@@ -1,0 +1,24 @@
+function updateFontSize(val) {
+            // Apply scale ONLY to the content text variable. Layout stays static.
+            let scale = val / 100;
+            document.documentElement.style.setProperty('--text-scale', scale);
+
+            if (editorInstance) {
+                // Monaco font can still be scaled independently for better reading
+                editorInstance.updateOptions({ fontSize: Math.max(10, Math.min(48, 18 * scale)) });
+            }
+
+            // Sync Dashboard font if student is at dashboard
+            if (document.getElementById('testDashboardView').style.display !== 'none') {
+                renderDashboardTable();
+            }
+        }
+
+        // --- SPLIT PANE RESIZER LOGIC ---
+        let isResizingH = false;
+
+        document.addEventListener('mousedown', e => {
+            if (e.target.id === 'splitResizer') {
+                isResizingH = true;
+                document.body.style.cursor = 'col-resize';
+                document.body.style.userSelec

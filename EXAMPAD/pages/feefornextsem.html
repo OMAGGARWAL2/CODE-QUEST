@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --sbi-blue: #003366;
+            --sbi-light: #f0f7ff;
+            --accent-blue: #0066cc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        .header {
+            background-color: var(--sbi-blue);
+            color: white;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .sbi-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .sbi-circle {
+            width: 32px;
+            height: 32px;
+            background: #fff;
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sbi-circle::after {
+            content: '';
+            width: 14px;
+            height: 14px;
+            background: var(--sbi-blue);
+            border-radius: 50%;
+        }
+
+        .secure-badge {
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .payment-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+            padding: 30px;
+            border: 1px solid #e1e8ed;
+        }
+
+        .summary-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 25px;
+            height: fit-content;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--sbi-blue);
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--sbi-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 14px;
+            border-bottom: 1px dashed #eee;
+            padding-bottom: 8px;
+        }
+
+        .info-row label {
+            color: #777;
+        }
+
+        .info-row span {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .amount-highlight {
+            background: var(--sbi-light);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+            border: 1px solid #d0e1f9;
+        }
+
+        .amount-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--sbi-blue);
+        }
+
+        .payment-method {
+            margin-top: 30px;
+        }
+
+        .method-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .method-option:hover {
+            border-color: var(--accent-blue);
+            background: #f9fbff;
+        }
+
+        .method-option.active {
+            border-color: var(--accent-blue);
+            background: #f0f7ff;
+            box-shadow: 0 0 0 1px var(--accent-blue);
+        }
+
+        .method-icon {
+            width: 40px;
+            height: 40px;
+            background: #eee;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--sbi-blue);
+        }
+
+        .pay-button {
+            width: 100%;
+            background: var(--sbi-blue);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .pay-button:hover {
+            background: #002244;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #999;
+            font-size: 12px;
+            padding-bottom: 30px;
+        }
+
+        /* Success Animation Overlay */
+        #successOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .check-container {
+            width: 100px;
+            height: 100px;
+            background: #4bb543;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 50px;
+            margin-bottom: 20px;
+            animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+
+        .back-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: 1px solid #ccc;
+            background: #fff;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="sbi-logo">
+            <div class="sbi-circle"></div>
+            STATE BANK OF INDIA
+        </div>
+        <div class="secure-badge">
+            <i class="fas fa-lock"></i> 256-bit Secure Encryption
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="payment-card">
+            <h2><i class="fas fa-university"></i> Institution Payment</h2>
+            <p style="color: #666; margin-bottom: 20px; font-size: 14px;">You are paying to <b>CHITKARA UNIVERSITY - Academic Fee Account</b></p>
+            
+            <div class="payment-method">
+                <p style="font-weight: bold; margin-bottom: 15px; font-size: 14px;">Select Payment Method:</p>
+                
+                <div class="method-option active">
+                    <div class="method-icon"><i class="fas fa-globe"></i></div>
+                    <div>
+                        <div style="font-weight: bold; font-size: 14px;">Net Banking (SBI)</div>
+                        <div style="font-size: 12px; color: #888;">Zero processing fee</div>
+                    </div>
+                    <i class="fas fa-check-circle" style="margin-left: auto; color: var(--accent-blue);"></i>
+                </div>
+
+                <div class="method-option">
+                    <div class="method-icon"><i class="fas fa-credit-card"></i></div>
+                    <div>
+                        <div style="font-weight: bold; font-size: 14px;">Credit / Debit Card</div>
+                        <div style="font-size: 12px; color: #888;">Visa, Mastercard, RuPay</div>
+                    </div>
+                </div>
+
+                <div class="method-option">
+                    <div class="method-icon"><i class="fab fa-google-pay"></i></div>
+                    <div>
+                        <div style="font-weight: bold; font-size: 14px;">UPI / QR Code</div>
+                        <div style="font-size: 12px; color: #888;">PhonePe, Google Pay, BHIM</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="pay-button" onclick="processPayment()">
+                PROCEED TO PAY ₹1,00,000.00 <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <div class="summary-card">
+            <h3 style="font-size: 16px; margin-bottom: 20px; color: #444;">Order Summary</h3>
+            
+            <div class="info-row">
+                <label>Student Name</label>
+                <span>OM AGGARWAL</span>
+            </div>
+            <div class="info-row">
+                <label>Roll Number</label>
+                <span>2410990653</span>
+            </div>
+            <div class="info-row">
+                <label>Semester</label>
+                <span>Jul - Dec 2026</span>
+            </div>
+            <div class="info-row">
+                <label>Fee Type</label>
+                <span>Academic Tuition</span>
+            </div>
+
+            <div class="amount-highlight">
+                <div style="font-size: 12px; color: #777; margin-bottom: 5px;">Total Payable Amount</div>
+                <div class="amount-value">₹1,00,000.00</div>
+            </div>
+
+            <div style="font-size: 11px; color: #999; text-align: center; line-height: 1.4;">
+                Transaction ID: SBI_ERP_8829472910<br>
+                Please do not refresh the page while payment is in progress.
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        &copy; 2026 State Bank of India. All Rights Reserved. | <i class="fas fa-shield-alt"></i> Safe & Secure
+    </div>
+
+    <div id="successOverlay">
+        <div class="check-container">
+            <i class="fas fa-check"></i>
+        </div>
+        <h1 style="color: #333; margin-bottom: 10px;">Payment Successful!</h1>
+        <p style="color: #666; margin-bottom: 20px;">Transaction ID: SBI_ERP_8829472910</p>
+        <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; width: 300px; text-align: center; border: 1px solid #eee;">
+            <div style="font-size: 14px; color: #444;">Academic Fee for Jul-Dec 2026</div>
+            <div style="font-size: 24px; font-weight: bold; color: #4bb543; margin-top: 10px;">₹1,00,000.00 Paid</div>
+        </div>
+        <button class="pay-button" style="width: 200px;" onclick="window.location.href='erp.html'">
+            Return to Dashboard
+        </button>
+    </div>
+
+    <script>
+        function processPayment() {
+            const btn = document.querySelector('.pay-button');
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Contacting SBI API...';
+            btn.style.opacity = '0.7';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Finalizing Transaction...';
+                setTimeout(() => {
+                    document.getElementById('successOverlay').style.display = 'flex';
+                }, 1500);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

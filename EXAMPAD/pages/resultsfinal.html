@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <script src="../js/theme-engine.js"></script>
+    <style>
+        :root {
+            --primary: #F26B3A;
+            --primary-dark: #D45428;
+            --primary-soft: #FFF1EC;
+            --text-main: #101828;
+            --text-muted: #475467;
+            --card-border: #EAECF0;
+        }
+
+        /* RESET & BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: #f2f2f2;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            line-height: 1.4;
+            font-size: 13px;
+        }
+
+        /* 1. INSTITUTIONAL HEADER */
+        .inst-header {
+            background: #fff;
+            border-bottom: 3px solid var(--primary);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .inst-id {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .inst-logo {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 900;
+            border-radius: 12px;
+        }
+
+        .inst-name-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .inst-name-top {
+            font-family: 'Outfit';
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .inst-name-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: -2px;
+        }
+
+        .student-profile-block {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 1px solid #ddd;
+            padding-left: 20px;
+        }
+
+        .student-photo {
+            width: 45px;
+            height: 45px;
+            background: #eee;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .student-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .student-meta {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .student-meta-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .student-meta-roll {
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* 2. TAB NAVIGATION BAR */
+        .nav-tabs-bar {
+            background: #101828;
+            padding: 0 40px;
+            display: flex;
+        }
+
+        .nav-tab {
+            padding: 12px 25px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            background: #101828;
+            cursor: pointer;
+        }
+
+        .nav-tab:hover {
+            background: var(--primary);
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* 3. MAIN CONTENT CONTAINER */
+        .main-container {
+            max-width: 1200px;
+            margin: 15px auto;
+            background: #fff;
+            border: 1px solid #dcdcdc;
+            padding: 25px;
+            min-height: 75vh;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        .page-title-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+
+        .page-title {
+            font-family: 'Outfit';
+            font-size: 19px;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.3px;
+        }
+
+        /* 5. RESULT TABLE */
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .result-table th {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 12px 10px;
+            text-align: left;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #555;
+        }
+
+        .result-table td {
+            border: 1px solid #eee;
+            padding: 12px 10px;
+            vertical-align: middle;
+            font-size: 12px;
+        }
+
+        .result-table tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        /* ACTION BUTTONS (Standard ERP style) */
+        .btn-erp {
+            padding: 6px 14px;
+            background: #fff;
+            border: 1px solid #ccd0d4;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: 700;
+            color: #444;
+            transition: all 0.1s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-erp:hover {
+            background: #f6f7f7;
+            border-color: #007cba;
+            color: #007cba;
+        }
+
+        .btn-erp.re-eval {
+            background: #004a99;
+            color: #fff;
+            border-color: #003366;
+        }
+
+        .btn-erp.re-eval:hover {
+            background: #003366;
+            color: #fff;
+        }
+
+        .status-badge {
+            font-weight: 800;
+            font-size: 9px;
+            padding: 2px 6px;
+            border: 1px solid;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        .status-pass {
+            color: #1a7f37;
+            background: #dafbe1;
+            border-color: rgba(26, 127, 55, 0.2);
+        }
+
+        .status-fail {
+            color: #cf222e;
+            background: #ffebe9;
+            border-color: rgba(207, 34, 46, 0.2);
+        }
+
+        .log-section {
+            display: none;
+            padding: 15px;
+            background: #fff9e6;
+            border: 1px solid #ffe58f;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+    <style>
+        .sub-tab-btn {
+            padding: 8px 16px;
+            font-size: 11px;
+            font-weight: 800;
+            color: #666;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .sub-tab-btn.active {
+            color: #004a99;
+            background: #f0f7ff;
+            border-color: #c7e1ff;
+            border-top: 3px solid #004a99;
+            margin-top: -2px;
+            padding-top: 10px;
+        }
+
+        @media print {
+
+            .nav-tabs-bar,
+            .erp-footer,
+            .inst-header,
+            .btn-erp,
+            .sub-tabs,
+            #publishBar,
+            .inst-name-sub,
+            .nav-tab {
+                display: none !important;
+            }
+
+            .main-container {
+                border: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+            }
+
+            .page-title-box {
+                border-bottom: 2px solid #000 !important;
+            }
+
+            body {
+                background: #fff !important;
+            }
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+
+    <!-- 2. MAIN ERP INTERFACE -->
+    <div id="mainUI">
+        <div class="inst-header">
+            <div class="inst-id">
+                <div class="inst-logo"
+                    style="background: transparent; border-radius: 0; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;">
+                    <img src="https://api.learntechww.com/college_icon/logo1733989968823.jpg" alt="Chitkara"
+                        style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+                <div class="inst-name-text">
+                    <span class="inst-name-top">TESTPAD RE-EXAMINATION DEPARTMENT</span>
+                    <span class="inst-name-sub">Academic Registry & Results Verification Cell | ISO 9001:2015</span>
+                </div>
+            </div>
+            <div class="student-profile-block">
+                <div class="student-photo">
+                    <img src="https://img.freepik.com/premium-vector/avatar-icon-illustration-vector-design_672535-159.jpg"
+                        alt="Student">
+                </div>
+                <div class="student-meta">
+                    <span class="student-meta-name" id="userNameHeader">CANDIDATE: O02</span>
+                    <span class="student-meta-roll">Academic Year: 2024-25 | Roll: 2024SR22720</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="nav-tabs-bar">
+            <div class="nav-tab" onclick="location.href='./student-dashboard.html'">Student Dashboard</div>
+            <div class="nav-tab active">Official Performance Registry</div>
+        </nav>
+
+        <main class="main-container">
+            <div class="page-title-box">
+                <h1 class="page-title">Performance Registry (Academic Transcript)</h1>
+                <button class="btn-erp" onclick="window.print()"
+                    style="border-radius:20px; padding: 5px 15px; background: #004a99; color:#fff; border:none;">
+                    <i class="fas fa-print"></i> PRINT OFFICIAL COPY
+                </button>
+            </div>
+
+            <div class="sub-tabs" style="margin-bottom:15px; display: flex; gap: 5px;">
+                <div class="sub-tab-btn active" id="tab_grades" onclick="switchTab('grades')">
+                    <i class="fas fa-file-invoice"></i> FULL GRADE CARD
+                </div>
+                <div class="sub-tab-btn" id="tab_ledger" onclick="switchTab('ledger')">
+                    <i class="fas fa-history"></i> TRANSACTION LEDGER
+                </div>
+            </div>
+
+            <!-- GRADE CARD SECTION -->
+            <div id="section_grades">
+                <table class="result-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px; text-align:center;">S.No.</th>
+                            <th>Course / module Identity</th>
+                            <th style="width: 80px; text-align:center;">Credits</th>
+                            <th style="width: 100px; text-align:center;">Marks</th>
+                            <th style="width: 80px; text-align:center;">Grade</th>
+                            <th style="width: 100px; text-align:center;">Status</th>
+                            <th style="text-align: center; width: 300px;">Administrative Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsGrid">
+                        <tr>
+                            <td colspan="7" style="text-align:center; padding:50px; color:#888;"><i
+                                    class="fas fa-spinner fa-spin"></i> Initializing Secure Registry Access...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- TRANSACTION LEDGER SECTION -->
+            <div id="section_ledger" style="display:none;">
+                <table class="result-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px; text-align:center;">S.No.</th>
+                            <th>Transaction Reference</th>
+                            <th>Description / Purpose</th>
+                            <th style="width: 120px; text-align:center;">Date & Time</th>
+                            <th style="width: 100px; text-align:center;">Amount</th>
+                            <th style="width: 100px; text-align:center;">Status</th>
+                            <th style="width: 120px; text-align:center;">Receipt</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ledgerGrid">
+                        <!-- Transactions injected here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div
+                style="margin-top: 30px; border: 1px solid #ddd; padding: 15px; background: #fff9f9; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <p style="font-weight: bold; color: #cc0000; font-size: 11px; text-decoration: underline;">
+                        Processing Policies:</p>
+                    <ul
+                        style="font-size: 11px; margin-left: 15px; color: #666; margin-top: 5px; list-style-type: square;">
+                        <li>Re-evaluation window: 07 CALENDAR DAYS.</li>
+                        <li>Non-refundable reappearance processing fee applies.</li>
+                    </ul>
+                </div>
+                <div>
+                    <p style="font-weight: bold; color: #cc0000; font-size: 11px; text-decoration: underline;">Audit
+                        Instructions:</p>
+                    <ul
+                        style="font-size: 11px; margin-left: 15px; color: #666; margin-top: 5px; list-style-type: square;">
+                        <li>Query Fee: ₹100.00 PER SELECTED ATTEMPT ITEM.</li>
+                        <li>Digital Audit Logs are verifiable via Dept Secretariat.</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+
+        <footer class="erp-footer">
+            <p>Institutional Grade Management System (IGMS) | Centralized University Node: DB_ALPHA_SEC_4</p>
+            <p>&copy; 2025 Testpad Global Education Network. All Academic Records Protected by 256-bit Encryption.</p>
+        </footer>
+    </div>
+
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        let currentUser = null;
+        let attemptsData = [];
+
+        window.onload = function () {
+            const cachedUser = sessionStorage.getItem('results_auth_user');
+            if (cachedUser) {
+                currentUser = JSON.parse(cachedUser);
+                initializeMainUI();
+            } else {
+                window.location.href = './resultslogin.html';
+            }
+        };
+
+        function initializeMainUI() {
+            document.getElementById('mainUI').style.display = 'block';
+            // Artificial slight delay for "Server Loading" feel and also to allow initial layout
+            setTimeout(loadRegistry, 300);
+        }
+
+        function loadRegistry() {
+            const grid = document.getElementById('resultsGrid');
+            attemptsData = db.getStudentAttempts(currentUser.id).filter(a => a.status === 'reviewed');
+
+            if (attemptsData.length === 0) {
+                grid.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 40px; color:#999; font-style: italic;">No verified performance records found for current credentials.</td></tr>`;
+                return;
+            }
+
+            grid.innerHTML = attemptsData.map((attempt, index) => {
+                const exam = db.getExamById(attempt.examId);
+                const scoreObj = db.calculateScore(attempt);
+                const isPass = (scoreObj.percentage >= 40);
+                const credits = exam.credits || 1;
+                const reappearFee = credits * 2000;
+
+                return `
+                    <tr>
+                        <td style="text-align:center; font-weight:bold; color:#666;">${(index + 1).toString().padStart(2, '0')}</td>
+                        <td>
+                            <div style="font-weight:bold; font-size:12px; color:#004a99;">${exam.title.toUpperCase()}</div>
+                            <div style="font-size:10px; color:#888;">Module_ID: ${exam.testId || 'N/A'}</div>
+                        </td>
+                        <td style="text-align:center; font-family:monospace; font-weight:bold;">${credits.toFixed(1)}</td>
+                        <td style="text-align:center; font-family:monospace;">${scoreObj.score}/${scoreObj.totalMarks}</td>
+                        <td style="text-align:center; font-weight:bold;">${scoreObj.percentage}%</td>
+                        <td style="text-align:center;">
+                            <span style="font-weight:bold; font-size:10px; padding:3px 8px; border:1px solid ${isPass ? 'green' : 'red'}; color:${isPass ? 'green' : 'red'}; background:${isPass ? '#f0fff4' : '#fff5f5'};">
+                                ${isPass ? 'PROMOTED' : 'FAIL'}
+                            </span>
+                        </td>
+                        <td>
+                            <div style="display:flex; justify-content:center; gap:4px;">
+                                <button class="btn-erp" onclick="toggleLog('${attempt.id}')" id="btn_log_${attempt.id}"><i class="fas fa-search-plus"></i> AUDIT LOGS</button>
+                                <button class="btn-erp re-eval" onclick="initiatePayment('${attempt.id}', 'reeval', 500)">RE-EVAL</button>
+                                ${!isPass ? `<button class="btn-erp" style="background:#cc0000; color:#fff; border-color:#800000;" onclick="initiatePayment('${attempt.id}', 'reappear', ${reappearFee})">RE-APPEAR (₹${reappearFee})</button>` : ''}
+                            </div>
+                            <div class="log-section" id="log_${attempt.id}" style="display:none; text-align:left;">
+                                <!-- Content Lazy Loaded -->
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function toggleLog(attemptId) {
+            const el = document.getElementById('log_' + attemptId);
+            const btn = document.getElementById('btn_log_' + attemptId);
+
+            if (el.style.display === 'block') {
+                el.style.display = 'none';
+                btn.innerHTML = '<i class="fas fa-search-plus"></i> AUDIT LOGS';
+                return;
+            }
+
+            // Lazy Load Log Content
+            if (el.innerHTML.trim() === '') {
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> GENERATING...';
+
+                // Simulate quick processing
+                setTimeout(() => {
+                    const attempt = attemptsData.find(a => a.id === attemptId);
+                    const exam = db.getExamById(attempt.examId);
+                    const scoreObj = db.calculateScore(attempt);
+                    const assignedQuestions = db.getAttemptQuestions ? db.getAttemptQuestions(attempt, exam) : (exam?.questions || []);
+
+                    let questionsLog = '';
+                    assignedQuestions.forEach((q, qIndex) => {
+                        const response = attempt.responses ? (Array.isArray(attempt.responses) ? attempt.responses.find(r => r && (r.questionId === q.id || r.id === q.id)) : attempt.responses[q.id]) : null;
+                        const studentAnswer = (typeof response === 'object' && response !== null) ? (response.value || (response.selectedOption !== undefined ? response.selectedOption : 'EMPTY')) : (response || 'EMPTY');
+                        const isCorrect = db.checkAnswer(q, response);
+
+                        questionsLog += `
+                            <div style="margin-bottom: 12px; border-bottom: 1px dotted #ccc; padding-bottom: 8px; display: flex; gap: 12px; align-items: flex-start;">
+                                <input type="checkbox" class="query-check-${attempt.id}" onchange="updateQueryFee('${attempt.id}')" style="margin-top: 2px;">
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 700; font-size: 11px; margin-bottom: 2px;">Q${qIndex + 1}: ${q.heading || 'MODULE_QUESTION_' + (qIndex + 1)}</div>
+                                    <div style="display: flex; gap: 15px; font-size: 10px;">
+                                        <span>Official_Key: <b style="color:#555;">${q.correctAnswer || q.correctNumeric || 'RESTR.'}</b></span>
+                                        <span>Student_Bit: <b style="color:${isCorrect ? 'green' : 'red'};">${studentAnswer}</b></span>
+                                    </div>
+                                    ${q.teacherNotes ? `<div style="font-size:9px; color:#8844ff; margin-top:2px;">NB: ${q.teacherNotes}</div>` : ''}
+                                </div>
+                                <div style="font-size:9px; border:1px solid ${isCorrect ? '#27ae60' : '#e74c3c'}; padding:0 4px; color:${isCorrect ? '#27ae60' : '#e74c3c'};">
+                                    ${isCorrect ? 'PASS' : 'FLAG'}
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    el.innerHTML = `
+                        <div style="padding:15px; background:#fff; border:1px solid #ddd; margin-top:10px; font-family: Arial, sans-serif;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                                <strong style="font-size:12px; color:#004a99;">SECURE AUDIT TRACE: ${attemptId}</strong>
+                                <span style="font-size:9px; color:#666;">PROCTOR_FLAGS: ${attempt.tabSwitchCount || 0} | INTEGRITY: SECURE</span>
+                            </div>
+                            <div style="max-height: 250px; overflow-y: auto; padding-right:5px; border-top:1px solid #eee; padding-top:10px;">
+                                ${questionsLog}
+                            </div>
+                            <div style="margin-top: 10px; padding: 10px; background: #f0f7ff; border: 1px solid #c7e1ff; display: flex; justify-content: space-between; align-items: center;">
+                                <div style="font-size:10px;">
+                                    <b>Query Packet Tool</b><br>Select items above (₹100/ea)
+                                </div>
+                                <div style="display:flex; align-items:center; gap:10px;">
+                                    <span id="fee_${attempt.id}" style="font-weight:bold; color:#004a99;">₹0</span>
+                                    <button class="btn-erp re-eval" onclick="paySelectedQueries('${attemptId}')">SUBMIT</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    el.style.display = 'block';
+                    btn.innerHTML = '<i class="fas fa-search-minus"></i> HIDE LOGS';
+                }, 200);
+            } else {
+                el.style.display = 'block';
+                btn.innerHTML = '<i class="fas fa-search-minus"></i> HIDE LOGS';
+            }
+        }
+
+        function updateQueryFee(attemptId) {
+            const checks = document.querySelectorAll(`.query-check-${attemptId}:checked`);
+            document.getElementById(`fee_${attemptId}`).textContent = `₹${checks.length * 100}`;
+        }
+
+        function paySelectedQueries(attemptId) {
+            const checks = document.querySelectorAll(`.query-check-${attemptId}:checked`);
+            if (checks.length === 0) {
+                showToast("ERR_AUDIT_NOT_SELECTED: Please select at least one question line item.");
+                return;
+            }
+            initiatePayment(attemptId, 'query', checks.length * 100);
+        }
+
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.style = `
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                background: #333;
+                color: #fff;
+                padding: 12px 24px;
+                border-radius: 4px;
+                font-weight: 700;
+                font-size: 11px;
+                z-index: 10000;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                border-left: 4px solid #004a99;
+                font-family: inherit;
+                animation: slideIn 0.3s ease;
+            `;
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+            @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+        `;
+        document.head.appendChild(style);
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('tab_' + tabId).classList.add('active');
+
+            document.getElementById('section_grades').style.display = (tabId === 'grades' ? 'block' : 'none');
+            document.getElementById('section_ledger').style.display = (tabId === 'ledger' ? 'block' : 'none');
+
+            if (tabId === 'ledger') loadLedger();
+        }
+
+        function loadLedger() {
+            const grid = document.getElementById('ledgerGrid');
+            const txs = db.getStudentTransactions(currentUser.id);
+
+            if (txs.length === 0) {
+                grid.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 40px; color:#999; font-style: italic;">No payment transactions recorded in the registry ledger.</td></tr>`;
+                return;
+            }
+
+            grid.innerHTML = txs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).map((tx, index) => {
+                const date = new Date(tx.timestamp).toLocaleString();
+                return `
+                    <tr>
+                        <td style="text-align:center;">${(index + 1).toString().padStart(2, '0')}</td>
+                        <td><code style="background:#eee; padding:2px 5px;">${tx.ref}</code></td>
+                        <td style="font-weight:bold; font-size:11px;">${tx.purpose}</td>
+                        <td style="text-align:center; font-size:10px;">${date}</td>
+                        <td style="text-align:center; font-weight:bold;">₹${tx.amount}</td>
+                        <td style="text-align:center;">
+                            <span style="font-size:9px; font-weight:800; color:green; background:#e8f6ef; border:1px solid #27ae60; padding:2px 6px;">COMPLETED</span>
+                        </td>
+                        <td style="text-align:center;">
+                            <button class="btn-erp" onclick="showToast('Receipt Generation Tool: Not active for current session.')"><i class="fas fa-file-pdf"></i> VIEW</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function initiatePayment(attemptId, type, amount) {
+            const purposeMap = {
+                'reeval': 'Exam Re-evaluation Request',
+                'reappear': 'Academic Re-appear Application',
+                'query': 'Evaluation Clarification Query (Group Pack)'
+            };
+
+            const txnRef = 'ERP_' + Date.now().toString().substr(-6);
+
+            // Record a local transaction object (Pending usually, but for demo we mark as record)
+            db.addTransaction({
+                studentId: currentUser.id,
+                attemptId: attemptId,
+                type: type,
+                amount: amount,
+                purpose: purposeMap[type],
+                ref: txnRef,
+                status: 'pending'
+            });
+
+            const params = new URLSearchParams({
+                attemptId: attemptId,
+                type: type,
+                amount: amount,
+                purpose: purposeMap[type],
+                ref: txnRef
+            });
+            window.location.href = './payforre.html?' + params.toString();
+        }
+    </script>
+</body>
+
+</html>

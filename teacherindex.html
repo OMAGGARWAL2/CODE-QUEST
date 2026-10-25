@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Teacher & Faculty Portal</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+    <style>
+        :root {
+            --primary: #D92D20;
+            --primary-hover: #B42318;
+            --primary-soft: #FEF3F2;
+            --secondary: #667085;
+            --text-main: #101828;
+            --text-secondary: #475467;
+            --text-tertiary: #667085;
+            --bg-body: #F9FAFB;
+            --bg-card: #FFFFFF;
+            --border: #EAECF0;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --shadow-premium: 0 10px 40px rgba(0, 0, 0, 0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* ===== HEADER (teacher-dashboard style) ===== */
+        .site-header {
+            height: 72px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 32px; }
+
+        .logo-container { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; transition: opacity 0.2s; }
+        .logo-container:hover { opacity: 0.8; }
+        .logo-square { width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .logo-square img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text { font-size: 1.35rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; text-transform: uppercase; line-height: 1; }
+        .logo-text small { display: block; font-size: 0.7rem; font-weight: 700; color: var(--primary); letter-spacing: 0.8px; margin-top: 3px; }
+
+        .header-nav { display: flex; align-items: center; gap: 14px; margin-left: 12px; }
+
+        .nav-icon-btn {
+            width: 50px; height: 50px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--secondary); cursor: pointer; transition: all 0.2s;
+            background: transparent; border: none; font-size: 1.4rem; position: relative;
+        }
+        .nav-icon-btn img { width: 32px !important; height: 32px !important; }
+        .nav-icon-btn:hover { background: var(--bg-body); color: var(--primary); }
+        .nav-icon-btn.active { color: var(--primary); background: var(--primary-soft); }
+
+        .header-right { display: flex; align-items: center; gap: 20px; }
+
+        .header-search { position: relative; width: 240px; }
+        .header-search i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #999; font-size: 0.9rem; }
+        .header-search input { width: 100%; padding: 9px 12px 9px 34px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; font-family: 'Mulish', sans-serif; outline: none; background: #fff; color: #222; }
+        .header-search input:focus { border-color: var(--primary); }
+
+        .grid-btn { width: 48px; height: 48px; color: var(--secondary); border: none; background: transparent; font-size: 1.4rem; cursor: pointer; border-radius: 12px; position: relative; }
+        .grid-btn img { width: 26px; height: 26px; opacity: 0.75; }
+        .grid-btn:hover { background: #f5f5f5; }
+
+        .grid-menu { display: none; position: absolute; top: calc(100% + 12px); right: 0; background: #fff; border: 1px solid #f0f0f0; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 14px; width: 320px; z-index: 1002; justify-content: space-between; }
+        .grid-item { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467; }
+        .grid-item:hover { background: var(--primary-soft); color: var(--primary); }
+        .grid-item i { font-size: 1.7rem; }
+        .grid-item span { font-family: 'Mulish', sans-serif; font-size: 0.9rem; font-weight: 600; }
+
+        .plus-btn {
+            width: 48px; height: 72px; background: var(--primary-soft); color: var(--primary);
+            border: none; border-left: 1px solid #f0f0f0; border-right: 1px solid #f0f0f0;
+            display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+            cursor: pointer; transition: background 0.2s;
+        }
+        .plus-btn:hover { background: #ffece5; }
+
+        .profile-container { position: relative; }
+        .profile-bubble { display: flex; align-items: center; gap: 12px; padding-left: 16px; border-left: 1px solid var(--border); cursor: pointer; }
+        .user-info { text-align: right; }
+        .user-name { font-size: 1.05rem; font-weight: 700; font-family: 'Mulish', sans-serif; color: #444; text-transform: uppercase; }
+        .user-role { font-size: 0.72rem; font-weight: 800; font-family: 'Mulish', sans-serif; color: var(--primary); text-transform: uppercase; }
+        .avatar { width: 40px; height: 40px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow: hidden; }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .profile-menu { display: none; position: absolute; right: 0; top: calc(100% + 10px); background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.12); width: 220px; z-index: 1001; overflow: hidden; border: 1px solid #eee; }
+        .profile-menu .pm-item { padding: 12px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; font-size: 0.95rem; font-weight: 500; color: #475467; transition: background 0.2s; }
+        .profile-menu .pm-item:hover { background: #f9fafb; }
+        .profile-menu .pm-item.logout { color: #d32f2f; }
+        .profile-menu .pm-item.logout:hover { background: #fff5f5; }
+
+        /* ===== DASHBOARD LAYOUT (single column, right pane removed) ===== */
+        .dashboard-container { flex: 1; width: 100%; }
+        .main-content { padding: 40px 64px; background: #fff; min-height: calc(100vh - 72px); }
+
+        /* Create action bar */
+        .create-bar { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 44px; }
+        .create-tile {
+            flex: 1; min-width: 220px; background: #fff; border: 1px solid var(--border);
+            border-radius: var(--radius-md); padding: 22px; cursor: pointer; text-align: left;
+            display: flex; align-items: center; gap: 16px; transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03); font-family: 'Mulish', sans-serif;
+        }
+        .create-tile:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 12px 28px rgba(223,90,34,0.12); }
+        .create-tile .ct-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.35rem; flex-shrink: 0; }
+        .create-tile .ct-title { font-size: 1.1rem; font-weight: 800; color: #1a1a1a; }
+        .create-tile .ct-sub { font-size: 0.85rem; color: var(--text-tertiary); margin-top: 2px; }
+
+        /* Content sections */
+        .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; gap: 16px; }
+        .section-title { font-family: 'Mulish', sans-serif; font-size: 1.25rem; font-weight: 700; color: #222; }
+        .section-title span { font-weight: 400; color: #888; font-size: 1.1rem; margin-left: 8px; }
+
+        .search-container { position: relative; width: 240px; }
+        .search-container i { position: absolute; left: 6px; top: 50%; transform: translateY(-50%); color: #999; font-size: 0.9rem; }
+        .search-input { width: 100%; padding: 6px 8px 6px 28px; border: none; border-bottom: 1px solid #e0e0e0; border-radius: 0; font-size: 0.9rem; outline: none; transition: border-color 0.2s; background: transparent; font-family: 'Mulish', sans-serif; color: #222; }
+        .search-input:focus { border-bottom-color: var(--primary); }
+
+        .section-create-btn { background: var(--primary); color: #fff; border: none; height: 38px; padding: 0 18px; font-size: 0.85rem; font-weight: 700; border-radius: 8px; font-family: 'Mulish', sans-serif; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s; }
+        .section-create-btn:hover { background: var(--primary-hover); }
+
+        .assessments-grid { display: flex; flex-direction: column; gap: 20px; margin-bottom: 56px; }
+
+        .assessment-card {
+            background: #fff; border: 1px solid #f0f0f0; border-radius: var(--radius-lg); padding: 24px;
+            display: flex; align-items: center; gap: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            transition: all 0.3s cubic-bezier(0.16,1,0.3,1); position: relative; overflow: hidden;
+        }
+        .assessment-card:hover { box-shadow: 0 12px 30px rgba(0,0,0,0.08); border-color: var(--primary); transform: translateY(-4px); }
+        .assessment-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--primary); opacity: 0; transition: opacity 0.3s; }
+        .assessment-card:hover::before { opacity: 1; }
+
+        .card-icon-area { width: 56px; height: 56px; background: var(--primary-soft); color: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
+        .card-body { flex: 1; min-width: 0; }
+        .card-title { font-family: 'Mulish', sans-serif; font-size: 1.25rem; font-weight: 600; color: #1a1a1a; margin-bottom: 6px; word-break: break-word; }
+        .card-meta { display: flex; align-items: center; gap: 36px; font-size: 0.95rem; color: var(--text-tertiary); flex-wrap: wrap; }
+        .card-meta span { display: flex; align-items: center; gap: 12px; }
+        .card-meta span i { font-size: 1.3rem; }
+        .card-id { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #98a2b3; }
+
+        .card-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+        .btn-detail-action { background: #fff; border: 1px solid #e5e7eb; color: #344054; height: 42px; padding: 0 18px; font-size: 0.9rem; font-weight: 700; border-radius: 8px; font-family: 'Mulish', sans-serif; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; white-space: nowrap; transition: all 0.2s; }
+        .btn-detail-action:hover { background: #f9fafb; border-color: #d0d5dd; }
+        .btn-detail-action.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .btn-detail-action.primary:hover { background: var(--primary-hover); }
+        .btn-icon-del { background: #fff; border: 1px solid #e5e7eb; color: #d32f2f; width: 42px; height: 42px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .btn-icon-del:hover { background: #fff5f5; border-color: #fecdca; }
+
+        .status-pill { padding: 5px 14px; border-radius: 16px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .status-pill.active { background: #ecfdf3; color: #027a48; }
+        .status-pill.draft { background: #f2f4f7; color: #475467; }
+
+        .diff-pill { padding: 4px 12px; border-radius: 14px; font-size: 0.78rem; font-weight: 700; }
+        .diff-easy { background: #ecfdf3; color: #027a48; }
+        .diff-med { background: #fffaeb; color: #b54708; }
+        .diff-hard { background: #fef3f2; color: #b42318; }
+
+        .topic-badge { display: inline-block; background: #f2f4f7; color: #475467; border-radius: 6px; padding: 2px 8px; font-size: 0.75rem; font-weight: 600; margin: 2px 3px 2px 0; }
+
+        .empty-state { text-align: center; padding: 24px; color: #98a2b3; font-family: 'Mulish', sans-serif; font-size: 0.95rem; font-weight: 500; }
+
+        /* ===== SIMPLE CARD (teacher-dashboard learning-module-card style) ===== */
+        .lm-card { background: #fff; border: 1px solid #f0f0f0; border-radius: 12px; padding: 22px 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 10px; position: relative; transition: all 0.25s ease; cursor: pointer; }
+        .lm-card:hover { box-shadow: 0 12px 30px rgba(0,0,0,0.08); border-color: var(--primary); }
+        .lm-card-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+        .lm-title { font-family: 'Mulish', sans-serif; font-size: 1.25rem; font-weight: 600; color: #111111; margin: 0; line-height: 1.35; flex: 1; word-break: break-word; }
+        .lm-icons { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+        .icon-btn-box { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: #f9fafb; transition: background 0.2s; }
+        .icon-btn-box:hover { background: #f3f4f6; }
+        .icon-btn-box img { width: 24px; height: 24px; }
+        .icon-btn-box i { color: #666666; font-size: 0.95rem; }
+        .lm-sub { font-family: 'Mulish', sans-serif; font-size: 0.9rem; color: #777777; font-weight: 400; }
+        .lm-progress-row { display: flex; align-items: center; gap: 16px; margin-top: 4px; width: 100%; }
+        .lm-bar { width: 280px; max-width: 60%; height: 7px; background: #f5c6b6; overflow: hidden; }
+        .lm-bar > div { height: 100%; background: #df5a22; transition: width 0.6s ease; }
+        .lm-progress-label { font-family: 'Mulish', sans-serif; font-size: 0.88rem; color: #888888; font-weight: 500; }
+        .lm-details { display: none; margin-top: 18px; padding-top: 18px; border-top: 1px solid #f3f4f6; cursor: default; font-family: 'Mulish', sans-serif; }
+        .lm-details .btn-detail-action { margin: 0 8px 8px 0; }
+
+        /* ===== MODALS ===== */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(16,24,40,0.5); z-index: 5000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-card { background: #fff; border-radius: 16px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; padding: 28px 30px; box-shadow: var(--shadow-premium); }
+        .modal-header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+        .modal-header-top h3 { font-family: 'Mulish', sans-serif; font-size: 1.3rem; font-weight: 800; color: #101828; }
+        .modal-close-btn { background: #f2f4f7; border: none; width: 34px; height: 34px; border-radius: 8px; font-size: 1.1rem; cursor: pointer; color: #475467; }
+        .form-group { margin-bottom: 18px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .form-label { display: block; font-family: 'Mulish', sans-serif; font-size: 0.85rem; font-weight: 700; color: #344054; margin-bottom: 7px; }
+        .form-input, .form-select, .form-textarea { width: 100%; padding: 11px 13px; border: 1px solid #d0d5dd; border-radius: 8px; font-size: 0.95rem; font-family: 'Mulish', sans-serif; color: #101828; outline: none; background: #fff; }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+        .form-textarea { min-height: 90px; resize: vertical; }
+        .code-input-box { width: 100%; padding: 12px; border: 1px solid #d0d5dd; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; min-height: 120px; resize: vertical; outline: none; }
+        .code-input-box:focus { border-color: var(--primary); }
+        .sections-input-list { display: flex; flex-direction: column; gap: 10px; max-height: 240px; overflow-y: auto; }
+        .section-input-row { display: flex; align-items: center; gap: 10px; }
+        .modal-footer { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
+        .btn-cancel { background: #fff; border: 1px solid #d0d5dd; color: #475467; padding: 10px 22px; border-radius: 8px; font-weight: 700; font-family: 'Mulish', sans-serif; cursor: pointer; }
+        .btn-save { background: var(--primary); border: none; color: #fff; padding: 10px 24px; border-radius: 8px; font-weight: 700; font-family: 'Mulish', sans-serif; cursor: pointer; }
+        .btn-save:hover { background: var(--primary-hover); }
+
+        .toast-box { position: fixed; bottom: 24px; right: 24px; background: #101828; color: #fff; padding: 14px 24px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; z-index: 100000; font-weight: 600; font-family: 'Mulish', sans-serif; }
+
+        @media (max-width: 900px) {
+            .main-content { padding: 24px 18px; }
+            .header-nav { display: none; }
+            .assessment-card { flex-wrap: wrap; }
+            .card-actions { width: 100%; justify-content: flex-end; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="header-left">
+        <a href="teacherindex.html" class="logo-container">
+            <div class="logo-square"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest"></div>
+            <div class="logo-text">CodeQuest<small>Teacher &amp; Faculty Portal</small></div>
+        </a>
+        <nav class="header-nav">
+            <button class="nav-icon-btn active" data-tip="Dashboard" onclick="scrollTo({top:0,behavior:'smooth'})">
+                <img src="EXAMPAD/TESTPAD_WEBSITE__files/menu-1.svg" alt="Dashboard">
+            </button>
+            <button class="nav-icon-btn" data-tip="Coding Rounds" onclick="scrollToSection('testsSection')">
+                <img src="EXAMPAD/TESTPAD_WEBSITE__files/quiz.svg" alt="Tests">
+            </button>
+            <button class="nav-icon-btn" data-tip="Courses" onclick="scrollToSection('coursesSection')">
+                <img src="EXAMPAD/TESTPAD_WEBSITE__files/folder-2.svg" alt="Courses">
+            </button>
+            <button class="nav-icon-btn" data-tip="DSA Problems" onclick="scrollToSection('dsaSection')">
+                <img src="EXAMPAD/TESTPAD_WEBSITE__files/statistics.svg" alt="DSA">
+            </button>
+            <button class="nav-icon-btn" data-tip="Batches" onclick="scrollToSection('batchesSection')">
+                <i class="fas fa-users" style="font-size:1.15rem; color:#667085;"></i>
+            </button>
+            <button class="nav-icon-btn" data-tip="Chat Groups" onclick="location.href='createchat.html'">
+                <i class="fas fa-comments" style="font-size:1.2rem; color:#075E54;"></i>
+            </button>
+            <button class="nav-icon-btn" data-tip="Notifications" onclick="location.href='recPosts.html'">
+                <i class="fas fa-bell" style="font-size:1.2rem; color:#1570EF;"></i>
+            </button>
+        </nav>
+    </div>
+
+    <div class="header-right">
+        <div class="header-search">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Quick Search...">
+        </div>
+        <button class="plus-btn" onclick="location.href='interview-maker.html'" title="Launch New Assessment">
+            <i class="fas fa-plus"></i>
+        </button>
+        <div style="position: relative;">
+            <button class="grid-btn" onclick="toggleGridMenu(event)" title="Apps">
+                <img src="EXAMPAD/Testpad_pra_files_files/icons8-squared-menu-90.png" alt="Apps">
+            </button>
+            <div class="grid-menu" id="gridMenu">
+                <div class="grid-item" onclick="location.href='interview-maker.html'">
+                    <i class="fas fa-laptop-code"></i><span>Test</span>
+                </div>
+                <div class="grid-item" onclick="location.href='CQCmaker.html'">
+                    <i class="fas fa-book-reader"></i><span>Courses</span>
+                </div>
+                <div class="grid-item" onclick="location.href='createDSA.html'">
+                    <i class="fas fa-code"></i><span>DSA</span>
+                </div>
+                <div class="grid-item" onclick="location.href='createBatch.html'">
+                    <i class="fas fa-users"></i><span>Batches</span>
+                </div>
+                <div class="grid-item" onclick="location.href='createchat.html'">
+                    <i class="fas fa-comments"></i><span>Chat</span>
+                </div>
+                <div class="grid-item" onclick="location.href='recPosts.html'">
+                    <i class="fas fa-bell"></i><span>Notifs</span>
+                </div>
+            </div>
+        </div>
+        <div class="profile-container">
+            <div class="profile-bubble" onclick="toggleMenu(event)">
+                <div class="user-info">
+                    <div class="user-name" id="userName">Faculty</div>
+                    <div class="user-role">Professor</div>
+                </div>
+                <div class="avatar"><img src="EXAMPAD/LINUX_TEST_CHITKARA_files/user-icon.3d6e2547.svg" alt="Profile"></div>
+            </div>
+            <div class="profile-menu" id="profileMenu">
+                <div class="pm-item" onclick="location.href='firstpage.html'"><i class="fas fa-user-circle"></i> Switch Account</div>
+                <div class="pm-item logout" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="dashboard-container">
+    <main class="main-content">
+
+        <!-- CODING ROUNDS / TESTS -->
+        <section id="testsSection">
+            <div class="content-header">
+                <h2 class="section-title">Interview Tests &amp; Coding Rounds <span id="testsCount">(0)</span></h2>
+                <div style="display:flex; align-items:center; gap:16px;">
+                    <button class="section-create-btn" onclick="location.href='interview-maker.html'"><i class="fas fa-plus"></i> Create Test</button>
+                    <div class="search-container"><i class="fas fa-search"></i>
+                        <input type="text" class="search-input" placeholder="Search rounds..." onkeyup="renderTests()">
+                    </div>
+                </div>
+            </div>
+            <div class="assessments-grid" id="testsList"></div>
+        </section>
+
+        <!-- COURSES -->
+        <section id="coursesSection">
+            <div class="content-header">
+                <h2 class="section-title">My Courses <span id="coursesCount">(0)</span></h2>
+                <div style="display:flex; align-items:center; gap:16px;">
+                    <button class="section-create-btn" onclick="location.href='CQCmaker.html'"><i class="fas fa-plus"></i> Create Course</button>
+                    <div class="search-container"><i class="fas fa-search"></i>
+                        <input type="text" class="search-input" placeholder="Search courses..." onkeyup="renderCourses()">
+                    </div>
+                </div>
+            </div>
+            <div class="assessments-grid" id="coursesList"></div>
+        </section>
+
+        <!-- DSA PROBLEMS -->
+        <section id="dsaSection">
+            <div class="content-header">
+                <h2 class="section-title">DSA Problem Pool <span id="dsaCount">(0)</span></h2>
+                <div style="display:flex; align-items:center; gap:16px;">
+                    <button class="section-create-btn" onclick="location.href='createDSA.html'"><i class="fas fa-plus"></i> Create DSA Problem</button>
+                    <div class="search-container"><i class="fas fa-search"></i>
+                        <input type="text" class="search-input" placeholder="Search problems..." onkeyup="renderDsa()">
+                    </div>
+                </div>
+            </div>
+            <div class="assessments-grid" id="dsaList"></div>
+        </section>
+
+        <!-- BATCHES -->
+        <section id="batchesSection">
+            <div class="content-header">
+                <h2 class="section-title">My Batches <span id="batchesCount">(0)</span></h2>
+                <div style="display:flex; align-items:center; gap:16px;">
+                    <button class="section-create-btn" style="background:#075E54;" onclick="location.href='createchat.html'"><i class="fas fa-comments"></i> Chat Groups</button>
+                    <button class="section-create-btn" onclick="location.href='createBatch.html'"><i class="fas fa-plus"></i> Create Batch</button>
+                </div>
+            </div>
+            <div class="assessments-grid" id="batchesList"></div>
+        </section>
+
+    </main>
+</div>
+
+<!-- CREATE COURSE MODAL -->
+<div class="modal-overlay" id="createCourseModal">
+    <div class="modal-card">
+        <div class="modal-header-top">
+            <h3>Create &amp; Publish Course</h3>
+            <button class="modal-close-btn" onclick="closeCreateModal()">&#10005;</button>
+        </div>
+        <form onsubmit="handleSaveCourse(event)">
+            <div class="form-group">
+                <label class="form-label">Course Code &amp; Full Title</label>
+                <input type="text" id="courseCodeInput" class="form-input" placeholder="e.g. 24CSE0101-Problem Solving Using Python-1stSem-2024" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Total Sections</label>
+                    <input type="number" id="sectionsCountInput" class="form-input" min="1" max="25" value="5" onchange="generateSectionFields(this.value)">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Default Progress (%)</label>
+                    <input type="number" id="courseProgressInput" class="form-input" min="0" max="100" value="0">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Section Titles (Modules)</label>
+                <div class="sections-input-list" id="sectionsListInputs"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" onclick="closeCreateModal()">Cancel</button>
+                <button type="submit" class="btn-save">Publish Course</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ADD DSA PROBLEM MODAL -->
+<div class="modal-overlay" id="addDsaModal">
+    <div class="modal-card">
+        <div class="modal-header-top">
+            <h3>Add DSA Problem to Arena</h3>
+            <button class="modal-close-btn" onclick="closeAddDsaModal()">&#10005;</button>
+        </div>
+        <form onsubmit="handleSaveDsaProblem(event)">
+            <div class="form-group">
+                <label class="form-label">Problem Title</label>
+                <input type="text" id="dsaTitleInput" class="form-input" placeholder="e.g. 6. Valid Parentheses" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Difficulty</label>
+                    <select id="dsaDiffInput" class="form-select">
+                        <option value="Easy">Easy</option>
+                        <option value="Med." selected>Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Acceptance Rate (%)</label>
+                    <input type="text" id="dsaAcceptanceInput" class="form-input" value="50.0%">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Topic Tags (comma-separated)</label>
+                <input type="text" id="dsaTopicsInput" class="form-input" placeholder="e.g. Algorithms, String, Stack" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Problem Description</label>
+                <textarea id="dsaDescInput" class="form-textarea" placeholder="Describe the problem statement, constraints and examples..." required></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Starter Solution Template (Python 3)</label>
+                <textarea id="dsaCodeInput" class="code-input-box" placeholder="class Solution:&#10;    def solve(self, ...):&#10;        pass"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" onclick="closeAddDsaModal()">Cancel</button>
+                <button type="submit" class="btn-save">Publish to Student Arena</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="toast-box" id="teacherToast">Notification</div>
+
+<script>
+    const STORAGE_KEY = 'CodeQuest_teacher_courses';
+    const TESTS_STORAGE_KEY = 'CodeQuest_teacher_tests';
+    const DSA_STORAGE_KEY = 'CodeQuest_dsa_problems';
+    const BATCHES_KEY = 'CodeQuest_batches';
+    function getBatches() { try { return JSON.parse(localStorage.getItem(BATCHES_KEY)) || []; } catch (e) { return []; } }
+    function writeBatchesLocal(v) { localStorage.setItem(BATCHES_KEY, JSON.stringify(v)); }
+
+    // No dummy/sample data. Only items the teacher actually creates are shown.
+    const DEFAULT_SEEDED_COURSES = [];
+    const DEFAULT_SEEDED_TESTS = [];
+    const DEFAULT_SEEDED_DSA = [];
+
+    // One-time cleanup: drop any previously-stored dummy rows
+    const DUMMY_IDS = {
+        [STORAGE_KEY]: ["24CSE0101", "24CSE0102", "24CSE0208"],
+        [TESTS_STORAGE_KEY]: ["CQ_TEST_101", "CQ_TEST_102", "CQ_TEST_103"],
+        [DSA_STORAGE_KEY]: ["PQ9RJ001", "PQ9RJ002", "PQ9RJ003", "PQ9RJ004", "PQ9RJ005"]
+    };
+    function purgeDummyData() {
+        Object.keys(DUMMY_IDS).forEach(key => {
+            try {
+                const list = JSON.parse(localStorage.getItem(key));
+                if (Array.isArray(list)) {
+                    const cleaned = list.filter(x => !DUMMY_IDS[key].includes(x.id));
+                    localStorage.setItem(key, JSON.stringify(cleaned));
+                }
+            } catch (e) {}
+        });
+    }
+
+    function readStore(key, seed) {
+        try { const s = localStorage.getItem(key); if (s) return JSON.parse(s); }
+        catch (e) {}
+        localStorage.setItem(key, JSON.stringify(seed));
+        return seed.slice();
+    }
+    function getCourses() { return readStore(STORAGE_KEY, DEFAULT_SEEDED_COURSES); }
+    function getTests() { return readStore(TESTS_STORAGE_KEY, DEFAULT_SEEDED_TESTS); }
+    function getDsaProblems() { return readStore(DSA_STORAGE_KEY, DEFAULT_SEEDED_DSA); }
+    function saveList(key, v) { localStorage.setItem(key, JSON.stringify(v)); }
+
+    function searchVal(id) { const el = document.getElementById(id); return el ? el.value.toLowerCase().trim() : ''; }
+
+    // ===== EXPAND / COLLAPSE CARD DETAILS =====
+    function toggleCardDetails(event, id) {
+        if (event) event.stopPropagation();
+        const details = document.getElementById('details-' + id);
+        const btn = document.getElementById('expandBtn-' + id);
+        if (!details) return;
+        const hidden = details.style.display === 'none' || details.style.display === '';
+        details.style.display = hidden ? 'block' : 'none';
+        if (btn) {
+            const icon = btn.querySelector('i');
+            if (icon) icon.className = hidden ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
+            btn.style.background = hidden ? '#fef3f2' : '#f9fafb';
+        }
+    }
+
+    // ===== RENDER: TESTS =====
+    function renderTests() {
+        const q = document.querySelector('#testsSection .search-input');
+        const term = (q ? q.value : '').toLowerCase().trim();
+        const tests = getTests().filter(t => !term || (t.title + ' ' + (t.code || '') + ' ' + (t.id || '')).toLowerCase().includes(term));
+        document.getElementById('testsCount').textContent = `(${getTests().length})`;
+        const list = document.getElementById('testsList');
+        if (!tests.length) { list.innerHTML = `<div class="empty-state">Not Created yet.</div>`; return; }
+        list.innerHTML = tests.map((t) => {
+            const realIdx = getTests().findIndex(x => x.id === t.id);
+            const tid = encodeURIComponent(t.id || t.code);
+            const sections = t.sectionsCount || (t.sections ? t.sections.length : 1);
+            const qns = t.questionsCount || (t.questions ? t.questions.length : 0);
+            const part = t.participation || t.attempts || 0;
+            const sub = t.submitted || 0;
+            const pct = part > 0 ? Math.round((sub / part) * 100) : 0;
+            const dcid = 'test-' + t.id;
+            return `
+            <div class="lm-card" onclick="location.href='interound-attempt.html?id=${tid}'">
+                <div class="lm-card-top">
+                    <h3 class="lm-title">${esc(t.title)}</h3>
+                    <div class="lm-icons" onclick="event.stopPropagation();">
+                        <div class="icon-btn-box" title="Open" onclick="location.href='interound-attempt.html?id=${tid}'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/menu-1.svg" alt="Open"></div>
+                        <div class="icon-btn-box" id="expandBtn-${dcid}" title="Details &amp; Actions" onclick="toggleCardDetails(event,'${dcid}')"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+                </div>
+                <div class="lm-sub">${sections} Sections (${qns} Qns)</div>
+                <div class="lm-progress-row">
+                    <div class="lm-bar"><div style="width:${pct}%"></div></div>
+                    <span class="lm-progress-label">${sub}/${part} Submissions (${pct}%)</span>
+                </div>
+                <div id="details-${dcid}" class="lm-details" onclick="event.stopPropagation();">
+                    <span class="status-pill active">${esc(t.status || 'ACTIVE')}</span>
+                    <span class="card-id" style="margin-left:12px;">ID: ${esc(t.id || t.code)}</span>
+                    <div style="margin-top:16px;">
+                        <a href="interview-maker.html?id=${tid}" class="btn-detail-action"><i class="fas fa-edit"></i> Edit</a>
+                        <a href="interound-attempt.html?id=${tid}" class="btn-detail-action"><i class="fas fa-eye"></i> Preview</a>
+                        <button class="btn-detail-action" style="color:#d32f2f;border-color:#fecdca;" onclick="deleteTest(${realIdx})"><i class="fas fa-trash"></i> Delete</button>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    // ===== RENDER: COURSES =====
+    function renderCourses() {
+        const q = document.querySelector('#coursesSection .search-input');
+        const term = (q ? q.value : '').toLowerCase().trim();
+        const courses = getCourses().filter(c => !term || (c.code || '').toLowerCase().includes(term));
+        document.getElementById('coursesCount').textContent = `(${getCourses().length})`;
+        const list = document.getElementById('coursesList');
+        if (!courses.length) { list.innerHTML = `<div class="empty-state">Not Created yet.</div>`; return; }
+        list.innerHTML = courses.map((c) => {
+            const realIdx = getCourses().findIndex(x => x.id === c.id);
+            const cid = encodeURIComponent(c.id || c.code);
+            const modules = c.sectionsCount || (c.sections ? c.sections.length : 0);
+            const prog = c.progress || 0;
+            const dcid = 'course-' + c.id;
+            return `
+            <div class="lm-card" onclick="location.href='course-player.html?courseId=${cid}'">
+                <div class="lm-card-top">
+                    <h3 class="lm-title">${esc(c.code)}</h3>
+                    <div class="lm-icons" onclick="event.stopPropagation();">
+                        <div class="icon-btn-box" title="Open" onclick="location.href='course-player.html?courseId=${cid}'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/menu-1.svg" alt="Open"></div>
+                        <div class="icon-btn-box" id="expandBtn-${dcid}" title="Details &amp; Actions" onclick="toggleCardDetails(event,'${dcid}')"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+                </div>
+                <div class="lm-sub">${modules} Sections (${c.students || 0} Students)</div>
+                <div class="lm-progress-row">
+                    <div class="lm-bar"><div style="width:${prog}%"></div></div>
+                    <span class="lm-progress-label">${prog}% completion</span>
+                </div>
+                <div id="details-${dcid}" class="lm-details" onclick="event.stopPropagation();">
+                    <span class="status-pill active">PUBLISHED</span>
+                    <span class="card-id" style="margin-left:12px;">${esc(c.id)}</span>
+                    <div style="margin-top:16px;">
+                        <a href="CQCmaker.html" class="btn-detail-action"><i class="fas fa-drafting-compass"></i> Studio</a>
+                        <a href="course-player.html?courseId=${cid}" class="btn-detail-action"><i class="fas fa-play"></i> Player</a>
+                        <button class="btn-detail-action" style="color:#d32f2f;border-color:#fecdca;" onclick="deleteCourse(${realIdx})"><i class="fas fa-trash"></i> Delete</button>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    // ===== RENDER: DSA =====
+    function renderDsa() {
+        const q = document.querySelector('#dsaSection .search-input');
+        const term = (q ? q.value : '').toLowerCase().trim();
+        const all = getDsaProblems();
+        const problems = all.filter(p => !term || (p.title + ' ' + (p.topics || '')).toLowerCase().includes(term));
+        document.getElementById('dsaCount').textContent = `(${all.length})`;
+        const list = document.getElementById('dsaList');
+        if (!problems.length) { list.innerHTML = `<div class="empty-state">Not Created yet.</div>`; return; }
+        list.innerHTML = problems.map((p) => {
+            const realIdx = all.findIndex(x => x.id === p.id);
+            const diffClass = p.diff === 'Easy' ? 'diff-easy' : (p.diff === 'Hard' ? 'diff-hard' : 'diff-med');
+            const topics = (p.topics || '').split(',').map(t => t.trim()).filter(Boolean);
+            const topicBadges = topics.map(t => `<span class="topic-badge">${esc(t)}</span>`).join(' ');
+            const acc = parseFloat(p.acceptance) || 0;
+            const qid = encodeURIComponent(p.id);
+            const dcid = 'dsa-' + p.id;
+            return `
+            <div class="lm-card" onclick="location.href='CodeQuestattempt.html?id=${qid}'">
+                <div class="lm-card-top">
+                    <h3 class="lm-title">${esc(p.title)}</h3>
+                    <div class="lm-icons" onclick="event.stopPropagation();">
+                        <div class="icon-btn-box" title="Solve" onclick="location.href='CodeQuestattempt.html?id=${qid}'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/menu-1.svg" alt="Open"></div>
+                        <div class="icon-btn-box" id="expandBtn-${dcid}" title="Details &amp; Actions" onclick="toggleCardDetails(event,'${dcid}')"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+                </div>
+                <div class="lm-sub">${esc(p.diff || 'Medium')} &middot; ${topics.length} topic${topics.length === 1 ? '' : 's'}</div>
+                <div class="lm-progress-row">
+                    <div class="lm-bar"><div style="width:${acc}%"></div></div>
+                    <span class="lm-progress-label">${esc(p.acceptance || '50.0%')} acceptance</span>
+                </div>
+                <div id="details-${dcid}" class="lm-details" onclick="event.stopPropagation();">
+                    <span class="diff-pill ${diffClass}">${esc(p.diff || 'Medium')}</span>
+                    <div style="margin:12px 0;">${topicBadges}</div>
+                    <div>
+                        <a href="CodeQuestattempt.html?id=${qid}" class="btn-detail-action"><i class="fas fa-terminal"></i> Solve</a>
+                        <button class="btn-detail-action" style="color:#d32f2f;border-color:#fecdca;" onclick="deleteDsaProblem(${realIdx})"><i class="fas fa-trash"></i> Delete</button>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    // ===== COURSE CREATE =====
+    function openCreateModal() { document.getElementById('createCourseModal').style.display = 'flex'; generateSectionFields(5); }
+    function closeCreateModal() { document.getElementById('createCourseModal').style.display = 'none'; }
+
+    function generateSectionFields(count) {
+        const list = document.getElementById('sectionsListInputs');
+        list.innerHTML = '';
+        for (let i = 1; i <= count; i++) {
+            const row = document.createElement('div');
+            row.className = 'section-input-row';
+            row.innerHTML = `<span style="font-weight:800; min-width:24px;">${i}.</span>
+                <input type="text" class="form-input section-title-item" placeholder="Section ${i} Module Title" required>`;
+            list.appendChild(row);
+        }
+    }
+
+    function handleSaveCourse(e) {
+        e.preventDefault();
+        const code = document.getElementById('courseCodeInput').value.trim();
+        const progress = parseInt(document.getElementById('courseProgressInput').value) || 0;
+        const sections = Array.from(document.querySelectorAll('.section-title-item')).map((inp, idx) => ({
+            num: idx + 1, title: inp.value.trim() || `Section ${idx + 1}`
+        }));
+        const courses = getCourses();
+        courses.push({ id: 'course_' + Date.now(), code, sectionsCount: sections.length, progress, sections });
+        saveList(STORAGE_KEY, courses);
+        closeCreateModal();
+        renderCourses();
+        showToast(`Course published to student portal!`);
+    }
+
+    function deleteCourse(idx) {
+        if (!confirm('Delete this course from the student roster?')) return;
+        const courses = getCourses(); courses.splice(idx, 1); saveList(STORAGE_KEY, courses); renderCourses(); showToast('Course removed.');
+    }
+
+    // ===== TEST DELETE =====
+    function deleteTest(idx) {
+        if (!confirm('Remove this coding round?')) return;
+        const tests = getTests(); tests.splice(idx, 1); saveList(TESTS_STORAGE_KEY, tests); renderTests(); showToast('Coding round removed.');
+    }
+
+    // ===== DSA CREATE =====
+    function openAddDsaModal() { document.getElementById('addDsaModal').style.display = 'flex'; }
+    function closeAddDsaModal() { document.getElementById('addDsaModal').style.display = 'none'; }
+
+    function handleSaveDsaProblem(e) {
+        e.preventDefault();
+        const title = document.getElementById('dsaTitleInput').value.trim();
+        const problems = getDsaProblems();
+        problems.push({
+            id: 'PQ9RJ' + String(problems.length + 1).padStart(3, '0'),
+            num: problems.length + 1,
+            title,
+            diff: document.getElementById('dsaDiffInput').value,
+            acceptance: document.getElementById('dsaAcceptanceInput').value.trim() || '50.0%',
+            topics: document.getElementById('dsaTopicsInput').value.trim(),
+            desc: document.getElementById('dsaDescInput').value.trim(),
+            code: document.getElementById('dsaCodeInput').value.trim() || 'class Solution:\n    def solve(self):\n        pass'
+        });
+        saveList(DSA_STORAGE_KEY, problems);
+        closeAddDsaModal();
+        renderDsa();
+        showToast(`"${title}" published to Student Arena!`);
+    }
+
+    function deleteDsaProblem(idx) {
+        if (!confirm('Delete this DSA problem from the arena?')) return;
+        const problems = getDsaProblems(); problems.splice(idx, 1); saveList(DSA_STORAGE_KEY, problems); renderDsa(); showToast('Problem removed.');
+    }
+
+    // ===== HEADER / UI HELPERS =====
+    function scrollToSection(id) { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+
+    function toggleMenu(e) { e.stopPropagation(); const m = document.getElementById('profileMenu'); m.style.display = m.style.display === 'block' ? 'none' : 'block'; }
+    function toggleGridMenu(e) { e.stopPropagation(); const m = document.getElementById('gridMenu'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }
+    document.addEventListener('click', () => {
+        const m = document.getElementById('profileMenu'); if (m) m.style.display = 'none';
+        const g = document.getElementById('gridMenu'); if (g) g.style.display = 'none';
+    });
+
+    function handleLogout() { localStorage.removeItem('CodeQuest_active_session'); window.location.href = 'firstpage.html'; }
+
+    function showToast(msg) { const t = document.getElementById('teacherToast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(showToast._h); showToast._h = setTimeout(() => { t.style.display = 'none'; }, 3000); }
+
+    function esc(s) { return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+    function loadSession() {
+        try {
+            const s = JSON.parse(localStorage.getItem('CodeQuest_active_session'));
+            if (s && s.name) document.getElementById('userName').textContent = s.name;
+        } catch (e) {}
+    }
+
+    // ===== RENDER: BATCHES =====
+    function renderBatches() {
+        const list = getBatches();
+        const el = document.getElementById('batchesList');
+        const cnt = document.getElementById('batchesCount');
+        if (cnt) cnt.textContent = `(${list.length})`;
+        if (!el) return;
+        if (!list.length) { el.innerHTML = `<div class="empty-state">Not Created yet.</div>`; return; }
+        el.innerHTML = list.map(b => {
+            const n = (b.students || []).length;
+            return `
+            <div class="lm-card" onclick="location.href='createBatch.html?id=${b.id}'">
+                <div class="lm-card-top">
+                    <h3 class="lm-title">${esc(b.name)}</h3>
+                    <div class="lm-icons" onclick="event.stopPropagation();">
+                        <div class="icon-btn-box" title="Edit Batch" onclick="location.href='createBatch.html?id=${b.id}'"><i class="fas fa-users" style="color:#666;"></i></div>
+                        <div class="icon-btn-box" title="Open Chat" onclick="location.href='createchat.html?batchId=${b.id}'"><i class="fas fa-comments" style="color:#075E54;"></i></div>
+                        <div class="icon-btn-box" title="Delete" onclick="deleteBatch('${b.id}')"><i class="fas fa-trash" style="color:#d32f2f;"></i></div>
+                    </div>
+                </div>
+                <div class="lm-sub">${esc(b.subject || 'General')} &middot; ${n} student${n === 1 ? '' : 's'}</div>
+            </div>`;
+        }).join('');
+    }
+    function deleteBatch(id) {
+        if (!confirm('Delete this batch and its student list?')) return;
+        writeBatchesLocal(getBatches().filter(b => b.id !== id));
+        renderBatches(); showToast('Batch removed.');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        loadSession();
+        purgeDummyData();
+        renderTests();
+        renderCourses();
+        renderDsa();
+        renderBatches();
+    });
+</script>
+</body>
+
+</html>

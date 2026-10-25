@@ -1,0 +1,282 @@
+/* ===== TESTPAD GLOBAL STYLES ===== */
+/* Color Scheme: Orange (#FF8C00, #FFA500) + White (#FFFFFF) + Dark Text (#333333) */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-orange: #FF8C00;
+    --light-orange: #FFA500;
+    --dark-orange: #E67E00;
+    --white: #FFFFFF;
+    --light-gray: #F5F5F5;
+    --dark-gray: #333333;
+    --border-gray: #CCCCCC;
+    --success: #28A745;
+    --danger: #DC3545;
+    --warning: #FFC107;
+    --shadow: 0 4px 12px rgba(255, 140, 0, 0.15);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--light-gray);
+    color: var(--dark-gray);
+    line-height: 1.6;
+}
+
+/* ===== LANDING PAGE ===== */
+.landing-page {
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--light-orange) 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.landing-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+
+.landing-header {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--white);
+}
+
+.logo-section h1 {
+    font-size: 3.5rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+}
+
+.logo-section .brand-subtitle {
+    font-size: 1.3rem;
+    opacity: 0.95;
+}
+
+.landing-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--white);
+}
+
+.landing-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.landing-content .subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 50px;
+    opacity: 0.9;
+}
+
+.role-selector {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+    width: 100%;
+    max-width: 800px;
+}
+
+.role-card {
+    background: var(--white);
+    border-radius: 15px;
+    padding: 40px 30px;
+    width: 280px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.role-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 24px rgba(255, 140, 0, 0.3);
+}
+
+.role-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.role-card h3 {
+    color: var(--primary-orange);
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+.role-card p {
+    color: var(--dark-gray);
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+}
+
+.info-section {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    color: var(--white);
+    max-width: 500px;
+    backdrop-filter: blur(10px);
+}
+
+.info-section p {
+    margin: 10px 0;
+    font-size: 0.95rem;
+}
+
+.landing-footer {
+    padding: 20px;
+    text-align: center;
+    color: var(--white);
+    opacity: 0.8;
+    font-size: 0.9rem;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary {
+    background-color: var(--primary-orange);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background-color: var(--dark-orange);
+    transform: scale(1.05);
+}
+
+.btn-secondary {
+    background-color: var(--light-gray);
+    color: var(--primary-orange);
+    border: 2px solid var(--primary-orange);
+}
+
+.btn-secondary:hover {
+    background-color: var(--primary-orange);
+    color: var(--white);
+}
+
+.btn-success {
+    background-color: var(--success);
+    color: var(--white);
+}
+
+.btn-danger {
+    background-color: var(--danger);
+    color: var(--white);
+}
+
+/* ===== FORMS ===== */
+.form-container {
+    background: var(--white);
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 450px;
+    box-shadow: var(--shadow);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--dark-gray);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--border-gray);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 8px rgba(255, 140, 0, 0.2);
+}
+
+/* ===== CARDS ===== */
+.card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .role-selector {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .landing-content h2 {
+        font-size: 1.8rem;
+    }
+
+    .logo-section h1 {
+        font-size: 2.5rem;
+    }
+
+    .form-container {
+        padding: 25px;
+        max-width: 90%;
+    }
+}
+
+/* Custom Smooth Blue Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #60a5fa;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #2563eb;
+}

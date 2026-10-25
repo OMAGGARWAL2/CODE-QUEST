@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Chat Groups</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Mulish:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+    <style>
+        :root {
+            --primary: #D92D20;
+            --accent: #075E54;
+            --accent-rgb: 7, 94, 84;
+            --accent-hover: #054c44;
+            
+            /* Light Theme Tokens (Default WhatsApp) */
+            --bg-body: #f0f2f5;
+            --bg-header: #075E54;
+            --text-header: #ffffff;
+            --bg-sidebar: #ffffff;
+            --bg-sidebar-header: #f0f2f5;
+            --border-color: #e9edef;
+            --text-main: #111b21;
+            --text-secondary: #667781;
+            --text-muted: #8696a0;
+            
+            --chat-pane-bg: #efeae2;
+            --bubble-in: #ffffff;
+            --bubble-in-text: #111b21;
+            --bubble-out: #d9fdd3;
+            --bubble-out-text: #111b21;
+            --bubble-shadow: rgba(11, 20, 26, 0.12);
+            --meta-color: #667781;
+            --tick-read: #53bdeb;
+            --tick-unread: #8696a0;
+            
+            --composer-bg: #f0f2f5;
+            --composer-input-bg: #ffffff;
+            --composer-input-text: #111b21;
+            --composer-btn-color: #54656f;
+            
+            --modal-bg: #ffffff;
+            --modal-overlay: rgba(11, 20, 26, 0.55);
+            --context-bg: #ffffff;
+            --context-hover: #f5f6f6;
+            --card-subtle: #f7f8fa;
+            --code-bg: #1e1e1e;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0c1317;
+            --bg-header: #202c33;
+            --text-header: #e9edef;
+            --bg-sidebar: #111b21;
+            --bg-sidebar-header: #202c33;
+            --border-color: #222d34;
+            --text-main: #e9edef;
+            --text-secondary: #aebac1;
+            --text-muted: #8696a0;
+            
+            --chat-pane-bg: #0b141a;
+            --bubble-in: #202c33;
+            --bubble-in-text: #e9edef;
+            --bubble-out: #005c4b;
+            --bubble-out-text: #e9edef;
+            --bubble-shadow: rgba(0, 0, 0, 0.35);
+            --meta-color: #8696a0;
+            --tick-read: #53bdeb;
+            --tick-unread: #8696a0;
+            
+            --composer-bg: #202c33;
+            --composer-input-bg: #2a3942;
+            --composer-input-text: #e9edef;
+            --composer-btn-color: #8696a0;
+            
+            --modal-bg: #222e35;
+            --modal-overlay: rgba(0, 0, 0, 0.75);
+            --context-bg: #233138;
+            --context-hover: #182229;
+            --card-subtle: #182229;
+            --code-bg: #111b21;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind', sans-serif; }
+        body { background: var(--bg-body); color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; transition: background-color 0.25s, color 0.25s; }
+        h1, h2, h3, h4 { font-family: 'Mulish', sans-serif; }
+
+        /* HEADER */
+        .site-header { height: 62px; background: var(--bg-header); color: var(--text-header); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.18); z-index: 100; transition: background 0.25s; }
+        .site-header .brand { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .site-header .brand img { width: 36px; height: 36px; background: #fff; border-radius: 8px; padding: 3px; }
+        .site-header .brand b { font-family: 'Mulish', sans-serif; font-size: 1.15rem; letter-spacing: -0.3px; }
+        .site-header .brand small { display: block; font-size: 0.72rem; opacity: 0.85; }
+        .site-header .hright { display: flex; align-items: center; gap: 10px; }
+        .who { font-family: 'Mulish', sans-serif; font-size: 0.9rem; opacity: 0.95; display: flex; align-items: center; }
+        .who .role-tag { background: rgba(255,255,255,0.22); padding: 2px 8px; border-radius: 12px; font-weight: 700; font-size: 0.72rem; text-transform: uppercase; margin-left: 6px; }
+        .hbtn { background: rgba(255,255,255,0.14); border: none; color: #fff; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .hbtn:hover { background: rgba(255,255,255,0.28); transform: scale(1.05); }
+
+        /* LAYOUT */
+        .chat-shell { flex: 1; display: flex; min-height: 0; position: relative; }
+        .sidebar { width: 360px; background: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; min-height: 0; z-index: 20; transition: background 0.25s, border-color 0.25s; }
+        .sidebar-head { padding: 12px 16px; background: var(--bg-sidebar-header); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; }
+        .sidebar-head h2 { font-size: 1.15rem; font-weight: 800; color: var(--text-main); }
+        .sidebar-search-box { padding: 8px 14px; background: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); }
+        .search-inner { background: var(--bg-sidebar-header); border-radius: 8px; display: flex; align-items: center; padding: 6px 12px; gap: 10px; }
+        .search-inner i { color: var(--text-muted); font-size: 0.9rem; }
+        .search-inner input { background: transparent; border: none; outline: none; width: 100%; color: var(--text-main); font-size: 0.92rem; font-family: 'Hind', sans-serif; }
+        .search-inner input::placeholder { color: var(--text-muted); }
+
+        .new-group-btn { background: var(--accent); color: #fff; border: none; padding: 7px 12px; border-radius: 8px; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 0.82rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
+        .new-group-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .group-list { flex: 1; overflow-y: auto; }
+        .group-item { padding: 12px 16px; border-bottom: 1px solid var(--border-color); cursor: pointer; display: flex; gap: 12px; align-items: center; transition: background 0.15s; position: relative; }
+        .group-item:hover { background: var(--context-hover); }
+        .group-item.active { background: var(--context-hover); border-left: 4px solid var(--accent); }
+        .group-avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.2rem; flex-shrink: 0; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+        .group-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .group-info { flex: 1; min-width: 0; }
+        .group-info-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; }
+        .group-info .gname { font-family: 'Mulish', sans-serif; font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.98rem; }
+        .group-info .gtime { font-size: 0.75rem; color: var(--text-muted); font-family: 'Mulish', sans-serif; font-weight: 600; flex-shrink: 0; }
+        .group-info .gprev { font-size: 0.86rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 4px; }
+        .lock-ic { color: var(--primary); font-size: 0.8rem; margin-left: 6px; }
+        .rem-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(234, 88, 12, 0.15); color: #ea580c; border: 1px solid rgba(234, 88, 12, 0.35); font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 0.68rem; padding: 1px 6px; border-radius: 8px; margin-left: 6px; vertical-align: middle; }
+        .side-empty { padding: 40px 20px; color: var(--text-muted); font-family: 'Mulish', sans-serif; text-align: center; font-size: 0.95rem; }
+
+        /* CHAT PANE */
+        .chat-pane { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; background: var(--chat-pane-bg); }
+        .chat-top { background: var(--bg-sidebar-header); padding: 10px 18px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid var(--border-color); flex-shrink: 0; cursor: pointer; z-index: 10; }
+        .chat-top .group-avatar { width: 42px; height: 42px; font-size: 1.05rem; }
+        .chat-top .ct-info { flex: 1; min-width: 0; }
+        .chat-top .ct-info .ct-name { font-family: 'Mulish', sans-serif; font-weight: 800; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 1.05rem; }
+        .chat-top .ct-info .ct-sub { font-size: 0.82rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .chat-top .ct-tools { display: flex; gap: 8px; align-items: center; }
+        .tool-btn { background: var(--modal-bg); border: 1px solid var(--border-color); width: 38px; height: 38px; border-radius: 50%; cursor: pointer; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; transition: all 0.15s; font-size: 0.95rem; }
+        .tool-btn:hover { background: var(--context-hover); color: var(--accent); transform: scale(1.05); }
+        .tool-btn.on { background: rgba(217, 45, 32, 0.12); color: var(--primary); border-color: rgba(217, 45, 32, 0.35); }
+
+        /* MESSAGES CONTAINER */
+        .messages-container { flex: 1; position: relative; min-height: 0; display: flex; flex-direction: column; }
+        .messages { flex: 1; overflow-y: auto; padding: 18px 24px; display: flex; flex-direction: column; gap: 6px; background-size: cover; background-position: center; transition: background 0.3s ease; }
+        .msg-day { align-self: center; background: rgba(11, 20, 26, 0.15); backdrop-filter: blur(4px); color: var(--text-main); font-family: 'Mulish', sans-serif; font-size: 0.74rem; font-weight: 600; padding: 4px 12px; border-radius: 8px; margin: 8px 0; text-transform: uppercase; letter-spacing: 0.4px; }
+        [data-theme="dark"] .msg-day { background: rgba(0, 0, 0, 0.45); }
+
+        /* BUBBLE STYLES */
+        .bubble-wrap { display: flex; flex-direction: column; position: relative; margin: 2px 0; max-width: 72%; }
+        .bubble-wrap.in { align-self: flex-start; }
+        .bubble-wrap.out { align-self: flex-end; }
+
+        .bubble { padding: 7px 12px 5px 12px; border-radius: 8px; position: relative; box-shadow: 0 1px 2px var(--bubble-shadow); word-wrap: break-word; user-select: text; transition: filter 0.15s; cursor: pointer; }
+        .bubble-wrap.in .bubble { background: var(--bubble-in); color: var(--bubble-in-text); border-top-left-radius: 0; }
+        .bubble-wrap.out .bubble { background: var(--bubble-out); color: var(--bubble-out-text); border-top-right-radius: 0; }
+        .bubble:hover { filter: brightness(0.98); }
+        [data-theme="dark"] .bubble:hover { filter: brightness(1.05); }
+
+        .bubble-corner-arrow { position: absolute; top: 6px; right: 8px; opacity: 0; cursor: pointer; color: var(--meta-color); font-size: 0.85rem; padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.06); transition: opacity 0.15s; }
+        [data-theme="dark"] .bubble-corner-arrow { background: rgba(255,255,255,0.08); }
+        .bubble:hover .bubble-corner-arrow { opacity: 1; }
+
+        .bubble .sender { font-size: 0.8rem; font-weight: 800; font-family: 'Mulish', sans-serif; color: var(--accent); margin-bottom: 3px; display: flex; align-items: center; justify-content: space-between; }
+        .bubble-wrap.out .sender { display: none; }
+        .bubble .txt { font-size: 0.98rem; line-height: 1.42; white-space: pre-wrap; word-break: break-word; }
+        .bubble .meta { font-size: 0.68rem; color: var(--meta-color); text-align: right; margin-top: 3px; display: flex; align-items: center; justify-content: flex-end; gap: 4px; float: right; margin-left: 10px; }
+        .bubble .meta .adm { color: var(--primary); font-weight: 700; margin-right: 4px; }
+        .bubble .meta i.tick { font-size: 0.72rem; }
+        .bubble .meta i.tick.read { color: var(--tick-read); }
+        .bubble .meta i.tick.unread { color: var(--tick-unread); }
+
+        .msg-deleted { font-style: italic; opacity: 0.72; display: flex; align-items: center; gap: 6px; font-size: 0.92rem; }
+
+        /* REPLIED QUOTE */
+        .reply-quote-preview { background: rgba(0, 0, 0, 0.05); border-left: 4px solid var(--accent); border-radius: 4px; padding: 5px 8px; margin-bottom: 6px; font-size: 0.82rem; }
+        [data-theme="dark"] .reply-quote-preview { background: rgba(0, 0, 0, 0.25); }
+        .reply-quote-preview .rq-author { font-weight: 700; color: var(--accent); font-family: 'Mulish', sans-serif; font-size: 0.78rem; }
+        .reply-quote-preview .rq-text { color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* ATTACHMENT IN BUBBLE */
+        .bubble .att-img { max-width: 320px; width: 100%; border-radius: 6px; display: block; margin-bottom: 5px; cursor: pointer; object-fit: cover; max-height: 380px; }
+        .att-file { display: flex; align-items: center; gap: 12px; background: rgba(0,0,0,0.06); border-radius: 8px; padding: 10px 12px; margin-bottom: 5px; text-decoration: none; color: inherit; }
+        [data-theme="dark"] .att-file { background: rgba(0,0,0,0.22); }
+        .att-file .af-ic { width: 42px; height: 42px; border-radius: 8px; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0; }
+        .att-file .af-name { font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 0.95rem; max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main); }
+        .att-file .af-size { font-size: 0.76rem; color: var(--text-secondary); }
+
+        /* CODE SNIPPET BUBBLE */
+        .code-snippet-box { background: var(--code-bg); color: #d4d4d4; border-radius: 8px; overflow: hidden; margin-bottom: 6px; font-family: 'Fira Code', monospace; font-size: 0.84rem; }
+        .code-snippet-head { background: #2d2d2d; padding: 5px 12px; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: #9cdcfe; }
+        .code-snippet-body { padding: 10px 12px; overflow-x: auto; white-space: pre; line-height: 1.45; font-family: 'Fira Code', monospace; }
+
+        /* POLL BUBBLE */
+        .poll-box { min-width: 260px; padding: 4px 0 6px 0; }
+        .poll-question { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.05rem; margin-bottom: 10px; color: var(--text-main); }
+        .poll-option-row { background: rgba(0,0,0,0.05); border-radius: 6px; padding: 8px 12px; margin-bottom: 6px; cursor: pointer; transition: background 0.15s; position: relative; overflow: hidden; }
+        [data-theme="dark"] .poll-option-row { background: rgba(255,255,255,0.06); }
+        .poll-option-row:hover { background: rgba(0,0,0,0.09); }
+        .poll-option-bar { position: absolute; left: 0; top: 0; bottom: 0; background: rgba(7, 94, 84, 0.25); border-radius: 6px; z-index: 1; transition: width 0.3s; }
+        [data-theme="dark"] .poll-option-bar { background: rgba(0, 92, 75, 0.45); }
+        .poll-option-content { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; font-size: 0.92rem; }
+        .poll-opt-name { font-weight: 600; color: var(--text-main); }
+        .poll-opt-votes { font-size: 0.75rem; color: var(--text-secondary); font-weight: 700; }
+
+        /* PROBLEM CARD */
+        .prob-card .af-ic { background: var(--primary) !important; }
+        .prob-card { border: 1px solid rgba(217, 45, 32, 0.35); }
+
+        /* REACTION PILLS */
+        .reaction-pills-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+        .reaction-pill { background: var(--modal-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 2px 7px; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 3px; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.08); transition: transform 0.1s; }
+        .reaction-pill:hover { transform: scale(1.1); }
+        .reaction-pill.mine { border-color: var(--accent); background: rgba(7, 94, 84, 0.12); }
+
+        .system-note { align-self: center; font-family: 'Mulish', sans-serif; font-size: 0.8rem; color: var(--text-secondary); background: var(--modal-bg); padding: 5px 14px; border-radius: 10px; text-align: center; box-shadow: 0 1px 2px rgba(0,0,0,0.08); max-width: 85%; margin: 4px 0; }
+
+        /* COMPOSER */
+        .composer-wrap { flex-shrink: 0; background: var(--composer-bg); border-top: 1px solid var(--border-color); position: relative; z-index: 15; }
+        .reply-composer-bar { display: none; background: var(--bg-sidebar-header); border-bottom: 1px solid var(--border-color); padding: 8px 16px; align-items: center; justify-content: space-between; border-left: 4px solid var(--accent); }
+        .reply-composer-bar.show { display: flex; }
+        .rcb-info { min-width: 0; flex: 1; }
+        .rcb-author { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 0.82rem; color: var(--accent); }
+        .rcb-text { font-size: 0.84rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .rcb-close { background: none; border: none; font-size: 1rem; color: var(--text-muted); cursor: pointer; padding: 4px; }
+
+        .attach-bar { display: none; background: var(--bg-sidebar); border-bottom: 1px solid var(--border-color); padding: 8px 16px; align-items: center; gap: 12px; }
+        .attach-bar.show { display: flex; }
+        .attach-bar .ab-thumb { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; background: var(--card-subtle); display: flex; align-items: center; justify-content: center; overflow: hidden; color: var(--accent); font-size: 1.2rem; }
+        .attach-bar .ab-name { font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 0.92rem; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main); }
+        .attach-bar .ab-x { background: rgba(217, 45, 32, 0.15); color: var(--primary); border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        .composer { padding: 10px 16px; display: flex; align-items: center; gap: 10px; position: relative; }
+        .icon-round { background: transparent; border: none; color: var(--composer-btn-color); font-size: 1.25rem; cursor: pointer; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; }
+        .icon-round:hover { background: rgba(0,0,0,0.06); color: var(--accent); }
+        [data-theme="dark"] .icon-round:hover { background: rgba(255,255,255,0.08); }
+        .icon-round.active { color: var(--accent); transform: rotate(45deg); }
+
+        .composer input.msg-input { flex: 1; padding: 11px 18px; border: 1px solid var(--border-color); border-radius: 24px; font-family: 'Hind', sans-serif; font-size: 1rem; outline: none; background: var(--composer-input-bg); color: var(--composer-input-text); box-shadow: inset 0 1px 2px rgba(0,0,0,0.04); }
+        .composer input.msg-input::placeholder { color: var(--text-muted); }
+        .composer input.msg-input:focus { border-color: var(--accent); }
+        
+        .send-btn { background: var(--accent); color: #fff; border: none; width: 46px; height: 46px; border-radius: 50%; cursor: pointer; font-size: 1.15rem; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: transform 0.1s, background 0.15s; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .send-btn:hover { transform: scale(1.06); filter: brightness(1.1); }
+        .send-btn:disabled { background: var(--text-muted); cursor: not-allowed; }
+        .lock-banner { background: rgba(234, 88, 12, 0.15); color: #ea580c; font-family: 'Mulish', sans-serif; font-size: 0.9rem; padding: 12px 16px; text-align: center; border-top: 1px solid rgba(234, 88, 12, 0.3); font-weight: 600; }
+
+        /* WHATSAPP ATTACHMENT POPUP TRAY */
+        .attach-tray-popover { position: absolute; bottom: 70px; left: 16px; background: var(--modal-bg); border-radius: 16px; box-shadow: 0 8px 30px rgba(0,0,0,0.25); border: 1px solid var(--border-color); padding: 14px 16px; display: none; grid-template-columns: repeat(3, 1fr); gap: 14px 18px; z-index: 500; animation: popUp 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .attach-tray-popover.show { display: grid; }
+        @keyframes popUp {
+            from { opacity: 0; transform: translateY(16px) scale(0.92); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .attach-option-btn { display: flex; flex-direction: column; align-items: center; gap: 6px; background: none; border: none; cursor: pointer; font-family: 'Mulish', sans-serif; }
+        .attach-opt-circle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.25rem; transition: transform 0.15s; box-shadow: 0 4px 10px rgba(0,0,0,0.18); }
+        .attach-option-btn:hover .attach-opt-circle { transform: scale(1.12); }
+        .attach-opt-label { font-size: 0.78rem; font-weight: 700; color: var(--text-main); text-align: center; }
+
+        /* CUSTOM CONTEXT MENU (WhatsApp style) */
+        .wa-context-menu { position: fixed; background: var(--context-bg); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.28); border: 1px solid var(--border-color); min-width: 220px; z-index: 6000; display: none; overflow: hidden; animation: fadeInMenu 0.12s ease-out; }
+        @keyframes fadeInMenu { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        
+        .wa-context-reactions { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--bg-sidebar-header); border-bottom: 1px solid var(--border-color); font-size: 1.35rem; }
+        .wa-context-reactions span { cursor: pointer; transition: transform 0.15s; }
+        .wa-context-reactions span:hover { transform: scale(1.35); }
+
+        .wa-context-item { display: flex; align-items: center; gap: 12px; padding: 11px 16px; cursor: pointer; font-family: 'Mulish', sans-serif; font-size: 0.92rem; font-weight: 600; color: var(--text-main); transition: background 0.12s; }
+        .wa-context-item:hover { background: var(--context-hover); }
+        .wa-context-item i { width: 20px; text-align: center; color: var(--text-secondary); font-size: 1rem; }
+        .wa-context-item.danger { color: #d92d20; }
+        .wa-context-item.danger i { color: #d92d20; }
+        .wa-context-sep { height: 1px; background: var(--border-color); margin: 3px 0; }
+
+        /* MESSAGE INFO DRAWER */
+        .info-overlay { display: none; position: fixed; inset: 0; background: var(--modal-overlay); z-index: 4000; backdrop-filter: blur(2px); }
+        .info-overlay.show { display: block; }
+        .info-drawer { position: fixed; top: 0; right: -450px; width: 420px; max-width: 92vw; height: 100vh; background: var(--modal-bg); z-index: 4100; box-shadow: -8px 0 30px rgba(0,0,0,0.25); transition: right 0.28s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; color: var(--text-main); }
+        .info-drawer.show { right: 0; }
+        .info-head { background: var(--bg-header); color: var(--text-header); padding: 18px 20px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 2; }
+        .info-head .ih-title { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.15rem; }
+        .info-head button { margin-left: auto; background: rgba(255,255,255,0.18); border: none; color: #fff; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; }
+
+        .info-body { padding: 20px 20px 60px; }
+        .info-avatar-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 20px; }
+        .info-avatar { width: 110px; height: 110px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 2.8rem; overflow: hidden; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.18); }
+        .info-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .info-avatar .cam { position: absolute; bottom: 0; right: 0; background: var(--accent); border: 3px solid var(--modal-bg); width: 38px; height: 38px; border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.95rem; }
+        .info-name { font-family: 'Mulish', sans-serif; font-size: 1.35rem; font-weight: 800; text-align: center; color: var(--text-main); }
+        .info-topic { color: var(--text-secondary); text-align: center; font-size: 0.92rem; margin-top: 2px; }
+        .info-count { color: var(--accent); font-weight: 700; text-align: center; font-size: 0.88rem; margin-top: 4px; }
+        .info-section { background: var(--modal-bg); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); margin-top: 16px; padding: 10px 0; }
+        .info-row { display: flex; align-items: center; gap: 14px; padding: 12px 8px; cursor: pointer; font-family: 'Mulish', sans-serif; font-weight: 600; color: var(--text-main); border-radius: 8px; }
+        .info-row:hover { background: var(--context-hover); }
+        .info-row i.lead { width: 26px; color: var(--text-secondary); font-size: 1.15rem; text-align: center; }
+        .info-row .grow { flex: 1; }
+
+        .member-row { display: flex; align-items: center; gap: 12px; padding: 10px 8px; border-radius: 8px; }
+        .member-row .m-av { width: 40px; height: 40px; border-radius: 50%; background: var(--card-subtle); color: var(--text-main); display: flex; align-items: center; justify-content: center; font-family: 'Mulish', sans-serif; font-weight: 800; }
+        .member-row .m-name { font-family: 'Mulish', sans-serif; font-weight: 700; color: var(--text-main); flex: 1; }
+        .member-row .m-tag { font-size: 0.72rem; background: rgba(7, 94, 84, 0.15); color: var(--accent); padding: 2px 8px; border-radius: 10px; font-weight: 700; }
+
+        /* MESSAGE INFO VIEW SPECIFICS (WHO WATCHED) */
+        .msg-preview-card { background: var(--card-subtle); border-radius: 10px; padding: 12px 14px; border: 1px solid var(--border-color); margin-bottom: 18px; }
+        .msg-info-status-group { margin-top: 14px; }
+        .msg-status-head { display: flex; align-items: center; gap: 8px; font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 0.95rem; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border-color); }
+        .msg-status-head.read-head { color: var(--tick-read); }
+        .msg-status-head.deliv-head { color: var(--text-secondary); }
+        .read-user-row { display: flex; align-items: center; gap: 12px; padding: 8px 6px; }
+        .read-user-av { width: 36px; height: 36px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; }
+        .read-user-info { flex: 1; }
+        .read-user-name { font-weight: 700; font-size: 0.92rem; color: var(--text-main); font-family: 'Mulish', sans-serif; }
+        .read-user-time { font-size: 0.75rem; color: var(--text-muted); }
+
+        /* MODALS */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: var(--modal-overlay); z-index: 5000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(3px); }
+        .modal-card { background: var(--modal-bg); border-radius: 16px; width: 100%; max-width: 520px; padding: 26px 28px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto; color: var(--text-main); border: 1px solid var(--border-color); }
+        .modal-card h3 { font-family: 'Mulish', sans-serif; font-size: 1.35rem; font-weight: 800; margin-bottom: 18px; color: var(--text-main); }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 0.92rem; margin-bottom: 6px; color: var(--text-main); }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 11px 14px; border: 1px solid var(--border-color); border-radius: 10px; font-family: 'Hind', sans-serif; font-size: 0.98rem; outline: none; background: var(--card-subtle); color: var(--text-main); }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); }
+        
+        .modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 22px; }
+        .btn { border: 1px solid var(--border-color); background: var(--modal-bg); color: var(--text-main); padding: 10px 20px; border-radius: 8px; font-family: 'Mulish', sans-serif; font-weight: 700; cursor: pointer; transition: all 0.15s; font-size: 0.92rem; }
+        .btn:hover { background: var(--context-hover); }
+        .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+        .btn.primary:hover { filter: brightness(1.1); }
+        .btn.danger { background: #d92d20; color: #fff; border-color: #d92d20; }
+
+        /* WALLPAPER SELECTOR GRID */
+        .wall-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 10px 0; }
+        .wall-swatch { height: 90px; border-radius: 12px; border: 3px solid transparent; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; font-size: 0.76rem; font-family: 'Mulish', sans-serif; font-weight: 800; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); padding-bottom: 6px; transition: transform 0.15s, border-color 0.15s; box-shadow: 0 2px 6px rgba(0,0,0,0.15); position: relative; overflow: hidden; }
+        .wall-swatch:hover { transform: scale(1.04); }
+        .wall-swatch.sel { border-color: #25D366; box-shadow: 0 0 0 2px #fff, 0 4px 12px rgba(37,211,102,0.4); }
+
+        .toast-box { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #111b21; color: #fff; padding: 12px 24px; border-radius: 10px; display: none; z-index: 100000; font-weight: 600; font-family: 'Mulish', sans-serif; box-shadow: 0 8px 24px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); animation: toastAnim 0.2s ease-out; }
+        @keyframes toastAnim { from { opacity: 0; transform: translate(-50%, 15px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+        /* REMINDER BANNER */
+        .rem-banner { background: rgba(234, 88, 12, 0.12); border-bottom: 1px solid rgba(234, 88, 12, 0.25); color: #ea580c; padding: 8px 18px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-family: 'Mulish', sans-serif; flex-shrink: 0; }
+        .rem-chip { display: inline-flex; align-items: center; gap: 8px; background: var(--modal-bg); color: var(--text-main); border: 1px solid rgba(234, 88, 12, 0.35); border-radius: 10px; padding: 5px 10px; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 0.8rem; }
+        .rem-chip .rc-x { cursor: pointer; opacity: 0.6; color: #d92d20; }
+        .rem-chip .rc-x:hover { opacity: 1; }
+
+        input[type=file] { display: none; }
+
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; position: absolute; z-index: 40; height: 100%; }
+            .sidebar.hidden { display: none; }
+            .chat-shell { position: relative; }
+            .attach-tray-popover { left: 8px; bottom: 65px; }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="brand" onclick="location.reload()">
+            <img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest">
+            <div><b>CodeQuest WhatsApp</b><small>Collaborative Groups</small></div>
+        </div>
+        <div class="hright">
+            <span class="who" id="whoami">Guest</span>
+            <button class="hbtn" id="themeToggleBtn" onclick="toggleThemeMode()" title="Toggle Dark / Light Theme"><i class="fas fa-moon"></i></button>
+            <button class="hbtn" onclick="openWallpaperModal()" title="Change Chat Wallpaper"><i class="fas fa-image"></i></button>
+            <button class="hbtn" onclick="location.href='teacherindex.html'" title="Back to Dashboard"><i class="fas fa-arrow-left"></i></button>
+        </div>
+    </header>
+
+    <div class="chat-shell">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-head">
+                <h2>Chats</h2>
+                <div style="display:flex; gap:8px;">
+                    <button class="new-group-btn" id="newGroupBtn" onclick="openCreateGroup()"><i class="fas fa-plus"></i> New Group</button>
+                </div>
+            </div>
+            <div class="sidebar-search-box">
+                <div class="search-inner">
+                    <i class="fas fa-magnifying-glass"></i>
+                    <input type="text" id="groupSearchInput" placeholder="Search or start new chat" oninput="filterGroups(this.value)">
+                </div>
+            </div>
+            <div class="group-list" id="groupList"></div>
+        </aside>
+
+        <!-- CHAT PANE -->
+        <section class="chat-pane" id="chatPane">
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--text-muted); gap:14px;">
+                <i class="fab fa-whatsapp" style="font-size:4.5rem; color:var(--accent);"></i>
+                <h3 style="font-size:1.3rem; color:var(--text-main);">CodeQuest Web Chat</h3>
+                <p style="font-family:'Mulish',sans-serif; font-size:0.95rem; max-width:320px; text-align:center;">Select any group to send messages, share problems, code snippets, and collaborate with your batchmates.</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- WHATSAPP ATTACHMENT TRAY POPOVER -->
+    <div class="attach-tray-popover" id="attachTray">
+        <button class="attach-option-btn" onclick="triggerFileInput('doc')">
+            <div class="attach-opt-circle" style="background:linear-gradient(135deg, #7f00ff, #e100ff);"><i class="fas fa-file-lines"></i></div>
+            <span class="attach-opt-label">Document</span>
+        </button>
+        <button class="attach-option-btn" onclick="triggerFileInput('media')">
+            <div class="attach-opt-circle" style="background:linear-gradient(135deg, #00c6ff, #0072ff);"><i class="fas fa-images"></i></div>
+            <span class="attach-opt-label">Photos & Videos</span>
+        </button>
+        <button class="attach-option-btn" onclick="triggerFileInput('audio')">
+            <div class="attach-opt-circle" style="background:linear-gradient(135deg, #f857a6, #ff5858);"><i class="fas fa-headphones"></i></div>
+            <span class="attach-opt-label">Audio</span>
+        </button>
+        <button class="attach-option-btn" onclick="openProblemModal()">
+            <div class="attach-opt-circle" style="background:linear-gradient(135deg, #ff416c, #ff4b2b);"><i class="fas fa-code"></i></div>
+            <span class="attach-opt-label">DSA Problem</span>
+        </button>
+        <button class="attach-option-btn" onclick="openSnippetModal()">
+            <div class="attach-opt-circle" style="background:linear-gradient(135deg, #11998e, #38ef7d);"><i class="fas fa-laptop-code"></i></div>
+            <span class="attach-opt-label">Code Snippet</span>
+        </button>
+        <button class="attach-option-btn" onclick="openPollModal()">
+            <div class="attach-opt-circle" style="background:linear-gradient(135deg, #f7971e, #ffd200);"><i class="fas fa-square-poll-vertical"></i></div>
+            <span class="attach-opt-label">Poll</span>
+        </button>
+    </div>
+
+    <!-- CUSTOM RIGHT-CLICK CONTEXT MENU -->
+    <div class="wa-context-menu" id="contextMenu">
+        <div class="wa-context-reactions">
+            <span onclick="reactToMessage('👍')">👍</span>
+            <span onclick="reactToMessage('❤️')">❤️</span>
+            <span onclick="reactToMessage('😂')">😂</span>
+            <span onclick="reactToMessage('😮')">😮</span>
+            <span onclick="reactToMessage('😢')">😢</span>
+            <span onclick="reactToMessage('🙏')">🙏</span>
+            <span onclick="reactToMessage('🚀')">🚀</span>
+        </div>
+        <div class="wa-context-item" onclick="triggerMessageInfo()"><i class="fas fa-circle-info"></i> Message info</div>
+        <div class="wa-context-item" onclick="triggerReply()"><i class="fas fa-reply"></i> Reply</div>
+        <div class="wa-context-item" onclick="triggerCopyText()"><i class="fas fa-copy"></i> Copy</div>
+        <div class="wa-context-item" onclick="triggerStarMessage()"><i class="fas fa-star" id="ctxStarIcon"></i> Star</div>
+        <div class="wa-context-sep"></div>
+        <div class="wa-context-item danger" onclick="triggerDeleteMessage()"><i class="fas fa-trash-can"></i> Delete message</div>
+    </div>
+
+    <!-- MESSAGE INFO (WHO WATCHED) DRAWER -->
+    <div class="info-overlay" id="infoOverlay" onclick="closeAllDrawers()"></div>
+    <aside class="info-drawer" id="infoDrawer"></aside>
+
+    <!-- CREATE GROUP MODAL -->
+    <div class="modal-overlay" id="groupModal">
+        <div class="modal-card">
+            <h3>Create Chat Group</h3>
+            <div class="form-group"><label>Group Name</label><input type="text" id="gName" placeholder="e.g. DSA Batch A Discussions"></div>
+            <div class="form-group"><label>Topic / Description (optional)</label><input type="text" id="gTopic" placeholder="e.g. College Coding & Contest Prep 🚀"></div>
+            <div class="form-group"><label>Attach to Batch (optional)</label><select id="gBatch"><option value="">— No batch (open group) —</option></select></div>
+            <div class="form-group"><label>Who can send messages?</label>
+                <select id="gPerm"><option value="all">All participants</option><option value="admins">Only admins (teacher)</option></select>
+            </div>
+            <div class="form-group"><label>Chat Wallpaper</label>
+                <div class="wall-grid" id="newGroupWallGrid"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('groupModal')">Cancel</button>
+                <button class="btn primary" onclick="createGroup()"><i class="fas fa-check"></i> Create Group</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHAT WALLPAPERS MODAL -->
+    <div class="modal-overlay" id="wallModal">
+        <div class="modal-card" style="max-width:580px;">
+            <h3><i class="fas fa-palette" style="color:var(--accent);"></i> Choose WhatsApp Wallpaper</h3>
+            <p style="color:var(--text-secondary); margin-bottom:14px; font-size:0.92rem;">Select a wallpaper style for this chat or upload your custom background photo.</p>
+            <div class="wall-grid" id="allWallpapersGrid"></div>
+            <div style="margin-top:16px; padding:12px; background:var(--card-subtle); border-radius:10px; display:flex; align-items:center; justify-content:space-between;">
+                <div>
+                    <div style="font-weight:700; font-size:0.92rem; color:var(--text-main);">Upload Custom Wallpaper</div>
+                    <small style="color:var(--text-secondary);">Supports JPG, PNG, WebP from your device</small>
+                </div>
+                <button class="btn primary" onclick="document.getElementById('wallFileInput').click()"><i class="fas fa-upload"></i> Upload</button>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('wallModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CODE SNIPPET MODAL -->
+    <div class="modal-overlay" id="snippetModal">
+        <div class="modal-card">
+            <h3><i class="fas fa-laptop-code" style="color:var(--accent);"></i> Share Code Snippet</h3>
+            <div class="form-group"><label>Language</label>
+                <select id="snipLang">
+                    <option value="python">Python</option>
+                    <option value="cpp">C++</option>
+                    <option value="java">Java</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="c">C</option>
+                    <option value="sql">SQL</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Code</label>
+                <textarea id="snipCode" rows="8" placeholder="// Write or paste your code here..." style="font-family:'Fira Code',monospace; font-size:0.9rem;"></textarea>
+            </div>
+            <div class="form-group"><label>Caption (optional)</label>
+                <input type="text" id="snipCaption" placeholder="e.g. Check this solution for Two Sum">
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('snippetModal')">Cancel</button>
+                <button class="btn primary" onclick="sendCodeSnippet()"><i class="fas fa-paper-plane"></i> Send Snippet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DSA PROBLEM SHARING MODAL -->
+    <div class="modal-overlay" id="problemModal">
+        <div class="modal-card">
+            <h3><i class="fas fa-code" style="color:var(--primary);"></i> Share CodeQuest Problem</h3>
+            <p style="color:var(--text-secondary); margin-bottom:14px; font-size:0.9rem;">Send an interactive DSA challenge link directly into the group for members to attempt.</p>
+            <div class="form-group"><label>Problem Title</label>
+                <input type="text" id="probTitle" placeholder="e.g. Merge K Sorted Lists">
+            </div>
+            <div class="form-group"><label>Difficulty</label>
+                <select id="probDiff">
+                    <option value="Easy">Easy 🟢</option>
+                    <option value="Medium" selected>Medium 🟡</option>
+                    <option value="Hard">Hard 🔴</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Points / Score</label>
+                <input type="number" id="probPoints" value="100">
+            </div>
+            <div class="form-group"><label>Target URL or Problem ID (optional)</label>
+                <input type="text" id="probUrl" placeholder="CodeQuestattempt.html?id=101">
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('problemModal')">Cancel</button>
+                <button class="btn primary" onclick="sendProblemCard()"><i class="fas fa-paper-plane"></i> Share Challenge</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- POLL CREATION MODAL -->
+    <div class="modal-overlay" id="pollModal">
+        <div class="modal-card">
+            <h3><i class="fas fa-square-poll-vertical" style="color:var(--accent);"></i> Create Poll</h3>
+            <div class="form-group"><label>Question</label>
+                <input type="text" id="pollQuestion" placeholder="e.g. What time is best for the contest?">
+            </div>
+            <div class="form-group"><label>Options</label>
+                <input type="text" class="poll-opt-input" placeholder="Option 1" style="margin-bottom:8px;">
+                <input type="text" class="poll-opt-input" placeholder="Option 2" style="margin-bottom:8px;">
+                <input type="text" class="poll-opt-input" placeholder="Option 3 (optional)" style="margin-bottom:8px;">
+                <input type="text" class="poll-opt-input" placeholder="Option 4 (optional)">
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('pollModal')">Cancel</button>
+                <button class="btn primary" onclick="sendPoll()"><i class="fas fa-paper-plane"></i> Create Poll</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE MESSAGE CONFIRMATION MODAL -->
+    <div class="modal-overlay" id="deleteMsgModal">
+        <div class="modal-card" style="max-width:420px;">
+            <h3>Delete Message?</h3>
+            <p style="color:var(--text-secondary); margin-bottom:18px; font-size:0.95rem;" id="delConfirmText">Choose how you'd like to delete this message.</p>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <button class="btn danger" id="btnDelEveryone" onclick="confirmDelete(true)"><i class="fas fa-users"></i> Delete for everyone</button>
+                <button class="btn" id="btnDelMe" onclick="confirmDelete(false)"><i class="fas fa-user"></i> Delete for me</button>
+                <button class="btn" onclick="closeModal('deleteMsgModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- REMINDER MODAL -->
+    <div class="modal-overlay" id="remModal">
+        <div class="modal-card">
+            <h3><i class="fas fa-bell" style="color:var(--accent);"></i> Set Group Reminder</h3>
+            <div class="form-group"><label>Remind at</label><input type="datetime-local" id="remTime"></div>
+            <div class="form-group"><label>Message (optional)</label><input type="text" id="remText" placeholder="e.g. Submit DSA Assignment by 6 PM"></div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('remModal')">Cancel</button>
+                <button class="btn primary" onclick="saveReminder()"><i class="fas fa-bell"></i> Set Reminder</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HIDDEN FILE INPUTS -->
+    <input type="file" id="docFileInput" accept="*/*">
+    <input type="file" id="mediaFileInput" accept="image/*,video/*">
+    <input type="file" id="audioFileInput" accept="audio/*">
+    <input type="file" id="wallFileInput" accept="image/*">
+    <input type="file" id="iconInput" accept="image/*">
+    
+    <div class="toast-box" id="cqToast">Done</div>
+
+    <script>
+        const GROUPS_KEY = 'CodeQuest_chat_groups';
+        const MSGS_KEY = 'CodeQuest_chat_messages';
+        const BATCHES_KEY = 'CodeQuest_batches';
+        const THEME_MODE_KEY = 'CodeQuest_chat_theme_mode';
+        const MAX_FILE = 5 * 1024 * 1024; // 5MB
+
+        // Authentic WhatsApp Doodle SVG patterns (Clean & crisp inline SVGs)
+        const WA_DOODLE_LIGHT = `radial-gradient(circle at 50% 50%, rgba(255,255,255,0.4) 0%, transparent 100%), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120' opacity='0.08'%3E%3Cpath d='M15 15h20v14H15zM75 20h15v15H75zM20 70h25v15H20zM80 80h18v18H80z' fill='%23000'/%3E%3Ccircle cx='35' cy='35' r='5' fill='%23000'/%3E%3Ccircle cx='85' cy='45' r='6' fill='%23000'/%3E%3Cpath d='M45 40l10 10-10 10M90 60l-10 10 10 10' stroke='%23000' stroke-width='2' fill='none'/%3E%3C/svg%3E") #EFEAE2`;
+        const WA_DOODLE_DARK = `radial-gradient(circle at 50% 50%, rgba(0,0,0,0.4) 0%, transparent 100%), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120' opacity='0.07'%3E%3Cpath d='M15 15h20v14H15zM75 20h15v15H75zM20 70h25v15H20zM80 80h18v18H80z' fill='%23fff'/%3E%3Ccircle cx='35' cy='35' r='5' fill='%23fff'/%3E%3Ccircle cx='85' cy='45' r='6' fill='%23fff'/%3E%3Cpath d='M45 40l10 10-10 10M90 60l-10 10 10 10' stroke='%23fff' stroke-width='2' fill='none'/%3E%3C/svg%3E") #0B141A`;
+
+        const WALLPAPERS = {
+            doodle_light: { label: 'WA Doodle (Light)', css: WA_DOODLE_LIGHT, size: 'auto', repeat: 'repeat' },
+            doodle_dark:  { label: 'WA Doodle (Dark)',  css: WA_DOODLE_DARK,  size: 'auto', repeat: 'repeat' },
+            beige:         { label: 'Solid Cream',       css: '#E5DDD5',       size: 'auto', repeat: 'no-repeat' },
+            dark_oled:     { label: 'Midnight Dark',     css: '#0B141A',       size: 'auto', repeat: 'no-repeat' },
+            matrix:        { label: 'Matrix Code',       css: 'linear-gradient(rgba(10,20,30,0.92), rgba(10,20,30,0.92)), radial-gradient(#00ff66 1px, transparent 1px) #0a141e', size: '28px 28px', repeat: 'repeat' },
+            emerald:       { label: 'WA Emerald',        css: 'linear-gradient(135deg, #075E54, #128C7E)', size: 'cover', repeat: 'no-repeat' },
+            sunset:        { label: 'Sunset Glow',       css: 'linear-gradient(135deg, #FF7E5F, #FEB47B)', size: 'cover', repeat: 'no-repeat' },
+            ocean:         { label: 'Deep Ocean',        css: 'linear-gradient(135deg, #0F2027, #203A43, #2C5364)', size: 'cover', repeat: 'no-repeat' },
+            cyberpunk:     { label: 'Cyber Violet',      css: 'linear-gradient(135deg, #2E0854, #180B2B, #0F2027)', size: 'cover', repeat: 'no-repeat' },
+            slate:         { label: 'Minimal Slate',     css: 'linear-gradient(135deg, #1e293b, #0f172a)', size: 'cover', repeat: 'no-repeat' }
+        };
+
+        let session = {};
+        let isAdmin = false;
+        let activeGroupId = null;
+        let pendingAttachment = null;
+        let activeReply = null;
+        let selectedMessageContext = null; // { gid, msgIdx, msg }
+
+        function readJSON(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
+        function writeJSON(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+        function getGroups() { return readJSON(GROUPS_KEY, []); }
+        function getMsgs() { return readJSON(MSGS_KEY, {}); }
+        function getBatches() { return readJSON(BATCHES_KEY, []); }
+        function saveGroups(g) { try { writeJSON(GROUPS_KEY, g); return true; } catch (e) { toast('Storage full — file/image too large.'); return false; } }
+        function saveMsgs(m) { try { writeJSON(MSGS_KEY, m); return true; } catch (e) { toast('Storage full — file/image too large.'); return false; } }
+        function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+        // THEME MODE (LIGHT / DARK)
+        function initThemeMode() {
+            const saved = localStorage.getItem(THEME_MODE_KEY) || 'light';
+            applyThemeMode(saved);
+        }
+        function toggleThemeMode() {
+            const current = document.documentElement.getAttribute('data-theme') || 'light';
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyThemeMode(next);
+            toast(next === 'dark' ? '🌙 Dark Mode Activated' : '☀️ Light Mode Activated');
+        }
+        function applyThemeMode(mode) {
+            document.documentElement.setAttribute('data-theme', mode);
+            localStorage.setItem(THEME_MODE_KEY, mode);
+            const btn = document.getElementById('themeToggleBtn');
+            if (btn) btn.innerHTML = mode === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            if (activeGroupId) {
+                const g = getGroups().find(x => x.id === activeGroupId);
+                if (g) applyWallpaper(g);
+            }
+        }
+
+        // BATCH & ACCESS RESOLUTION
+        function sessionMatchesStudent(stu) {
+            const email = (session.email || '').toLowerCase();
+            const name = (session.name || '').toLowerCase();
+            return (email && (stu.username || '').toLowerCase() === email) ||
+                   (email && (stu.regNo || '').toLowerCase() === email) ||
+                   (email && (stu.roll || '').toLowerCase() === email) ||
+                   (name && (stu.name || '').toLowerCase() === name);
+        }
+        function studentBatchIds() {
+            if (isAdmin) return getBatches().map(b => b.id);
+            const ids = [];
+            getBatches().forEach(b => { if ((b.students || []).some(s => sessionMatchesStudent(s))) ids.push(b.id); });
+            return ids;
+        }
+        function visibleGroups() {
+            const myBatches = studentBatchIds();
+            return getGroups().filter(g => {
+                if (isAdmin) return true;
+                if (!g.batchId) return true;
+                return myBatches.includes(g.batchId);
+            });
+        }
+        function groupPerms(g) { return g.permissions || (g.locked ? 'admins' : 'all'); }
+        function canSend(g) { return isAdmin || groupPerms(g) === 'all'; }
+
+        function groupMembers(g) {
+            const b = getBatches().find(x => x.id === g.batchId);
+            const list = [];
+            if (b) (b.students || []).forEach(s => list.push({ name: s.name || s.username || ('Roll ' + (s.roll || '')), roll: s.roll || s.regNo || '', email: s.username || s.email || '', admin: false }));
+            (g.members || []).forEach(m => list.push({ name: m.name, roll: m.roll || '', email: m.email || '', admin: false }));
+            if (g.createdBy) list.unshift({ name: g.createdByName || 'Teacher', roll: '', email: g.createdBy, admin: true });
+            return list;
+        }
+
+        // READ RECEIPTS (WHO WATCHED)
+        function markMessagesAsRead(gid) {
+            const all = getMsgs();
+            const arr = all[gid] || [];
+            let changed = false;
+            const myId = session.email || session.name || 'Member';
+            const myName = session.name || 'Student';
+            const myRole = session.role || 'student';
+            const now = Date.now();
+
+            arr.forEach(m => {
+                if (m.system || m.deletedForEveryone) return;
+                m.readBy = m.readBy || [];
+                // Check if not authored by me and not already recorded
+                if (m.sender !== myId) {
+                    if (!m.readBy.some(r => r.id === myId)) {
+                        m.readBy.push({ id: myId, name: myName, role: myRole, time: now });
+                        changed = true;
+                    }
+                }
+            });
+
+            if (changed) {
+                saveMsgs(all);
+            }
+        }
+
+        // RENDER GROUP LIST
+        let searchKeyword = '';
+        function filterGroups(val) {
+            searchKeyword = (val || '').trim().toLowerCase();
+            renderGroupList();
+        }
+        function renderGroupList() {
+            let list = visibleGroups();
+            if (searchKeyword) {
+                list = list.filter(g => (g.name || '').toLowerCase().includes(searchKeyword) || (g.topic || '').toLowerCase().includes(searchKeyword));
+            }
+            const el = document.getElementById('groupList');
+            if (!list.length) { el.innerHTML = `<div class="side-empty">${isAdmin ? 'No groups found. Click "New Group" to create one.' : 'No chat groups available for you.'}</div>`; return; }
+            const msgs = getMsgs();
+            el.innerHTML = list.map(g => {
+                const gm = msgs[g.id] || [];
+                const last = gm[gm.length - 1];
+                let prev = 'No messages yet';
+                let timeStr = '';
+                if (last) {
+                    const d = new Date(last.time);
+                    timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    if (last.deletedForEveryone) prev = '🚫 Message deleted';
+                    else if (last.problem) prev = '🧩 Challenge: ' + last.problem.title;
+                    else if (last.codeSnippet) prev = '💻 Code: ' + last.codeSnippet.lang;
+                    else if (last.poll) prev = '📊 Poll: ' + last.poll.question;
+                    else if (last.attachment) prev = '📎 ' + last.attachment.name;
+                    else prev = (last.senderName ? last.senderName.split(' ')[0] + ': ' : '') + (last.text || '');
+                }
+                const nr = nextReminder(g);
+                return `
+                <div class="group-item ${g.id === activeGroupId ? 'active' : ''}" onclick="openGroup('${g.id}')">
+                    ${avatarHtml(g, 'group-avatar')}
+                    <div class="group-info">
+                        <div class="group-info-top">
+                            <div class="gname">${esc(g.name)}${groupPerms(g) === 'admins' ? '<i class="fas fa-lock lock-ic" title="Only admins can message"></i>' : ''}</div>
+                            <div class="gtime">${timeStr}</div>
+                        </div>
+                        <div class="gprev">
+                            ${nr ? `<span class="rem-badge"><i class="fas fa-bell"></i></span>` : ''}
+                            <span style="overflow:hidden; text-overflow:ellipsis;">${esc(prev)}</span>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function avatarHtml(g, cls) {
+            if (g.icon) return `<div class="${cls}"><img src="${g.icon}" alt=""></div>`;
+            return `<div class="${cls}">${esc((g.name || '?').charAt(0).toUpperCase())}</div>`;
+        }
+
+        // OPEN GROUP
+        function openGroup(id) {
+            activeGroupId = id;
+            const g = getGroups().find(x => x.id === id);
+            if (!g) return;
+            pendingAttachment = null;
+            activeReply = null;
+            hideAttachTray();
+            closeContextMenu();
+            
+            markMessagesAsRead(id);
+            renderGroupList();
+            
+            const msgs = (getMsgs()[id] || []);
+            const memberCount = groupMembers(g).length;
+            const batchName = (getBatches().find(b => b.id === g.batchId) || {}).name || 'All Students';
+
+            const pane = document.getElementById('chatPane');
+            pane.innerHTML = `
+                <div class="chat-top" onclick="openGroupInfo('${g.id}')">
+                    ${avatarHtml(g, 'group-avatar')}
+                    <div class="ct-info">
+                        <div class="ct-name">${esc(g.name)}${groupPerms(g) === 'admins' ? ' <i class="fas fa-lock" style="color:var(--primary); font-size:0.85rem;"></i>' : ''}</div>
+                        <div class="ct-sub">${esc(g.topic || (groupPerms(g) === 'admins' ? 'Only admins can send messages' : memberCount + ' members'))} · ${esc(batchName)}</div>
+                    </div>
+                    <div class="ct-tools" onclick="event.stopPropagation();">
+                        <button class="tool-btn" onclick="openWallpaperModal()" title="Wallpaper"><i class="fas fa-image"></i></button>
+                        ${canSend(g) ? `<button class="tool-btn" onclick="openReminderModal('${g.id}')" title="Set reminder"><i class="fas fa-bell"></i></button>` : ''}
+                        ${isAdmin ? `<button class="tool-btn ${groupPerms(g) === 'admins' ? 'on' : ''}" onclick="toggleLock('${g.id}')" title="Admin only lock"><i class="fas fa-lock"></i></button>` : ''}
+                        <button class="tool-btn" onclick="openGroupInfo('${g.id}')" title="Group Info"><i class="fas fa-ellipsis-vertical"></i></button>
+                    </div>
+                </div>
+                ${reminderBannerHtml(g)}
+                <div class="messages-container">
+                    <div class="messages" id="messages"></div>
+                </div>
+                <div class="composer-wrap">
+                    <div class="reply-composer-bar" id="replyComposerBar">
+                        <div class="rcb-info">
+                            <div class="rcb-author" id="replyAuthor">Replying to</div>
+                            <div class="rcb-text" id="replyText"></div>
+                        </div>
+                        <button class="rcb-close" onclick="cancelReply()"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="attach-bar" id="attachBar"></div>
+                    ${canSend(g) ? `
+                    <div class="composer">
+                        <button class="icon-round" id="pinBtn" onclick="toggleAttachTray(event)" title="Attach file, photo, code, poll, challenge"><i class="fas fa-paperclip"></i></button>
+                        <input type="text" class="msg-input" id="msgInput" placeholder="Type a message or press pin to share…" autocomplete="off" onkeydown="if(event.key==='Enter')sendMessage('${g.id}')">
+                        <button class="send-btn" onclick="sendMessage('${g.id}')" title="Send message"><i class="fas fa-paper-plane"></i></button>
+                    </div>` : `<div class="lock-banner"><i class="fas fa-lock"></i> Only admins can send messages in this group.</div>`}
+                </div>
+            `;
+            
+            applyWallpaper(g);
+            renderMessages(msgs);
+            const inp = document.getElementById('msgInput');
+            if (inp) inp.focus();
+        }
+
+        // WALLPAPER APPLICATION
+        function applyWallpaper(g) {
+            const box = document.getElementById('messages');
+            if (!box) return;
+            const currentMode = document.documentElement.getAttribute('data-theme') || 'light';
+            let wallKey = g.wallpaper || (currentMode === 'dark' ? 'doodle_dark' : 'doodle_light');
+            
+            // If custom data URI wallpaper
+            if (g.customWallpaper) {
+                box.style.background = `url("${g.customWallpaper}") center/cover no-repeat`;
+                return;
+            }
+            
+            const w = WALLPAPERS[wallKey] || (currentMode === 'dark' ? WALLPAPERS.doodle_dark : WALLPAPERS.doodle_light);
+            box.style.background = w.css;
+            box.style.backgroundSize = w.size;
+            box.style.backgroundRepeat = w.repeat;
+        }
+
+        // RENDER MESSAGES WITH RIGHT-CLICK & TOUCH MENU SUPPORT
+        function renderMessages(msgs) {
+            const box = document.getElementById('messages');
+            if (!box) return;
+            const myId = session.email || session.name || 'Member';
+            
+            // Filter messages deleted for me
+            const visibleList = msgs.filter(m => !(m.deletedForMe && m.deletedForMe.includes(myId)));
+            
+            if (!visibleList.length) {
+                box.innerHTML = `<div class="system-note">✨ No messages yet. Say hello or share your first code challenge! 👋</div>`;
+                return;
+            }
+            
+            let lastDay = '';
+            box.innerHTML = visibleList.map((m, idx) => {
+                const d = new Date(m.time);
+                const day = d.toDateString();
+                let daySep = '';
+                if (day !== lastDay) {
+                    lastDay = day;
+                    daySep = `<div class="msg-day">${d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</div>`;
+                }
+                
+                if (m.system) return `${daySep}<div class="system-note">${esc(m.text)}</div>`;
+                
+                const mine = m.sender && m.sender === myId;
+                const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                // Deleted for everyone
+                if (m.deletedForEveryone) {
+                    return `${daySep}
+                    <div class="bubble-wrap ${mine ? 'out' : 'in'}">
+                        <div class="bubble" oncontextmenu="openContextMenu(event, '${activeGroupId}', ${idx})">
+                            <div class="msg-deleted"><i class="fas fa-ban"></i> This message was deleted</div>
+                            <div class="meta">${timeStr}</div>
+                        </div>
+                    </div>`;
+                }
+
+                // Replied Message Banner
+                let replyHtml = '';
+                if (m.replyTo) {
+                    replyHtml = `
+                    <div class="reply-quote-preview">
+                        <div class="rq-author">${esc(m.replyTo.senderName || 'Member')}</div>
+                        <div class="rq-text">${esc(m.replyTo.text || 'Attachment/Code')}</div>
+                    </div>`;
+                }
+
+                // Attachment
+                let attHtml = '';
+                if (m.attachment) {
+                    if (m.attachment.type === 'image') {
+                        attHtml = `<img class="att-img" src="${m.attachment.url}" onclick="window.open('${m.attachment.url}')" alt="Photo">`;
+                    } else if (m.attachment.type === 'audio') {
+                        attHtml = `<div style="margin-bottom:6px;"><audio controls style="max-width:280px; width:100%;"><source src="${m.attachment.url}"></audio></div>`;
+                    } else {
+                        attHtml = `
+                        <a class="att-file" href="${m.attachment.url}" download="${esc(m.attachment.name)}">
+                            <span class="af-ic"><i class="fas ${fileIcon(m.attachment.name, m.attachment.mime)}"></i></span>
+                            <span style="min-width:0;">
+                                <span class="af-name">${esc(m.attachment.name)}</span><br>
+                                <span class="af-size">${fmtSize(m.attachment.size)} · Tap to download</span>
+                            </span>
+                        </a>`;
+                    }
+                }
+
+                // Problem Card
+                let probCard = '';
+                if (m.problem) {
+                    const purl = esc(m.problem.url || ('CodeQuestattempt.html?id=' + encodeURIComponent(m.problem.id || '101')));
+                    probCard = `
+                    <a class="att-file prob-card" href="${purl}" target="_blank" style="text-decoration:none;">
+                        <span class="af-ic"><i class="fas fa-code"></i></span>
+                        <span style="min-width:0;">
+                            <span class="af-name">🧩 ${esc(m.problem.title)}</span><br>
+                            <span class="af-size">${esc(m.problem.diff || 'Medium')}${m.problem.points ? ' · ' + esc(m.problem.points) + ' pts' : ''} · Click to Solve</span>
+                        </span>
+                    </a>`;
+                }
+
+                // Code Snippet
+                let snipCard = '';
+                if (m.codeSnippet) {
+                    snipCard = `
+                    <div class="code-snippet-box">
+                        <div class="code-snippet-head">
+                            <span><i class="fas fa-terminal"></i> ${esc(m.codeSnippet.lang.toUpperCase())}</span>
+                            <button class="btn" style="padding:2px 8px; font-size:0.7rem; background:rgba(255,255,255,0.1); color:#fff; border:none;" onclick="copyCodeText('${idx}')"><i class="fas fa-copy"></i> Copy</button>
+                        </div>
+                        <div class="code-snippet-body" id="codeText_${idx}">${esc(m.codeSnippet.code)}</div>
+                    </div>`;
+                }
+
+                // Live Poll
+                let pollCard = '';
+                if (m.poll) {
+                    const totalVotes = (m.poll.options || []).reduce((acc, opt) => acc + (opt.votes || []).length, 0);
+                    pollCard = `
+                    <div class="poll-box">
+                        <div class="poll-question"><i class="fas fa-square-poll-vertical" style="color:var(--accent);"></i> ${esc(m.poll.question)}</div>
+                        ${(m.poll.options || []).map((opt, optIdx) => {
+                            const optVoteCount = (opt.votes || []).length;
+                            const pct = totalVotes > 0 ? Math.round((optVoteCount / totalVotes) * 100) : 0;
+                            const hasVotedThis = (opt.votes || []).includes(myId);
+                            return `
+                            <div class="poll-option-row" onclick="voteOnPoll('${activeGroupId}', ${idx}, ${optIdx})">
+                                <div class="poll-option-bar" style="width:${pct}%;"></div>
+                                <div class="poll-option-content">
+                                    <span class="poll-opt-name">${hasVotedThis ? '✓ ' : ''}${esc(opt.text)}</span>
+                                    <span class="poll-opt-votes">${optVoteCount} (${pct}%)</span>
+                                </div>
+                            </div>`;
+                        }).join('')}
+                    </div>`;
+                }
+
+                // Reactions Bar
+                let reactHtml = '';
+                if (m.reactions && Object.keys(m.reactions).length) {
+                    reactHtml = `<div class="reaction-pills-row">
+                        ${Object.keys(m.reactions).map(emoji => {
+                            const users = m.reactions[emoji] || [];
+                            if (!users.length) return '';
+                            const mineReacted = users.includes(myId);
+                            return `<span class="reaction-pill ${mineReacted ? 'mine' : ''}" onclick="toggleReactionOnMessage('${activeGroupId}', ${idx}, '${emoji}')">${emoji} ${users.length}</span>`;
+                        }).join('')}
+                    </div>`;
+                }
+
+                // Read Receipt status ticks for outgoing messages
+                let tickHtml = '';
+                if (mine) {
+                    const readCount = (m.readBy || []).length;
+                    if (readCount > 0) {
+                        tickHtml = `<i class="fas fa-check-double tick read" title="Read by ${readCount} members"></i>`;
+                    } else {
+                        tickHtml = `<i class="fas fa-check-double tick unread" title="Delivered"></i>`;
+                    }
+                }
+
+                const starred = m.starred ? '<i class="fas fa-star" style="color:#f59e0b; font-size:0.68rem; margin-right:3px;"></i>' : '';
+
+                return `${daySep}
+                <div class="bubble-wrap ${mine ? 'out' : 'in'}">
+                    <div class="bubble" oncontextmenu="openContextMenu(event, '${activeGroupId}', ${idx})" onclick="handleBubbleClick(event, '${activeGroupId}', ${idx})">
+                        <span class="bubble-corner-arrow" onclick="openContextMenu(event, '${activeGroupId}', ${idx})"><i class="fas fa-chevron-down"></i></span>
+                        <div class="sender">${esc(m.senderName || 'Member')}${m.role === 'teacher' ? ' <span class="adm">· Admin</span>' : ''}</div>
+                        ${replyHtml}
+                        ${probCard}
+                        ${snipCard}
+                        ${pollCard}
+                        ${attHtml}
+                        ${m.text ? `<div class="txt">${esc(m.text)}</div>` : ''}
+                        <div class="meta">${starred}${timeStr} ${tickHtml}</div>
+                    </div>
+                    ${reactHtml}
+                </div>`;
+            }).join('');
+            
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function copyCodeText(idx) {
+            const el = document.getElementById('codeText_' + idx);
+            if (el) {
+                navigator.clipboard.writeText(el.innerText).then(() => toast('Code copied!'));
+            }
+        }
+
+        // ==========================================
+        // WHATSAPP ATTACHMENT TRAY (LEFT PIN)
+        // ==========================================
+        function toggleAttachTray(e) {
+            if (e) e.stopPropagation();
+            const tray = document.getElementById('attachTray');
+            const pin = document.getElementById('pinBtn');
+            if (tray.classList.contains('show')) {
+                hideAttachTray();
+            } else {
+                tray.classList.add('show');
+                if (pin) pin.classList.add('active');
+            }
+        }
+        function hideAttachTray() {
+            const tray = document.getElementById('attachTray');
+            const pin = document.getElementById('pinBtn');
+            if (tray) tray.classList.remove('show');
+            if (pin) pin.classList.remove('active');
+        }
+
+        function triggerFileInput(kind) {
+            hideAttachTray();
+            if (kind === 'doc') document.getElementById('docFileInput').click();
+            if (kind === 'media') document.getElementById('mediaFileInput').click();
+            if (kind === 'audio') document.getElementById('audioFileInput').click();
+        }
+
+        // ATTACHMENT EVENT HANDLERS
+        ['docFileInput', 'mediaFileInput', 'audioFileInput'].forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('change', function () {
+                const f = this.files && this.files[0];
+                this.value = '';
+                if (!f) return;
+                if (f.size > MAX_FILE) { toast('File too large (max ' + fmtSize(MAX_FILE) + ').'); return; }
+                const reader = new FileReader();
+                reader.onload = () => {
+                    let type = 'file';
+                    if (f.type.startsWith('image')) type = 'image';
+                    else if (f.type.startsWith('audio')) type = 'audio';
+                    else if (f.type.startsWith('video')) type = 'video';
+                    
+                    pendingAttachment = { name: f.name, size: f.size, mime: f.type || '', type, url: reader.result };
+                    showAttachBar();
+                };
+                reader.readAsDataURL(f);
+            });
+        });
+
+        function showAttachBar() {
+            const bar = document.getElementById('attachBar');
+            if (!bar || !pendingAttachment) return;
+            const thumb = pendingAttachment.type === 'image'
+                ? `<img class="ab-thumb" src="${pendingAttachment.url}">`
+                : `<div class="ab-thumb"><i class="fas ${fileIcon(pendingAttachment.name, pendingAttachment.mime)}"></i></div>`;
+            bar.innerHTML = `${thumb}<div class="ab-name">${esc(pendingAttachment.name)} <span style="color:var(--text-muted);font-weight:400;">(${fmtSize(pendingAttachment.size)})</span></div><button class="ab-x" onclick="clearAttachment()"><i class="fas fa-times"></i></button>`;
+            bar.classList.add('show');
+        }
+        function clearAttachment() {
+            pendingAttachment = null;
+            const bar = document.getElementById('attachBar');
+            if (bar) { bar.classList.remove('show'); bar.innerHTML = ''; }
+        }
+
+        function fileIcon(name, mime) {
+            const ext = (name.split('.').pop() || '').toLowerCase();
+            if (mime && mime.startsWith('video')) return 'fa-file-video';
+            if (mime && mime.startsWith('audio')) return 'fa-file-audio';
+            if (ext === 'pdf') return 'fa-file-pdf';
+            if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) return 'fa-file-zipper';
+            if (ext === 'apk') return 'fa-android';
+            if (['doc', 'docx'].includes(ext)) return 'fa-file-word';
+            if (['xls', 'xlsx', 'csv'].includes(ext)) return 'fa-file-excel';
+            if (['ppt', 'pptx'].includes(ext)) return 'fa-file-powerpoint';
+            if (['js', 'py', 'java', 'cpp', 'c', 'html', 'css', 'json', 'ts'].includes(ext)) return 'fa-file-code';
+            return 'fa-file-lines';
+        }
+        function fmtSize(b) { if (b < 1024) return b + ' B'; if (b < 1048576) return (b / 1024).toFixed(1) + ' KB'; return (b / 1048576).toFixed(1) + ' MB'; }
+
+        // ==========================================
+        // RIGHT-CLICK CONTEXT MENU & ACTIONS
+        // ==========================================
+        function openContextMenu(e, gid, msgIdx) {
+            e.preventDefault();
+            e.stopPropagation();
+            hideAttachTray();
+            
+            const msgs = getMsgs()[gid] || [];
+            const msg = msgs[msgIdx];
+            if (!msg) return;
+            selectedMessageContext = { gid, msgIdx, msg };
+
+            const menu = document.getElementById('contextMenu');
+            menu.style.display = 'block';
+
+            // Position context menu nicely on screen
+            const menuWidth = 220;
+            const menuHeight = 240;
+            let x = e.clientX;
+            let y = e.clientY;
+
+            if (x + menuWidth > window.innerWidth) x = window.innerWidth - menuWidth - 10;
+            if (y + menuHeight > window.innerHeight) y = window.innerHeight - menuHeight - 10;
+
+            menu.style.left = Math.max(10, x) + 'px';
+            menu.style.top = Math.max(10, y) + 'px';
+
+            const starIcon = document.getElementById('ctxStarIcon');
+            if (starIcon) starIcon.className = msg.starred ? 'fas fa-star-half-stroke' : 'fas fa-star';
+        }
+
+        function closeContextMenu() {
+            const menu = document.getElementById('contextMenu');
+            if (menu) menu.style.display = 'none';
+        }
+
+        function handleBubbleClick(e, gid, idx) {
+            // If clicked on mobile or small devices
+            if (window.innerWidth < 768 && e.target.closest('.bubble-corner-arrow')) {
+                openContextMenu(e, gid, idx);
+            }
+        }
+
+        // 1. REACTION TO MESSAGE
+        function reactToMessage(emoji) {
+            if (!selectedMessageContext) return;
+            toggleReactionOnMessage(selectedMessageContext.gid, selectedMessageContext.msgIdx, emoji);
+            closeContextMenu();
+        }
+        function toggleReactionOnMessage(gid, msgIdx, emoji) {
+            const all = getMsgs();
+            const arr = all[gid] || [];
+            const msg = arr[msgIdx];
+            if (!msg) return;
+            
+            const myId = session.email || session.name || 'Member';
+            msg.reactions = msg.reactions || {};
+            msg.reactions[emoji] = msg.reactions[emoji] || [];
+            
+            const idx = msg.reactions[emoji].indexOf(myId);
+            if (idx > -1) {
+                msg.reactions[emoji].splice(idx, 1);
+                if (msg.reactions[emoji].length === 0) delete msg.reactions[emoji];
+            } else {
+                msg.reactions[emoji].push(myId);
+            }
+            
+            saveMsgs(all);
+            renderMessages(arr);
+        }
+
+        // 2. MESSAGE INFO (WHO WATCHED)
+        function triggerMessageInfo() {
+            if (!selectedMessageContext) return;
+            const { gid, msgIdx } = selectedMessageContext;
+            closeContextMenu();
+            openMessageInfo(gid, msgIdx);
+        }
+        function openMessageInfo(gid, msgIdx) {
+            const g = getGroups().find(x => x.id === gid);
+            const msgs = getMsgs()[gid] || [];
+            const msg = msgs[msgIdx];
+            if (!g || !msg) return;
+
+            const allMembers = groupMembers(g);
+            const readList = msg.readBy || [];
+            const readIds = readList.map(r => r.id);
+            const unreadMembers = allMembers.filter(m => m.email !== msg.sender && !readIds.includes(m.email || m.name));
+
+            const d = new Date(msg.time);
+            const timeStr = d.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ' at ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            const drawer = document.getElementById('infoDrawer');
+            drawer.innerHTML = `
+                <div class="info-head">
+                    <span class="ih-title"><i class="fas fa-circle-info"></i> Message Info</span>
+                    <button onclick="closeAllDrawers()"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="info-body">
+                    <div class="msg-preview-card">
+                        <div style="font-weight:700; font-size:0.85rem; color:var(--accent); margin-bottom:4px;">${esc(msg.senderName || 'Member')}</div>
+                        <div style="font-size:0.95rem; color:var(--text-main); margin-bottom:6px;">${esc(msg.text || (msg.attachment ? '📎 ' + msg.attachment.name : (msg.problem ? '🧩 ' + msg.problem.title : 'Code/Poll')))}</div>
+                        <div style="font-size:0.75rem; color:var(--text-muted); text-align:right;">Sent: ${timeStr}</div>
+                    </div>
+
+                    <div class="msg-info-status-group">
+                        <div class="msg-status-head read-head">
+                            <i class="fas fa-check-double"></i> Read by (${readList.length})
+                        </div>
+                        ${readList.length ? readList.map(r => {
+                            const rt = new Date(r.time);
+                            return `
+                            <div class="read-user-row">
+                                <div class="read-user-av">${esc((r.name || '?').charAt(0).toUpperCase())}</div>
+                                <div class="read-user-info">
+                                    <div class="read-user-name">${esc(r.name)}</div>
+                                    <div class="read-user-time">Watched ${rt.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' })}</div>
+                                </div>
+                            </div>`;
+                        }).join('') : '<div style="font-size:0.85rem; color:var(--text-muted); padding:8px 6px;">No members have read this message yet.</div>'}
+                    </div>
+
+                    <div class="msg-info-status-group" style="margin-top:20px;">
+                        <div class="msg-status-head deliv-head">
+                            <i class="fas fa-check"></i> Delivered to (${unreadMembers.length})
+                        </div>
+                        ${unreadMembers.length ? unreadMembers.map(m => `
+                            <div class="read-user-row">
+                                <div class="read-user-av" style="background:var(--card-subtle); color:var(--text-main);">${esc((m.name || '?').charAt(0).toUpperCase())}</div>
+                                <div class="read-user-info">
+                                    <div class="read-user-name">${esc(m.name)}</div>
+                                    <div class="read-user-time">Pending read</div>
+                                </div>
+                            </div>
+                        `).join('') : '<div style="font-size:0.85rem; color:var(--text-muted); padding:8px 6px;">All group members have read this message! 🎉</div>'}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('infoDrawer').classList.add('show');
+            document.getElementById('infoOverlay').classList.add('show');
+        }
+
+        // 3. REPLY TO MESSAGE
+        function triggerReply() {
+            if (!selectedMessageContext) return;
+            const { msg } = selectedMessageContext;
+            closeContextMenu();
+            
+            activeReply = {
+                senderName: msg.senderName || 'Member',
+                text: msg.text || (msg.attachment ? '📎 ' + msg.attachment.name : (msg.problem ? '🧩 ' + msg.problem.title : 'Attachment')),
+                id: msg.time
+            };
+
+            const bar = document.getElementById('replyComposerBar');
+            document.getElementById('replyAuthor').textContent = 'Replying to ' + activeReply.senderName;
+            document.getElementById('replyText').textContent = activeReply.text;
+            bar.classList.add('show');
+            
+            const inp = document.getElementById('msgInput');
+            if (inp) inp.focus();
+        }
+        function cancelReply() {
+            activeReply = null;
+            const bar = document.getElementById('replyComposerBar');
+            if (bar) bar.classList.remove('show');
+        }
+
+        // 4. COPY TEXT
+        function triggerCopyText() {
+            if (!selectedMessageContext) return;
+            const { msg } = selectedMessageContext;
+            closeContextMenu();
+            const textToCopy = msg.text || (msg.codeSnippet ? msg.codeSnippet.code : (msg.problem ? msg.problem.title : ''));
+            if (textToCopy) {
+                navigator.clipboard.writeText(textToCopy).then(() => toast('Copied to clipboard! 📋'));
+            } else {
+                toast('No text to copy');
+            }
+        }
+
+        // 5. STAR MESSAGE
+        function triggerStarMessage() {
+            if (!selectedMessageContext) return;
+            const { gid, msgIdx, msg } = selectedMessageContext;
+            closeContextMenu();
+            const all = getMsgs();
+            const arr = all[gid] || [];
+            if (arr[msgIdx]) {
+                arr[msgIdx].starred = !arr[msgIdx].starred;
+                saveMsgs(all);
+                renderMessages(arr);
+                toast(arr[msgIdx].starred ? '⭐ Message Starred' : 'Star removed');
+            }
+        }
+
+        // 6. DELETE MESSAGE
+        function triggerDeleteMessage() {
+            if (!selectedMessageContext) return;
+            closeContextMenu();
+            const { msg } = selectedMessageContext;
+            const myId = session.email || session.name || 'Member';
+            const isMine = msg.sender === myId;
+            const canDeleteEveryone = isMine || isAdmin;
+
+            const btnEveryone = document.getElementById('btnDelEveryone');
+            if (btnEveryone) btnEveryone.style.display = canDeleteEveryone ? 'block' : 'none';
+
+            openModal('deleteMsgModal');
+        }
+        function confirmDelete(forEveryone) {
+            closeModal('deleteMsgModal');
+            if (!selectedMessageContext) return;
+            const { gid, msgIdx } = selectedMessageContext;
+            const all = getMsgs();
+            const arr = all[gid] || [];
+            const msg = arr[msgIdx];
+            if (!msg) return;
+
+            const myId = session.email || session.name || 'Member';
+
+            if (forEveryone) {
+                msg.deletedForEveryone = true;
+                msg.text = '';
+                delete msg.attachment;
+                delete msg.problem;
+                delete msg.codeSnippet;
+                delete msg.poll;
+                saveMsgs(all);
+                toast('Message deleted for everyone 🗑️');
+            } else {
+                msg.deletedForMe = msg.deletedForMe || [];
+                if (!msg.deletedForMe.includes(myId)) msg.deletedForMe.push(myId);
+                saveMsgs(all);
+                toast('Message deleted for you 🗑️');
+            }
+
+            renderMessages(arr);
+            renderGroupList();
+        }
+
+        // ==========================================
+        // SENDING MESSAGES & ARTIFACTS
+        // ==========================================
+        function sendMessage(id) {
+            const g = getGroups().find(x => x.id === id);
+            if (!g || !canSend(g)) return;
+            const inp = document.getElementById('msgInput');
+            const text = (inp && inp.value ? inp.value : '').trim();
+            if (!text && !pendingAttachment) return;
+
+            const myId = session.email || session.name || 'Member';
+            const msg = {
+                sender: myId,
+                senderName: session.name || 'You',
+                role: session.role || 'student',
+                text,
+                time: Date.now(),
+                readBy: []
+            };
+
+            if (pendingAttachment) msg.attachment = pendingAttachment;
+            if (activeReply) { msg.replyTo = activeReply; cancelReply(); }
+
+            const all = getMsgs();
+            const arr = (all[id] = all[id] || []);
+            arr.push(msg);
+
+            if (!saveMsgs(all)) { arr.pop(); return; }
+
+            if (inp) inp.value = '';
+            clearAttachment();
+            renderMessages(arr);
+            renderGroupList();
+        }
+
+        // SEND CODE SNIPPET
+        function openSnippetModal() { hideAttachTray(); openModal('snippetModal'); }
+        function sendCodeSnippet() {
+            if (!activeGroupId) return;
+            const lang = document.getElementById('snipLang').value;
+            const code = document.getElementById('snipCode').value.trim();
+            const caption = document.getElementById('snipCaption').value.trim();
+            if (!code) { toast('Please enter some code'); return; }
+
+            const myId = session.email || session.name || 'Member';
+            const msg = {
+                sender: myId,
+                senderName: session.name || 'You',
+                role: session.role || 'student',
+                text: caption,
+                codeSnippet: { lang, code },
+                time: Date.now(),
+                readBy: []
+            };
+
+            const all = getMsgs();
+            (all[activeGroupId] = all[activeGroupId] || []).push(msg);
+            saveMsgs(all);
+            closeModal('snippetModal');
+            document.getElementById('snipCode').value = '';
+            document.getElementById('snipCaption').value = '';
+            renderMessages(all[activeGroupId]);
+            renderGroupList();
+            toast('Code Snippet Shared! 💻');
+        }
+
+        // SEND DSA PROBLEM CHALLENGE
+        function openProblemModal() { hideAttachTray(); openModal('problemModal'); }
+        function sendProblemCard() {
+            if (!activeGroupId) return;
+            const title = document.getElementById('probTitle').value.trim();
+            const diff = document.getElementById('probDiff').value;
+            const points = document.getElementById('probPoints').value;
+            const url = document.getElementById('probUrl').value.trim();
+
+            if (!title) { toast('Enter problem title'); return; }
+
+            const myId = session.email || session.name || 'Member';
+            const msg = {
+                sender: myId,
+                senderName: session.name || 'You',
+                role: session.role || 'student',
+                text: '🚀 Solve this CodeQuest challenge with the group:',
+                problem: { id: 'CQ_' + Date.now(), title, diff, points, url },
+                time: Date.now(),
+                readBy: []
+            };
+
+            const all = getMsgs();
+            (all[activeGroupId] = all[activeGroupId] || []).push(msg);
+            saveMsgs(all);
+            closeModal('problemModal');
+            document.getElementById('probTitle').value = '';
+            renderMessages(all[activeGroupId]);
+            renderGroupList();
+            toast('DSA Problem Shared! 🧩');
+        }
+
+        // SEND POLL
+        function openPollModal() { hideAttachTray(); openModal('pollModal'); }
+        function sendPoll() {
+            if (!activeGroupId) return;
+            const q = document.getElementById('pollQuestion').value.trim();
+            if (!q) { toast('Enter poll question'); return; }
+
+            const optInputs = Array.from(document.querySelectorAll('.poll-opt-input'));
+            const options = optInputs.map(i => i.value.trim()).filter(v => v).map(text => ({ text, votes: [] }));
+
+            if (options.length < 2) { toast('Provide at least 2 options'); return; }
+
+            const myId = session.email || session.name || 'Member';
+            const msg = {
+                sender: myId,
+                senderName: session.name || 'You',
+                role: session.role || 'student',
+                text: '',
+                poll: { question: q, options },
+                time: Date.now(),
+                readBy: []
+            };
+
+            const all = getMsgs();
+            (all[activeGroupId] = all[activeGroupId] || []).push(msg);
+            saveMsgs(all);
+            closeModal('pollModal');
+            document.getElementById('pollQuestion').value = '';
+            optInputs.forEach(i => i.value = '');
+            renderMessages(all[activeGroupId]);
+            renderGroupList();
+            toast('Poll Created! 📊');
+        }
+
+        function voteOnPoll(gid, msgIdx, optIdx) {
+            const all = getMsgs();
+            const arr = all[gid] || [];
+            const msg = arr[msgIdx];
+            if (!msg || !msg.poll) return;
+
+            const myId = session.email || session.name || 'Member';
+            const opt = msg.poll.options[optIdx];
+            if (!opt) return;
+
+            opt.votes = opt.votes || [];
+            const idx = opt.votes.indexOf(myId);
+            if (idx > -1) {
+                opt.votes.splice(idx, 1);
+            } else {
+                // If single-choice, remove from others
+                msg.poll.options.forEach(o => {
+                    o.votes = (o.votes || []).filter(v => v !== myId);
+                });
+                opt.votes.push(myId);
+            }
+
+            saveMsgs(all);
+            renderMessages(arr);
+        }
+
+        // ==========================================
+        // WALLPAPERS SELECTOR
+        // ==========================================
+        function openWallpaperModal() {
+            renderWallpaperGrid('allWallpapersGrid');
+            openModal('wallModal');
+        }
+        function renderWallpaperGrid(containerId) {
+            const el = document.getElementById(containerId);
+            if (!el) return;
+            const g = getGroups().find(x => x.id === activeGroupId) || {};
+            const curWall = g.wallpaper || 'doodle_light';
+
+            el.innerHTML = Object.keys(WALLPAPERS).map(k => `
+                <div class="wall-swatch ${curWall === k ? 'sel' : ''}" style="background:${WALLPAPERS[k].css};" onclick="selectWallpaper('${k}')">
+                    <span>${WALLPAPERS[k].label}</span>
+                </div>
+            `).join('');
+        }
+        function selectWallpaper(key) {
+            if (!activeGroupId) return;
+            const groups = getGroups();
+            const g = groups.find(x => x.id === activeGroupId);
+            if (!g) return;
+            g.wallpaper = key;
+            delete g.customWallpaper;
+            saveGroups(groups);
+            applyWallpaper(g);
+            renderWallpaperGrid('allWallpapersGrid');
+            toast('Wallpaper Updated! 🎨');
+        }
+
+        // CUSTOM WALLPAPER FILE UPLOAD
+        document.getElementById('wallFileInput').addEventListener('change', function () {
+            const f = this.files && this.files[0];
+            this.value = '';
+            if (!f || !activeGroupId) return;
+            if (f.size > MAX_FILE) { toast('Image too large (max 5MB)'); return; }
+            const reader = new FileReader();
+            reader.onload = () => {
+                const groups = getGroups();
+                const g = groups.find(x => x.id === activeGroupId);
+                if (!g) return;
+                g.customWallpaper = reader.result;
+                saveGroups(groups);
+                applyWallpaper(g);
+                closeModal('wallModal');
+                toast('Custom Wallpaper Set! 🖼️');
+            };
+            reader.readAsDataURL(f);
+        });
+
+        // ==========================================
+        // GROUP INFO & MANAGEMENT
+        // ==========================================
+        function openGroupInfo(id) {
+            const g = getGroups().find(x => x.id === id);
+            if (!g) return;
+            const members = groupMembers(g);
+            const msgs = getMsgs()[id] || [];
+            const mediaCount = msgs.filter(m => m.attachment).length;
+
+            const drawer = document.getElementById('infoDrawer');
+            drawer.innerHTML = `
+                <div class="info-head">
+                    <span class="ih-title">Group Info</span>
+                    <button onclick="closeAllDrawers()"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="info-body">
+                    <div class="info-avatar-wrap">
+                        <div class="info-avatar">
+                            ${g.icon ? `<img src="${g.icon}" alt="">` : esc((g.name || '?').charAt(0).toUpperCase())}
+                            ${isAdmin ? `<span class="cam" onclick="document.getElementById('iconInput').click()" title="Change icon"><i class="fas fa-camera"></i></span>` : ''}
+                        </div>
+                        <div class="info-name">${esc(g.name)}</div>
+                        <div class="info-topic">${g.topic ? esc(g.topic) : 'No description'}</div>
+                        <div class="info-count">Group · ${members.length} participants</div>
+                    </div>
+
+                    ${isAdmin ? `
+                    <div class="info-section">
+                        <div class="form-group" style="margin:10px 6px;"><label>Group Name</label><input type="text" id="editName" value="${esc(g.name)}"></div>
+                        <div class="form-group" style="margin:10px 6px;"><label>Topic / Description</label><input type="text" id="editTopic" value="${esc(g.topic || '')}" placeholder="Description"></div>
+                        <div style="padding:0 6px 6px;"><button class="btn primary" onclick="saveGroupSettings('${g.id}')"><i class="fas fa-check"></i> Save Changes</button></div>
+                    </div>` : ''}
+
+                    <div class="info-section">
+                        <div class="info-row" style="cursor:default;"><i class="lead fas fa-photo-film"></i><span class="grow">Media, Links and Docs</span><span>${mediaCount}</span></div>
+                    </div>
+
+                    <div class="info-section">
+                        <div class="info-row" onclick="openWallpaperModal()"><i class="lead fas fa-palette"></i><span class="grow">Chat Wallpaper</span><i class="fas fa-chevron-right" style="color:var(--text-muted);font-size:0.8rem;"></i></div>
+                    </div>
+
+                    ${isAdmin ? `
+                    <div class="info-section">
+                        <div style="font-weight:800; font-family:'Mulish',sans-serif; margin-bottom:8px; padding:0 6px;">Group Permissions</div>
+                        <label style="display:flex; align-items:center; gap:10px; padding:6px; cursor:pointer;"><input type="radio" name="perm" value="all" ${groupPerms(g) === 'all' ? 'checked' : ''} onchange="setPerm('${g.id}','all')"> All participants can send messages</label>
+                        <label style="display:flex; align-items:center; gap:10px; padding:6px; cursor:pointer;"><input type="radio" name="perm" value="admins" ${groupPerms(g) === 'admins' ? 'checked' : ''} onchange="setPerm('${g.id}','admins')"> Only admins can send messages</label>
+                    </div>` : ''}
+
+                    <div class="info-section">
+                        <div style="font-weight:800; font-family:'Mulish',sans-serif; margin-bottom:8px; padding:0 6px;">Members (${members.length})</div>
+                        ${isAdmin ? `<div style="display:flex; gap:8px; padding:6px;"><input type="text" id="newMemberName" placeholder="Student Name" style="padding:8px 12px; border:1px solid var(--border-color); border-radius:8px; flex:1; background:var(--card-subtle); color:var(--text-main);"><button class="btn primary" onclick="addMember('${g.id}')"><i class="fas fa-user-plus"></i> Add</button></div>` : ''}
+                        ${members.map(m => `
+                            <div class="member-row">
+                                <div class="m-av">${esc((m.name || '?').charAt(0).toUpperCase())}</div>
+                                <div class="m-name">${esc(m.name)}${m.roll ? ` <span style="color:var(--text-muted);font-weight:400;">· ${esc(m.roll)}</span>` : ''}</div>
+                                ${m.admin ? '<span class="m-tag">Admin</span>' : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            document.getElementById('infoDrawer').classList.add('show');
+            document.getElementById('infoOverlay').classList.add('show');
+        }
+
+        function closeAllDrawers() {
+            document.getElementById('infoDrawer').classList.remove('show');
+            document.getElementById('infoOverlay').classList.remove('show');
+            closeContextMenu();
+        }
+
+        function saveGroupSettings(id) {
+            const groups = getGroups();
+            const g = groups.find(x => x.id === id);
+            if (!g) return;
+            const n = document.getElementById('editName').value.trim();
+            if (!n) { toast('Group name required'); return; }
+            g.name = n;
+            g.topic = document.getElementById('editTopic').value.trim();
+            if (saveGroups(groups)) { toast('Settings Saved'); openGroup(id); openGroupInfo(id); }
+        }
+        function setPerm(id, val) {
+            const groups = getGroups();
+            const g = groups.find(x => x.id === id);
+            if (!g) return;
+            g.permissions = val;
+            saveGroups(groups);
+            pushSystem(id, val === 'admins' ? '🔒 Only admins can send messages now.' : '🔓 All participants can now send messages.');
+            openGroup(id); openGroupInfo(id);
+        }
+        function addMember(id) {
+            const groups = getGroups();
+            const g = groups.find(x => x.id === id);
+            if (!g) return;
+            const name = document.getElementById('newMemberName').value.trim();
+            if (!name) { toast('Enter student name'); return; }
+            g.members = g.members || [];
+            g.members.push({ name, email: name.toLowerCase().replace(/\s+/g, '') + '@codequest.edu' });
+            if (saveGroups(groups)) {
+                pushSystem(id, `👋 ${name} was added to the group.`);
+                toast('Member Added');
+                openGroup(id); openGroupInfo(id);
+            }
+        }
+
+        // GROUP ICON UPLOAD
+        document.getElementById('iconInput').addEventListener('change', function () {
+            const f = this.files && this.files[0];
+            this.value = '';
+            if (!f || !activeGroupId) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                const groups = getGroups();
+                const g = groups.find(x => x.id === activeGroupId);
+                if (!g) return;
+                g.icon = reader.result;
+                if (saveGroups(groups)) { toast('Group icon updated'); openGroup(activeGroupId); openGroupInfo(activeGroupId); }
+            };
+            reader.readAsDataURL(f);
+        });
+
+        // LOCK TOGGLE
+        function toggleLock(id) {
+            const groups = getGroups();
+            const g = groups.find(x => x.id === id);
+            if (!g) return;
+            g.permissions = groupPerms(g) === 'admins' ? 'all' : 'admins';
+            saveGroups(groups);
+            pushSystem(id, g.permissions === 'admins' ? '🔒 Group restricted — only admins can message now.' : '🔓 All participants can now send messages.');
+            openGroup(id);
+            toast(g.permissions === 'admins' ? 'Admins only' : 'Everyone can message');
+        }
+
+        function pushSystem(id, text) {
+            const all = getMsgs();
+            (all[id] = all[id] || []).push({ system: true, text, time: Date.now() });
+            saveMsgs(all);
+        }
+
+        // ==========================================
+        // REMINDERS
+        // ==========================================
+        function nextReminder(g) {
+            const now = Date.now();
+            return (g.reminders || []).filter(r => !r.fired && r.time > now).sort((a, b) => a.time - b.time)[0];
+        }
+        function fmtRemTime(t) {
+            const d = new Date(t), now = new Date();
+            const time = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            return d.toDateString() === now.toDateString() ? ('Today ' + time) : (d.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ' ' + time);
+        }
+        function reminderBannerHtml(g) {
+            const now = Date.now();
+            const pend = (g.reminders || []).filter(r => !r.fired && r.time > now).sort((a, b) => a.time - b.time);
+            if (!pend.length) return '';
+            return `<div class="rem-banner"><span style="font-weight:800;"><i class="fas fa-bell"></i> Reminders:</span>${pend.map(r => `<span class="rem-chip"><i class="far fa-clock"></i> ${fmtRemTime(r.time)}${r.text ? ' — ' + esc(r.text) : ''}${(isAdmin || r.by === (session.email || session.name)) ? `<span class="rc-x" onclick="deleteReminder('${g.id}','${r.id}')" title="Remove"><i class="fas fa-times"></i></span>` : ''}</span>`).join('')}</div>`;
+        }
+        function openReminderModal(id) {
+            activeGroupId = id;
+            document.getElementById('remTime').value = '';
+            document.getElementById('remText').value = '';
+            openModal('remModal');
+        }
+        function saveReminder() {
+            const groups = getGroups();
+            const g = groups.find(x => x.id === activeGroupId);
+            if (!g) return;
+            const t = document.getElementById('remTime').value;
+            if (!t) { toast('Pick date & time'); return; }
+            const time = new Date(t).getTime();
+            if (!isFinite(time) || time <= Date.now()) { toast('Choose future time'); return; }
+            const text = document.getElementById('remText').value.trim();
+            g.reminders = g.reminders || [];
+            g.reminders.push({ id: 'REM' + Date.now(), time, text, by: session.email || session.name, byName: session.name || 'Member', fired: false });
+            g.reminders.sort((a, b) => a.time - b.time);
+            if (saveGroups(groups)) {
+                closeModal('remModal');
+                pushSystem(activeGroupId, '⏰ Reminder set for ' + fmtRemTime(time) + (text ? ': ' + text : ''));
+                renderGroupList();
+                openGroup(activeGroupId);
+                toast('Reminder Set ⏰');
+            }
+        }
+        function deleteReminder(gid, rid) {
+            const groups = getGroups();
+            const g = groups.find(x => x.id === gid);
+            if (!g) return;
+            g.reminders = (g.reminders || []).filter(r => r.id !== rid);
+            if (saveGroups(groups)) { renderGroupList(); if (activeGroupId === gid) openGroup(gid); toast('Reminder removed'); }
+        }
+
+        // ==========================================
+        // CREATE GROUP
+        // ==========================================
+        let chosenNewGroupWall = 'doodle_light';
+        function openCreateGroup() {
+            document.getElementById('gName').value = '';
+            document.getElementById('gTopic').value = '';
+            const sel = document.getElementById('gBatch');
+            sel.innerHTML = '<option value="">— No batch (open group) —</option>' + getBatches().map(b => `<option value="${b.id}">${esc(b.name)}</option>`).join('');
+            document.getElementById('gPerm').value = 'all';
+            chosenNewGroupWall = 'doodle_light';
+            
+            const grid = document.getElementById('newGroupWallGrid');
+            grid.innerHTML = Object.keys(WALLPAPERS).slice(0, 6).map(k => `
+                <div class="wall-swatch ${k === chosenNewGroupWall ? 'sel' : ''}" style="background:${WALLPAPERS[k].css};" onclick="chosenNewGroupWall='${k}'; Array.from(this.parentElement.children).forEach(c=>c.classList.remove('sel')); this.classList.add('sel');">
+                    <span>${WALLPAPERS[k].label}</span>
+                </div>
+            `).join('');
+
+            openModal('groupModal');
+        }
+        function createGroup() {
+            const name = document.getElementById('gName').value.trim();
+            if (!name) { toast('Enter group name'); return; }
+            const groups = getGroups();
+            const g = {
+                id: 'GRP' + Date.now(),
+                name,
+                topic: document.getElementById('gTopic').value.trim(),
+                batchId: document.getElementById('gBatch').value || '',
+                permissions: document.getElementById('gPerm').value,
+                wallpaper: chosenNewGroupWall,
+                icon: '',
+                members: [],
+                createdBy: session.email || session.name || 'Admin',
+                createdByName: session.name || 'Teacher',
+                createdAt: Date.now()
+            };
+            groups.unshift(g);
+            if (!saveGroups(groups)) return;
+            closeModal('groupModal');
+            renderGroupList();
+            openGroup(g.id);
+            toast('Chat Group Created! 🎉');
+        }
+
+        // MODAL HELPERS
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function toast(m) {
+            const t = document.getElementById('cqToast');
+            t.textContent = m;
+            t.style.display = 'block';
+            clearTimeout(toast._h);
+            toast._h = setTimeout(() => t.style.display = 'none', 2600);
+        }
+
+        // GLOBAL CLICK TO CLOSE POPOVERS & CONTEXT MENU
+        window.addEventListener('click', (e) => {
+            if (!e.target.closest('#attachTray') && !e.target.closest('#pinBtn')) {
+                hideAttachTray();
+            }
+            if (!e.target.closest('#contextMenu')) {
+                closeContextMenu();
+            }
+        });
+
+        // INIT
+        window.addEventListener('DOMContentLoaded', () => {
+            initThemeMode();
+            session = readJSON('CodeQuest_active_session', null) || readJSON('TESTPAD_current_user', {});
+            const role = (session.role || '').toLowerCase();
+            isAdmin = ['teacher', 'faculty', 'admin', 'official'].includes(role);
+            
+            document.getElementById('whoami').innerHTML = `${esc(session.name || 'Guest')}<span class="role-tag">${isAdmin ? 'Teacher' : 'Student'}</span>`;
+            if (!isAdmin) {
+                const nBtn = document.getElementById('newGroupBtn');
+                if (nBtn) nBtn.style.display = 'none';
+            }
+            
+            renderGroupList();
+
+            const params = new URLSearchParams(location.search);
+            const batchId = params.get('batchId');
+            if (batchId) {
+                let g = getGroups().find(x => x.batchId === batchId);
+                if (!g && isAdmin) {
+                    const b = getBatches().find(x => x.id === batchId) || {};
+                    const groups = getGroups();
+                    g = {
+                        id: 'GRP' + Date.now(),
+                        name: (b.name || 'Batch') + ' Group',
+                        topic: 'Official Discussion Group',
+                        batchId,
+                        permissions: 'all',
+                        wallpaper: 'doodle_light',
+                        icon: '',
+                        members: [],
+                        createdBy: session.email || session.name,
+                        createdByName: session.name || 'Teacher',
+                        createdAt: Date.now()
+                    };
+                    groups.unshift(g);
+                    saveGroups(groups);
+                    renderGroupList();
+                }
+                if (g) openGroup(g.id);
+            } else {
+                const list = visibleGroups();
+                if (list.length) openGroup(list[0].id);
+            }
+        });
+    </script>
+</body>
+
+</html>

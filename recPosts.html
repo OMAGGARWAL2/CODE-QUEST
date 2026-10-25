@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Notifications</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Hind:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+    <style>
+        :root {
+            --primary: #D92D20;
+            --primary-hover: #B42318;
+            --primary-soft: #FEF3F2;
+            --text-main: #101828;
+            --text-secondary: #475467;
+            --text-tertiary: #667085;
+            --bg-body: #F9FAFB;
+            --border: #EAECF0;
+            --green: #34A853;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-body); color: var(--text-main); min-height: 100vh; }
+
+        /* ===== HEADER ===== */
+        .site-header { height: 72px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; position: sticky; top: 0; z-index: 1000; }
+        .header-left { display: flex; align-items: center; gap: 32px; }
+        .logo-container { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; }
+        .logo-square { width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .logo-square img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text { font-size: 1.35rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; text-transform: uppercase; line-height: 1; }
+        .logo-text small { display: block; font-size: 0.7rem; font-weight: 700; color: var(--primary); letter-spacing: 0.8px; margin-top: 3px; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--text-tertiary); text-decoration: none; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 0.95rem; padding: 8px 14px; border-radius: 8px; transition: all 0.2s; }
+        .back-link:hover { background: var(--primary-soft); color: var(--primary); }
+        .avatar { width: 40px; height: 40px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; overflow: hidden; }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* ===== PAGE ===== */
+        .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 80px; }
+        .page-head { display: flex; align-items: center; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+        .page-head .ph-ico { width: 46px; height: 46px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+        .page-head h1 { font-family: 'Mulish', sans-serif; font-size: 1.7rem; font-weight: 800; color: #101828; }
+        .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin: 22px 0 8px; }
+        .filter-chip { font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 0.85rem; color: #475467; background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 7px 16px; cursor: pointer; transition: all 0.2s; }
+        .filter-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+        /* ===== TIMELINE (matches screenshot) ===== */
+        .tl { position: relative; margin-top: 10px; }
+        .tl-date { text-align: center; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 1.35rem; color: #344054; margin: 30px 0 34px; position: relative; }
+        .tl-date::before, .tl-date::after { content: ''; position: absolute; top: 50%; width: 30%; height: 1px; background: #e6e8ec; }
+        .tl-date::before { left: 2%; } .tl-date::after { right: 2%; }
+        .tl-item { display: flex; gap: 22px; position: relative; padding-left: 6px; margin-bottom: 40px; }
+        .tl-item::before { content: ''; position: absolute; left: 66px; top: 56px; bottom: -40px; width: 4px; background: #bcd4f6; border-radius: 2px; }
+        .tl-item:last-child::before { display: none; }
+        .tl-node { display: flex; align-items: center; gap: 12px; width: 150px; flex-shrink: 0; }
+        .tl-label { font-family: 'Mulish', sans-serif; font-weight: 700; color: var(--green); font-size: 1.02rem; }
+        .tl-arrow { color: var(--green); font-size: 0.8rem; }
+        .tl-ico { width: 58px; height: 58px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; font-size: 1.7rem; box-shadow: 0 0 0 6px #fff; flex-shrink: 0; }
+        .tl-content { flex: 1; min-width: 0; padding-top: 4px; }
+        .tl-title { font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 1.28rem; color: #1a1a1a; line-height: 1.45; margin-bottom: 12px; }
+        .tl-desc { font-family: 'Hind', sans-serif; font-size: 1.08rem; color: #475467; line-height: 1.55; }
+        .tl-more { color: var(--primary); font-weight: 700; cursor: pointer; }
+        .tl-empty { text-align: center; padding: 70px 20px; color: #98a2b3; font-family: 'Mulish', sans-serif; font-size: 1.05rem; }
+        .tl-empty i { font-size: 2.6rem; color: #d0d5dd; display: block; margin-bottom: 14px; }
+
+        /* ===== DETAIL MODAL (matches screenshot 2) ===== */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(16,24,40,0.55); z-index: 5000; align-items: flex-start; justify-content: center; padding: 40px 20px; overflow-y: auto; }
+        .modal-card { background: #fff; border-radius: 14px; width: 100%; max-width: 760px; padding: 40px 44px; box-shadow: 0 20px 60px rgba(0,0,0,0.25); position: relative; }
+        .modal-tools { position: absolute; top: 22px; right: 22px; display: flex; gap: 12px; }
+        .tool-btn { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary); background: #fff; color: var(--primary); font-size: 1.05rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .tool-btn:hover { background: var(--primary); color: #fff; }
+        .md-title { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.9rem; color: #1a1a1a; line-height: 1.35; margin: 6px 0 22px; padding-right: 60px; }
+        .md-body { font-family: 'Hind', sans-serif; font-size: 1.12rem; color: #344054; line-height: 1.6; white-space: pre-wrap; }
+        .md-meta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+        .md-chip { background: #f2f4f7; color: #475467; border-radius: 6px; padding: 5px 12px; font-size: 0.82rem; font-weight: 700; font-family: 'Mulish', sans-serif; }
+        .md-att-head { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.25rem; color: #1a1a1a; margin: 30px 0 12px; }
+        .md-att { display: flex; align-items: center; gap: 10px; color: var(--primary); font-family: 'Hind', sans-serif; font-size: 1.05rem; text-decoration: none; margin-bottom: 8px; cursor: pointer; word-break: break-all; }
+        .md-att:hover { text-decoration: underline; }
+        .md-divider { border: none; border-top: 1px solid #eaecf0; margin: 30px 0 0; }
+
+        @media (max-width: 720px) {
+            .tl-node { width: auto; } .tl-label, .tl-arrow { display: none; }
+            .tl-item::before { left: 29px; }
+            .modal-card { padding: 26px 20px; } .md-title { font-size: 1.4rem; }
+        }
+        @media print {
+            .site-header, .filter-bar, .modal-tools, .page-head { display: none !important; }
+            .modal-overlay { position: static; display: block !important; background: #fff; padding: 0; }
+            .modal-card { box-shadow: none; max-width: 100%; }
+            .tl-item { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="header-left">
+        <a href="#" class="logo-container" onclick="goHome(event)">
+            <div class="logo-square"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest"></div>
+            <div class="logo-text">CodeQuest<small>Notifications</small></div>
+        </a>
+        <a href="#" class="back-link" onclick="goHome(event)"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+    </div>
+    <div class="header-right">
+        <div class="avatar"><img src="EXAMPAD/LINUX_TEST_CHITKARA_files/user-icon.3d6e2547.svg" alt="Profile"></div>
+    </div>
+</header>
+
+<div class="wrap">
+    <div class="page-head">
+        <div class="ph-ico"><i class="fas fa-sliders"></i></div>
+        <h1>My Timeline</h1>
+    </div>
+
+    <div class="filter-bar" id="filterBar">
+        <div class="filter-chip active" data-cat="all" onclick="setFilter('all')">All</div>
+        <div class="filter-chip" data-cat="Circular" onclick="setFilter('Circular')">Circulars</div>
+        <div class="filter-chip" data-cat="Job" onclick="setFilter('Job')">Jobs</div>
+        <div class="filter-chip" data-cat="Notice" onclick="setFilter('Notice')">Notices</div>
+        <div class="filter-chip" data-cat="Result" onclick="setFilter('Result')">Results</div>
+    </div>
+
+    <div class="tl" id="timeline"></div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detailModal" onclick="if(event.target===this)closeDetail()">
+    <div class="modal-card">
+        <div class="modal-tools">
+            <button class="tool-btn" onclick="window.print()" title="Print"><i class="fas fa-print"></i></button>
+            <button class="tool-btn" onclick="closeDetail()" title="Close"><i class="fas fa-xmark"></i></button>
+        </div>
+        <div class="md-meta" id="mdMeta"></div>
+        <h2 class="md-title" id="mdTitle"></h2>
+        <div class="md-body" id="mdBody"></div>
+        <div id="mdAttWrap">
+            <div class="md-att-head">Attachment(s)</div>
+            <div id="mdAtt"></div>
+        </div>
+        <hr class="md-divider">
+    </div>
+</div>
+
+<script>
+    const POSTS_KEY = 'CodeQuest_recruiter_posts';
+    let currentFilter = 'all';
+
+    function readJSON(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
+    function getPosts() { return readJSON(POSTS_KEY, []); }
+    function esc(s) { return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function session() { return readJSON('CodeQuest_active_session', null) || readJSON('TESTPAD_current_user', {}); }
+
+    function myRole() {
+        const s = session();
+        const r = (s.role || '').toLowerCase();
+        if (r === 'recruiter' || r === 'admin') return 'recruiter';
+        if (r === 'teacher' || r === 'faculty' || r === 'official') return 'teacher';
+        return 'student';
+    }
+    function visibleToMe(p) {
+        const role = myRole();
+        const aud = p.audience || 'all';
+        if (role === 'recruiter') return true;
+        if (aud === 'all') return true;
+        if (aud === 'students' && role === 'student') return true;
+        if (aud === 'teachers' && role === 'teacher') return true;
+        return false;
+    }
+    function goHome(e) {
+        e.preventDefault();
+        const role = myRole();
+        location.href = role === 'recruiter' ? 'recruiterindex.html' : (role === 'teacher' ? 'teacherindex.html' : 'studentindex.html');
+    }
+    function fmtDate(iso) { const d = new Date(iso); return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + ', ' + d.toLocaleDateString(undefined, { weekday: 'long' }); }
+    function iconFor(cat) {
+        switch ((cat || '').toLowerCase()) {
+            case 'job': return '💼';
+            case 'result': return '📊';
+            case 'notice': return '📢';
+            default: return '📄';
+        }
+    }
+
+    function setFilter(cat) {
+        currentFilter = cat;
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c.dataset.cat === cat));
+        renderTimeline();
+    }
+
+    function renderTimeline() {
+        const posts = getPosts().filter(visibleToMe)
+            .filter(p => currentFilter === 'all' || (p.category || 'Circular') === currentFilter)
+            .sort((a, b) => b.createdAt - a.createdAt);
+        const el = document.getElementById('timeline');
+        if (!posts.length) {
+            el.innerHTML = `<div class="tl-empty"><i class="far fa-bell-slash"></i>No notifications to show right now.</div>`;
+            return;
+        }
+        let lastDay = '';
+        el.innerHTML = posts.map(p => {
+            const day = fmtDate(p.createdAt);
+            const sep = day !== lastDay ? `<div class="tl-date">${day}</div>` : '';
+            lastDay = day;
+            const desc = p.description || '';
+            const short = desc.length > 170 ? desc.slice(0, 170) + '… ' : '';
+            return `${sep}
+            <div class="tl-item">
+                <div class="tl-node">
+                    <span class="tl-label">${esc(p.category || 'Circular')}</span>
+                    <i class="fas fa-arrow-right tl-arrow"></i>
+                    <div class="tl-ico">${iconFor(p.category)}</div>
+                </div>
+                <div class="tl-content" onclick="openDetail('${p.id}')" style="cursor:pointer;">
+                    <div class="tl-title">${esc(p.company ? p.company + ' — ' : '')}${esc(p.title)}</div>
+                    <div class="tl-desc">${esc(short)}<span class="tl-more">More</span></div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function openDetail(id) {
+        const p = getPosts().find(x => x.id === id); if (!p) return;
+        document.getElementById('mdTitle').textContent = (p.company ? p.company + ' \u2014 ' : '') + p.title;
+        document.getElementById('mdBody').textContent = p.description || '';
+        document.getElementById('mdMeta').innerHTML =
+            `<span class="md-chip">${iconFor(p.category)} ${esc(p.category || 'Circular')}</span>` +
+            `<span class="md-chip"><i class="far fa-clock"></i> ${fmtDate(p.createdAt)}</span>` +
+            (p.postedByName ? `<span class="md-chip"><i class="far fa-user"></i> ${esc(p.postedByName)}</span>` : '');
+        const atts = p.attachments || [];
+        document.getElementById('mdAttWrap').style.display = atts.length ? 'block' : 'none';
+        document.getElementById('mdAtt').innerHTML = atts.map(a =>
+            `<a class="md-att" href="${a.url}" download="${esc(a.name)}"><i class="fas fa-file-arrow-down"></i>${esc(a.name)}</a>`
+        ).join('');
+        document.getElementById('detailModal').style.display = 'flex';
+    }
+    function closeDetail() { document.getElementById('detailModal').style.display = 'none'; }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        // Deep link: ?post=ID opens detail directly (from recruiter "More").
+        const params = new URLSearchParams(location.search);
+        const pid = params.get('post');
+        renderTimeline();
+        if (pid) { const p = getPosts().find(x => x.id === pid); if (p) openDetail(pid); }
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+</script>
+</body>
+
+</html>

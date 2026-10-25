@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #fff;
+            font-family: 'Inter', sans-serif;
+            color: #333;
+        }
+
+        .success-banner {
+            background: #FAF6F0;
+            padding: 50px 0;
+            margin-bottom: 60px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: auto;
+            padding: 0 20px;
+        }
+
+        .success-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .success-title {
+            color: #d35400;
+            font-size: 1.8rem;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .success-box p {
+            margin: 5px 0;
+            color: #555;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .feedback-content {
+            background: #f5f5f5;
+        }
+
+        .feedback-section {
+            margin-bottom: 10px;
+        }
+
+        .feedback-section label {
+            display: block;
+            margin-bottom: 15px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .rating-group {
+            display: flex;
+            gap: 35px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .rating-btn {
+            background: #d9c7b7;
+            border: none;
+            padding: 8px 26px;
+            border-radius: 25px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #333;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .rating-btn:hover {
+            background: #cbb4a3;
+        }
+
+        .rating-btn.active {
+            background: #e26a00;
+            color: white;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #d9d9d9;
+            margin: 25px 0;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            background: #efefef;
+            padding: 12px;
+            box-sizing: border-box;
+            font-family: Roboto, Arial, sans-serif;
+            font-size: 14px;
+            resize: vertical;
+            outline: none;
+        }
+
+        textarea::placeholder {
+            color: #aaa;
+        }
+
+        .submit-btn {
+            background: #e26a00;
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: Roboto, Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+
+    <div class="success-banner">
+        <div class="container">
+            <div class="success-box">
+                <img src="thumb.png" width="70" alt="Success">
+
+                <div>
+                    <h2 class="success-title">Test submitted successfully :)</h2>
+                    <p><b>you took <span style="color:#e26a00" id="finalTimeTook">-- mins</span></b> to finish the test
+                    </p>
+                    <p>Please take out a minute to submit your feedback. Your feedback helps us improve the quality of
+                        learning and the services we render to you.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="feedback-content container">
+        <div class="feedback-section">
+            <label>How was the interpretation of questions</label>
+            <div class="rating-group">
+                <button class="rating-btn" onclick="setFeedbackPill(this)">EXCELLENT</button>
+                <button class="rating-btn" onclick="setFeedbackPill(this)">GOOD</button>
+                <button class="rating-btn" onclick="setFeedbackPill(this)">AVERAGE</button>
+                <button class="rating-btn" onclick="setFeedbackPill(this)">POOR</button>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="feedback-section">
+            <label>Any other suggestion or feedback?</label>
+            <textarea id="finalFeedbackMsg" placeholder=".enter text here..."></textarea>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <button class="submit-btn" id="feedbackSubmitBtn" onclick="submitFeedback()">Submit</button>
+            <div id="immediateResultContainer"></div>
+        </div>
+    </div>
+
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const attemptId = urlParams.get('attemptId');
+        const attempt = db.getAttempt(attemptId);
+
+        if (attempt) {
+            const start = new Date(attempt.startTime);
+            const end = new Date(attempt.endTime || new Date());
+            const mins = Math.max(1, Math.round((end - start) / 60000));
+            document.getElementById('finalTimeTook').textContent = `${mins} mins`;
+        }
+
+        function setFeedbackPill(btn) {
+            btn.parentElement.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function submitFeedback() {
+            // Determine if we're in Electron environment by looking for our custom bridge
+            const hasBridge = window.proctorBridge && typeof window.proctorBridge.close === 'function';
+            
+            if (hasBridge) {
+                // Decisive close in Electron environment
+                window.proctorBridge.close();
+                return;
+            }
+
+            const btn = document.getElementById('feedbackSubmitBtn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            btn.disabled = true;
+
+            // Show a success animation with a thumb sign
+            const finalOverlay = document.createElement('div');
+            finalOverlay.style.cssText = "position:fixed; inset:0; background:rgba(255,255,255,0.95); z-index:100000; display:flex; flex-direction:column; align-items:center; justify-content:center; animation: fadeIn 0.5s forwards;";
+            finalOverlay.innerHTML = `
+                <div style="font-size: 8rem; color: #D35400; margin-bottom: 24px; animation: thumbPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+                    <i class="fas fa-thumbs-up"></i>
+                </div>
+                <h1 style="font-family: Roboto, Arial, sans-serif; font-weight: 800; color: #101828; margin-bottom: 12px; font-size: 2.5rem;">SUCCESS!</h1>
+                <p style="color: #475467; font-size: 1.2rem; font-weight: 600;">Your evaluation has been securely registered.</p>
+                <style>
+                    @keyframes thumbPop {
+                        0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+                        70% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+                        100% { transform: scale(1) rotate(0deg); opacity: 1; }
+                    }
+                    @keyframes fadeIn {
+                        from { opacity: 0; }
+                        to { opacity: 1; }
+                    }
+                </style>
+            `;
+            document.body.appendChild(finalOverlay);
+
+            // Attempt to close decisively after visual confirmation (Fallback for browsers/other)
+            setTimeout(() => {
+                console.log("[SYSTEM] Finalizing session...");
+                
+                // AI HUB Fallback: If bridge isn't detected correctly, try alternate Electron methods
+                if (typeof require !== 'undefined' || window.process && window.process.versions && window.process.versions.electron) {
+                    try {
+                        const { ipcRenderer } = require('electron');
+                        ipcRenderer.send('window-control', 'close');
+                        return;
+                    } catch (e) { }
+                }
+
+                // Web Fallback: Try closing current window session
+                try {
+                    window.close();
+                } catch (e) { }
+
+                // Ultimate fallback: Redirection to portal
+                window.location.href = '../index.html';
+            }, 1000); 
+        }
+    </script>
+</body>
+
+</html>

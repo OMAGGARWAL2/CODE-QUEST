@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Login</title>
+
+    <!-- Google Fonts matching login.html -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Mulish:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+
+    <!-- Official Google Identity Services SDK -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <style>
+        :root {
+            --primary: #e30613;
+            --primary-light: #ff4d4d;
+            --primary-hover: #c70410;
+            --accent: #1e272e;
+            --text: #2d3436;
+            --text-dim: #636e72;
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Mulish', 'Hind', sans-serif;
+        }
+
+        button,
+        input,
+        select,
+        textarea,
+        label,
+        h2,
+        h3,
+        a,
+        span {
+            font-family: 'Mulish', 'Hind', sans-serif;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ===== BACKGROUND: ONLY BGNEW01.png, NO EXTRA ORANGE LAYER ===== */
+        body {
+            background-color: #f0f2f5;
+            background-image: url('BGNEW01.png');
+            background-size: cover;
+            background-position: top center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-y: auto;
+            padding: 24px 12px 36px 12px;
+            box-sizing: border-box;
+        }
+
+        /* --- AUTH CARD --- */
+        .auth-card {
+            width: 100%;
+            max-width: 460px;
+            background: #ffffff;
+            border: none;
+            border-radius: var(--radius);
+            padding: 30px 38px 24px 38px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+            position: relative;
+            margin: auto 0;
+            box-sizing: border-box;
+            transform: translateY(0);
+            animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(15px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* --- TAB SWITCHER IN TOP RIGHT OF CARD --- */
+        .tab-switcher {
+            display: flex;
+            background: #f1f3f5;
+            padding: 3px;
+            border-radius: 14px;
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            width: 175px;
+            z-index: 10;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 6px 6px;
+            border: none;
+            background: transparent;
+            font-weight: 700;
+            font-size: 0.73rem;
+            color: var(--text-dim);
+            cursor: pointer;
+            z-index: 2;
+            transition: color 0.25s;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+        }
+
+        .tab-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: calc(50% - 3px);
+            height: calc(100% - 6px);
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1;
+        }
+
+        /* --- CARD HEADER & LOGO --- */
+        .auth-header {
+            text-align: center;
+            margin-bottom: 16px;
+            margin-top: 2px;
+        }
+
+        .logo-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .logo-box img {
+            height: 42px;
+            width: 42px;
+            object-fit: contain;
+        }
+
+        .logo-text-branding {
+            text-align: left;
+            line-height: 1;
+        }
+
+        .logo-text-branding .main-name {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #000000;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text-branding .sub-name {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--primary);
+            letter-spacing: 2px;
+            margin-top: 2px;
+        }
+
+        .auth-header h2 {
+            font-size: 1.45rem;
+            font-weight: 600;
+            color: #2b2b2b;
+            margin-top: 4px;
+        }
+
+        /* --- FORM SECTIONS --- */
+        .form-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        #signupSection .input-group {
+            margin-bottom: 12px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.98rem;
+            font-weight: 400;
+            color: var(--primary);
+            margin-bottom: 6px;
+            text-align: left;
+        }
+
+        #signupSection .input-group label {
+            font-size: 0.92rem;
+            margin-bottom: 4px;
+        }
+
+        .input-with-action {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            background: #ffffff;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.25s;
+            color: #333333;
+        }
+
+        #signupSection .input-field {
+            padding: 8px 12px;
+            font-size: 0.95rem;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.1);
+        }
+
+        .input-field::placeholder {
+            color: #aaa;
+            font-weight: 400;
+            font-size: 0.92rem;
+        }
+
+        /* --- PASSWORD WRAPPER & TOGGLE --- */
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        .toggle-password:hover {
+            color: var(--primary);
+        }
+
+        .caps-warning {
+            position: absolute;
+            right: 42px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            font-size: 0.78rem;
+            font-weight: 700;
+            display: none;
+        }
+
+        /* --- BUTTONS --- */
+        .btn-primary {
+            width: 155px;
+            margin: 12px auto 0;
+            padding: 10px 16px;
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.08rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .link-forgot {
+            font-size: 1.05rem;
+            color: var(--primary);
+            text-decoration: underline;
+            font-weight: 400;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .link-forgot:hover {
+            color: var(--primary-hover);
+        }
+
+        /* --- RECENT / REMEMBERED CREDENTIALS DROPDOWN --- */
+        .history-toggle {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            padding: 6px;
+            transition: all 0.2s;
+            z-index: 5;
+            font-size: 0.88rem;
+        }
+
+        .history-toggle:hover {
+            color: var(--primary);
+        }
+
+        .history-dropdown {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-top: 2px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+            max-height: 240px;
+            overflow-y: auto;
+            animation: dropdownFade 0.2s ease;
+        }
+
+        @keyframes dropdownFade {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .history-item {
+            padding: 10px 14px;
+            cursor: pointer;
+            transition: background 0.15s;
+            border-bottom: 1px solid #f5f5f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-item:hover {
+            background: rgba(227, 6, 19, 0.05);
+        }
+
+        .history-item-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .history-item-email {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .history-item-role {
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        .history-item .delete-btn {
+            color: rgba(227, 6, 19, 0.5);
+            font-size: 0.95rem;
+            padding: 4px;
+            cursor: pointer;
+        }
+
+        .history-item .delete-btn:hover {
+            color: var(--primary);
+        }
+
+        /* --- GOOGLE SIGN IN BUTTON --- */
+        .google-btn-wrap {
+            text-align: center;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px dashed #e5e7eb;
+        }
+
+        .btn-google {
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #374151;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+
+        .btn-google:hover {
+            background: #f9fafb;
+            border-color: #9ca3af;
+        }
+
+        /* --- TOAST & NOTIFICATIONS --- */
+        .message-toast {
+            position: fixed;
+            bottom: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 26px;
+            border-radius: 50px;
+            background: #1e272e;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.92rem;
+            z-index: 10000;
+            display: none;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translate(-50%, 40px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+        }
+
+        /* --- DELETE CONFIRMATION BANNER --- */
+        .delete-banner {
+            display: none;
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            opacity: 0;
+            background: #ffffff;
+            padding: 22px 30px;
+            z-index: 100000;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            border: 1px solid #eee;
+            text-align: center;
+            flex-direction: column;
+            gap: 16px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            max-width: 400px;
+        }
+
+        /* --- GOOGLE & OTP MODALS --- */
+        .custom-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .modal-inner-card {
+            background: #ffffff;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 420px;
+            padding: 30px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-close-icon {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .modal-close-icon:hover {
+            color: #333;
+        }
+
+        .otp-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 20px 0 15px 0;
+        }
+
+        .otp-box {
+            width: 44px;
+            height: 48px;
+            border: 1.5px solid #d1d5db;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .otp-box:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .not-student-link {
+            color: #667085;
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .not-student-link:hover {
+            text-decoration: underline !important;
+            color: var(--primary) !important;
+        }
+
+        @media (max-width: 520px) {
+            .auth-card {
+                padding: 36px 24px;
+                border-radius: 0;
+                min-height: 100vh;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- AUTH CARD -->
+    <div class="auth-card">
+        <!-- Top-Right Tab Switcher -->
+        <div class="tab-switcher">
+            <div class="tab-slider" id="tabSlider"></div>
+            <button class="tab-btn active" id="loginTab" onclick="switchTab('login')">SIGN IN</button>
+            <button class="tab-btn" id="signupTab" onclick="switchTab('signup')">CREATE ID</button>
+        </div>
+
+        <!-- Header: CODEQUEST Logo and Title -->
+        <div class="auth-header">
+            <div class="logo-box">
+                <img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest Logo">
+                <div class="logo-text-branding">
+                    <span class="main-name">CODEQUEST</span>
+                    <span class="sub-name">DSA &amp; TESTPAD</span>
+                </div>
+            </div>
+            <h2 id="headerTitle">Log into your account</h2>
+        </div>
+
+        <!-- ===== SIGN IN SECTION ===== -->
+        <div id="loginSection" class="form-section active">
+            <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+                <div id="credInputs">
+                    <!-- Email or Enrollment Id -->
+                    <div class="input-group">
+                        <label for="loginEmail">Email or Enrollment Id</label>
+                        <div class="input-with-action">
+                            <input type="text" id="loginEmail" class="input-field"
+                                placeholder="Email or EnrollmentId(RollNo / EmployeeId)" autocomplete="username"
+                                required>
+                            <button type="button" class="history-toggle" id="historyToggle"
+                                onclick="toggleHistoryMenu(event)" title="Saved Identities">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="history-dropdown" id="historyDropdown"></div>
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="input-group">
+                        <label for="loginPassword">Password</label>
+                        <div class="password-container">
+                            <input type="password" id="loginPassword" class="input-field" placeholder="Enter Password"
+                                autocomplete="current-password" onkeyup="checkCaps(event, 'loginCaps')" required>
+                            <span class="caps-warning" id="loginCaps"><i class="fas fa-arrow-up"></i> CAPS</span>
+                            <i class="fas fa-eye toggle-password" onclick="togglePass('loginPassword', this)"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-primary" id="loginSubmitBtn">
+                    <span>Login</span>
+                </button>
+
+                <!-- Forgot Password Link -->
+                <div style="text-align: center; margin-top: 16px;">
+                    <a href="#" class="link-forgot" onclick="showForgotSection(event)">Forgot password?</a>
+                </div>
+
+                <!-- Proper Google Sign-in Verification -->
+                <div class="google-btn-wrap">
+                    <button type="button" class="btn-google" onclick="initiateRealGoogleAuth()">
+                        <svg width="18" height="18" viewBox="0 0 24 24">
+                            <path fill="#4285F4"
+                                d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z" />
+                            <path fill="#34A853"
+                                d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z" />
+                            <path fill="#FBBC05"
+                                d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z" />
+                            <path fill="#EA4335"
+                                d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
+                        </svg>
+                        <span>Sign in with Google</span>
+                    </button>
+                    <div id="googleSignInHiddenPrompt" style="display: none;"></div>
+                </div>
+            </form>
+        </div>
+
+        <!-- ===== CREATE ID / SIGN UP SECTION ===== -->
+        <div id="signupSection" class="form-section">
+            <form id="signupForm" onsubmit="handleSignupSubmit(event)">
+                <div class="input-group">
+                    <label for="signupName">Assigned Name</label>
+                    <input type="text" id="signupName" class="input-field" placeholder="Johnathan Doe" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="signupEmail">Email or Enrollment Id</label>
+                    <input type="text" id="signupEmail" class="input-field" placeholder="Email or EnrollmentId"
+                        autocomplete="email" required>
+                </div>
+
+                <!-- <input type="hidden" id="signupRole" value="student">
+                <div style="background: #fff5f0; border: 1px solid #fce8e0; border-radius: 6px; padding: 7px 12px; margin-bottom: 12px; font-size: 0.8rem; font-weight: 700; color: #df5a22; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Student Registration Only</span>
+                </div> -->
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label for="signupPassword">Security Key</label>
+                        <div class="password-container">
+                            <input type="password" id="signupPassword" class="input-field"
+                                placeholder="Min 6 characters" autocomplete="new-password"
+                                onkeyup="checkCaps(event, 'signupCaps')" required>
+                            <span class="caps-warning" id="signupCaps" style="right: 30px; font-size: 0.7rem;"><i
+                                    class="fas fa-arrow-up"></i> CAPS</span>
+                            <i class="fas fa-eye toggle-password" onclick="togglePass('signupPassword', this)"
+                                style="right: 10px;"></i>
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label for="confirmPassword">Verify Key</label>
+                        <input type="password" id="confirmPassword" class="input-field" placeholder="Repeat key"
+                            autocomplete="new-password" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary" id="signupSubmitBtn"
+                    style="margin-top: 10px; padding: 10px 16px;">
+                    <span>Sign Up as Student</span>
+                </button>
+
+                <div class="google-btn-wrap">
+                    <button type="button" class="btn-google" onclick="initiateRealGoogleAuth()">
+                        <svg width="18" height="18" viewBox="0 0 24 24">
+                            <path fill="#4285F4"
+                                d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z" />
+                            <path fill="#34A853"
+                                d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z" />
+                            <path fill="#FBBC05"
+                                d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z" />
+                            <path fill="#EA4335"
+                                d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
+                        </svg>
+                        <span>Sign up with Google</span>
+                    </button>
+                </div>
+
+                <div style="text-align: center; margin-top: 18px; padding-top: 14px; border-top: 1px solid #f0f0f0;">
+                    <a href="loginforcomp.html" class="not-student-link">
+                        Click here if you are not a student
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- ===== FORGOT PASSWORD SECTION ===== -->
+        <div id="forgotSection" class="form-section">
+            <form id="forgotForm" onsubmit="handleForgotSubmit(event)">
+                <div class="input-group">
+                    <label for="forgotEmail">Email or Enrollment Id</label>
+                    <input type="text" id="forgotEmail" class="input-field"
+                        placeholder="Email or EnrollmentId(RollNo / EmployeeId)" autocomplete="username" required>
+                </div>
+
+                <div
+                    style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px 16px; background: #f8fafc; display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; margin-top: 10px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <input type="checkbox" id="hcaptchaCheck" required
+                            style="width: 22px; height: 22px; cursor: pointer; border: 1px solid #cbd5e1; border-radius: 4px;">
+                        <label for="hcaptchaCheck" style="font-size: 1rem; color: #334155; cursor: pointer;">I am
+                            human</label>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <i class="fas fa-hand-sparkles"
+                            style="font-size: 24px; color: #38bdf8; margin-bottom: 4px;"></i>
+                        <span style="font-size: 0.65rem; color: #64748b; font-weight: 600;">hCaptcha</span>
+                        <span style="font-size: 0.55rem; color: #94a3b8;">Privacy - Terms</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    <span>Verify Identity</span>
+                </button>
+                <div style="text-align:center; margin-top:16px;">
+                    <a href="#" class="link-forgot" onclick="showLoginSection(event)">Go Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Message Toast -->
+    <div class="message-toast" id="toast">Message content</div>
+
+    <!-- Delete Confirmation Banner -->
+    <div id="deleteConfirmBanner" class="delete-banner">
+        <div id="deleteConfirmText" style="font-weight: 500; font-size: 1.05rem; color: #444;">Do you really want to
+            remove this identity?</div>
+        <div style="display: flex; gap: 16px; justify-content: center;">
+            <button id="confirmDeleteBtn"
+                style="background: #e30613; border: none; padding: 10px 32px; border-radius: 30px; color: white; font-weight: 500; font-size: 1rem; cursor: pointer;">Yes</button>
+            <button id="cancelDeleteBtn"
+                style="background: #fde8e8; border: none; padding: 10px 32px; border-radius: 30px; color: #2d3436; font-weight: 500; font-size: 1rem; cursor: pointer;"
+                onclick="closeDeleteBanner()">No</button>
+        </div>
+    </div>
+
+
+
+    <!-- ===== JAVASCRIPT: EXACT LOGIN.HTML CREDENTIAL REMEMBER LOGIC ===== -->
+    <script>
+        const USERS_STORAGE_KEY = 'TESTPAD_users';
+        const HISTORY_STORAGE_KEY = 'TESTPAD_login_history';
+
+        let pendingRegistration = null;
+        let generatedOtp = "582914";
+        let identityToDelete = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Ensure inputs are completely empty by default (NO autofed data)
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+
+            // Close dropdowns on outside click
+            document.addEventListener('click', (e) => {
+                const dropdown = document.getElementById('historyDropdown');
+                const toggle = document.getElementById('historyToggle');
+                if (dropdown && !dropdown.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        });
+
+        function showMessage(msg) {
+            const t = document.getElementById('toast');
+            if (!t) return;
+            t.textContent = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
+
+        function togglePass(id, icon) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (el.type === 'password') {
+                el.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                el.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        function checkCaps(e, warningId) {
+            const warning = document.getElementById(warningId);
+            if (!warning) return;
+            if (e.getModifierState('CapsLock')) {
+                warning.style.display = 'block';
+            } else {
+                warning.style.display = 'none';
+            }
+        }
+
+        function switchTab(tab) {
+            const slider = document.getElementById('tabSlider');
+            const loginSection = document.getElementById('loginSection');
+            const signupSection = document.getElementById('signupSection');
+            const forgotSection = document.getElementById('forgotSection');
+            const loginBtn = document.getElementById('loginTab');
+            const signupBtn = document.getElementById('signupTab');
+            const headerTitle = document.getElementById('headerTitle');
+
+            forgotSection.classList.remove('active');
+
+            if (tab === 'login') {
+                slider.style.transform = 'translateX(0)';
+                loginSection.classList.add('active');
+                signupSection.classList.remove('active');
+                loginBtn.classList.add('active');
+                signupBtn.classList.remove('active');
+                headerTitle.innerText = 'Log into your account';
+            } else {
+                slider.style.transform = 'translateX(100%)';
+                loginSection.classList.remove('active');
+                signupSection.classList.add('active');
+                loginBtn.classList.remove('active');
+                signupBtn.classList.add('active');
+                headerTitle.innerText = 'Create your account';
+            }
+        }
+
+        function showForgotSection(e) {
+            if (e) e.preventDefault();
+            document.getElementById('loginSection').classList.remove('active');
+            document.getElementById('signupSection').classList.remove('active');
+            document.getElementById('forgotSection').classList.add('active');
+            document.querySelector('.tab-switcher').style.display = 'none';
+            document.getElementById('headerTitle').innerText = 'Forgot Password';
+        }
+
+        function showLoginSection(e) {
+            if (e) e.preventDefault();
+            document.getElementById('forgotSection').classList.remove('active');
+            document.querySelector('.tab-switcher').style.display = 'flex';
+            document.getElementById('headerTitle').innerText = 'Log into your account';
+            switchTab('login');
+        }
+
+        // ===== RECENT LOGINS / HISTORY DROPDOWN (FROM LOGIN.HTML) =====
+        function toggleHistoryMenu(e) {
+            if (e) e.stopPropagation();
+            const dropdown = document.getElementById('historyDropdown');
+            if (!dropdown) return;
+
+            const isVisible = dropdown.style.display === 'flex';
+            if (isVisible) {
+                dropdown.style.display = 'none';
+            } else {
+                renderHistoryDropdown();
+            }
+        }
+
+        function getRoleDisplayName(role) {
+            switch ((role || '').toLowerCase()) {
+                case 'company_executive': return 'Company Executive';
+                case 'interviewer': return 'Interviewer';
+                case 'university_head': return 'University Head';
+                case 'recruiter': return 'Recruiter';
+                case 'student':
+                default: return 'Student';
+            }
+        }
+
+        function renderHistoryDropdown() {
+            const users = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY)) || [];
+            const dropdown = document.getElementById('historyDropdown');
+            if (!dropdown) return;
+
+            if (users.length === 0) {
+                dropdown.style.display = 'none';
+                showMessage("No saved identities found yet.");
+                return;
+            }
+
+            dropdown.innerHTML = '';
+            dropdown.style.display = 'flex';
+
+            [...users].reverse().forEach(u => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                const displayRole = getRoleDisplayName(u.role);
+                item.innerHTML = `
+                    <div class="history-item-info">
+                        <span class="history-item-email">${u.email || u.rollNo}</span>
+                        <span class="history-item-role">${displayRole.toUpperCase()}</span>
+                    </div>
+                    <i class="fas fa-trash delete-btn" title="Delete identity"></i>
+                `;
+
+                // Delete button with confirmation banner
+                const delBtn = item.querySelector('.delete-btn');
+                delBtn.addEventListener('click', (ev) => {
+                    ev.stopPropagation();
+                    identityToDelete = u;
+                    dropdown.style.display = 'none';
+
+                    const banner = document.getElementById('deleteConfirmBanner');
+                    const text = document.getElementById('deleteConfirmText');
+                    text.textContent = `Do you really want to remove identity ${u.email || u.rollNo}?`;
+                    banner.style.display = 'flex';
+                    requestAnimationFrame(() => {
+                        banner.style.transform = 'translateX(-50%) translateY(0)';
+                        banner.style.opacity = '1';
+                    });
+                });
+
+                // Select to restore credential
+                item.addEventListener('click', () => {
+                    let pass = "";
+                    try { pass = atob(u.password); } catch (ex) { pass = u.password; }
+                    selectCredential(u.email || u.rollNo, pass, u.role);
+                    dropdown.style.display = 'none';
+                });
+
+                dropdown.appendChild(item);
+            });
+        }
+
+        function selectCredential(email, pass) {
+            const emailField = document.getElementById('loginEmail');
+            const passField = document.getElementById('loginPassword');
+
+            if (emailField) emailField.value = email;
+            if (passField) passField.value = pass;
+
+            switchTab('login');
+            showMessage(`Identity restored: ${email}`);
+
+            const btn = document.getElementById('loginSubmitBtn');
+            if (btn) btn.focus();
+        }
+
+        function closeDeleteBanner() {
+            const banner = document.getElementById('deleteConfirmBanner');
+            banner.style.transform = 'translateX(-50%) translateY(-20px)';
+            banner.style.opacity = '0';
+            setTimeout(() => { banner.style.display = 'none'; }, 250);
+            identityToDelete = null;
+        }
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+            if (!identityToDelete) return;
+
+            let users = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY)) || [];
+            users = users.filter(user => (user.email || user.rollNo) !== (identityToDelete.email || identityToDelete.rollNo));
+            localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+
+            let history = JSON.parse(localStorage.getItem(HISTORY_STORAGE_KEY)) || [];
+            history = history.filter(item => {
+                try { return atob(item.e) !== (identityToDelete.email || identityToDelete.rollNo); }
+                catch (e) { return item.e !== (identityToDelete.email || identityToDelete.rollNo); }
+            });
+            localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
+
+            const emailField = document.getElementById('loginEmail');
+            if (emailField && emailField.value === (identityToDelete.email || identityToDelete.rollNo)) {
+                emailField.value = '';
+                document.getElementById('loginPassword').value = '';
+            }
+
+            showMessage(`Identity removed: ${identityToDelete.email || identityToDelete.rollNo}`);
+            closeDeleteBanner();
+        });
+
+        // ===== FORM SUBMISSIONS =====
+
+        // Login Handler
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            const identifier = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            if (!identifier || !password) {
+                showMessage("Please enter your credentials");
+                return;
+            }
+
+            // Master admin shortcut: ALPHAWINNERS / CodeQuest12 opens the ONLALP approval portal
+            if (identifier === 'ALPHAWINNERS' && password === 'CodeQuest12') {
+                sessionStorage.setItem('ONLALP_admin_auth', 'true');
+                showMessage("Welcome Administrator! Redirecting...");
+                setTimeout(() => { window.location.href = 'ONLALP.html'; }, 600);
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY)) || [];
+            const user = users.find(u => (u.email && u.email.toLowerCase() === identifier.toLowerCase()) || (u.rollNo && u.rollNo.toLowerCase() === identifier.toLowerCase()));
+
+            if (!user) {
+                showMessage("Identity not found. Please create an account.");
+                return;
+            }
+
+            let valid = false;
+            try { valid = atob(user.password) === password; }
+            catch (ex) { valid = user.password === password; }
+
+            if (!valid) {
+                showMessage("Invalid password. Please check your credentials.");
+                return;
+            }
+
+            const effectiveRole = user.role || 'student';
+
+            // Save/Remember to history
+            let history = JSON.parse(localStorage.getItem(HISTORY_STORAGE_KEY)) || [];
+            history = history.filter(h => {
+                try { return atob(h.e) !== identifier; } catch (e) { return h.e !== identifier; }
+            });
+            history.push({ e: btoa(identifier), p: btoa(password), r: effectiveRole });
+            localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
+
+            // Set active session for CodeQuest
+            const sessionData = {
+                name: user.name || identifier.split('@')[0],
+                email: user.email || identifier,
+                role: effectiveRole,
+                roleDisplay: getRoleDisplayName(effectiveRole),
+                loggedInAt: new Date().toISOString()
+            };
+            localStorage.setItem('CodeQuest_active_session', JSON.stringify(sessionData));
+            localStorage.setItem('TESTPAD_current_user', JSON.stringify(sessionData));
+
+            showMessage(`Welcome back, ${sessionData.name}! Redirecting...`);
+            setTimeout(() => {
+                // Teachers / officials (signed up via loginforcomp.html and approved) open the teacher portal
+                const role = (effectiveRole || '').toLowerCase();
+                if (role === 'recruiter' || role === 'employer' || role === 'hr' || role === 'company_recruiter') {
+                    window.location.href = 'recruiterindex.html';
+                } else if (role === 'teacher' || role === 'faculty' || role === 'company' || role === 'official') {
+                    window.location.href = 'teacherindex.html';
+                } else {
+                    window.location.href = 'studentindex.html';
+                }
+            }, 600);
+        }
+
+        // Signup Handler
+        function handleSignupSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const role = 'student'; // Student-only signup. Teachers/companies/officials register from loginforcomp.html
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                showMessage("Security keys do not match");
+                return;
+            }
+
+            if (password.length < 6) {
+                showMessage("Security key must be at least 6 characters");
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY)) || [];
+            if (users.some(u => (u.email && u.email.toLowerCase() === email.toLowerCase()) || (u.rollNo && u.rollNo.toLowerCase() === email.toLowerCase()))) {
+                showMessage("Identity already exists. Please Sign In.");
+                switchTab('login');
+                document.getElementById('loginEmail').value = email;
+                return;
+            }
+
+            const newUser = {
+                id: 'cq_' + Date.now(),
+                name,
+                email,
+                role,
+                password: btoa(password),
+                createdAt: new Date().toISOString()
+            };
+
+            // Register user immediately
+            users.push(newUser);
+            localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+
+            // Save credentials to remembered history
+            let history = JSON.parse(localStorage.getItem(HISTORY_STORAGE_KEY)) || [];
+            history = history.filter(h => {
+                try { return atob(h.e) !== email; } catch (ex) { return h.e !== email; }
+            });
+            history.push({
+                e: btoa(email),
+                p: btoa(password),
+                r: role
+            });
+            localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
+
+            // Set active session for CodeQuest
+            const sessionData = {
+                name: name,
+                email: email,
+                role: role,
+                roleDisplay: getRoleDisplayName(role),
+                loggedInAt: new Date().toISOString()
+            };
+            localStorage.setItem('CodeQuest_active_session', JSON.stringify(sessionData));
+            localStorage.setItem('TESTPAD_current_user', JSON.stringify(sessionData));
+
+            // Welcome member notification
+            showMessage(`You are a new member of CodeQuest. A welcome mail has been sent to ${email}`);
+
+            setTimeout(() => {
+                window.location.href = 'studentindex.html';
+            }, 1000);
+        }
+
+        // Forgot password submission
+        function handleForgotSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('forgotEmail').value.trim();
+            showMessage(`Password recovery instructions dispatched to ${email}`);
+            setTimeout(() => showLoginSection(), 1500);
+        }
+
+        // ===== REAL GOOGLE IDENTITY SERVICES & ACCOUNT SELECTION =====
+        const GOOGLE_CLIENT_ID = '924537036544-437jb5662hdu1ao26dprkd016nqpj2q3.apps.googleusercontent.com';
+        let googleOAuthTokenClient = null;
+
+        function initGoogleIdentityServices() {
+            if (window.google && window.google.accounts) {
+                try {
+                    // Initialize Google One Tap / Sign In
+                    google.accounts.id.initialize({
+                        client_id: GOOGLE_CLIENT_ID,
+                        callback: handleRealGoogleCredentialResponse,
+                        auto_select: false,
+                        cancel_on_tap_outside: true
+                    });
+
+                    // Initialize OAuth Token Client for real account selection
+                    if (google.accounts.oauth2) {
+                        googleOAuthTokenClient = google.accounts.oauth2.initTokenClient({
+                            client_id: GOOGLE_CLIENT_ID,
+                            scope: 'openid email profile',
+                            prompt: 'select_account',
+                            callback: handleRealGoogleTokenResponse
+                        });
+                    }
+                } catch (err) {
+                    console.log("GIS initialization info:", err);
+                }
+            }
+        }
+
+        // Initialize when window or GIS library is ready
+        window.addEventListener('load', () => {
+            initGoogleIdentityServices();
+
+            // Check if redirected from Google OAuth with access_token or id_token
+            if (window.location.hash.includes('access_token=') || window.location.hash.includes('id_token=')) {
+                handleGoogleOAuthHashRedirect();
+            }
+        });
+
+        // Trigger real Google account selection
+        function initiateRealGoogleAuth() {
+            const isFileOrigin = window.location.protocol === 'file:';
+
+            // If running on http/https and token client is ready, open real Google account chooser
+            if (!isFileOrigin && googleOAuthTokenClient) {
+                try {
+                    googleOAuthTokenClient.requestAccessToken({ prompt: 'select_account' });
+                    return;
+                } catch (e) {
+                    console.warn("GIS token client error, falling back to popup:", e);
+                }
+            }
+
+            // If GIS prompt available
+            if (!isFileOrigin && window.google && window.google.accounts && window.google.accounts.id) {
+                try {
+                    google.accounts.id.prompt((notification) => {
+                        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                            openRealGoogleAccountChooserPopup();
+                        }
+                    });
+                    return;
+                } catch (e) {
+                    console.warn("GIS prompt error:", e);
+                }
+            }
+
+            // Always open the authentic Google Account Chooser popup from accounts.google.com
+            openRealGoogleAccountChooserPopup();
+        }
+
+        // Opens authentic Google Account Chooser window popup
+        function openRealGoogleAccountChooserPopup() {
+            const width = 500;
+            const height = 620;
+            const left = Math.max(0, (window.screen.width - width) / 2);
+            const top = Math.max(0, (window.screen.height - height) / 2);
+
+            const redirectUri = window.location.protocol === 'file:'
+                ? 'http://localhost:3000/firstpage.html'
+                : window.location.origin + window.location.pathname;
+
+            const googleOAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+                `client_id=${encodeURIComponent(GOOGLE_CLIENT_ID)}` +
+                `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+                `&response_type=token%20id_token` +
+                `&scope=${encodeURIComponent('openid email profile')}` +
+                `&prompt=select_account` +
+                `&nonce=${Date.now()}`;
+
+            const popup = window.open(
+                googleOAuthUrl,
+                'googleAccountPicker',
+                `width=${width},height=${height},top=${top},left=${left},status=no,toolbar=no,menubar=no`
+            );
+
+            if (popup) {
+                popup.focus();
+                showMessage("Choose your Google account in the popup window");
+            } else {
+                alert("Please allow popups for this browser window to select your Google account.");
+            }
+        }
+
+        // Handle real Google JWT Credential Response
+        function handleRealGoogleCredentialResponse(response) {
+            if (response && response.credential) {
+                try {
+                    const payload = JSON.parse(atob(response.credential.split('.')[1]));
+                    saveVerifiedUser(payload.email, payload.name || payload.email.split('@')[0], 'GoogleOAuthVerified2026!');
+                } catch (err) {
+                    console.error("Error decoding Google credential:", err);
+                }
+            }
+        }
+
+        // Handle real Google Access Token Response
+        async function handleRealGoogleTokenResponse(response) {
+            if (response && response.access_token) {
+                try {
+                    const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                        headers: { Authorization: `Bearer ${response.access_token}` }
+                    });
+                    const profile = await res.json();
+                    if (profile && profile.email) {
+                        saveVerifiedUser(profile.email, profile.name || profile.email.split('@')[0], 'GoogleOAuthVerified2026!');
+                    }
+                } catch (err) {
+                    console.error("Error fetching Google profile:", err);
+                }
+            }
+        }
+
+        // Handle return from Google OAuth Hash
+        function handleGoogleOAuthHashRedirect() {
+            try {
+                const params = new URLSearchParams(window.location.hash.substring(1));
+                const idToken = params.get('id_token');
+                const accessToken = params.get('access_token');
+
+                if (idToken) {
+                    const payload = JSON.parse(atob(idToken.split('.')[1]));
+                    saveVerifiedUser(payload.email, payload.name, 'GoogleOAuthVerified2026!');
+                    window.history.replaceState(null, document.title, window.location.pathname);
+                } else if (accessToken) {
+                    fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                        headers: { Authorization: `Bearer ${accessToken}` }
+                    }).then(r => r.json()).then(p => {
+                        if (p && p.email) {
+                            saveVerifiedUser(p.email, p.name, 'GoogleOAuthVerified2026!');
+                            window.history.replaceState(null, document.title, window.location.pathname);
+                        }
+                    });
+                }
+            } catch (e) {
+                console.error("Error handling Google redirect:", e);
+            }
+        }
+
+        function saveVerifiedUser(email, name, pass) {
+            let users = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY)) || [];
+            let user = users.find(u => (u.email && u.email.toLowerCase() === email.toLowerCase()));
+            const role = (user && user.role) ? user.role : 'student';
+
+            if (!user) {
+                user = {
+                    id: 'cq_google_' + Date.now(),
+                    name: name || email.split('@')[0],
+                    email: email,
+                    role: role,
+                    password: btoa(pass)
+                };
+                users.push(user);
+                localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+            }
+
+            // Remember credentials
+            let history = JSON.parse(localStorage.getItem(HISTORY_STORAGE_KEY)) || [];
+            history = history.filter(h => {
+                try { return atob(h.e) !== email; } catch (e) { return h.e !== email; }
+            });
+            history.push({ e: btoa(email), p: btoa(pass), r: user.role });
+            localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
+
+            // Set active session for CodeQuest
+            const sessionData = {
+                name: user.name || name || email.split('@')[0],
+                email: email,
+                role: user.role || role,
+                roleDisplay: getRoleDisplayName(user.role || role),
+                loggedInAt: new Date().toISOString()
+            };
+            localStorage.setItem('CodeQuest_active_session', JSON.stringify(sessionData));
+            localStorage.setItem('TESTPAD_current_user', JSON.stringify(sessionData));
+
+            showMessage(`Authenticated as ${sessionData.name}! Redirecting...`);
+            setTimeout(() => {
+                window.location.href = 'studentindex.html';
+            }, 800);
+        }
+
+        // Secret Shortcut: Ctrl + Q directly opens ONLALP.html without requiring login
+        window.addEventListener('keydown', function (e) {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'q' || e.key === 'Q')) {
+                e.preventDefault();
+                sessionStorage.setItem('ONLALP_admin_auth', 'true');
+                window.location.href = 'ONLALP.html?auth=direct';
+            }
+        });
+    </script>
+</body>
+
+</html>

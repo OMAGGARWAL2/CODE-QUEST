@@ -1,0 +1,2170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="../logo.jpg">
+    <!-- Legacy Chalkpad Styles -->
+    <link rel="stylesheet" type="text/css" href="../CHALKPAD_files/font-face.css">
+    <link rel="stylesheet" type="text/css" href="../CHALKPAD_files/style_new.css">
+    <link rel="stylesheet" type="text/css" href="../CHALKPAD_files/style-timeline.css">
+
+    <style>
+        :root {
+            --classic-blue: #4a76a8;
+            --classic-blue-dark: #3b5d85;
+            --nav-gradient: linear-gradient(to bottom, #729fcf 0%, #3b6ea5 100%);
+            --border-gray: #ccc;
+            --text-blue: #3b6ea5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Tahoma, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #E9EAED;
+            color: #333;
+            font-size: 13px;
+        }
+
+        .top-bar {
+            background-color: #2e5b87;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .top-bar-content {
+            width: 990px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            color: #fff;
+            font-family: Verdana, Arial, sans-serif;
+            font-size: 11px;
+            padding: 0 15px;
+            gap: 20px;
+        }
+
+        .top-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .top-icons i {
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .session-select {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .session-select select {
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 2px 8px;
+            font-size: 11px;
+            border-radius: 4px;
+        }
+
+        .logout-btn {
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .page-wrapper {
+            max-width: 990px;
+            margin: 15px auto;
+            background: #fff;
+            min-height: 90vh;
+            border: 1px solid #ccc;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            position: relative;
+        }
+
+        /* --- HEADER --- */
+        .site-header {
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Toast Notifications */
+        #toastContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+        }
+
+        .toast {
+            background: #333;
+            color: white;
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 250px;
+            animation: slideIn 0.3s ease-out;
+            border-left: 4px solid #3b5998;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .logo-section img {
+            height: 95px;
+        }
+
+        /* Dashboard Global Styles */
+        body {
+            font-family: 'Roboto', Verdana, sans-serif;
+            color: #333;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e7eaef;
+            margin-bottom: 25px;
+        }
+
+        .section-title .title-icon {
+            background-color: #5d82c6;
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .section-title h2 {
+            font-size: 16px;
+            color: #3b5d85;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info-text {
+            text-align: right;
+            line-height: 1.5;
+            font-size: 12px;
+        }
+
+        .user-info-text div {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .user-info-text label {
+            font-weight: bold;
+            color: #555;
+            min-width: 120px;
+            text-align: left;
+        }
+
+        .user-info-text span {
+            color: #333;
+            text-align: left;
+            min-width: 150px;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            overflow: hidden;
+            background: #fdfdfd;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* --- UTILITY BAR --- */
+        .utility-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 25px;
+            border-bottom: 1px solid #eee;
+            background: #fff;
+        }
+
+        .cal-link {
+            color: var(--text-blue);
+            font-weight: bold;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .cal-link i {
+            color: #ff8b70;
+            font-size: 14px;
+        }
+
+        .lookup-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #666;
+        }
+
+        .search-input-wrapper {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc;
+            padding: 3px 8px;
+            background: #fff;
+        }
+
+        .search-input-wrapper input {
+            border: none;
+            outline: none;
+            width: 280px;
+            font-size: 12px;
+        }
+
+        /* --- COMMUNICATION GRID (LEGACY STYLE) --- */
+        .comm-container {
+            border: 1px solid #abbfd2;
+            background: #fff;
+            margin-top: 10px;
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+        }
+
+        .comm-header {
+            background-image: url("https://cuiet.codebrigade.in/images/panelTitleBgBottomBorder.gif");
+            background-color: #f0f4f8;
+            padding: 8px 12px;
+            font-weight: bold;
+            color: #2e5b87;
+            font-size: 12px;
+            border-bottom: 1px solid #abbfd2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .comm-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            padding: 15px;
+            gap: 15px 40px;
+            background: #fff;
+        }
+
+        .comm-item {
+            display: flex;
+            gap: 15px;
+            cursor: pointer;
+            padding: 10px;
+            border-bottom: 1px dotted #eeeeee;
+            transition: background 0.2s;
+        }
+
+        .comm-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .comm-icon {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            background-image: url("https://cuiet.codebrigade.in/images/resources.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 24px;
+        }
+
+        .comm-item-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .comm-item-title {
+            color: #2e5b87;
+            font-weight: bold;
+            font-size: 11px;
+            text-decoration: underline;
+        }
+
+        .comm-item-title:hover {
+            text-decoration: none;
+        }
+
+        .comm-item-desc {
+            font-size: 10px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        /* --- FORM STYLES --- */
+        .form-section-title {
+            background: #84a3c1;
+            color: #fff;
+            padding: 8px 15px;
+            font-weight: bold;
+            font-size: 12px;
+            margin: 20px 0 15px 0;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 180px auto;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 12px;
+        }
+
+        .form-label {
+            text-align: right;
+            padding-right: 15px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-input {
+            border: 1px solid #ccc;
+            padding: 5px 8px;
+            width: 250px;
+            outline: none;
+        }
+
+        .btn-apply {
+            background: #84a3c1;
+            color: #fff;
+            border: none;
+            padding: 8px 25px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* --- NAVIGATION --- */
+        .main-nav {
+            display: flex;
+            background: linear-gradient(to bottom, #4a7eb9 0%, #2e5b87 100%);
+            border: 1px solid #1a3a5a;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 8px 5px;
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            border-right: 1px solid #1a3a5a;
+            border-left: 1px solid #8cb1d4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+            min-height: 42px;
+            transition: background 0.2s;
+            line-height: 1.2;
+        }
+
+        .nav-btn:first-child {
+            border-left: none;
+        }
+
+        .nav-btn:last-child {
+            border-right: none;
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(to bottom, #1a3a5a 0%, #2e5b87 100%);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-btn:hover:not(.active) {
+            background: linear-gradient(to bottom, #5d87b1 0%, #3b6ea5 100%);
+        }
+
+        /* --- LEGACY TIMELINE OVERRIDES --- */
+        .timeline-main {
+            padding-left: 100px;
+            margin-top: 15px;
+        }
+
+        .timeline-day-divider {
+            text-align: center;
+            position: relative;
+            margin: 30px 0;
+        }
+
+        .timeline-day-divider::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #e7eaef;
+            z-index: 1;
+        }
+
+        .timeline-day-divider span {
+            background: #fff;
+            padding: 0 15px;
+            color: #666;
+            font-size: 16px;
+            font-family: 'Roboto Light', sans-serif;
+            position: relative;
+            z-index: 2;
+        }
+
+        .ui-timeline {
+            margin: 0 0 0 30px;
+            padding: 0 0 55px 2.5em;
+            position: relative;
+            border-left: 5px solid #E7EAEF;
+            transition: all .3s ease-in-out;
+            cursor: pointer;
+        }
+
+        .ui-timeline:hover {
+            border-color: #5D82C6;
+        }
+
+        .ui-feed-icon {
+            position: absolute;
+            top: 0;
+            left: -21px;
+            background-color: #55A592;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            z-index: 50;
+            box-shadow: 0 2px 3px 0px #C7C7C7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ui-feed-icon::before {
+            content: "\f15c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .ui-feed-icon::after {
+            content: 'Circular';
+            position: absolute;
+            left: -98px;
+            top: 10px;
+            color: #55A592;
+            font: 600 12px 'Roboto', sans-serif;
+            width: 80px;
+            text-align: right;
+        }
+
+        .ui-feed-connector {
+            position: absolute;
+            left: -18px;
+            top: 18px;
+            width: 15px;
+            height: 1px;
+            background: #55A592;
+            z-index: 40;
+        }
+
+        .ui-feed-connector::before {
+            content: "";
+            position: absolute;
+            left: -4px;
+            top: -2px;
+            width: 5px;
+            height: 5px;
+            background: #55A592;
+            border-radius: 50%;
+        }
+
+        .ui-feed-content {
+            padding-left: 15px;
+            padding-top: 2px;
+        }
+
+        .ui-feed-title {
+            font-weight: bold;
+            font-size: 13px;
+            color: #3b5d85;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .ui-feed-desc {
+            font-size: 12px;
+            color: #555;
+            line-height: 1.6;
+            letter-spacing: 0.2px;
+        }
+
+        .read-more {
+            color: #337ab7;
+            font-weight: bold;
+        }
+
+        /* Sidebar Legacy Overrides */
+        .sidebar-block {
+            margin-bottom: 40px;
+        }
+
+        .ui-cat-nav-title {
+            font: 600 13px 'Roboto', Arial;
+            border-bottom: 2px solid #E7EAEF;
+            padding-bottom: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #444;
+        }
+
+        .ui-cat-nav-title::before {
+            content: '';
+            width: 22px;
+            height: 22px;
+            background-color: #5D82C6;
+            border-radius: 50%;
+            display: inline-block;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .title-filter::before {
+            background-image: url("https://cuiet.codebrigade.in/images/filter.png");
+        }
+
+        .title-link::before {
+            background-image: url("https://cuiet.codebrigade.in/images/link.png");
+        }
+
+        .ui-nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            margin-left: 9px;
+            /* Align 4px border center with 22px icon center (11 - 2 = 9) */
+        }
+
+        .ui-nav-list li {
+            font-size: 12px;
+            border-left: 4px solid #E7EAEF;
+            padding: 8px 15px;
+            margin-bottom: 1px;
+            cursor: pointer;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .ui-nav-list li:hover {
+            color: #427FED;
+            border-left-color: #5D82C6;
+        }
+
+        .ui-nav-list li.active {
+            border-left-color: #5D82C6;
+            font-weight: bold;
+        }
+
+        /* --- DASHBOARD LAYOUT --- */
+        .dashboard-container {
+            display: flex;
+            gap: 30px;
+            padding: 10px 0;
+            align-items: flex-start;
+        }
+
+        .timeline-main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .sidebar-section {
+            width: 250px;
+            flex-shrink: 0;
+            margin-top: 80px;
+            /* Align with the first timeline date divider */
+        }
+
+        /* --- CONTENT WRAPPER --- */
+        .main-content {
+            padding: 10px 25px;
+        }
+
+        .breadcrumb {
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+            font-size: 11px;
+            color: #333;
+            background-color: #FFFFFF;
+            padding: 5px 5px 5px 10px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* --- TABS SYSTEM --- */
+        .tabs-container {
+            border: 1px solid #abbfd2;
+        }
+
+        .tabs-header {
+            display: flex;
+            background: #f7f7f7;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .tab-item {
+            padding: 10px 18px;
+            border-right: 1px solid #ccc;
+            cursor: pointer;
+            font-size: 12px;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .tab-item.active {
+            background: #fff;
+            border-top: 3px solid var(--text-blue);
+            border-bottom: 1px solid #fff;
+            margin-bottom: -1px;
+            color: var(--text-blue);
+            font-weight: bold;
+        }
+
+        .tab-panel-body {
+            padding: 20px;
+            min-height: 450px;
+        }
+
+        /* --- SUB TABS --- */
+        .sub-tab-row {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .sub-tab-item {
+            padding: 8px 15px;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            background: #f9f9f9;
+            margin-right: -1px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .sub-tab-item.active {
+            background: #fff;
+            border-top: 3px solid var(--text-blue);
+            color: var(--text-blue);
+            position: relative;
+            top: 1px;
+        }
+
+        /* --- DATA VIEWS --- */
+        .info-header {
+            font-family: 'Trebuchet MS', sans-serif;
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--text-blue);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+
+        .data-row {
+            display: grid;
+            grid-template-columns: 180px 30px auto;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .data-label {
+            font-weight: bold;
+            color: var(--text-blue);
+        }
+
+        .data-value {
+            color: var(--text-blue);
+        }
+
+        /* --- GRADE CARD --- */
+        .grade-card-top-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px 50px;
+            font-size: 14px;
+            line-height: 2.2;
+        }
+
+        .meta-grid b {
+            color: #000;
+        }
+
+        .btn-blue-sharp {
+            background: #5d8aa8;
+            color: #fff;
+            border: none;
+            padding: 8px 18px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .common-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #ccc;
+        }
+
+        .common-table th {
+            background: #f4f4f4;
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .common-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            font-size: 12px;
+        }
+
+        .common-table tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        /* --- GRIEVANCE --- */
+        .grievance-header-bar {
+            background: #f0f4f8;
+            border: 1px solid #d1d9e1;
+            padding: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .grievance-title {
+            padding: 8px 15px;
+            color: var(--text-blue);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-action-blue {
+            background: #3b6ea5;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .grievance-search-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+            font-size: 12px;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .grievance-search-row input {
+            border: 1px solid #ccc;
+            padding: 4px 8px;
+        }
+
+        /* --- FOOTER --- */
+        .site-footer {
+            margin-top: 60px;
+            padding: 40px;
+            text-align: center;
+            border-top: 1px dotted #ccc;
+        }
+
+        .powered-by-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .code-logo-brand {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .sq-bricks {
+            display: flex;
+            gap: 2px;
+        }
+
+        .brick {
+            width: 15px;
+            height: 15px;
+        }
+
+        .br-red {
+            background: #d0021b;
+        }
+
+        .br-yellow {
+            background: #f5a623;
+        }
+
+        .br-green {
+            background: #7ed321;
+        }
+
+        .brigade-tag {
+            font-size: 9px;
+            letter-spacing: 2.5px;
+            color: #444;
+            font-weight: bold;
+        }
+
+        /* --- TAB VISIBILITY --- */
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        /* --- PERFORMANCE UI (CHALKPAD STYLE) --- */
+        .perf-tabs-wrapper {
+            margin-top: 20px;
+            height: 32px;
+            display: flex;
+            align-items: flex-end;
+            padding-left: 2px;
+        }
+
+        .perf-tab-item {
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', Arial, sans-serif;
+            padding: 5px 17px;
+            cursor: pointer;
+            font-size: 11px;
+            border-top-right-radius: 2px;
+            border-top-left-radius: 2px;
+            margin-right: 2px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .perf-tab-item.active {
+            background-color: #fff;
+            border-top: 3px solid #598DC4;
+            border-right: 1px solid #c2c1c1;
+            border-left: 1px solid #c2c1c1;
+            padding-bottom: 7px;
+            font-weight: bold;
+            margin-bottom: -1px;
+            z-index: 10;
+        }
+
+        .perf-tab-item.inactive {
+            background-color: #f2f4f7;
+            border-top: 2px solid #c2c1c1;
+            border-right: 1px solid #c2c1c1;
+            border-left: 1px solid #c2c1c1;
+            padding-bottom: 5px;
+            color: #333;
+        }
+
+        .perf-tab-item.inactive:hover {
+            border-top: 2px solid #598DC4;
+            background-color: #f2f4f7;
+        }
+
+        .perf-content-pane {
+            border: 1px solid #c2c1c1;
+            background: #fff;
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        .grid-header-gradient {
+            background: linear-gradient(to bottom, #fafafa 0%, #e4e4e4 100%);
+            font-weight: bold;
+            color: #333;
+            height: 26px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+            font-size: 11px;
+        }
+
+        .grid-cell {
+            padding: 5px;
+            border: 1px solid #eee;
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+            font-size: 11px;
+            vertical-align: middle;
+        }
+
+        .summary-row {
+            background-color: #f9f9f9;
+            font-weight: bold;
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+            font-size: 11px;
+        }
+
+        /* --- MODERN TIMELINE (CHALKPAD STYLE) --- */
+        .timeline-card {
+            background: #fff;
+            border: 1px solid #abbfd2;
+            border-radius: 0;
+            min-height: 400px;
+            position: relative;
+        }
+
+        .timeline-header {
+            background: linear-gradient(to bottom, #598DC4 0%, #3b6ea5 100%);
+            padding: 8px 15px;
+            border-bottom: 1px solid #2d5a8e;
+            font-weight: bold;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Trebuchet MS', sans-serif;
+            font-size: 13px;
+        }
+
+        .timeline-day-divider {
+            margin: 25px 0 15px 0;
+            position: relative;
+            text-align: center;
+        }
+
+        .timeline-day-divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 5%;
+            right: 5%;
+            height: 1px;
+            background: #d1d9e1;
+            z-index: 1;
+        }
+
+        .timeline-day-divider span {
+            background: #fff;
+            padding: 0 15px;
+            position: relative;
+            z-index: 2;
+            font-weight: bold;
+            color: #444;
+            font-family: Verdana, sans-serif;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        .feed-item {
+            display: flex;
+            gap: 15px;
+            padding: 12px 20px;
+            border-left: 4px solid #f0f0f0;
+            margin-left: 20px;
+            margin-right: 20px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px solid #f9f9f9;
+        }
+
+        .feed-item:hover {
+            background: #fdfdfd;
+            border-left-color: #3b6ea5;
+        }
+
+        .feed-icon {
+            width: 24px;
+            height: 24px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .feed-icon.circular {
+            background-image: url("https://cuiet.codebrigade.in/images/script.png");
+        }
+
+        .feed-content {
+            flex: 1;
+        }
+
+        .feed-title {
+            font-weight: bold;
+            color: #2d5a8e;
+            font-family: Verdana, sans-serif;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+
+        .feed-desc {
+            font-family: Verdana, sans-serif;
+            font-size: 11px;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .read-more {
+            color: var(--text-blue);
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* --- CIRCULAR MODAL --- */
+        #circularModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+        }
+
+        .modal-card {
+            background: #fff;
+            width: 80%;
+            max-width: 800px;
+            border: 1px solid #86b2d1;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            background-image: url("https://cuiet.codebrigade.in/images/circularTitleBg.gif");
+            background-color: #2e5b87;
+            color: #fff;
+            padding: 10px 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .modal-body {
+            padding: 25px;
+            max-height: 70vh;
+            overflow-y: auto;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .modal-footer {
+            padding: 10px 15px;
+            border-top: 1px solid #eee;
+            text-align: right;
+            background: #f9f9f9;
+        }
+
+        .btn-close-modal {
+            background: #eee;
+            border: 1px solid #ccc;
+            padding: 5px 15px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+    <!-- CIRCULAR MODAL -->
+    <div id="circularModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <span id="modalTitle">Circular Details</span>
+                <span style="cursor:pointer" onclick="closeCircular()">[x] Close</span>
+            </div>
+            <div class="modal-body" id="modalContent">
+                <!-- Content injected here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-close-modal" onclick="closeCircular()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastContainer"></div>
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="session-select">
+                <span>Session</span>
+                <select>
+                    <option>JanJun2026</option>
+                    <option>JulDec2025</option>
+                </select>
+            </div>
+            <div class="top-icons">
+                <i class="fas fa-bell" title="Notifications"></i>
+                <i class="fas fa-envelope" title="Messages"></i>
+                <i class="fas fa-cog" title="Settings"></i>
+                <div class="logout-btn" onclick="window.location.href='erp-login.html'">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastContainer"></div>
+    <div class="page-wrapper">
+        <!-- HEADER -->
+        <header class="site-header">
+            <div class="logo-section">
+                <img src="https://cuiet.codebrigade.in/images/logo_373.png" alt="CHITKARA" style="height: 95px;">
+            </div>
+            <div class="user-section">
+                <div class="user-avatar"
+                    style="border-radius: 50%; width: 65px; height: 65px; border: 1px solid #ccc; overflow: hidden;">
+                    <img id="userImg" src="https://ui-avatars.com/api/?name=Om+Aggarwal&background=random" alt="Avatar"
+                        style="width: 100%; height: 100%;">
+                </div>
+                <div class="user-info-text">
+                    <div style="font-weight: bold; font-size: 13px; color: #000; margin-bottom: 2px;">OM AGGARWAL</div>
+                    <div><label>Roll No:</label> <span>2410990653</span></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- UTILITY -->
+        <div class="utility-bar">
+            <div class="cal-link">
+                <i class="far fa-calendar-alt"></i> My Calendar
+            </div>
+            <div class="lookup-section">
+                <span>Menu Option Lookup</span>
+                <div class="search-input-wrapper">
+                    <input type="text" placeholder="Type here to find menu option">
+                    <i class="fas fa-search" style="color:#ccc"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- NAVIGATION -->
+        <nav class="main-nav">
+            <div class="nav-btn active" onclick="showTab('home', this)">Home</div>
+            <div class="nav-btn" onclick="showTab('myinfo', this)">My Info</div>
+            <div class="nav-btn" onclick="showTab('comm', this)">Communication</div>
+            <div class="nav-btn" onclick="showTab('perf', this)">Performance</div>
+            <div class="nav-btn" onclick="showTab('feedback', this)">Student Feedback</div>
+            <div class="nav-btn" onclick="showTab('grievance', this)">Student Grievance Form</div>
+            <div class="nav-btn" onclick="showTab('password', this)">Change Password</div>
+            <div class="nav-btn" onclick="showTab('lms', this)">LMS</div>
+        </nav>
+
+        <div class="main-content">
+
+            <!-- HOME -->
+            <div id="paneHome" class="tab-pane active">
+                <div class="dashboard-container">
+                    <div class="timeline-main">
+                        <div class="section-title">
+                            <div class="title-icon"><i class="fas fa-exchange-alt"></i></div>
+                            <h2>My Timeline</h2>
+                        </div>
+
+                        <div class="timeline-day-divider">
+                            <span>Apr 21, Tuesday</span>
+                        </div>
+
+                        <!-- Feed Items -->
+                        <div class="ui-timeline blue-path"
+                            onclick="openCircular('Budgeted Kazakhstan trip (Only 20 seats)', '21-Apr-2026', 'Dear Students, Applications invited for the Budgeted Semester Exchange Program to Astana, Kazakhstan.')">
+                            <div class="ui-feed-connector"></div>
+                            <div class="ui-feed-icon"></div>
+                            <div class="ui-feed-content">
+                                <div class="ui-feed-title">Budgeted Kazakhstan trip (Only 20 seats)</div>
+                                <div class="ui-feed-desc">Dear Students, This is to inform all interested students that
+                                    applications are invited for the Budgeted Semester Exchange Program to Astana,
+                                    scheduled fro... <span class="read-more">More</span></div>
+                            </div>
+                        </div>
+
+                        <div class="ui-timeline blue-path"
+                            onclick="openCircular('Explore South Korea (Seoul) in Under 75,000', '21-Apr-2026', 'For the first time, we are excited to offer an exclusive short-term international program at Myongji University, Seoul.')">
+                            <div class="ui-feed-connector"></div>
+                            <div class="ui-feed-icon"></div>
+                            <div class="ui-feed-content">
+                                <div class="ui-feed-title">Explore South Korea (Seoul) in Under 75,000 - Limited Seats!
+                                </div>
+                                <div class="ui-feed-desc">Dear Students, For the first time, we are excited to offer an
+                                    exclusive short-term international program at Myongji University, Seoul - giving you
+                                    the oppo... <span class="read-more">More</span></div>
+                            </div>
+                        </div>
+
+                        <div class="ui-timeline"
+                            onclick="openCircular('Notice - Awarded Zero marks', '21-Apr-2026', 'Notice regarding Awarded Zero marks to Non-Submission of Coursera Certificates (COOP-2 / IOHE) for CSE, Batch-2022')">
+                            <div class="ui-feed-connector"></div>
+                            <div class="ui-feed-icon"></div>
+                            <div class="ui-feed-content">
+                                <div class="ui-feed-title">Notice - Awarded Zero marks to Non-Submission of Coursera
+                                    Certificates (COOP-2 or IOHE) CSE, Batch-2022</div>
+                                <div class="ui-feed-desc">Dear Students Kindly see the attached Notice regarding Awarded
+                                    Zero marks to Non-Submission of Coursera Certificates (COOP-2 / IOHE) for CSE,
+                                    Batch-2022 ... <span class="read-more">More</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <div class="sidebar-block">
+                            <div class="ui-cat-nav-title title-filter">Integrations</div>
+                            <ul class="ui-nav-list">
+                                <li>Access UHostel</li>
+                                <li>Access UBus</li>
+                            </ul>
+                        </div>
+
+                        <div class="sidebar-block">
+                            <div class="ui-cat-nav-title title-link">Payment Link(s)</div>
+                            <ul class="ui-nav-list">
+
+                                <li onclick="window.location.href='feefornextsem.html'">Fee for JulDec2026 <span
+                                        class="new-tag">new</span></li>
+                            </ul>
+                        </div>
+
+                        <div class="sidebar-block">
+                            <div class="ui-cat-nav-title title-link">Links</div>
+                            <ul class="ui-nav-list">
+                                <li onclick="window.location.href='bookcounsellingsession.html'">Book Counselling
+                                    Session <span class="new-tag">new</span></li>
+                            </ul>
+                        </div>
+
+                        <div class="sidebar-block">
+                            <div class="ui-cat-nav-title title-link">Links</div>
+                            <ul class="ui-nav-list">
+                                <li onclick="window.location.href='student-dashboard.html'">Access LMS</li>
+                            </ul>
+                        </div>
+
+                        <div class="sidebar-block">
+                            <div class="ui-cat-nav-title title-filter">Filters</div>
+                            <ul class="ui-nav-list">
+                                <li style="display: flex; justify-content: space-between;">
+                                    <span>Circulars</span>
+                                    <span style="color: #5D82C6; font-weight: bold;">273</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COMMUNICATION (GRID VIEW) -->
+            <div id="paneComm" class="tab-pane">
+                <span class="breadcrumb">Communication</span>
+                <div class="comm-container">
+                    <div class="comm-header">
+                        <i class="far fa-envelope"></i> Communication
+                    </div>
+                    <div class="comm-grid">
+                        <div class="comm-item" onclick="showSubPage('View Circulars')">
+                            <div class="comm-icon"></div>
+                            <div class="comm-item-text">
+                                <div class="comm-item-title">View Circulars</div>
+                                <div class="comm-item-desc">View latest circulars or notices</div>
+                            </div>
+                        </div>
+                        <div class="comm-item" onclick="showSubPage('View Resources')">
+                            <div class="comm-icon" style="filter: hue-rotate(45deg);"></div>
+                            <div class="comm-item-text">
+                                <div class="comm-item-title">View Resources</div>
+                                <div class="comm-item-desc">View resources shared by teachers</div>
+                            </div>
+                        </div>
+                        <div class="comm-item" onclick="showSubPage('View Planners')">
+                            <div class="comm-icon" style="filter: hue-rotate(90deg);"></div>
+                            <div class="comm-item-text">
+                                <div class="comm-item-title">View Planners</div>
+                                <div class="comm-item-desc">Used to view and download the planners uploaded</div>
+                            </div>
+                        </div>
+                        <div class="comm-item" onclick="showSubPage('Message Inbox')">
+                            <div class="comm-icon" style="filter: hue-rotate(180deg);"></div>
+                            <div class="comm-item-text">
+                                <div class="comm-item-title">Message Inbox</div>
+                                <div class="comm-item-desc">Send/Receive messages from teachers and other staff members
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comm-item" onclick="showSubPage('Apply Gate Pass')">
+                            <div class="comm-icon"></div>
+                            <div class="comm-item-text">
+                                <div class="comm-item-title">Apply Gate Pass</div>
+                                <div class="comm-item-desc">Apply or view your applied gate passes.</div>
+                            </div>
+                        </div>
+                        <div class="comm-item" onclick="showSubPage('View Custom Pages')">
+                            <div class="comm-icon" style="filter: saturate(3);"></div>
+                            <div class="comm-item-text">
+                                <div class="comm-item-title">View Custom Pages</div>
+                                <div class="comm-item-desc">View/Participate in the ongoing activities open for you
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comm-item" onclick="showSubPage('Re-Evaluation Receipt')">
+                            <div class="comm-icon"></div>
+                            <div class="comm-item-text">
+                                <div class="comm-item-title">Re-Evaluation Receipt</div>
+                                <div class="comm-item-desc">Apply or view your revaluation</div>
+                            </div>
+                        </div>
+                        <div class="comm-item" onclick="showSubPage('Re-Appear Receipt')">
+                            <div class="comm-icon"></div>
+                            <div class="comm-item-text">
+                                <div class="comm-item-title">Re-Appear Receipt</div>
+                                <div class="comm-item-desc">Apply or view your reappear</div>
+                            </div>
+                        </div>
+                        <div class="comm-item" onclick="showSubPage('Re-Appear Re-Evaluation Receipt')">
+                            <div class="comm-icon"></div>
+                            <div class="comm-item-text">
+                                <div class="comm-item-title">Re-Appear Re-Evaluation Receipt</div>
+                                <div class="comm-item-desc">Apply or view your reappear revaluation</div>
+                            </div>
+                        </div>
+                        <div class="comm-item" onclick="showSubPage('Apply Duty-Medical Leave')">
+                            <div class="comm-icon"></div>
+                            <div class="comm-item-text">
+                                <div class="comm-item-title">Apply Duty-Medical Leave</div>
+                                <div class="comm-item-desc">Apply or view leave</div>
+                            </div>
+                        </div>
+                        <div class="comm-item" onclick="showSubPage('Students Experience Survey')">
+                            <div class="comm-icon"></div>
+                            <div class="comm-item-text">
+                                <div class="comm-item-title">Students Experience Survey</div>
+                                <div class="comm-item-desc">Students Experience Survey</div>
+                            </div>
+                        </div>
+                        <div class="comm-item" onclick="showSubPage('Student Data Verification Form')">
+                            <div class="comm-icon"></div>
+                            <div class="comm-item-text">
+                                <div class="comm-item-title">Student Data Verification Form</div>
+                                <div class="comm-item-desc">Student Data Verification Form</div>
+                            </div>
+                        </div>
+                        <div class="comm-item" onclick="showSubPage('No Dues Verification')">
+                            <div class="comm-icon"></div>
+                            <div class="comm-item-text">
+                                <div class="comm-item-title">No Dues Verification</div>
+                                <div class="comm-item-desc">To apply and get student's no dues form</div>
+                            </div>
+                        </div>
+                        <div class="comm-item" onclick="showSubPage('My Interactions')">
+                            <div class="comm-icon"></div>
+                            <div class="comm-item-text">
+                                <div class="comm-item-title">My Interactions</div>
+                                <div class="comm-item-desc">View Interaction</div>
+                            </div>
+                        </div>
+                        <div class="comm-item" onclick="showSubPage('View Lost/Found Items')">
+                            <div class="comm-icon" style="filter: hue-rotate(-90deg);"></div>
+                            <div class="comm-item-text">
+                                <div class="comm-item-title">View Lost/Found Items</div>
+                                <div class="comm-item-desc">Get Details of Lost and Found Items</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COMMUNICATION SUB-PAGES -->
+            <div id="paneSubPage" class="tab-pane">
+                <span class="breadcrumb" id="subPageBreadcrumb"
+                    onclick="showTab('comm', document.querySelectorAll('.nav-btn')[2])"
+                    style="cursor:pointer; text-decoration: underline;">Communication</span>
+                <span style="font-size: 11px; color:#666"> » </span>
+                <span class="breadcrumb" id="subPageTitle" style="display:inline-block">Detail View</span>
+
+                <!-- Duty/Medical Leave Form -->
+                <div id="viewDutyLeave" class="sub-view" style="display:none;">
+                    <div
+                        style="background: #f0f4f8; border: 1px solid #d1d9e1; padding: 10px 15px; margin-bottom: 20px; color:var(--text-blue); font-weight:bold; display: flex; align-items:center; gap:8px;">
+                        <i class="fas fa-file-medical"></i> Apply Duty/Medical Leave
+                    </div>
+                    <div class="meta-grid" style="padding: 0 20px; margin-bottom: 30px;">
+                        <div>Student Name : <b>OM AGGARWAL</b></div>
+                        <div>Roll No. : <b>2410990653</b></div>
+                        <div>Father Name : <b>Amit Aggarwal</b></div>
+                        <div>Mother Name : <b>Swati Aggarwal</b></div>
+                        <div>Class Name : <b>2024-BE-CSE-4 SEM</b></div>
+                        <div>Mobile Number : <b>9780647351</b></div>
+                    </div>
+
+                    <div class="form-section-title">Apply Duty/Medical Leave</div>
+                    <div class="form-row">
+                        <div class="form-label">Leave Type<span style="color:red">*</span> :</div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="leaveType" checked> Duty Leave</label>
+                            <label><input type="radio" name="leaveType"> Medical Leave</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-label">Category<span style="color:red">*</span> :</div>
+                        <select class="form-input" style="width: 500px;">
+                            <option>3D printing workshop</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-label">Event<span style="color:red">*</span> :</div>
+                        <input type="text" class="form-input">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-label">Leave Start Date<span style="color:red">*</span> :</div>
+                        <input type="date" class="form-input">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-label">Leave End Date<span style="color:red">*</span> :</div>
+                        <input type="date" class="form-input">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-label">Time Slot<span style="color:red">*</span> :</div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="timeSlot" checked> Full day</label>
+                            <label><input type="radio" name="timeSlot"> Period Wise</label>
+                        </div>
+                    </div>
+                    <button class="btn-apply">Apply Leave</button>
+
+                    <div
+                        style="border: 1px solid #eee; padding: 15px; text-align: center; font-weight: bold; margin-top: 40px;">
+                        No Records Found
+                    </div>
+                </div>
+
+                <!-- Lost/Found Table -->
+                <div id="viewLostFound" class="sub-view" style="display:none;">
+                    <div
+                        style="background: #f0f4f8; border: 1px solid #d1d9e1; padding: 10px 15px; margin-bottom: 20px; color:var(--text-blue); font-weight:bold; display: flex; align-items:center; gap:8px;">
+                        <i class="fas fa-search-location"></i> View Lost/Found Items
+                    </div>
+                    <table class="common-table">
+                        <thead>
+                            <tr>
+                                <th># Item Name</th>
+                                <th>Item Found Date & Time</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Delivered To</th>
+                                <th>Delivered By</th>
+                                <th>Delivered Date & Time</th>
+                                <th>Item Image</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1 Tester test</td>
+                                <td>14-10-2025 08:00</td>
+                                <td>Testing purpose only</td>
+                                <td style="color:red">Pending</td>
+                                <td>--</td>
+                                <td>--</td>
+                                <td>--</td>
+                                <td style="color:var(--text-blue)">Download</td>
+                            </tr>
+                            <tr>
+                                <td>2 vbcbvbvb</td>
+                                <td>14-10-2025 07:00</td>
+                                <td>vccvbbv</td>
+                                <td style="color:red">Pending</td>
+                                <td>--</td>
+                                <td>--</td>
+                                <td>--</td>
+                                <td style="color:var(--text-blue)">Download</td>
+                            </tr>
+                            <tr>
+                                <td>3 Tester</td>
+                                <td>14-10-2025 06:00</td>
+                                <td>Park</td>
+                                <td style="color:red">Pending</td>
+                                <td>--</td>
+                                <td>--</td>
+                                <td>--</td>
+                                <td style="color:var(--text-blue)">Download</td>
+                            </tr>
+                            <tr>
+                                <td>4 Charger</td>
+                                <td>14-10-2025 03:00</td>
+                                <td>test today</td>
+                                <td style="color:red">Pending</td>
+                                <td>--</td>
+                                <td>--</td>
+                                <td>--</td>
+                                <td style="color:var(--text-blue)">Download</td>
+                            </tr>
+                            <tr>
+                                <td>5 Tester Tets</td>
+                                <td>08-10-2025 03:00</td>
+                                <td>Test</td>
+                                <td style="color:red">Pending</td>
+                                <td>--</td>
+                                <td>--</td>
+                                <td>--</td>
+                                <td style="color:var(--text-blue)">Download</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div
+                        style="border: 1px solid #ccc; border-top:none; padding: 8px 15px; font-size: 12px; background:#fafafa">
+                        Found 5 Rows</div>
+                </div>
+
+                <!-- Generic "Experience Form" placeholder -->
+                <div id="viewGeneric" class="sub-view" style="display:none;">
+                    <div
+                        style="background: #f0f4f8; border: 1px solid #d1d9e1; padding: 40px; text-align: center; border-radius: 4px;">
+                        <h2 style="color:var(--text-blue); margin-bottom: 20px;">Experience Survey / Form</h2>
+                        <p style="color:#666">This form is currently under maintenance or awaiting your input.</p>
+                        <button class="btn-apply" onclick="showTab('comm', document.querySelectorAll('.nav-btn')[2])">Go
+                            Back</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MY INFO -->
+            <div id="paneMyInfo" class="tab-pane">
+                <span class="breadcrumb">My Info</span>
+                <div
+                    style="background: #f0f4f8; border: 1px solid #d1d9e1; padding: 10px 15px; margin-bottom: 0; color:var(--text-blue); font-weight:bold;">
+                    <i class="fas fa-cog"></i> OM AGGARWAL's(2410990653) Details
+                </div>
+                <div class="tabs-container">
+                    <div class="tabs-header">
+                        <div class="tab-item" onclick="showSubPane('Personal', this)">Personal</div>
+                        <div class="tab-item" onclick="showSubPane('Parents', this)">Parents</div>
+                        <div class="tab-item" onclick="showSubPane('Subjects', this)">Subjects</div>
+                        <div class="tab-item" onclick="showSubPane('TimeTable', this)">Time Table</div>
+                        <div class="tab-item" onclick="showSubPane('Attendance', this)">Attendance</div>
+                        <div class="tab-item" onclick="showSubPane('Fee', this)">Fee</div>
+                        <div class="tab-item active" onclick="showSubPane('Medical', this)">Medical</div>
+                        <div class="tab-item" onclick="showSubPane('Transport', this)">Transport</div>
+                        <div class="tab-item" onclick="showSubPane('Downloads', this)">Downloads</div>
+                    </div>
+                    <div class="tab-panel-body">
+
+                        <!-- Medical Pane -->
+                        <div id="subPaneMedical" class="sub-pane">
+                            <div class="sub-tab-row">
+                                <div class="sub-tab-item active">Student Info</div>
+                                <div class="sub-tab-item">Dental Report</div>
+                                <div class="sub-tab-item">Eye Report</div>
+                            </div>
+                            <div class="info-header">General Info</div>
+                            <div class="data-row">
+                                <div class="data-label">Student Name:</div>
+                                <div>:</div>
+                                <div class="data-value">OM AGGARWAL</div>
+                            </div>
+                            <div class="data-row">
+                                <div class="data-label">Date Of Birth:</div>
+                                <div>:</div>
+                                <div class="data-value">02-08-2006</div>
+                            </div>
+                            <div class="data-row">
+                                <div class="data-label">Father's Name:</div>
+                                <div>:</div>
+                                <div class="data-value">Mr. Amit Aggarwal</div>
+                            </div>
+                            <div class="data-row">
+                                <div class="data-label">Mother's Name:</div>
+                                <div>:</div>
+                                <div class="data-value">Mrs. Swati Aggarwal</div>
+                            </div>
+                            <div class="data-row">
+                                <div class="data-label">Class:</div>
+                                <div>:</div>
+                                <div class="data-value">2024-BE-CSE-4 SEM 4 SEM</div>
+                            </div>
+                            <div class="data-row">
+                                <div class="data-label">Blood Group:</div>
+                                <div>:</div>
+                                <div class="data-value">--</div>
+                            </div>
+                            <div class="data-row">
+                                <div class="data-label">Height:</div>
+                                <div>:</div>
+                                <div class="data-value">--</div>
+                            </div>
+                            <div class="data-row">
+                                <div class="data-label">Weight:</div>
+                                <div>:</div>
+                                <div class="data-value">--</div>
+                            </div>
+
+                            <div class="info-header" style="margin-top: 30px;">Medical Problems</div>
+                            <div style="color: #999;">No medical problems found.</div>
+                        </div>
+
+                        <!-- Personal Pane -->
+                        <div id="subPanePersonal" class="sub-pane" style="display:none;">
+                            <div class="info-header">Personal Details</div>
+                            <div class="data-row">
+                                <div class="data-label">Roll Number</div>
+                                <div>:</div>
+                                <div class="data-value">2410990653</div>
+                            </div>
+                        </div>
+
+                        <!-- Time Table Pane -->
+                        <div id="subPaneTimeTable" class="sub-pane" style="display:none;">
+                            <div class="info-header">Course / Class Time Table</div>
+                            <div style="overflow-x: auto;">
+                                <table class="common-table" style="min-width: 700px; font-size: 10px;">
+                                    <thead>
+                                        <tr id="ttHeaderRows">
+                                            <th>Day</th>
+                                            <th>08:30</th>
+                                            <th>09:25</th>
+                                            <th>10:20</th>
+                                            <th>11:15</th>
+                                            <th>12:10</th>
+                                            <th>01:50</th>
+                                            <th>02:45</th>
+                                            <th>03:40</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="studentTimetableBody">
+                                        <!-- Dynamic -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- PERFORMANCE -->
+            <div id="panePerf" class="tab-pane">
+                <span class="breadcrumb">Performance</span>
+
+                <div class="perf-tabs-wrapper">
+                    <div class="perf-tab-item active" onclick="showPerfSubPane('Marks', this)">Marks</div>
+                    <div class="perf-tab-item inactive" onclick="showPerfSubPane('GradeCard', this)">Grade Card</div>
+                </div>
+
+                <div class="perf-content-pane">
+                    <!-- Marks Sub-Pane -->
+                    <div id="perfSubMarks" class="perf-sub-pane">
+                        <div style="overflow-x: auto; margin-bottom: 15px;">
+                            <table class="common-table" style="width: 100%; border: 1px solid #ccc;">
+                                <thead>
+                                    <tr>
+                                        <th class="grid-header-gradient" style="text-align: center; width: 30px;">#</th>
+                                        <th class="grid-header-gradient" style="text-align: left;">Subject <span
+                                                style="font-size: 8px;">▲</span></th>
+                                        <th class="grid-header-gradient" style="text-align: left;">Group</th>
+                                        <th class="grid-header-gradient" style="text-align: left;">Test Type</th>
+                                        <th class="grid-header-gradient" style="text-align: center;">Test Date</th>
+                                        <th class="grid-header-gradient" style="text-align: center;">Study Period</th>
+                                        <th class="grid-header-gradient" style="text-align: center;">Teacher Name</th>
+                                        <th class="grid-header-gradient" style="text-align: center;">Test</th>
+                                        <th class="grid-header-gradient" style="text-align: center;">M.M</th>
+                                        <th class="grid-header-gradient" style="text-align: center;">M.S</th>
+                                        <th class="grid-header-gradient" style="text-align: center;">%age</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="marksBody">
+                                    <tr>
+                                        <td colspan="11"
+                                            style="text-align:center; padding: 60px; color: #666; font-family: Verdana; font-size: 11px;">
+                                            No marks data available for the current period.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="text-align: right; padding: 5px;">
+                            <img src="https://cuiet.codebrigade.in/images/printer.png" title="Print"
+                                style="cursor: pointer; opacity: 0.7;">
+                        </div>
+                    </div>
+
+                    <!-- Grade Card Sub-Pane -->
+                    <div id="perfSubGradeCard" class="perf-sub-pane" style="display: none;">
+                        <div style="padding: 0 0 20px 0; font-family: Verdana; font-size: 11px;">
+                            <table style="width: 100%;">
+                                <tr>
+                                    <td style="padding: 5px 0;">Name: <b>OM AGGARWAL</b></td>
+                                    <td style="padding: 5px 0;">Roll No.: <b>2410990653</b></td>
+                                    <td rowspan="3" style="text-align: right; vertical-align: top;">
+                                        <button class="btn-blue-sharp"
+                                            style="font-size: 11px; padding: 4px 12px;">Detail</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px 0;">Father's Name: <b>AMIT AGGARWAL</b></td>
+                                    <td style="padding: 5px 0;">Mother's Name: <b>SWATI AGGARWAL</b></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px 0;">Class Name: <b>2024-BE-CSE-4 SEM-4 SEM</b></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <table class="common-table" style="width: 100%; border: 1px solid #ccc;">
+                            <thead>
+                                <tr>
+                                    <th class="grid-header-gradient" style="text-align: center; width: 40px;">#</th>
+                                    <th class="grid-header-gradient" style="text-align: left;">Subject Code</th>
+                                    <th class="grid-header-gradient" style="text-align: left;">Subject Name</th>
+                                    <th class="grid-header-gradient" style="text-align: center;">Credits</th>
+                                    <th class="grid-header-gradient" style="text-align: center;">Grade</th>
+                                    <th class="grid-header-gradient" style="text-align: center;">Study Period</th>
+                                </tr>
+                            </thead>
+                            <tbody id="gradeCardBody">
+                                <tr>
+                                    <td colspan="6"
+                                        style="text-align: center; padding: 40px; color: #666; font-family: Verdana; font-size: 11px;">
+                                        No grading data available for the current period.
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="summary-row">
+                                    <td class="grid-cell" colspan="4" style="border: none;"></td>
+                                    <td class="grid-cell" style="text-align: left; border-right: none;"><b>SGPA:
+                                            6.70</b></td>
+                                    <td class="grid-cell" style="text-align: left;"><b>CGPA: 6.70</b></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GALLERY -->
+            <div id="paneGallery" class="tab-pane">
+                <span class="breadcrumb">Image Gallery</span>
+                <div
+                    style="background: #f0f4f8; border: 1px solid #d1d9e1; padding: 10px 15px; color:var(--text-blue); font-weight:bold;">
+                    <i class="far fa-images"></i> Image Gallery
+                </div>
+                <div style="padding: 60px; text-align: center; border: 1px solid #eee; margin-top: -1px;">
+                    <div style="font-weight: bold; color: #333; margin-bottom: 25px;">No Albums Created Yet!</div>
+                </div>
+            </div>
+
+            <!-- GRIEVANCE -->
+            <div id="paneGrievance" class="tab-pane">
+                <span class="breadcrumb">Student Grievance Form</span>
+                <div class="grievance-search-row">
+                    Search <input type="text"> <i class="fas fa-search" style="color:#aaa"></i>
+                </div>
+                <div class="grievance-header-bar">
+                    <div class="grievance-title">
+                        <i class="far fa-list-alt"></i> My Grievances
+                    </div>
+                    <button class="btn-action-blue">Submit New Grievance</button>
+                </div>
+                <div
+                    style="padding: 60px; text-align: center; border: 1px solid #eee; font-weight: bold; font-size: 14px;">
+                    No Records Found
+                </div>
+            </div>
+
+            <!-- CHANGE PASSWORD -->
+            <div id="panePassword" class="tab-pane">
+                <span class="breadcrumb">Change Password</span>
+                <div
+                    style="background: #f0f4f8; border: 1px solid #d1d9e1; padding: 10px 15px; color:var(--text-blue); font-weight:bold; margin-bottom: 20px;">
+                    <i class="fas fa-key"></i> Change Password
+                </div>
+
+                <div style="background: #fff; border: 1px solid #eee; padding: 30px; max-width: 600px; margin: 0 auto;">
+                    <table style="width: 100%; font-family: Verdana; font-size: 12px;">
+                        <tr>
+                            <td style="padding: 10px; width: 40%; text-align: right;"><b>Current Password :</b></td>
+                            <td style="padding: 10px;"><input type="password" id="curPass"
+                                    style="width: 200px; padding: 4px; border: 1px solid #ccc;"></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; text-align: right;"><b>New Password :</b></td>
+                            <td style="padding: 10px;"><input type="password" id="newPass"
+                                    style="width: 200px; padding: 4px; border: 1px solid #ccc;"></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; text-align: right;"><b>Confirm New Password :</b></td>
+                            <td style="padding: 10px;"><input type="password" id="confPass"
+                                    style="width: 200px; padding: 4px; border: 1px solid #ccc;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="padding-top: 20px; text-align: center;">
+                                <button class="btn-blue-sharp" onclick="changePassword()"
+                                    style="padding: 6px 15px;">Change Password</button>
+                                &nbsp;
+                                <button class="btn-blue-sharp" style="background: #999; padding: 6px 15px;"
+                                    onclick="showTab('home', document.querySelector('.nav-btn'))">Cancel</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- LMS -->
+            <div id="paneLMS" class="tab-pane">
+                <span class="breadcrumb">Learning Management System</span>
+                <div style="padding: 60px; text-align: center; border: 1px solid #eee;">
+                    <h3 style="color:var(--text-blue)">Redirecting to Canvas/LMS...</h3>
+                    <p>Please wait while we establish a secure connection.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <footer class="site-footer">
+            <div class="powered-by-wrap">
+                <div class="powered-text">Powered by</div>
+                <div class="code-logo-brand">
+                    <div class="sq-bricks">
+                        <div class="brick br-red"></div>
+                        <div class="brick br-yellow"></div>
+                        <div class="brick br-green"></div>
+                    </div>
+                    <span>CODE</span>
+                </div>
+                <div class="brigade-tag">BRIGADE NETWORK</div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        function changePassword() {
+            const cur = document.getElementById('curPass').value;
+            const n1 = document.getElementById('newPass').value;
+            const n2 = document.getElementById('confPass').value;
+
+            if (!cur || !n1 || !n2) {
+                showToast('All fields are required!', 'error');
+                return;
+            }
+            if (n1 !== n2) {
+                showToast('New passwords do not match!', 'error');
+                return;
+            }
+            if (n1.length < 6) {
+                showToast('Password must be at least 6 characters!', 'error');
+                return;
+            }
+
+            // Simple LocalStorage simulation
+            const userData = JSON.parse(localStorage.getItem('currentUser')) || { password: 'password' };
+
+            // In a real app, we'd check if 'cur' matches 'userData.password'
+            // For now, we update it
+            userData.password = n1;
+            localStorage.setItem('currentUser', JSON.stringify(userData));
+
+            showToast('Password changed successfully!');
+
+            // Clear fields
+            document.getElementById('curPass').value = '';
+            document.getElementById('newPass').value = '';
+            document.getElementById('confPass').value = '';
+
+            // Go back home after delay
+            setTimeout(() => showTab('home', document.querySelector('.nav-btn')), 1500);
+        }
+
+        function showToast(msg, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+            toast.innerHTML = `<i class="fas fa-${icon}"></i> <span>${msg}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        function showTab(tabId, btn) {
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+            const paneMap = {
+                'home': 'paneHome',
+                'myinfo': 'paneMyInfo',
+                'comm': 'paneComm',
+                'perf': 'panePerf',
+                'gallery': 'paneGallery',
+                'grievance': 'paneGrievance',
+                'password': 'panePassword',
+                'lms': 'paneLMS'
+            };
+
+            const target = document.getElementById(paneMap[tabId]);
+            if (target) {
+                target.classList.add('active');
+                if (tabId === 'comm') {
+                    document.getElementById('subPageTitle').textContent = '';
+                }
+                if (tabId === 'perf') {
+                    loadPerformanceData();
+                }
+                if (tabId === 'myinfo') {
+                    loadTimetable();
+                }
+            }
+        }
+
+        function loadTimetable() {
+            const body = document.getElementById('studentTimetableBody');
+            if (!body) return;
+
+            const tt = JSON.parse(localStorage.getItem('erp_timetable')) || {};
+            const subjects = JSON.parse(localStorage.getItem('erp_subjects')) || [];
+            const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+            body.innerHTML = '';
+            days.forEach(day => {
+                let row = `<tr><td><strong>${day}</strong></td>`;
+                for (let h = 1; h <= 8; h++) {
+                    const code = (tt[day] && tt[day][h]) ? tt[day][h] : '';
+                    const sub = subjects.find(s => s.code == code);
+                    row += `<td style="background: ${code ? '#f9f9f9' : 'transparent'};">
+                        ${code ? `<strong>${code}</strong><br><small>${sub ? sub.name : ''}</small>` : '-'}
+                    </td>`;
+                }
+                row += `</tr>`;
+                body.innerHTML += row;
+            });
+        }
+
+        function loadPerformanceData() {
+            // Load Grade Card
+            const results = JSON.parse(localStorage.getItem('erp_results')) || [];
+            const subjects = JSON.parse(localStorage.getItem('erp_subjects')) || [];
+            const gcBody = document.getElementById('gradeCardBody');
+            if (gcBody) {
+                if (results.length === 0) {
+                    gcBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #666;">No grading data available for the current period.</td></tr>';
+                } else {
+                    gcBody.innerHTML = '';
+                    results.forEach((r, idx) => {
+                        const sub = subjects.find(s => s.code == r.scode) || { name: r.scode, credits: '--' };
+                        gcBody.innerHTML += `
+                            <tr>
+                                <td>${idx + 1}</td>
+                                <td>${r.scode}</td>
+                                <td>${sub.name}</td>
+                                <td>${sub.credits || '4.0'}</td>
+                                <td>${r.grade}</td>
+                                <td>Current SEM</td>
+                            </tr>`;
+                    });
+                }
+            }
+
+            // Load Marks
+            const marks = JSON.parse(localStorage.getItem('erp_marks')) || [];
+            const mBody = document.getElementById('marksBody');
+            if (mBody) {
+                if (marks.length === 0) {
+                    mBody.innerHTML = '<tr><td colspan="11" style="text-align:center; padding: 40px; color: #666;">No marks data available for the current period.</td></tr>';
+                } else {
+                    mBody.innerHTML = '';
+                    marks.forEach((m, idx) => {
+                        const sub = subjects.find(s => s.code == m.scode) || { name: m.scode };
+                        const percentage = ((m.ms / m.mm) * 100).toFixed(0) + '%';
+                        mBody.innerHTML += `
+                            <tr>
+                                <td>${idx + 1}</td>
+                                <td>${sub.name}</td>
+                                <td>${m.group}</td>
+                                <td>${m.testType}</td>
+                                <td>${m.date}</td>
+                                <td>${m.period}</td>
+                                <td>${m.teacher}</td>
+                                <td>${m.testCode}</td>
+                                <td>${m.mm}</td>
+                                <td>${m.ms}</td>
+                                <td>${percentage}</td>
+                            </tr>`;
+                    });
+                }
+            }
+        }
+
+        function showSubPage(title) {
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            document.getElementById('paneSubPage').classList.add('active');
+            document.getElementById('subPageTitle').textContent = title;
+
+            // Hide all sub-views
+            document.querySelectorAll('.sub-view').forEach(v => v.style.display = 'none');
+
+            if (title === 'Apply Duty-Medical Leave') {
+                document.getElementById('viewDutyLeave').style.display = 'block';
+            } else if (title === 'View Lost/Found Items') {
+                document.getElementById('viewLostFound').style.display = 'block';
+            } else {
+                document.getElementById('viewGeneric').style.display = 'block';
+            }
+        }
+
+        function showSubPane(subId, btn) {
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.sub-pane').forEach(p => p.style.display = 'none');
+            const target = document.getElementById('subPane' + subId);
+            if (target) target.style.display = 'block';
+        }
+
+        function showPerfSubPane(subId, btn) {
+            // Find parent wrapper and update tab states
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.perf-tab-item').forEach(t => {
+                t.classList.remove('active');
+                t.classList.add('inactive');
+            });
+            btn.classList.remove('inactive');
+            btn.classList.add('active');
+
+            // Hide all sub-panes in panePerf
+            document.querySelectorAll('#panePerf .perf-sub-pane').forEach(p => p.style.display = 'none');
+            const target = document.getElementById('perfSub' + subId);
+            if (target) target.style.display = 'block';
+        }
+
+        function openCircular(title, date, content) {
+            document.getElementById('modalTitle').textContent = title + " (" + date + ")";
+            document.getElementById('modalContent').innerHTML = `
+                <h4 style="margin-top:0; color:#2e5b87;">${title}</h4>
+                <p style="color:#666; font-size:11px; margin-bottom:20px;">Posted on: ${date}</p>
+                <div style="border-top: 1px solid #eee; padding-top:15px;">
+                    ${content}
+                </div>
+            `;
+            document.getElementById('circularModal').style.display = 'flex';
+        }
+
+        function closeCircular() {
+            document.getElementById('circularModal').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>

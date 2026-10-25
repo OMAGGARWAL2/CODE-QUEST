@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Hind:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="../logo.jpg">
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+    <link rel="stylesheet" href="../css/chitkara_main_test_css.css">
+    <style>
+        :root {
+            --primary: #DE6834;
+            --border: #E5E7EB;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #FFFFFF;
+        }
+
+        /* Replicate Header Styles from Course Player / Dashboard */
+        header {
+            height: 64px;
+            background: #fff;
+            border-bottom: 1px solid #f2f4f7;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .header-left-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-right-tools {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .plus-tool {
+            width: 64px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #FFEBE1;
+            color: #DE5B2B;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .profile-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-left: 20px;
+            margin-left: 10px;
+        }
+
+        .profile-info {
+            text-align: right;
+        }
+
+        .profile-name {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #475467;
+            text-transform: uppercase;
+        }
+
+        .profile-role {
+            font-size: 0.75rem;
+            color: #DE5B2B;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #DE5B2B;
+            color: #FFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            overflow: hidden;
+        }
+
+        /* Main Content Styles */
+        .container {
+            max-width: 1100px;
+            margin: 120px auto 40px;
+            padding: 0 20px;
+            background: #fff;
+            border-radius: 8px;
+        }
+
+        .page-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 24px;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #E5E7EB;
+            padding-bottom: 8px;
+            width: 300px;
+        }
+
+        .search-container i {
+            color: #D1D5DB;
+            font-size: 1.1rem;
+        }
+
+        .search-input {
+            border: none;
+            outline: none;
+            font-size: 1.05rem;
+            color: #4B5563;
+            width: 100%;
+            background: transparent;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .search-input::placeholder {
+            color: #9CA3AF;
+        }
+
+        .page-title {
+            font-size: 3.8rem;
+            font-weight: 300;
+            color: #A0A0A0;
+            text-transform: lowercase;
+            margin: 0;
+            line-height: 1;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .table-wrapper {
+            background: #fff;
+            border: 1px solid #F3F4F6;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: none;
+        }
+
+        .bookmarks-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .bookmarks-table th {
+            padding: 20px 16px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #6B7280;
+            text-transform: uppercase;
+            border-bottom: 1px solid #F3F4F6;
+            letter-spacing: 0.5px;
+        }
+
+        .bookmarks-table td {
+            padding: 24px 16px;
+            font-size: 1.2rem;
+            color: #4B5563;
+            border-bottom: 1px solid #F3F4F6;
+            vertical-align: middle;
+        }
+
+        .bookmarks-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .lesson-link {
+            color: #DE6834;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.25rem;
+        }
+
+        .lesson-link:hover {
+            text-decoration: underline;
+        }
+
+        .remove-btn {
+            color: #D1D5DB;
+            font-size: 1.6rem;
+            font-weight: 300;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .remove-btn:hover {
+            color: #EF4444;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 0;
+            color: #9CA3AF;
+            font-size: 1.2rem;
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left-icons" style="gap: 110px;">
+            <div class="chitkara-logo-red" onclick="location.href='./student-dashboard.html'"
+                style="background: transparent; width: auto; height: auto; margin-left: -10px; cursor:pointer;">
+                <img src="../Tests _ Chitkara_files/chitkara.a1beb7f0.png" style="height: 52px; border-radius: 6px;">
+            </div>
+            <img src="../Testpad_pra_files_files/menu-1.svg" id="widgetDashboard"
+                style="height: 32px; cursor: pointer;" onclick="location.href='./student-dashboard.html'">
+            <img src="../Testpad_pra_files_files/statistics.svg" id="widgetAttempts"
+                style="height: 32px; cursor: pointer;" onclick="location.href='./studentreports.html'">
+        </div>
+
+        <div class="header-right-tools">
+            <div class="plus-tool" id="plusBtn" onclick="location.href='./playground.html'">
+                <i class="fas fa-plus"></i>
+            </div>
+
+            <div class="header-icon" id="gridBtn"
+                style="width: 52px; height: 100%; display: flex; align-items: center; justify-content: center; position: relative;">
+                <img src="../Testpad_pra_files_files/icons8-squared-menu-90.png"
+                    style="width: 36px; height: 36px; opacity: 0.75; transition: all 0.2s; cursor: pointer;"
+                    onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'" onclick="location.href='./student-dashboard.html'">
+            </div>
+            <div class="profile-area">
+                <div class="profile-info">
+                    <div class="profile-name" id="uName">OM AGGARWAL</div>
+                    <div class="profile-role">STUDENT</div>
+                </div>
+                <div class="profile-avatar" id="uAvatar">O</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-top-bar">
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search in bookmarks" oninput="filterBookmarks()">
+            </div>
+            <h1 class="page-title">bookmarks</h1>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="bookmarks-table">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;"></th>
+                        <th style="text-align: left; width: 35%;">RESOURCE <i class="fas fa-caret-down" style="color:#9CA3AF; margin-left:4px;"></i></th>
+                        <th style="width: 20%;">TYPE</th>
+                        <th style="width: 25%;">CREATED AT <i class="fas fa-sort" style="color:#9CA3AF; margin-left:4px;"></i></th>
+                        <th style="width: 15%;">ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="bookmarkList">
+                    <!-- Bookmarks populated by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const user = auth.getCurrentUser();
+        if (!user) location.href = './login.html';
+
+        document.getElementById('uName').textContent = user.name || 'STUDENT';
+        document.getElementById('uAvatar').textContent = (user.name || 'S').charAt(0).toUpperCase();
+
+        let allBookmarks = [];
+
+        function renderBookmarks(bookmarksToRender) {
+            const tbody = document.getElementById('bookmarkList');
+            
+            if (bookmarksToRender.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="empty-state">No bookmarks found.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = bookmarksToRender.map((b, index) => {
+                const dateObj = new Date(b.timestamp);
+                const dateStr = ('0' + dateObj.getDate()).slice(-2) + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + dateObj.getFullYear();
+                const timeStr = ('0' + dateObj.getHours()).slice(-2) + ':' + ('0' + dateObj.getMinutes()).slice(-2);
+                
+                // Determine Type
+                let typeLabel = 'Lesson';
+                if (b.type) {
+                    if (b.type === 'coding') typeLabel = 'Coding';
+                    else if (b.type === 'mcq') typeLabel = 'Mcq';
+                    else if (b.type === 'web') typeLabel = 'Web';
+                    else typeLabel = b.type.charAt(0).toUpperCase() + b.type.slice(1);
+                }
+                
+                return `
+                    <tr>
+                        <td>${index + 1}.</td>
+                        <td style="text-align: left; padding-right: 20px;">
+                            <a href="./course-player.html?courseId=${b.courseId}&moduleIndex=${b.moduleIdx}&lessonIndex=${b.lessonIdx}" class="lesson-link">
+                                ${b.lessonTitle}
+                            </a>
+                        </td>
+                        <td>${typeLabel}</td>
+                        <td style="line-height: 1.4; color: #6B7280; font-size: 1rem;">
+                            ${dateStr}<br>${timeStr}
+                        </td>
+                        <td>
+                            <i class="far fa-times-circle remove-btn" onclick="removeBookmark('${b.lessonId}')"></i>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function loadBookmarks() {
+            allBookmarks = db.getBookmarks(user.id) || [];
+            
+            // Re-enrich types and missing data
+            allBookmarks.forEach(b => {
+                if (!b.type) {
+                    const c = db.getCourseById(b.courseId);
+                    if (c && c.modules && c.modules[b.moduleIdx] && c.modules[b.moduleIdx].lessons && c.modules[b.moduleIdx].lessons[b.lessonIdx]) {
+                        b.type = c.modules[b.moduleIdx].lessons[b.lessonIdx].type;
+                    }
+                }
+            });
+
+            filterBookmarks();
+        }
+
+        function filterBookmarks() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allBookmarks.filter(b => b.lessonTitle.toLowerCase().includes(query));
+            renderBookmarks(filtered);
+        }
+
+        function removeBookmark(lessonId) {
+            const idx = allBookmarks.findIndex(b => b.lessonId === lessonId);
+            if (idx > -1) {
+                allBookmarks.splice(idx, 1);
+                db.saveBookmarks(user.id, allBookmarks);
+                filterBookmarks();
+            }
+        }
+
+        loadBookmarks();
+    </script>
+</body>
+</html>

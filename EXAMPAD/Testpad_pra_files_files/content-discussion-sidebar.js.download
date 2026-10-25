@@ -1,0 +1,396 @@
+
+/**
+ * left sidebar
+ */
+const mainSegment = attemptLinks && attemptLinks.segmentData
+  ? attemptLinks.segmentData.segmentIndex
+  : 0;
+let currentOpenedSegmentInLeft = mainSegment;
+let segmentsLength = 0;
+let sharingPercentageDisable = false;
+
+if (container && container.courseSegments) {
+  segmentsLength = container.courseSegments.length;
+} else if (course && course.courseSegments) {
+  segmentsLength = course.courseSegments.length;
+}
+
+function scrollToTop() {
+  document.getElementsByClassName('currentSelectedOpenQues')[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function setOpenedSegment() {
+  let index = window.container?.courseSegments[currentOpenedSegmentInLeft]?.segmentCountIndex ?? currentOpenedSegmentInLeft;
+  getContentOfCurrentSegment(index, container._id);
+}
+
+function checkCursorPrevBtn() {
+  if (currentOpenedSegmentInLeft <= 0) {
+    $('#prevSegment').css({ cursor: 'not-allowed' });
+    $('#prevSegment i').css({ cursor: 'not-allowed' });
+  } else {
+    $('#prevSegment').css({ cursor: 'pointer' });
+    $('#prevSegment i').css({ cursor: 'pointer' });
+  }
+}
+
+function checkCursorNextBtn() {
+  if (currentOpenedSegmentInLeft == segmentsLength - 1) {
+    $('#nextSegment').css({ cursor: 'not-allowed' });
+    $('#nextSegment i').css({ cursor: 'not-allowed' });
+  } else {
+    $('#nextSegment').css({ cursor: 'pointer' });
+    $('#nextSegment i').css({ cursor: 'pointer' });
+  }
+}
+
+// Add Question title and type in course's segment : segments_question_container_courseId.append ==>  question_segment_courseId_segIndex
+function addQuestionToSegment(segmentIndex, courseId, data) {
+  const segData = data.segmentData;
+  let contents = data?.titles ?? [];
+  let contentType;
+  
+  $('#sectionCount').html(`SECTION ${currentOpenedSegmentInLeft + 1}`);
+  $('#segmentName').text(segData.title);
+
+  let divString = `<div id="question_segment_${courseId}_${segmentIndex}" class="course-questions-container">`;
+
+
+  if (data.err) {
+    divString+= `<div><p style="color: #828282; padding-top: 20px; cursor: not-allowed" >${data.err}</p></div>`
+  }
+
+  if (data?.skipFirst) {
+    contents = contents.slice(1);
+  }
+
+
+
+  (contents).forEach((content, index) => {
+    const idIndex = `${courseId}_${segmentIndex}`; // For add Questions Status in upcoming AJAX
+    let title = content.title || content.name;
+    title = title.replace(/>/g, '&gt;');
+    title = title.replace(/</g, '&lt;');
+
+    if (content.type == contentTypeString.contentTypeTutorial) {
+      contentType = 'Tutorial';
+    } else if (content.type === contentTypeString.contentTypeMCQ) {
+      contentType = 'MCQ';
+    } else if (content.type === contentTypeString.contentTypeSubjective) {
+      contentType = 'Subjective';
+    } else if (content.type === contentTypeString.contentTypeCoding) {
+      contentType = 'Coding';
+    } else if (content.type === contentTypeString.contentTypeStepwise) {
+      contentType = 'MQ';
+    } else if (content.type === contentTypeString.contentTypeWeb) {
+      contentType = 'Web';
+    } else if (content.type === contentTypeString.contentTypeProject) {
+      contentType = 'Project';
+    } else if (content.type === contentTypeString.contentTypeClass) {
+      contentType = 'Class';
+    } else if (content.type === contentTypeString.contentTypeQuiz) {
+      contentType = 'Test';
+    } else {
+      contentType = 'N/A';
+    }
+
+    let matchItem = false;
+    if ((typeof question._id !== 'undefined' && content._id == question._id)
+      || (typeof tutorialId !== 'undefined' && content._id == tutorialId)
+    ) {
+      matchItem = true;
+    }
+
+    let slicedTitle;
+    if (title.length > 40) {
+      slicedTitle = `${title.slice(0, 40)}...`;
+    } else {
+      slicedTitle = title;
+    }
+    if (
+      content.type === contentTypeString.contentTypeSubjective
+      &&
+      content.isFileQuestion === true
+    ) {
+      return false;
+    }
+    divString += `
+       <div style="${matchItem ? 'color: #DE6834' : ''}" id="course-question${content._id}" class="course-question code ${matchItem ? 'currentSelectedOpenQues' : ''}">
+           <div id="${content._id}" class="row">
+             <div style="max-width: 5%; margin-left: 15px; margin-top: 19px; position: relative; right: ${index + 1 > 99 ? '12px' : '7px'};" class="col-1">
+               <p class="course-question-number">${index + 1}</p>
+             </div>
+             <div style="padding: 0px;" class="col-9">
+               <p class="course-question-type">${contentType}</p>
+               <p class="course-question-name">
+                 <a style="${matchItem ? 'color: #DE6834' : ''}" id="ancAttempt${idIndex}_${index}">${slicedTitle}</a>
+               </p>
+             </div>
+             <div style="max-width: 5%;" class="col-1 course-question-icons" id="questionCompleted${idIndex}_${index}"></div>
+             <div class="col-1 course-question-icons" id="questionStatus${idIndex}_${index}"></div>
+           </div>
+       </div>
+       <div style="border: 1px solid #ebebeb; margin: 5px 0;position:relative;"></div>
+     `;
+  });
+
+  divString += '</div>';
+  $('#segmentContent').empty();
+  $('#segmentContent').append(divString);
+}
+
+function addContentStatus(courseId, segmentIndex, data) {
+  const indexId = `${courseId}_${segmentIndex}`;
+  let counter = 0;
+
+
+  data.result.forEach((contentObj) => {
+    if (contentObj._id) {
+      if (!data.isArchived) {
+        if (contentObj.type == contentTypeString.contentTypeTutorial) {
+          $(`#ancAttempt${indexId}_${counter}`).attr('href', `/attempt/attempttutorial/${courseId}/${contentObj._id}`);
+        } else if (contentObj.type == contentTypeString.contentTypeQuiz) {
+          if (!contentObj.userAnswer) {
+            $(`#ancAttempt${indexId}_${counter}`).attr('href', `/attempt/attemptquiz/${courseId}/${contentObj._id}`);
+          } else if(contentObj.userAnswer && contentObj.userAnswer.completed) {
+            $(`#ancAttempt${indexId}_${counter}`).attr('href', `/attempt/attemptquiz/${courseId}/${contentObj._id}?reAttempt=true`);
+          }
+        } else if (contentObj.type == contentTypeString.contentTypeClass || contentObj.link) {
+          if (contentObj.link) {
+            $(`#ancAttempt${indexId}_${counter}`).attr('href', `${contentObj.link}?courseId=${courseId}&contentId=${contentObj._id}`);
+          } else if(!contentObj.link && contentObj.isOffline) { 
+            $(`#ancAttempt${indexId}_${counter}`).removeAttr('href');
+            $(`#ancAttempt${indexId}_${counter}`).attr('onclick', ' toggleAlertMsgModal(\'Offline class, The content will be visible after class ends.\', 2);').css('cursor', 'pointer');
+          } else {
+            $(`#ancAttempt${indexId}_${counter}`).removeAttr('href');
+            $(`#ancAttempt${indexId}_${counter}`).attr('onclick', ' toggleAlertMsgModal(\'Link not present\', 2);').css('cursor', 'pointer');
+          }
+        } else {
+          $(`#ancAttempt${indexId}_${counter}`).attr('href', `/attempt/attemptquestion/${courseId}/${contentObj._id}`);
+        }
+      }
+
+      if (contentObj.userAnswer) {
+        if (contentObj.userAnswer.completed) {
+          $(`#questionCompleted${indexId}_${counter}`).append('<img style="margin-top: 5px; width: 15px; height: 15px;" src="/icons/foursquare-check-in.png"/>');
+          if (contentObj.type == contentTypeString.contentTypeClass) {
+            $(`#ancAttempt${indexId}_${counter}`).attr('href', `/attempt/attemptclass/${courseId}/${contentObj._id}`);
+            $(`#ancAttemptType${indexId}_${counter}`).attr('href', `/attempt/attemptclass/${courseId}/${contentObj._id}`);
+            $(`#ancAttempt${indexId}_${counter}`).removeAttr('onclick');
+            $(`#ancAttemptType${indexId}_${counter}`).removeAttr('onclick');
+          }
+        }
+      }
+    } else {
+      $(`#questionStatus${indexId}_${counter}`).append('<img style="margin-top: 5px; width: 15px; height: 15px;" src="/icons/lock.png" />');
+    }
+
+    counter += 1;
+  });
+
+  const segment_completion = (data?.segmentCompletion) ? data.segmentCompletion.replace('%', '') : 0;
+  const seg_progress = `<p>${segment_completion}% covered</p>
+     <div class="progress">
+       <div class="progress-bar" role="progressbar" style="width: ${segment_completion}%" aria-valuenow="${segment_completion}" aria-valuemin="0" aria-valuemax="100"></div>
+     </div>
+   `;
+
+  if (!sharingPercentageDisable) {
+    $('#progress-container').empty();
+    $('#progress-container').append(seg_progress);
+    $('#progress-container').removeClass('share-container-left-bar');
+    $('.left-side-bar-main-content').css('height', 'calc(100vh - 116px)');
+  }
+}
+
+async function getContentOfCurrentSegment(segmentIndex, courseId) {
+  toggleSidebarLoader(true);
+
+  const url = `/api/user-dashboard/segmentTitle/${courseId}/${segmentIndex}`;
+  try {
+    const rowResponse = await fetch(url);
+    const data = await rowResponse.json();
+    if (data.frontendMessage) {
+      data.err = data.frontendMessage;
+      addQuestionToSegment(segmentIndex, courseId, data);
+      addContentStatus(courseId, segmentIndex, {
+        error: data.frontendMessage,
+        result: [],
+      });
+      toggleSidebarLoader(false);
+      return;
+    }
+    if (data.error) {
+      toggleSidebarLoader(false);
+      toggleAlertMsgModal(data.error);
+      return;
+    }
+    addQuestionToSegment(segmentIndex, courseId, data);
+
+    $.ajax({
+      url: `/api/user-dashboard/${courseId}/${segmentIndex}`,
+      dataType: 'json',
+      success(data) {
+        if (data.error) {
+          toggleSidebarLoader(false);
+          toggleAlertMsgModal(data.error);
+          return;
+        }
+        addContentStatus(courseId, segmentIndex, data);
+        toggleSidebarLoader(false);
+      },
+      error(jqXHR, textStatus, err) {
+        toggleSidebarLoader(false);
+        toggleAlertMsgModal('Error fetching the course content details.',2);
+      },
+    });
+  } catch (error) {
+    console.trace(error);
+    window.location.reload();
+  }
+}
+
+function openSideBar() {
+  $('.img-2-container img').removeClass('active');
+  $('.left-side-bar-container-iframe').removeClass('left-side-bar-container-iframe-open');
+  const Open = $('.left-side-bar-container').hasClass('left-side-bar-container-open');
+  if (!Open) {
+    $('.left-side-bar-container').addClass('left-side-bar-container-open');
+    $('.img-1-container img').addClass('active');
+    if (currentOpenedSegmentInLeft != mainSegment) {
+      currentOpenedSegmentInLeft = mainSegment;
+      setOpenedSegment();
+      checkCursorPrevBtn();
+      checkCursorNextBtn();
+    }
+    scrollToTop();
+  } else {
+    $('.img-1-container img').removeClass('active');
+    $('.left-side-bar-container').removeClass('left-side-bar-container-open');
+  }
+}
+
+function openSideBarIframe() {
+  $('.img-1-container img').removeClass('active');
+  $('.left-side-bar-container').removeClass('left-side-bar-container-open');
+  const Open = $('.left-side-bar-container-iframe').hasClass('left-side-bar-container-iframe-open');
+  if (!Open) {
+    $('.left-side-bar-container-iframe').addClass('left-side-bar-container-iframe-open');
+    $('.img-2-container img').addClass('active');
+  } else {
+    $('.img-2-container img').removeClass('active');
+    $('.left-side-bar-container-iframe').removeClass('left-side-bar-container-iframe-open');
+  }
+}
+
+function toggleSidebarLoader(val) {
+  const loader = document.getElementById('loader-container-1');
+
+  if (val) {
+    loader.style.display = 'block';
+    document.getElementById('openSideFiles').removeEventListener('click', openSideBar);
+    // document.getElementById('openSidebarIFrame').removeEventListener('click', openSideBarIframe);
+  } else {
+    loader.style.display = 'none';
+    document.getElementById('openSideFiles').addEventListener('click', openSideBar);
+    // document.getElementById('openSidebarIFrame').addEventListener('click', openSideBarIframe);
+  }
+}
+
+async function getTotalUserMsgCount() {
+  try {
+    const response = await fetch(`${discussionUrl}/api/discussion/user-total-count`, {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const totalUserMsgCount = await response.json();
+    if (totalUserMsgCount.count > 0) {
+      document.getElementById('user-total-msg-count').innerText = totalUserMsgCount.count;
+    }
+  } catch (error) {
+    console.error('error while getting total user message count.');
+  }
+}
+
+function closeSidebarContent(e) {
+  const filesListContainer = $('#fileListContainer');
+  const iframeContainer = $('#iframeDiscussionContainer');
+  const leftBarOptionsContainer = $('#leftBarOptionsContainer');
+
+  if (
+    !filesListContainer.is(e.target)
+     && filesListContainer.has(e.target).length === 0
+     && !iframeContainer.is(e.target)
+     && iframeContainer.has(e.target).length === 0
+     && !leftBarOptionsContainer.is(e.target)
+     && leftBarOptionsContainer.has(e.target).length === 0
+  ) {
+    $('.img-1-container img').removeClass('active');
+    $('.left-side-bar-container').removeClass('left-side-bar-container-open');
+    $('.img-2-container img').removeClass('active');
+    $('.left-side-bar-container-iframe').removeClass('left-side-bar-container-iframe-open');
+  }
+}
+
+$(document).ready(async () => {
+  checkCursorPrevBtn();
+  checkCursorNextBtn();
+  // getTotalUserMsgCount();
+  toggleSidebarLoader(false);
+  setOpenedSegment();
+});
+
+$('#prevSegment').on('click', (event) => {
+  console.log(event);
+  console.log("TEST");
+  const startIndex = parseInt(parseInt(event.target.getAttribute('startIndex')));
+  if (!isNaN(startIndex)) {
+    if (currentOpenedSegmentInLeft > startIndex) {
+      currentOpenedSegmentInLeft--;
+      setOpenedSegment();
+      sharingPercentageDisable = false;
+    }
+  } else {
+    if (currentOpenedSegmentInLeft > 0) {
+      currentOpenedSegmentInLeft--;
+      setOpenedSegment();
+      sharingPercentageDisable = false;
+    }
+  }
+  checkCursorPrevBtn();
+  checkCursorNextBtn();
+});
+
+$('#nextSegment').on('click', (event) => {
+  console.log(event);
+  console.log("TEST");
+  const endIndex = parseInt(event.target.getAttribute('endIndex'));
+  if (!isNaN(endIndex)) {
+    if (currentOpenedSegmentInLeft < endIndex) {
+      currentOpenedSegmentInLeft++;
+      
+      setOpenedSegment();
+      sharingPercentageDisable = false;
+    }
+  } else {
+    if (currentOpenedSegmentInLeft < segmentsLength - 1) {
+      currentOpenedSegmentInLeft++;
+      setOpenedSegment();
+      sharingPercentageDisable = false;
+    }
+  }
+
+
+  checkCursorPrevBtn();
+  checkCursorNextBtn();
+});
+
+$(document).on('mouseup', closeSidebarContent);
+
+/**
+ * left sidebar
+ */

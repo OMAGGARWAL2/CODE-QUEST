@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts: Inter and Outfit -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="https://api.learntechww.com/college_icon/logo1733989968823.jpg">
+    <style>
+        :root {
+            --primary: #D92D20;
+            --primary-hover: #B42318;
+            --primary-soft: #FEF3F2;
+            --secondary: #667085;
+            --text-main: #101828;
+            --text-secondary: #475467;
+            --text-tertiary: #667085;
+            --bg-body: #F9FAFB;
+            --bg-card: #FFFFFF;
+            --border: #EAECF0;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --shadow-premium: 0 10px 40px rgba(0, 0, 0, 0.06);
+            --orange-soft: #ffedd5;
+            --orange: #f97316;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1,
+        h2,
+        h3,
+        .logo-text,
+        .nav-btn {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* --- HEADER --- */
+        .site-header {
+            height: 72px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .logo-square {
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-square img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-back:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        /* --- LAYOUT --- */
+        .main-container {
+            flex: 1;
+            padding: 40px 64px;
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 40px;
+        }
+
+        /* --- CONFIG PANEL --- */
+        .config-panel {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .panel-heading {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-box {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: var(--bg-body);
+        }
+
+        .input-box:focus {
+            outline: none;
+            border-color: var(--orange);
+            box-shadow: 0 0 0 4px var(--orange-soft);
+            background: #fff;
+        }
+
+        .textarea-box {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn-generate {
+            background: var(--orange);
+            color: #fff;
+            border: none;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: auto;
+        }
+
+        .btn-generate:hover {
+            background: #ea580c;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(249, 115, 22, 0.3);
+        }
+
+        /* --- RESULTS PANEL --- */
+        .results-panel {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-tertiary);
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            color: var(--orange-soft);
+            margin-bottom: 24px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        /* --- SCHEDULE CARDS --- */
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+        }
+
+        .slot-card {
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .slot-card:hover {
+            box-shadow: var(--shadow-premium);
+            border-color: var(--orange);
+            background: #fff;
+            transform: translateY(-4px);
+        }
+
+        .slot-date {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--orange);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .slot-course {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 16px;
+        }
+
+        .room-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--orange-soft);
+            color: #9a3412;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .seat-matrix {
+            margin-top: 16px;
+            border-top: 1px dashed var(--border);
+            padding-top: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .seat {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            background: #ecfdf3;
+            border: 1px solid #10b981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #047857;
+        }
+
+        /* --- OVERLAY LOADER --- */
+        .loader-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid var(--orange-soft);
+            border-top-color: var(--orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <a href="./teacher-dashboard.html" class="logo-container">
+                <div class="logo-square">
+                    <img src="https://api.learntechww.com/college_icon/logo1733989968823.jpg" alt="CHITKARA">
+                </div>
+                <div class="logo-text">TESTPAD</div>
+            </a>
+            <div style="width: 1px; height: 32px; background: var(--border); margin: 0 16px;"></div>
+            <a href="./teacher-dashboard.html" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Dashboard
+            </a>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Configuration Panel -->
+        <div class="config-panel">
+            <h2 class="panel-heading"><i class="fas fa-sliders-h" style="color:var(--orange);"></i> Configuration
+                Parameters</h2>
+
+            <div class="form-group">
+                <label class="form-label">Exam Dates (Comma separated)</label>
+                <input type="text" id="datesInput" class="input-box" value="12 Oct 2026, 14 Oct 2026, 16 Oct 2026"
+                    placeholder="e.g. 12 Oct, 13 Oct...">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Courses / Subjects</label>
+                <textarea id="coursesInput" class="input-box textarea-box" placeholder="List courses line by line...">Network Security
+Cloud Computing
+Machine Learning
+Data Structures</textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Rooms & Capacities (Format: RoomName:Capacity)</label>
+                <textarea id="roomsInput" class="input-box textarea-box" placeholder="e.g. Room A: 40">Hall 1: 60
+Hall 2: 40
+Lab A: 30</textarea>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 24px;">
+                <label class="form-label">Total Participating Students</label>
+                <input type="number" id="studentsInput" class="input-box" value="250">
+            </div>
+
+            <button class="btn-generate" onclick="generateTimetable()">
+                <i class="fas fa-magic"></i> Generate Collision-Free Plan
+            </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="resultsPanel">
+            <div class="empty-state" id="emptyState">
+                <i class="fas fa-calendar-alt empty-icon"></i>
+                <h3>No Timetable Generated</h3>
+                <p>Adjust parameters and click Generate to run the algorithmic seating allocator.</p>
+            </div>
+
+            <div id="resultsContent" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items:flex-end;">
+                    <div>
+                        <h2 class="panel-heading">Generated Timetable & Seating</h2>
+                        <p style="color:var(--text-secondary); margin-top:8px;">Conflict-free scheduling algorithm
+                            completed successfully.</p>
+                    </div>
+                    <button class="btn-back" style="color:var(--orange); border-color:var(--orange);"
+                        onclick="window.print()">
+                        <i class="fas fa-print"></i> Print Matrix
+                    </button>
+                </div>
+
+                <div class="schedule-grid" id="scheduleGrid">
+                    <!-- Cards injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loader -->
+    <div class="loader-overlay" id="loaderOverlay">
+        <div class="spinner"></div>
+        <h2 style="color:var(--orange);">Running Constrained Allocation Algorithm...</h2>
+        <p style="color:var(--text-secondary);">Plotting student seat vectors to avoid collisions.</p>
+    </div>
+
+    <script>
+        function generateTimetable() {
+            // Show loader
+            document.getElementById('loaderOverlay').style.display = 'flex';
+
+            setTimeout(() => {
+                document.getElementById('loaderOverlay').style.display = 'none';
+                document.getElementById('emptyState').style.display = 'none';
+                document.getElementById('resultsContent').style.display = 'block';
+
+                const dates = document.getElementById('datesInput').value.split(',').map(d => d.trim()).filter(Boolean);
+                const courses = document.getElementById('coursesInput').value.split('\n').filter(Boolean);
+                const roomsRaw = document.getElementById('roomsInput').value.split('\n').filter(Boolean);
+                const totalStudents = parseInt(document.getElementById('studentsInput').value) || 0;
+
+                const rooms = roomsRaw.map(r => {
+                    const parts = r.split(':');
+                    return { name: parts[0].trim(), capacity: parseInt(parts[1]) || 0 };
+                });
+
+                const grid = document.getElementById('scheduleGrid');
+                grid.innerHTML = '';
+
+                let dayIndex = 0;
+                courses.forEach(course => {
+                    const date = dates[dayIndex % dates.length];
+                    let allocatedStudents = 0;
+
+                    rooms.forEach(room => {
+                        const countInRoom = Math.min(room.capacity, totalStudents - allocatedStudents);
+                        if (countInRoom <= 0) return;
+                        allocatedStudents += countInRoom;
+
+                        // Generate seats
+                        let seatsHTML = '';
+                        for (let i = 1; i <= Math.min(countInRoom, 14); i++) {
+                            seatsHTML += `<div class="seat">R${Math.ceil(i / 7)}C${i % 7 || 7}</div>`;
+                        }
+                        if (countInRoom > 14) seatsHTML += `<div class="seat" style="background:#fff; border:none; width:auto; color:var(--text-secondary);">+${countInRoom - 14} more</div>`;
+
+                        const card = document.createElement('div');
+                        card.className = 'slot-card';
+                        card.innerHTML = `
+                            <div class="slot-date"><i class="far fa-clock"></i> ${date} - 10:00 AM</div>
+                            <div class="slot-course">${course}</div>
+                            <div class="room-tag"><i class="fas fa-door-open"></i> ${room.name} (${countInRoom} Students)</div>
+                            <div class="seat-matrix">
+                                ${seatsHTML}
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+
+                    dayIndex++;
+                });
+
+            }, 1200);
+        }
+    </script>
+</body>
+
+</html>

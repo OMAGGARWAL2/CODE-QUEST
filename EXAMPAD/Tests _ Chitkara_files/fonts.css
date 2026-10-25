@@ -1,0 +1,277 @@
+/* #region CHANGA ONE */
+@font-face {
+  font-family: "Changa One";
+  src: url("./fonts/Changa_One/ChangaOne-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Changa One";
+  src: url("./fonts/Changa_One/ChangaOne-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* #endregion */
+
+
+/* #region CHANGA */
+@font-face {
+  font-family: "Changa";
+  src: url("./fonts/Changa/static/Changa-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: "Changa";
+  src: url("./fonts/Changa/static/Changa-Light.ttf") format("truetype");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Changa";
+  src: url("./fonts/Changa/static/Changa-Regular.ttf") format("truetype");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Changa";
+  src: url("./fonts/Changa/static/Changa-Medium.ttf") format("truetype");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Changa";
+  src: url("./fonts/Changa/static/Changa-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Changa";
+  src: url("./fonts/Changa/static/Changa-Bold.ttf") format("truetype");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Changa";
+  src: url("./fonts/Changa/static/Changa-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+}
+
+/* #endregion */
+
+
+/* #region HIND */
+@font-face {
+  font-family: "Hind";
+  src: url("./fonts/Hind/Hind-Light.ttf") format("truetype");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Hind";
+  src: url("./fonts/Hind/Hind-Regular.ttf") format("truetype");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Hind";
+  src: url("./fonts/Hind/Hind-Medium.ttf") format("truetype");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Hind";
+  src: url("./fonts/Hind/Hind-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Hind";
+  src: url("./fonts/Hind/Hind-Bold.ttf") format("truetype");
+  font-weight: 700;
+}
+
+/* #endregion */
+
+
+/* #region MONTSERRAT */
+@font-face {
+  font-family: "Montserrat";
+  src: url("./fonts/Montserrat/static/Montserrat-Thin.ttf") format("truetype");
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("./fonts/Montserrat/static/Montserrat-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("./fonts/Montserrat/static/Montserrat-Light.ttf") format("truetype");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("./fonts/Montserrat/static/Montserrat-Regular.ttf") format("truetype");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("./fonts/Montserrat/static/Montserrat-Medium.ttf") format("truetype");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("./fonts/Montserrat/static/Montserrat-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("./fonts/Montserrat/static/Montserrat-Bold.ttf") format("truetype");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("./fonts/Montserrat/static/Montserrat-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("./fonts/Montserrat/static/Montserrat-Black.ttf") format("truetype");
+  font-weight: 900;
+}
+
+/* Italics */
+@font-face {
+  font-family: "Montserrat";
+  src: url("./fonts/Montserrat/static/Montserrat-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("./fonts/Montserrat/static/Montserrat-BoldItalic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+}
+
+/* #endregion */
+
+
+/* #region MULISH */
+@font-face {
+  font-family: "Mulish";
+  src: url("./fonts/Mulish/static/Mulish-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: "Mulish";
+  src: url("./fonts/Mulish/static/Mulish-ExtraLightItalic.ttf") format("truetype");
+  font-weight: 200;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Mulish";
+  src: url("./fonts/Mulish/static/Mulish-Light.ttf") format("truetype");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Mulish";
+  src: url("./fonts/Mulish/static/Mulish-LightItalic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Mulish";
+  src: url("./fonts/Mulish/static/Mulish-Regular.ttf") format("truetype");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Mulish";
+  src: url("./fonts/Mulish/static/Mulish-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Mulish";
+  src: url("./fonts/Mulish/static/Mulish-Medium.ttf") format("truetype");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Mulish";
+  src: url("./fonts/Mulish/static/Mulish-MediumItalic.ttf") format("truetype");
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Mulish";
+  src: url("./fonts/Mulish/static/Mulish-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Mulish";
+  src: url("./fonts/Mulish/static/Mulish-SemiBoldItalic.ttf") format("truetype");
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Mulish";
+  src: url("./fonts/Mulish/static/Mulish-Bold.ttf") format("truetype");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Mulish";
+  src: url("./fonts/Mulish/static/Mulish-BoldItalic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Mulish";
+  src: url("./fonts/Mulish/static/Mulish-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+}
+
+@font-face {
+  font-family: "Mulish";
+  src: url("./fonts/Mulish/static/Mulish-ExtraBoldItalic.ttf") format("truetype");
+  font-weight: 800;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Mulish";
+  src: url("./fonts/Mulish/static/Mulish-Black.ttf") format("truetype");
+  font-weight: 900;
+}
+
+@font-face {
+  font-family: "Mulish";
+  src: url("./fonts/Mulish/static/Mulish-BlackItalic.ttf") format("truetype");
+  font-weight: 900;
+  font-style: italic;
+}
+
+/* #endregion */

@@ -1,0 +1,22 @@
+
+        @font-face {
+            font-family: 'Avenir';
+            src: url('/common/fonts/Avenir/Avenir-Roman.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Avenir';
+            src: url('/common/fonts/Avenir/Avenir-Medium.ttf') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Avenir Book';
+            src: url('/common/fonts/Avenir/Avenir-Book.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+    

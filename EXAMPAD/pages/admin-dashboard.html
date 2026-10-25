@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts: Inter and Outfit -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="../logo.jpg">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary: #D92D20;
+            --primary-hover: #B42318;
+            --primary-soft: #FEF3F2;
+            --secondary: #667085;
+            --text-main: #101828;
+            --text-secondary: #475467;
+            --text-tertiary: #667085;
+            --bg-body: #F9FAFB;
+            --bg-card: #FFFFFF;
+            --border: #EAECF0;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --shadow-premium: 0 10px 40px rgba(0, 0, 0, 0.06);
+            --sidebar-width: 320px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        @media (min-width: 1201px) {
+            body {
+                height: 100vh;
+                overflow: hidden;
+            }
+        }
+
+        h1,
+        h2,
+        h3,
+        .logo-text,
+        .nav-btn {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* --- HEADER --- */
+        .site-header {
+            height: 72px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .logo-container:hover {
+            opacity: 0.8;
+        }
+
+        .logo-square {
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-square img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 90px;
+            margin-left: 48px;
+        }
+
+        .nav-icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            border: none;
+            font-size: 1.1rem;
+        }
+
+        .nav-icon-btn:hover {
+            background: var(--bg-body);
+            color: var(--primary);
+        }
+
+        .nav-icon-btn.active {
+            color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .plus-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            border: 1px solid #FDA29B;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .plus-btn:hover {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .grid-btn {
+            width: 40px;
+            height: 40px;
+            color: var(--secondary);
+            border: none;
+            background: transparent;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .grid-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .profile-bubble {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-left: 16px;
+            border-left: 1px solid var(--border);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-main);
+            text-transform: uppercase;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: #F46036;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- DASHBOARD LAYOUT --- */
+        .dashboard-container {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr var(--sidebar-width);
+            gap: 0;
+            overflow: hidden;
+        }
+
+        @media (min-width: 1201px) {
+            .dashboard-container {
+                height: calc(100vh - 72px);
+            }
+        }
+
+        .main-content {
+            padding: 40px 64px;
+            overflow-y: auto;
+            border-right: 1px solid var(--border);
+            background: #fff;
+        }
+
+        .sidebar-content {
+            padding: 40px 32px;
+            background: #fafafa;
+            overflow-y: auto;
+        }
+
+        /* --- ASSESSMENTS LIST --- */
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #344054;
+        }
+
+        .section-title span {
+            font-weight: 400;
+            color: var(--secondary);
+            font-size: 1.1rem;
+            margin-left: 8px;
+        }
+
+        .search-container {
+            position: relative;
+            width: 320px;
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 14px 10px 40px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            outline: none;
+            transition: all 0.2s;
+            background: #fff;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-soft);
+        }
+
+        .assessments-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* --- ASSESSMENT CARD --- */
+        .assessment-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            position: relative;
+            overflow-x: auto;
+            overflow-y: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .assessment-card:hover {
+            box-shadow: var(--shadow-premium);
+            border-color: var(--primary);
+            transform: translateY(-4px);
+        }
+
+        .card-icon-area {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            flex-shrink: 0;
+        }
+
+        .card-body {
+            flex: 1;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 0.9rem;
+            color: var(--text-tertiary);
+        }
+
+        .card-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-pill {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pill.draft {
+            background: #f2f4f7;
+            color: #475467;
+        }
+
+        .status-pill.published,
+        .status-pill.live {
+            background: #ecfdf3;
+            color: #027a48;
+        }
+
+        .stats-group {
+            display: flex;
+            gap: 30px;
+            margin-left: 40px;
+            padding-left: 40px;
+            border-left: 1px solid var(--border);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            display: block;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            margin-left: 30px;
+        }
+
+        .btn-action {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+
+        .btn-action:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .btn-action.primary {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            width: auto;
+            padding: 0 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-action.primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(217, 45, 32, 0.2);
+            color: #fff;
+        }
+
+        .btn-action.light-orange {
+            background: var(--primary-soft);
+            color: var(--primary);
+            border: 1px solid #FDA29B;
+            width: auto;
+            padding: 0 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-action.light-orange:hover {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(217, 45, 32, 0.2);
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar-heading {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        .side-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .quick-link-card {
+            border-radius: 8px;
+            padding: 24px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 180px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+            border: none;
+        }
+
+        .quick-link-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .ql-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .ql-desc {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+
+        .ql-icon {
+            font-size: 2rem;
+            opacity: 0.3;
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+        }
+
+        .quick-link-card.red {
+            background-color: #D92D20;
+        }
+
+        .quick-link-card.blue {
+            background-color: #026AA2;
+        }
+
+        .quick-link-card.pink {
+            background-color: #C11574;
+        }
+
+        .quick-link-card.orange {
+            background-color: #C4320A;
+        }
+
+        .quick-link-card.green {
+            background-color: #027A48;
+        }
+
+        .quick-link-card.dark {
+            background-color: #344054;
+        }
+
+        /* --- NOTIFICATION SYSTEM --- */
+        #toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 9999;
+        }
+
+        .toast {
+            min-width: 300px;
+            background: #101828;
+            color: #fff;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .toast.success {
+            border-left: 4px solid #4caf50;
+        }
+
+        .toast.error {
+            border-left: 4px solid #f44336;
+        }
+
+        .toast.info {
+            border-left: 4px solid #2e90fa;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(16, 24, 40, 0.4);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+
+        .modal-box {
+            background: #fff;
+            width: 100%;
+            max-width: 480px;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+            animation: modalScale 0.05s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalScale {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: #111;
+        }
+
+        .modal-body {
+            color: #475467;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn-modal {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-modal.cancel {
+            background: #f2f4f7;
+            color: #475467;
+        }
+
+        .btn-modal.confirm {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .btn-modal.danger {
+            background: #d32f2f;
+            color: #fff;
+        }
+
+        .btn-modal.light-orange {
+            background: #FF8A00;
+            color: #fff;
+        }
+
+        .btn-modal.light-orange:hover {
+            background: #E67A00;
+        }
+
+        @media (max-width: 1200px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar-content {
+                border-top: 1px solid var(--border);
+            }
+
+            .main-content {
+                padding: 30px 20px;
+            }
+        }
+
+        /* --- CUSTOM SCROLLBARS --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.08);
+            border-radius: 10px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+    </style>
+
+    <style>
+        ::selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+
+        ::-moz-selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="header-left">
+            <div class="logo-container" onclick="location.reload()">
+                <div class="logo-square">
+                    <img src="../TESTPAD_WEBSITE__files/chitkara.png" alt="CHITKARA">
+                </div>
+                <div class="logo-text">TESTPAD</div>
+            </div>
+            <div class="header-nav">
+                <button class="nav-icon-btn active" title="Dashboard"
+                    onclick="location.href='./teacher-dashboard.html'"><i class="fas fa-th-large"></i></button>
+                <button class="nav-icon-btn" title="Assessments" onclick="scrollToAssessments()"><i
+                        class="fas fa-file-alt"></i></button>
+                <button class="nav-icon-btn" title="Question Pool" onclick="location.href='./questionpool.html'"><i
+                        class="fas fa-layer-group"></i></button>
+                <button class="nav-icon-btn" title="Analytics" onclick="location.href='./livemonitor.html'"><i
+                        class="fas fa-chart-bar"></i></button>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="search-container" style="width: 240px; margin-right: 16px;">
+                <i class="fas fa-search"></i>
+                <input type="text" class="search-input" placeholder="Quick Search..." id="globalSearch">
+            </div>
+            <button class="plus-btn" onclick="createNewExam()" title="Launch New Assessment">
+                <i class="fas fa-plus"></i>
+            </button>
+            <button class="grid-btn" onclick="showToast('View mode updated', 'info')"
+                style="display: flex; align-items: center; justify-content: center;">
+                <img src="../Testpad_pra_files_files/icons8-squared-menu-90.png"
+                    style="width: 24px; height: 24px; opacity: 0.75; transition: all 0.2s;"
+                    onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'">
+            </button>
+            <div class="profile-bubble" onclick="handleLogout()">
+                <div class="user-info">
+                    <div class="user-name" id="userName">OM AGGARWAL</div>
+                    <div class="user-role" style="color: var(--primary);">SUPER ADMIN</div>
+                </div>
+                <div class="avatar" id="userInitial" style="background: transparent; border: none; padding: 0;">
+                    <img src="../LINUX_TEST_CHITKARA_files/user-icon.3d6e2547.svg"
+                        style="width: 100%; height: 100%; border-radius: 50%;">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <main class="main-content" id="assessmentsSection">
+            <div class="content-header">
+                <h2 class="section-title">Assessments <span id="examCount">(0)</span></h2>
+                <div class="bulk-actions" style="margin-left: auto; margin-right: 20px; display: flex; gap: 8px;">
+                    <button class="btn-action primary" style="background:#d32f2f;" onclick="endAllExams()"><i
+                            class="fas fa-stop-circle"></i> END ALL</button>
+                    <button class="btn-action primary" style="background:#FF8A00;" onclick="expireAllExams()"><i
+                            class="fas fa-calendar-times"></i> EXPIRE ALL</button>
+                </div>
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" class="search-input" placeholder="Search your assessments..." id="listSearch"
+                        onkeyup="filterAssessments()">
+                </div>
+            </div>
+
+            <div class="assessments-grid" id="examsList">
+                <div style="text-align: center; padding: 60px;">
+                    <i class="fas fa-spinner fa-spin"
+                        style="font-size: 2rem; color: var(--primary); margin-bottom: 20px;"></i>
+                    <p style="color: #667085;">Synchronizing assessment data...</p>
+                </div>
+            </div>
+
+            <div class="content-header" style="margin-top: 60px;">
+                <h2 class="section-title">All Courses <span id="courseCount">(0)</span></h2>
+                <div class="bulk-actions" style="margin-left: auto; display: flex; gap: 8px;">
+                    <button class="btn-action primary" style="background:#d32f2f;" onclick="expireAllCourses()">
+                        <i class="fas fa-calendar-times"></i> EXPIRE ALL
+                    </button>
+                    <button class="btn-action primary" onclick="location.href='./course-creator.html'">
+                        <i class="fas fa-plus"></i> NEW COURSE
+                    </button>
+                </div>
+            </div>
+
+            <div class="assessments-grid" id="coursesList">
+                <div style="text-align: center; padding: 60px;">
+                    <i class="fas fa-spinner fa-spin"
+                        style="font-size: 2rem; color: var(--primary); margin-bottom: 20px;"></i>
+                    <p style="color: #667085;">Loading curriculum data...</p>
+                </div>
+            </div>
+        </main>
+
+        <aside class="sidebar-content">
+            <h3 class="sidebar-heading">Quick Actions</h3>
+            <div class="side-cards">
+                <div class="quick-link-card red" onclick="location.href='./course-creator.html'">
+                    <div class="ql-title">
+                        <span>New Course</span>
+                        <i class="fas fa-plus-circle" style="font-size:1.2rem;"></i>
+                    </div>
+                    <p class="ql-desc">Build and publish new learning tracks for your students.</p>
+                    <i class="fas fa-graduation-cap ql-icon"></i>
+                </div>
+
+                <div class="quick-link-card blue" onclick="location.href='./questionpool.html'">
+                    <div class="ql-title">
+                        <span>Question Pool</span>
+                        <i class="fas fa-layer-group" style="font-size:1.2rem;"></i>
+                    </div>
+                    <p class="ql-desc">Manage and curate universal questions for all assessments.</p>
+                    <i class="fas fa-database ql-icon"></i>
+                </div>
+
+                <div class="quick-link-card pink" onclick="location.href='./digitallib.html'">
+                    <div class="ql-title">
+                        <span>Library</span>
+                        <i class="fas fa-book-open" style="font-size:1.2rem;"></i>
+                    </div>
+                    <p class="ql-desc">Access educational resources and student reference materials.</p>
+                    <i class="fas fa-university ql-icon"></i>
+                </div>
+
+                <div class="quick-link-card dark" onclick="location.href='./admit-card.html'">
+                    <div class="ql-title">
+                        <span>Admit Cards</span>
+                        <i class="fas fa-id-card" style="font-size:1.2rem;"></i>
+                    </div>
+                    <p class="ql-desc">Generate and manage student admit cards for upcoming exams.</p>
+                    <i class="fas fa-print ql-icon"></i>
+                </div>
+
+
+                <div class="quick-link-card green" style="background-color: #0b5345;"
+                    onclick="location.href='./department-erp.html'">
+                    <div class="ql-title">
+                        <span>Chalkpad Admin</span>
+                        <i class="fas fa-user-shield" style="font-size:1.2rem;"></i>
+                    </div>
+                    <p class="ql-desc">Configure subjects, fees, and education keys natively.</p>
+                    <i class="fas fa-cogs ql-icon"></i>
+                </div>
+
+                <div class="quick-link-card blue" style="background-color: #1a5276;"
+                    onclick="location.href='./dailyattendance.html'">
+                    <div class="ql-title">
+                        <span>Roster Mark</span>
+                        <i class="fas fa-chalkboard-teacher" style="font-size:1.2rem;"></i>
+                    </div>
+                    <p class="ql-desc">Mark daily attendance to auto-throttle 75% Admit rulings.</p>
+                    <i class="fas fa-check-double ql-icon"></i>
+                </div>
+
+                <div class="quick-link-card blue" style="background-color: #6c3483;"
+                    onclick="location.href='./seating-timetable.html'">
+                    <div class="ql-title">
+                        <span>Time Table Generator</span>
+                        <i class="fas fa-calendar-alt" style="font-size:1.2rem;"></i>
+                    </div>
+                    <p class="ql-desc">Generate academic time tables and slot allocation for classes.</p>
+                    <i class="fas fa-th ql-icon"></i>
+                </div>
+
+                <div class="quick-link-card dark" style="background-color: #d35400;"
+                    onclick="alert('Module Loading...')">
+                    <div class="ql-title">
+                        <span>Certificate Portal</span>
+                        <i class="fas fa-certificate" style="font-size:1.2rem;"></i>
+                    </div>
+                    <p class="ql-desc">Upload, verify and issue student character & experience certificates.</p>
+                    <i class="fas fa-stamp ql-icon"></i>
+                </div>
+
+                <div class="quick-link-card orange" onclick="location.href='./seating-timetable.html'">
+                    <div class="ql-title">
+                        <span>Seating Plan</span>
+                        <i class="fas fa-chair" style="font-size:1.2rem;"></i>
+                    </div>
+                    <p class="ql-desc">Algorithmic collision-free room allocation for exams.</p>
+                    <i class="fas fa-users ql-icon"></i>
+                </div>
+
+                <div class="quick-link-card green" onclick="location.href='./sms-gateway.html'">
+                    <div class="ql-title">
+                        <span>SMS & WhatsApp Push</span>
+                        <i class="fab fa-whatsapp" style="font-size:1.2rem;"></i>
+                    </div>
+                    <p class="ql-desc">Push notifications for Admit cards, circulars, and announcements.</p>
+                    <i class="fas fa-paper-plane ql-icon"></i>
+                </div>
+
+                <div class="quick-link-card green" onclick="location.href='./smartqp.html'"
+                    style="background-color: #0d9488;">
+                    <div class="ql-title">
+                        <span>Smart QP AI</span>
+                        <i class="fas fa-brain" style="font-size:1.2rem;"></i>
+                    </div>
+                    <p class="ql-desc">Auto-generate taxonomy-compliant question papers using neural inference.</p>
+                    <i class="fas fa-microchip ql-icon"></i>
+                </div>
+
+                <div class="quick-link-card green" onclick="location.href='./admit-card.html?tab=seating'">
+                    <div class="ql-title">
+                        <span>Seating Plan</span>
+                        <i class="fas fa-th" style="font-size:1.2rem;"></i>
+                    </div>
+                    <p class="ql-desc">Configure and export automated seating arrangements for rooms.</p>
+                    <i class="fas fa-chair ql-icon"></i>
+                </div>
+
+                <div class="quick-link-card orange" onclick="location.href='./livemonitor.html'">
+                    <div class="ql-title">
+                        <span>Live Monitor</span>
+                        <i class="fas fa-video" style="font-size:1.2rem;"></i>
+                    </div>
+                    <p class="ql-desc">Monitor student progress and integrity in real-time sessions.</p>
+                    <i class="fas fa-desktop ql-icon"></i>
+                </div>
+
+                <div class="quick-link-card green" onclick="location.href='./POST-CONTENT.html'">
+                    <div class="ql-title">
+                        <span>Post Content</span>
+                        <i class="fas fa-bullhorn" style="font-size:1.2rem;"></i>
+                    </div>
+                    <p class="ql-desc">Publish official circulars, notices, and result announcements.</p>
+                    <i class="fas fa-newspaper ql-icon"></i>
+                </div>
+
+                <div class="quick-link-card blue" style="background-color: #4B4E6D;"
+                    onclick="location.href='./osm-evaluator.html'">
+                    <div class="ql-title">
+                        <span>On Screen Marking</span>
+                        <i class="fas fa-pen-nib" style="font-size:1.2rem;"></i>
+                    </div>
+                    <p class="ql-desc">Digitally evaluate and annotate scanned answer copies with precision.</p>
+                    <i class="fas fa-file-signature ql-icon"></i>
+                </div>
+
+                <div class="quick-link-card dark" onclick="location.href='./generateqppdf.html'">
+                    <div class="ql-title">
+                        <span>QP Generator</span>
+                        <i class="fas fa-file-pdf" style="font-size:1.2rem;"></i>
+                    </div>
+                    <p class="ql-desc">Generate official university examination papers matching your uploaded template.
+                    </p>
+                    <i class="fas fa-print ql-icon" style="opacity: 0.2;"></i>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Notification Systems -->
+    <div id="toast-container"></div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box">
+            <div class="modal-title" id="modalTitle">Confirmation</div>
+            <div class="modal-body" id="modalBody">Description goes here</div>
+            <div class="modal-footer">
+                <button class="btn-modal cancel" id="modalCancel">Cancel</button>
+                <button class="btn-modal confirm" id="modalConfirm">Proceed</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+
+    <script>
+        if (!auth.isLoggedIn() || !auth.isSuperAdmin()) {
+            window.location.replace('./login.html?role=superadmin');
+        }
+
+        const user = auth.getCurrentUser();
+        let allExams = [];
+
+        function init() {
+            document.getElementById('userName').textContent = user.name || 'SUPER ADMIN';
+            document.getElementById('userInitial').textContent = (user.name || 'T').charAt(0).toUpperCase();
+
+            loadData();
+        }
+
+        function loadData() {
+            allExams = db.getAllExams().filter(e => e.status !== 'expired');
+            renderExams(allExams);
+            document.getElementById('examCount').textContent = `(${allExams.length})`;
+
+            const courses = db.getAllCourses ? db.getAllCourses() : [];
+            renderCourses(courses);
+            document.getElementById('courseCount').textContent = `(${courses.length})`;
+        }
+
+        function renderCourses(courses) {
+            const container = document.getElementById('coursesList');
+            if (courses.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 60px; color: var(--secondary);">
+                        <i class="fas fa-graduation-cap" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.3;"></i>
+                        <p>No courses published yet. Share your knowledge!</p>
+                        <button onclick="location.href='./course-creator.html'" class="btn-action primary" style="margin-top: 20px; height: 44px;">CREATE YOUR FIRST COURSE</button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = courses.map(c => {
+                const status = c.status || 'published';
+                const isDraft = status === 'draft';
+                const isExpired = status === 'expired';
+                return `
+                    <div class="assessment-card ${isDraft ? 'draft-card' : ''}" onclick="location.href='./course-creator.html?id=${c.id}'">
+                        <div class="card-icon-area" style="background: ${isDraft ? '#FEF3F2' : (isExpired ? '#F2F4F7' : '#ECFDF3')}; color: ${isDraft ? '#B42318' : (isExpired ? '#475467' : '#027A48')};">
+                            <i class="fas ${isDraft ? 'fa-pencil-ruler' : 'fa-book-reader'}"></i>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-title" style="font-family:'Outfit'; font-weight:700;">${c.title || 'Untitled Course'}</div>
+                            <div class="card-meta">
+                                <span><i class="far fa-folder"></i> ${c.modules?.length || 0} Modules</span>
+                                <span><i class="far fa-users"></i> ${c.studentCount || 0} Students</span>
+                                <div class="status-pill" style="display:inline-block; background:${isDraft ? '#FEF3F2' : (isExpired ? '#F2F4F7' : '#ECFDF3')}; color:${isDraft ? '#B42318' : (isExpired ? '#475467' : '#12B76A')}; border:1px solid ${isDraft ? '#FCA5A1' : (isExpired ? '#EAECF0' : '#ABEFC6')}; font-size:0.6rem; padding:1px 8px; border-radius:12px; font-weight:800; text-transform:uppercase; margin-left:8px;">${status}</div>
+                            </div>
+                        </div>
+                        <div class="stats-group">
+                            <div class="stat-item">
+                                <span class="stat-value">${c.avgProgress || 0}%</span>
+                                <span class="stat-label">Avg. Completion</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            ${!isExpired ? `<button class="btn-action light-orange" onclick="event.stopPropagation(); expireCourse('${c.id}')" title="Expire Course"><i class="fas fa-calendar-times"></i></button>` : ''}
+                            <button class="btn-action" title="View Students" onclick="event.stopPropagation();"><i class="fas fa-user-friends"></i></button>
+                            <button class="btn-action primary" style="background:${isDraft ? '#D96C33' : '#12B76A'};" onclick="event.stopPropagation(); location.href='./course-creator.html?id=${c.id}'">
+                                ${isDraft ? 'CONTINUE DESIGN' : 'EDIT CURRICULUM'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderExams(exams) {
+            const container = document.getElementById('examsList');
+            if (exams.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 60px; color: var(--secondary);">
+                        <i class="fas fa-folder-open" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.3;"></i>
+                        <p>No assessments found in your repository.</p>
+                        <button onclick="createNewExam()" class="btn-action primary" style="margin-top: 20px; height: 44px;">LAUNCH NEW ASSESSMENT</button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = exams.map(exam => {
+                const status = exam.status || 'draft';
+                const date = new Date(exam.createdAt || Date.now()).toLocaleDateString();
+                const attempts = db.getExamAttempts(exam.id) || [];
+                const participation = attempts.length;
+                const submitted = attempts.filter(a => a.status === 'submitted').length;
+
+                const startDateStr = exam.scheduledDate ? new Date(exam.scheduledDate).toLocaleDateString() : 'Anytime';
+                const startTimeStr = exam.scheduledTime || '';
+                const endDateStr = exam.scheduledEndDate ? new Date(exam.scheduledEndDate).toLocaleDateString() : 'No Limit';
+                const endTimeStr = exam.scheduledEndTime || '';
+
+                const marks = exam.totalMarks || 0;
+                const sectionsCount = exam.sections ? exam.sections.length : 0;
+
+                let questionsCount = 0;
+                if (exam.sections) {
+                    exam.sections.forEach(sec => questionsCount += (sec.questions ? sec.questions.length : 0));
+                } else if (exam.questions) {
+                    questionsCount = exam.questions.length;
+                }
+
+                return `
+                    <div class="assessment-card" onclick="openAssessment('${exam.id}')">
+                        <div class="card-icon-area">
+                            <i class="fas fa-scroll"></i>
+                        </div>
+                        <div class="card-body" style="min-width: 280px; flex: 1;">
+                            <div class="card-title">${exam.title} <span style="font-family:'JetBrains Mono'; color:var(--primary); font-size:0.75rem; font-weight:800; background:var(--primary-soft); padding:2px 6px; border-radius:4px; margin-left:8px; border: 1px solid #FDA29B;">#${exam.testId}</span></div>
+                            <div class="card-meta" style="margin-top: 8px; display: flex; flex-direction: column; gap: 6px; font-size: 0.8rem;">
+                                <div><span class="status-pill ${status}" style="margin-right: 8px;">${status}</span></div>
+                                <div style="display:flex; flex-wrap:wrap; gap: 12px; margin-top: 4px; color:#475569;">
+                                    <span><i class="far fa-calendar-plus" style="color:#10b981; margin-right:4px;"></i> <strong>Start:</strong> ${startDateStr} ${startTimeStr}</span>
+                                    <span><i class="far fa-calendar-check" style="color:#ef4444; margin-right:4px;"></i> <strong>End:</strong> ${endDateStr} ${endTimeStr}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stats-group" style="padding: 0 16px; border-left: none; gap: 20px;">
+                            <div class="stat-item">
+                                <span class="stat-value" style="font-size:1.1rem; color:#0f172a;">${marks}</span>
+                                <span class="stat-label">Marks</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" style="font-size:1.1rem; color:#0f172a;">${sectionsCount}</span>
+                                <span class="stat-label">Sections</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" style="font-size:1.1rem; color:#0f172a;">${questionsCount}</span>
+                                <span class="stat-label">Qns</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" style="font-size:1.1rem; color:#0f172a;">${exam.duration}m</span>
+                                <span class="stat-label">Time</span>
+                            </div>
+                        </div>
+
+                        <div class="stats-group" style="padding: 0 24px; gap: 20px; border-right: none;">
+                            <div class="stat-item">
+                                <span class="stat-value" style="font-size:1.1rem;">${participation}</span>
+                                <span class="stat-label">Joins</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" style="font-size:1.1rem;">${submitted}</span>
+                                <span class="stat-label">Done</span>
+                            </div>
+                        </div>
+
+                        <div class="card-actions">
+                            <button class="btn-action" onclick="event.stopPropagation(); editExam('${exam.id}')" title="Edit Structure"><i class="fas fa-edit"></i></button>
+                            <button class="btn-action" onclick="event.stopPropagation(); downloadExamPDF('${exam.id}')" title="Download Test PDF"><i class="fas fa-file-pdf"></i></button>
+                            <button class="btn-action" onclick="event.stopPropagation(); window.location.href='./livemonitor.html?examId=${exam.id}'" title="Live Monitor"><i class="fas fa-broadcast-tower"></i></button>
+                            <button class="btn-action light-orange" onclick="event.stopPropagation(); expireExam('${exam.id}')" title="Expire Test (Remove from student dashboards)"><i class="fas fa-calendar-times"></i> EXPIRE</button>
+                            <button class="btn-action light-orange" onclick="event.stopPropagation(); endExam('${exam.id}')" title="End Test Right Now"><i class="fas fa-stop-circle"></i> END TEST</button>
+                            <button class="btn-action light-orange" onclick="event.stopPropagation(); window.location.href='./exam-evaluation.html?examId=${exam.id}'">EVALUATE <i class="fas fa-clipboard-check"></i></button>
+                            <button class="btn-action light-orange" onclick="event.stopPropagation(); openAssessment('${exam.id}')">REPORT <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // --- UI ACTIONS ---
+        function scrollToAssessments() {
+            document.getElementById('assessmentsSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function createNewExam() {
+            location.href = './exam-creator.html';
+        }
+
+        function openAssessment(id) {
+            location.href = `./studentreports.html?examId=${id}`;
+        }
+
+        function editExam(id) {
+            location.href = `./exam-creator.html?id=${id}`;
+        }
+
+        async function expireExam(id) {
+            const ok = await showConfirm('Expire Assessment?', 'This will remove the test from the student dashboard and quicklinks, but it will stay here in your dashboard.', 'Expire Test', 'light-orange');
+            if (ok) {
+                db.updateExam(id, { status: 'expired' });
+                showToast('Assessment expired.', 'success');
+                loadData();
+            }
+        }
+
+        async function expireCourse(id) {
+            const ok = await showConfirm('Expire Course?', 'This will permanently remove the course from your dashboard and all student dashboards. It will only be visible to Superadmins.', 'Expire Course', 'light-orange');
+            if (ok) {
+                if (window.db && window.db.updateCourse) {
+                    window.db.updateCourse(id, { status: 'expired' });
+                }
+                showToast('Course expired successfully.', 'success');
+                loadData();
+            }
+        }
+
+        async function expireAllCourses() {
+            const ok = await showConfirm('Expire ALL Courses?', 'This will permanently expire ALL courses across the system. This cannot be undone.', 'Expire All', 'danger');
+            if (ok) {
+                const courses = db.getAllCourses ? db.getAllCourses().filter(c => c.status !== 'expired') : [];
+                courses.forEach(c => {
+                    db.updateCourse(c.id, { status: 'expired' });
+                });
+                showToast(`Successfully expired ${courses.length} courses.`, 'success');
+                loadData();
+            }
+        }
+
+        async function endExam(id) {
+            const ok = await showConfirm('End Test Right Now?', 'This will end the test immediately regardless of the scheduled timeframe.', 'End Test', 'danger');
+            if (ok) {
+                db.updateExam(id, { status: 'ended', scheduledEndDate: new Date().toISOString() });
+
+                // Submit any active attempts
+                const attempts = db.getExamAttempts(id) || [];
+                attempts.forEach(a => {
+                    if (a.status === 'in-progress' || a.status === 'started' || a.status === 'ongoing') {
+                        db.submitAttempt(a.id);
+                    }
+                });
+
+                showToast('Test has been ended.', 'success');
+                loadData();
+            }
+        }
+
+        async function expireAllExams() {
+            if (allExams.length === 0) return showToast('No assessments to expire.', 'info');
+            const ok = await showConfirm('Expire All Assessments?', `Are you sure you want to expire ALL ${allExams.length} tests? This will remove them from all student dashboards.`, 'Expire All', 'light-orange');
+            if (ok) {
+                allExams.forEach(exam => {
+                    db.updateExam(exam.id, { status: 'expired' });
+                });
+                showToast(`Expired ${allExams.length} assessments.`, 'success');
+                loadData();
+            }
+        }
+
+        async function endAllExams() {
+            if (allExams.length === 0) return showToast('No assessments to end.', 'info');
+            const ok = await showConfirm('End All Assessments?', `Are you sure you want to forcibly end ALL ${allExams.length} tests right now?`, 'End All', 'danger');
+            if (ok) {
+                allExams.forEach(exam => {
+                    db.updateExam(exam.id, { status: 'ended', scheduledEndDate: new Date().toISOString() });
+                    // Submit active attempts
+                    const attempts = db.getExamAttempts(exam.id) || [];
+                    attempts.forEach(a => {
+                        if (a.status === 'in-progress' || a.status === 'started' || a.status === 'ongoing') {
+                            db.submitAttempt(a.id);
+                        }
+                    });
+                });
+                showToast(`Ended ${allExams.length} assessments.`, 'success');
+                loadData();
+            }
+        }
+
+        function filterAssessments() {
+            const query = document.getElementById('listSearch').value.toLowerCase();
+            const filtered = allExams.filter(e => e.title.toLowerCase().includes(query) || e.testId.toLowerCase().includes(query));
+            renderExams(filtered);
+        }
+
+        // --- VECTOR QR CODE GENERATOR (Offline, zero-network, crisp vector SVG) ---
+        function getQrCodeSvg(size = 80) {
+            return `
+                <svg width="${size}" height="${size}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+                    <rect width="100" height="100" fill="#ffffff"/>
+                    <rect x="6" y="6" width="28" height="28" fill="#000000"/>
+                    <rect x="10" y="10" width="20" height="20" fill="#ffffff"/>
+                    <rect x="14" y="14" width="12" height="12" fill="#000000"/>
+                    <rect x="66" y="6" width="28" height="28" fill="#000000"/>
+                    <rect x="70" y="10" width="20" height="20" fill="#ffffff"/>
+                    <rect x="74" y="14" width="12" height="12" fill="#000000"/>
+                    <rect x="6" y="66" width="28" height="28" fill="#000000"/>
+                    <rect x="10" y="70" width="20" height="20" fill="#ffffff"/>
+                    <rect x="14" y="74" width="12" height="12" fill="#000000"/>
+                    <rect x="38" y="8" width="4" height="4" fill="#000000"/>
+                    <rect x="46" y="8" width="4" height="4" fill="#000000"/>
+                    <rect x="54" y="8" width="4" height="4" fill="#000000"/>
+                    <rect x="8" y="38" width="4" height="4" fill="#000000"/>
+                    <rect x="8" y="46" width="4" height="4" fill="#000000"/>
+                    <rect x="8" y="54" width="4" height="4" fill="#000000"/>
+                    <rect x="38" y="20" width="4" height="8" fill="#000000"/>
+                    <rect x="48" y="24" width="8" height="4" fill="#000000"/>
+                    <rect x="40" y="36" width="8" height="8" fill="#000000"/>
+                    <rect x="52" y="36" width="8" height="4" fill="#000000"/>
+                    <rect x="64" y="36" width="8" height="8" fill="#000000"/>
+                    <rect x="76" y="36" width="4" height="4" fill="#000000"/>
+                    <rect x="84" y="36" width="8" height="8" fill="#000000"/>
+                    <rect x="20" y="40" width="8" height="8" fill="#000000"/>
+                    <rect x="32" y="48" width="8" height="4" fill="#000000"/>
+                    <rect x="44" y="48" width="4" height="8" fill="#000000"/>
+                    <rect x="52" y="44" width="4" height="8" fill="#000000"/>
+                    <rect x="60" y="48" width="8" height="4" fill="#000000"/>
+                    <rect x="72" y="44" width="8" height="8" fill="#000000"/>
+                    <rect x="84" y="48" width="8" height="4" fill="#000000"/>
+                </svg>
+            `;
+        }
+
+        function downloadExamPDF(examId) {
+            let exam = null;
+            if (typeof allExams !== 'undefined' && Array.isArray(allExams)) {
+                exam = allExams.find(e => e.id === examId || e.testId === examId);
+            }
+            if (!exam && window.db && typeof db.getExamById === 'function') {
+                exam = db.getExamById(examId);
+            }
+            if (!exam && window.db && typeof db.getExamByTestId === 'function') {
+                exam = db.getExamByTestId(examId);
+            }
+            if (!exam) {
+                try {
+                    const localList = JSON.parse(localStorage.getItem('TESTPAD_exams')) || [];
+                    exam = localList.find(e => e.id === examId || e.testId === examId);
+                } catch (e) { }
+            }
+
+            if (!exam) {
+                showToast('Assessment details not found for PDF export.', 'error');
+                return;
+            }
+
+            let questions = [];
+            if (Array.isArray(exam.questions) && exam.questions.length > 0) {
+                questions = [...exam.questions];
+            } else if (Array.isArray(exam.sections) && exam.sections.length > 0) {
+                exam.sections.forEach(sec => {
+                    const sName = typeof sec === 'string' ? sec : (sec.name || sec.title || 'General');
+                    const secQs = sec.questions || sec.questionList || [];
+                    if (Array.isArray(secQs)) {
+                        secQs.forEach(q => {
+                            questions.push({ ...q, section: q.section || sName });
+                        });
+                    }
+                });
+            }
+
+            const totalMarksCalc = exam.totalMarks || (questions.length > 0 ? questions.reduce((acc, q) => acc + (parseFloat(q.marks) || 1), 0) : 0);
+            const durationCalc = exam.duration || 180;
+            const courseCalc = exam.course || 'B.E. Computer Science & Engineering';
+            const testIdBadge = exam.testId ? `${exam.testId}` : 'N/A';
+            const examTitle = exam.title || 'Examination Assessment';
+
+            const container = document.createElement('div');
+            container.style.position = 'absolute';
+            container.style.left = '0px';
+            container.style.top = '0px';
+            container.style.width = '794px';
+            container.style.minHeight = '1000px';
+            container.style.padding = '42px 48px';
+            container.style.fontFamily = '"Times New Roman", Times, "Liberation Serif", serif';
+            container.style.color = '#000000';
+            container.style.background = '#ffffff';
+            container.style.zIndex = '999999';
+            container.style.opacity = '1';
+            container.style.pointerEvents = 'none';
+            container.style.boxSizing = 'border-box';
+            container.style.lineHeight = '1.45';
+
+            let htmlContent = `
+                <div style="border-bottom: 2.5px solid #000; padding-bottom: 14px; margin-bottom: 22px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <div style="width: 76px; height: 76px;">${getQrCodeSvg(72)}</div>
+                        <div style="text-align: center; flex: 1; padding: 0 16px;">
+                            <h1 style="margin: 0; font-size: 22px; font-weight: 800; text-transform: uppercase;">CHITKARA UNIVERSITY, PUNJAB</h1>
+                            <div style="font-size: 13px; font-weight: 600; text-transform: uppercase; color: #333;">Office of the Controller of Examinations</div>
+                            <h2 style="margin: 6px 0 0 0; font-size: 17px; font-weight: 700;">${examTitle}</h2>
+                        </div>
+                        <div style="width: 76px; text-align: right; font-size: 11px; font-weight: 700;">
+                            <div>QP CODE</div>
+                            <div style="font-size: 14px;">#${testIdBadge}</div>
+                        </div>
+                    </div>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13.5px;">
+                        <tr>
+                            <td style="border: 1.5px solid #000; padding: 6px 10px; width: 50%;"><strong>Course:</strong> ${courseCalc}</td>
+                            <td style="border: 1.5px solid #000; padding: 6px 10px; width: 50%;"><strong>Paper ID:</strong> #${testIdBadge}</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1.5px solid #000; padding: 6px 10px;"><strong>Time Allowed:</strong> ${durationCalc} Mins</td>
+                            <td style="border: 1.5px solid #000; padding: 6px 10px;"><strong>Max Marks:</strong> ${totalMarksCalc}</td>
+                        </tr>
+                    </table>
+                </div>
+            `;
+
+            if (questions.length > 0) {
+                questions.forEach((q, i) => {
+                    const qText = (q.title || q.question || q.text || q.questionText || q.problem || '').trim();
+                    const qMarks = q.marks || 1;
+                    htmlContent += `
+                    <div style="margin-bottom: 20px; page-break-inside: avoid; display: flex; justify-content: space-between; border-bottom: 1px dashed #e2e8f0; padding-bottom: 14px;">
+                        <div style="flex: 1; padding-right: 18px;">
+                            <div style="display: flex; gap: 10px; align-items: baseline;">
+                                <strong>Q${i + 1}.</strong>
+                                <div style="flex: 1; font-size: 14.5px;">
+                                    <div style="text-align: justify; margin-bottom: 8px;">${qText}</div>
+                    `;
+
+                    if (q.type === 'coding' || q.prefilledCode || q.code || (q.testCases && q.testCases.length > 0)) {
+                        const sCode = q.prefilledCode || q.code;
+                        if (sCode) {
+                            htmlContent += `<pre style="background: #f8f9fa; border: 1px solid #e9ecef; padding: 8px 12px; font-family: monospace; font-size: 12px; white-space: pre-wrap;">${sCode.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>`;
+                        }
+                        if (q.testCases && q.testCases.length > 0) {
+                            htmlContent += `<ul style="margin: 5px 0; padding-left: 20px; font-size: 12px;">`;
+                            q.testCases.forEach((tc, idx) => {
+                                htmlContent += `<li>Case ${idx + 1}: Input: <code>${tc.input || ''}</code> | Output: <code>${tc.output || ''}</code></li>`;
+                            });
+                            htmlContent += `</ul>`;
+                        }
+                    } else if (q.options && Array.isArray(q.options) && q.options.length > 0) {
+                        htmlContent += `<div style="margin-top: 6px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 13.5px;">`;
+                        q.options.forEach((opt, optIdx) => {
+                            const label = String.fromCharCode(65 + optIdx);
+                            const optText = typeof opt === 'object' ? (opt.text || opt.label || '') : String(opt);
+                            htmlContent += `<div><strong>(${label})</strong> ${optText}</div>`;
+                        });
+                        htmlContent += `</div>`;
+                    }
+
+                    if (q.image || q.diag || q.diagram) {
+                        const img = q.diagram || q.image || q.diag;
+                        if (typeof img === 'string' && img.trim().startsWith('<svg')) {
+                            htmlContent += `<div style="margin-top: 10px; text-align: center;">${img}</div>`;
+                        } else if (typeof img === 'string') {
+                            htmlContent += `<div style="margin-top: 10px; text-align: center;"><img src="${img}" style="max-width: 80%; max-height: 200px; border: 1px solid #ddd;"></div>`;
+                        }
+                    }
+
+                    htmlContent += `
+                                </div>
+                            </div>
+                        </div>
+                        <div style="font-weight: bold; width: 40px; text-align: right;">[${qMarks}]</div>
+                    </div>`;
+                });
+            } else {
+                htmlContent += `<div style="text-align: center; color: #666; font-style: italic; padding: 30px;">No questions found in this assessment.</div>`;
+            }
+
+            htmlContent += `
+                <div style="margin-top: 48px; border-top: 1.5px solid #000; padding-top: 14px; text-align: right; font-weight: bold; page-break-inside: avoid;">
+                    Controller of Examination<br>
+                    <span style="font-size: 12px; font-weight: normal;">(Authorized Signatory)</span>
+                </div>
+            `;
+
+            container.innerHTML = htmlContent;
+            document.body.appendChild(container);
+
+            const opt = {
+                margin: [10, 12, 12, 12],
+                filename: `${(examTitle || 'Exam').replace(/[^a-zA-Z0-9_-]/g, '_')}_${testIdBadge}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, allowTaint: false, scrollY: 0, scrollX: 0, windowWidth: 794 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            showToast(`Generating PDF for "${examTitle}"...`, 'info');
+
+            setTimeout(() => {
+                html2pdf().set(opt).from(container).save().then(() => {
+                    showToast('PDF downloaded successfully!', 'success');
+                }).catch(err => {
+                    console.error('PDF export error:', err);
+                    showToast('PDF generation failed', 'error');
+                }).finally(() => {
+                    if (container && container.parentNode) {
+                        container.parentNode.removeChild(container);
+                    }
+                });
+            }, 250);
+        }
+
+        // --- MESSAGE SYSTEM ---
+        function showToast(msg, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            let icon = type === 'success' ? 'check-circle' : (type === 'error' ? 'exclamation-circle' : 'info-circle');
+            toast.innerHTML = `<i class="fas fa-${icon}"></i><span>${msg}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) reverse forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function showConfirm(title, body, confirmText, buttonType = 'confirm') {
+            return new Promise(resolve => {
+                const overlay = document.getElementById('modalOverlay');
+                const titleEl = document.getElementById('modalTitle');
+                const bodyEl = document.getElementById('modalBody');
+                const cancelBtn = document.getElementById('modalCancel');
+                const confirmBtn = document.getElementById('modalConfirm');
+
+                titleEl.textContent = title;
+                bodyEl.textContent = body;
+                confirmBtn.textContent = confirmText;
+
+                if (buttonType === true) buttonType = 'danger';
+                else if (buttonType === false) buttonType = 'confirm';
+
+                confirmBtn.className = 'btn-modal ' + buttonType;
+
+                overlay.style.display = 'flex';
+
+                cancelBtn.onclick = () => { overlay.style.display = 'none'; resolve(false); };
+                confirmBtn.onclick = () => { overlay.style.display = 'none'; resolve(true); };
+            });
+        }
+
+        async function handleLogout() {
+            const ok = await showConfirm('Sign Out?', 'Are you sure you want to exit the Admin Portal? Unsaved changes in any active creator sessions may be lost.', 'Log Out', 'danger');
+            if (ok) {
+                auth.logout();
+                location.href = '../index.html';
+            }
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

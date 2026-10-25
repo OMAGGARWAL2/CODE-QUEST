@@ -1,0 +1,2180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&family=Hind:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="../logo.jpg">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.js"></script>
+    <script src="../js/theme-engine.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+    <style>
+        :root {
+            --primary: #df5a22;
+            --primary-dark: #c54814;
+            --primary-blue: #1E40AF;
+            --accent: #e67e22;
+            --text-main: #101828;
+            --text-secondary: #475467;
+            --text-light: #777777;
+            --border: #EAECF0;
+            --bg: #FFFFFF;
+            --white: #FFFFFF;
+            --success: #12B76A;
+            --warning: #F79009;
+            --error: #F04438;
+            --shadow-premium: 0 10px 40px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind', sans-serif;
+            scrollbar-width: thin;
+            scrollbar-color: #94A3B8 #F8FAFC;
+        }
+
+        /* Custom Sleek Thin Grey Scrollbars - Globally Applied */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #F8FAFC;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #94A3B8;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748B;
+        }
+
+        body,
+        button,
+        input,
+        select,
+        textarea {
+            font-family: 'Hind', sans-serif;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            font-size: 16px;
+            font-weight: 400;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* --- HEADER --- */
+        .site-header {
+            height: 90px;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 90px;
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .logo-box:hover {
+            opacity: 0.85;
+        }
+
+        .logo-icon {
+            height: 56px;
+            background: transparent;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-icon img,
+        .logo-box img {
+            height: 56px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            color: #555;
+        }
+
+        .icon-btn-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            border-radius: 10px;
+            transition: background 0.15s ease-in-out;
+            cursor: pointer;
+        }
+
+        .icon-btn-box img {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+        }
+
+        .icon-btn-box:hover {
+            background-color: #f2f2f2;
+        }
+
+        .icon-btn-box.active {
+            background-color: #fff5f0;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .plus-btn {
+            width: 52px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff5f0;
+            color: var(--primary);
+            font-size: 1.4rem;
+            cursor: pointer;
+            border-left: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+
+        .plus-btn:hover {
+            background: #ffece5;
+        }
+
+        .grid-icon {
+            color: #555;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .grid-icon img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .grid-icon:hover {
+            background: #f0f0f0;
+        }
+
+        .profile-container {
+            position: relative;
+        }
+
+        .profile-stack {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 30px;
+            transition: background 0.2s;
+        }
+
+        .profile-stack:hover {
+            background: #f8f8f8;
+        }
+
+        .profile-text {
+            text-align: right;
+            line-height: 1.2;
+        }
+
+        .profile-name {
+            display: block;
+            font-weight: 600;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            color: #444;
+        }
+
+        .profile-role {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .avatar-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar-circle img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+        }
+
+        .profile-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 220px;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-premium);
+            margin-top: 10px;
+            padding: 10px;
+            display: none;
+            z-index: 2000;
+            border: 1px solid #eee;
+            animation: fadeInDown 0.2s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .menu-item:hover {
+            background: #f8f8f8;
+            color: var(--primary);
+        }
+
+        .menu-item.logout {
+            color: #d32f2f;
+        }
+
+        .menu-item.logout:hover {
+            background: #fff5f5;
+        }
+
+        /* --- TOOLTIPS --- */
+        [data-tooltip] {
+            position: relative;
+        }
+
+        [data-tooltip]:hover::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000000;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 500;
+            font-family: 'Hind', sans-serif;
+            white-space: nowrap;
+            z-index: 10000;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+            pointer-events: none;
+            line-height: 1.25;
+        }
+
+        [data-tooltip]:hover::after {
+            content: '';
+            position: absolute;
+            bottom: calc(100% + 2px);
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px 8px 0 8px;
+            border-style: solid;
+            border-color: #000000 transparent transparent transparent;
+            z-index: 10000;
+            pointer-events: none;
+        }
+
+        .sidebar-profile-wrapper {
+            text-align: center;
+            width: 100%;
+        }
+
+        .large-avatar {
+            width: 124px;
+            height: 124px;
+            background: #D9622D;
+            color: #ffffff;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.8rem;
+            font-weight: 600;
+            font-family: 'Hind', sans-serif;
+            border: none;
+            box-shadow: 0 6px 18px rgba(217, 98, 45, 0.28);
+        }
+
+        .side-profile-name {
+            font-family: 'Hind', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #101828;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            letter-spacing: 0.02em;
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        .sidebar-section {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #EAECF0;
+            text-align: left;
+        }
+
+        .sidebar-section h3 {
+            font-size: 1.45rem;
+            font-weight: 600;
+            color: #101828;
+            margin-bottom: 20px;
+            padding-bottom: 0;
+            border-bottom: none;
+            font-family: 'Hind', sans-serif;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            font-size: 1.25rem;
+            line-height: 1.6;
+        }
+
+        .sidebar-item label {
+            font-size: 1.25rem;
+            color: #667085;
+            font-weight: 400;
+            width: 190px;
+            flex-shrink: 0;
+            font-family: 'Hind', sans-serif;
+        }
+
+        .sidebar-item span {
+            font-size: 1.25rem;
+            color: #101828;
+            font-weight: 500;
+            font-family: 'Hind', sans-serif;
+            word-break: break-all;
+        }
+
+        /* Layout Main - Full bleed with independent left & right scrolling */
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+            height: calc(100vh - 90px);
+            overflow: hidden;
+            min-height: 0;
+            margin: 0;
+            padding: 0;
+            gap: 0;
+            background: var(--bg);
+            box-sizing: border-box;
+        }
+
+        /* Left Sidebar (Independent scrollbar, directly on white background) */
+        aside {
+            width: 540px;
+            min-width: 500px;
+            max-width: 540px;
+            flex-shrink: 0;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            border-right: 1px solid var(--border);
+            padding: 44px 36px;
+            box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: #94A3B8 #F8FAFC;
+        }
+
+        /* Main Content (Independent scrollbar with smooth padding) */
+        #sectionsContainer,
+        .main-content {
+            flex: 1 1 0;
+            min-width: 0;
+            min-height: 0;
+            height: auto;
+            overflow-y: auto !important;
+            overflow-x: hidden;
+            display: block;
+            box-sizing: border-box;
+            padding: 40px 48px 100px;
+            background: #ffffff;
+            scrollbar-gutter: stable;
+            scrollbar-width: thin;
+            scrollbar-color: #94A3B8 #F8FAFC;
+        }
+
+        .section-card {
+            background: #ffffff;
+            border-radius: 14px;
+            border: 1.5px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+        }
+
+        .section-header {
+            padding: 22px 32px;
+            background: #ffffff;
+            border-bottom: 1.5px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--text-main);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .section-header:hover {
+            background: #FAFAFA;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 1.45rem;
+            font-weight: 600;
+            color: #101828;
+        }
+
+        .section-title i {
+            font-size: 1.2rem;
+            color: #475467;
+            width: 20px;
+        }
+
+        .section-score {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #101828;
+            letter-spacing: 0.01em;
+        }
+
+        /* Table - Fixed layout that expands 100% full width when maximized */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        th {
+            background: #F9FAFB;
+            padding: 18px 24px;
+            text-align: left;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #344054;
+            border-bottom: 1.5px solid var(--border);
+        }
+
+        th:not(:first-child) {
+            border-left: 1px solid #EAECF0;
+        }
+
+        td {
+            padding: 18px 24px;
+            font-size: 1.25rem;
+            font-weight: 400;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-main);
+            vertical-align: middle;
+        }
+
+        th:first-child,
+        td:first-child {
+            width: 55px;
+            text-align: center;
+            padding-left: 12px;
+            padding-right: 8px;
+            color: #667085;
+            font-weight: 400;
+        }
+
+        th:nth-child(2),
+        td:nth-child(2) {
+            width: 32%;
+        }
+
+        th:nth-child(3),
+        td:nth-child(3) {
+            width: 15%;
+        }
+
+        th:nth-child(4),
+        td:nth-child(4) {
+            width: 15%;
+        }
+
+        th:nth-child(5),
+        td:nth-child(5) {
+            width: 34%;
+        }
+
+        .q-name {
+            font-weight: 500;
+            font-size: 1.25rem;
+            color: var(--text-main);
+            word-break: break-word;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .badge {
+            padding: 5px 14px;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            font-weight: 500;
+            text-transform: lowercase;
+            border: 1px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .badge-success {
+            background: #ECFDF3;
+            color: #027A48;
+            border-color: #ABEFC6;
+        }
+
+        .badge-error {
+            background: #FEF3F2;
+            color: #B42318;
+            border-color: #FECDCA;
+        }
+
+        .badge-warning {
+            background: #FFF9F2;
+            color: #B45118;
+            border-color: #FEDFCA;
+        }
+
+        .btn-action {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: 1px solid #D0D5DD;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #475467;
+            background: #fff;
+            font-size: 0.85rem;
+            transition: all 0.15s ease;
+            flex-shrink: 0;
+        }
+
+        .btn-action:hover {
+            background: #f2f4f7;
+            color: #101828;
+            border-color: #98A2B3;
+        }
+
+        .btn-view-attempt {
+            width: 34px;
+            height: 34px;
+            border-radius: 6px;
+            border: 1px solid #D0D5DD;
+            background: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #667085;
+            font-size: 1.05rem;
+            transition: all 0.15s ease;
+            flex-shrink: 0;
+        }
+
+        .btn-view-attempt:hover {
+            background: #f2f4f7;
+            color: var(--primary);
+            border-color: #98A2B3;
+        }
+
+        /* Inner Attempt Table Expansion */
+        .attempts-sub-row {
+            background: #FAFAFA !important;
+        }
+
+        .attempts-sub-row>td {
+            padding: 20px 32px 24px 32px !important;
+            background: #FAFAFA !important;
+            border-bottom: 1.5px solid #EAECF0 !important;
+        }
+
+        .inner-table-container {
+            width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .inner-table {
+            width: 100% !important;
+            background: #ffffff !important;
+            border-radius: 8px !important;
+            border: 1px solid #EAECF0 !important;
+            overflow: hidden !important;
+            border-collapse: collapse !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+            table-layout: auto !important;
+        }
+
+        .inner-table th.inner-th {
+            background: #F2F4F7 !important;
+            padding: 12px 18px !important;
+            text-align: center !important;
+            font-weight: 700 !important;
+            color: #475467 !important;
+            font-size: 1.05rem !important;
+            border: none !important;
+            border-bottom: 1px solid #EAECF0 !important;
+            width: auto !important;
+        }
+
+        .inner-table td.inner-td {
+            padding: 14px 18px !important;
+            text-align: center !important;
+            background: #ffffff !important;
+            border: none !important;
+            border-top: 1px solid #F2F4F7 !important;
+            font-size: 1.05rem !important;
+            color: #344054 !important;
+            width: auto !important;
+        }
+
+        /* Modal Preview */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: var(--white);
+            width: 96%;
+            max-width: 1560px;
+            height: 92vh;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            padding: 20px 32px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-body {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .preview-left {
+            width: 45%;
+            padding: 32px;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #64748B #F1F5F9;
+        }
+
+        .preview-right {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+            background: #ffffff;
+            scrollbar-width: thin;
+            scrollbar-color: #64748B #F1F5F9;
+        }
+
+        .tri-orange-line {
+            display: flex;
+            height: 8px;
+            width: 290px;
+            border-radius: 0px;
+            overflow: hidden;
+            margin: 12px 0 24px 0;
+        }
+
+        .tri-orange-line div:nth-child(1) { flex: 1; background: #DE6834; opacity: 0.2; }
+        .tri-orange-line div:nth-child(2) { flex: 1; background: #DE6834; opacity: 0.5; }
+        .tri-orange-line div:nth-child(3) { flex: 1; background: #DE6834; opacity: 1.0; }
+
+        /* Ace Editor & Code Typography */
+        .ace_editor,
+        .ace_editor * {
+            font-family: Consolas, 'Monaco', 'Courier New', monospace !important;
+            font-size: 20px !important;
+            line-height: 1.5 !important;
+        }
+
+        .ace_gutter,
+        .ace_gutter-cell {
+            font-family: Consolas, 'Monaco', 'Courier New', monospace !important;
+            font-size: 19px !important;
+            background: #f9f9f9 !important;
+            color: #444 !important;
+        }
+
+        /* Keywords in Blue */
+        .ace_keyword,
+        .ace_storage,
+        .ace_storage.ace_type,
+        .ace_meta.ace_tag {
+            color: #0000ff !important;
+            font-weight: 600 !important;
+        }
+
+        .preview-left pre,
+        .preview-left code {
+            font-family: Consolas, 'Monaco', 'Courier New', monospace !important;
+            font-size: 1.45rem !important;
+            line-height: 1.65 !important;
+        }
+
+        .btn-action {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            background: #fff;
+        }
+
+        .btn-action:hover {
+            background: var(--bg);
+            color: var(--text-main);
+        }
+
+        .btn-view-attempt {
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #475467;
+        }
+
+        /* --- TOASTS --- */
+        #toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 99999;
+        }
+
+        .toast {
+            min-width: 280px;
+            max-width: 400px;
+            background: #333;
+            color: #fff;
+            padding: 16px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-premium);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        .toast.success {
+            border-left: 4px solid #4caf50;
+        }
+
+        .toast.error {
+            border-left: 4px solid #f44336;
+        }
+
+        .toast.info {
+            border-left: 4px solid var(--primary);
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* --- CONFIRM MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100000;
+        }
+
+        .modal-box {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            animation: modalScale 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalScale {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #111;
+        }
+
+        .modal-body-text {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn-modal {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-modal.cancel {
+            background: #f0f0f0;
+            color: #555;
+        }
+
+        .btn-modal.confirm {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-modal.danger {
+            background: #d32f2f;
+            color: white;
+        }
+
+        .btn-modal:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        ::selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+
+        ::-moz-selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="site-header" style="position: relative;">
+        <div class="header-left">
+            <div class="logo-box" onclick="window.location.reload();" style="cursor: pointer;" title="Refresh Page">
+                <img src="../Tests _ Chitkara_files/chitkara.a1beb7f0.png" style="height: 56px; border-radius: 6px;"
+                    alt="Chitkara Logo">
+            </div>
+            <nav class="nav-icons">
+                <div class="icon-btn-box" data-tooltip="Dashboard"
+                    onclick="location.href='./student-dashboard.html'"
+                    style="width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <img src="../TESTPAD_WEBSITE__files/menu-1.svg" alt="Dashboard"
+                        style="width: 38px; height: 38px;" />
+                </div>
+                <div class="icon-btn-box" data-tooltip="Courses" onclick="location.href='./COURSETRAY.html'"
+                    style="width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <img src="../TESTPAD_WEBSITE__files/folder-2.svg" alt="Courses"
+                        style="width: 38px; height: 38px;" />
+                </div>
+                <div class="icon-btn-box" data-tooltip="Performance Analytics"
+                    onclick="location.href='./studentreports.html'"
+                    style="width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <img src="../TESTPAD_WEBSITE__files/statistics.svg" alt="Performance"
+                        style="width: 38px; height: 38px;" />
+                </div>
+            </nav>
+        </div>
+
+        <!-- Join Assessment Hidden as requested -->
+        <div class="header-center" style="display: none;">
+            <button id="headerToggleBtn" onclick="toggleTopJoinPopup(event)">
+                <span>Join Assessment</span>
+            </button>
+        </div>
+
+        <div class="header-right" style="position: relative;">
+            <div class="plus-btn" id="plusBtn" title="Create New" onclick="togglePlusMenu(event)"><i
+                    class="fas fa-plus"></i></div>
+
+            <!-- Plus Popover -->
+            <div class="popover plus-popover" id="plusMenu"
+                style="display: none; position: absolute; top: 90px; right: 60px; background: #fff; border-radius: 8px; border: 1px solid #EAECF0; box-shadow: 0 10px 30px rgba(0,0,0,0.12); z-index: 2000; width: 210px; padding: 6px 0;">
+                <div class="plus-item" onclick="window.location.href='./playground.html';"
+                    style="display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: background 0.2s;"
+                    onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
+                    <img src="../Testpad_pra_files_files/playground.svg" style="width: 26px; height: 26px;"
+                        alt="Playground">
+                    <span
+                        style="font-size: 15px; color: #344054; font-weight: 500; font-family: 'Hind', sans-serif;">Playground</span>
+                </div>
+                <div class="plus-item" onclick="window.location.href='./playground.html';"
+                    style="display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: background 0.2s;"
+                    onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
+                    <img src="../Testpad_pra_files_files/playground.svg" style="width: 26px; height: 26px;"
+                        alt="Python Notebook">
+                    <span
+                        style="font-size: 15px; color: #344054; font-weight: 500; font-family: 'Hind', sans-serif;">Python
+                        Notebook</span>
+                </div>
+            </div>
+            <div class="grid-icon" title="Menu" onclick="toggleGridMenu(event)">
+                <img src="../Testpad_pra_files_files/icons8-squared-menu-90.png"
+                    style="width: 30px; height: 30px; opacity: 0.75; transition: all 0.2s;"
+                    onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'" alt="Menu">
+            </div>
+
+            <!-- Grid Popover -->
+            <div class="popover grid-popover" id="gridMenu"
+                style="display: none; position: absolute; top: 90px; right: 90px; background: #fff; border-radius: 8px; border: 1px solid #EAECF0; box-shadow: 0 10px 30px rgba(0,0,0,0.12); z-index: 2000; width: 280px; padding: 14px;">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center;">
+                    <div onclick="location.href='./student-dashboard.html'"
+                        style="display: flex; flex-direction: column; align-items: center; padding: 10px; border-radius: 8px; cursor: pointer; transition: background 0.2s;"
+                        onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
+                        <img src="../Testpad_pra_files_files/quiz.svg"
+                            style="width: 36px; height: 36px; margin-bottom: 4px;" alt="Dashboard">
+                        <span style="font-size: 13px; color: #444; font-weight: 600;">Dashboard</span>
+                    </div>
+                    <div onclick="location.href='./COURSETRAY.html'"
+                        style="display: flex; flex-direction: column; align-items: center; padding: 10px; border-radius: 8px; cursor: pointer; transition: background 0.2s;"
+                        onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
+                        <img src="../Testpad_pra_files_files/folder-2.svg"
+                            style="width: 36px; height: 36px; margin-bottom: 4px;" alt="Courses">
+                        <span style="font-size: 13px; color: #df5a22; font-weight: 600;">Courses</span>
+                    </div>
+                    <div onclick="location.href='./mybookmarks.html'"
+                        style="display: flex; flex-direction: column; align-items: center; padding: 10px; border-radius: 8px; cursor: pointer; transition: background 0.2s;"
+                        onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
+                        <img src="../Testpad_pra_files_files/iconmonstr-star-3.svg"
+                            style="width: 36px; height: 36px; margin-bottom: 4px;" alt="Bookmarks">
+                        <span style="font-size: 13px; color: #444; font-weight: 600;">Bookmarks</span>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-container">
+                <div class="profile-stack" id="profileToggle" onclick="toggleMenu()">
+                    <div class="profile-text text-sm">
+                        <span class="profile-name" id="userName">Om Aggarwal</span>
+                        <span class="profile-role">Student</span>
+                    </div>
+                    <div class="avatar-circle" id="userInitial"
+                        style="background: transparent; color: inherit; font-size: inherit; font-weight: normal; border: none; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;">
+                        <img src="../LINUX_TEST_CHITKARA_files/user-icon.3d6e2547.svg"
+                            style="width: 100%; height: 100%; border-radius: 50%;" alt="User">
+                    </div>
+                </div>
+                <!-- Profile Dropdown -->
+                <div class="profile-menu" id="profileMenu">
+                    <div class="menu-item" onclick="location.href='./profile.html'">
+                        <img src="../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png"
+                            style="width: 16px; height: 16px; margin-right: 8px;" alt="Profile">
+                        <span>My Profile</span>
+                    </div>
+                    <div class="menu-item" onclick="location.href='./preferences.html'">
+                        <img src="../TESTPAD_WEBSITE__files/password.svg"
+                            style="width: 16px; height: 16px; margin-right: 8px;" alt="Preferences">
+                        <span>Preferences</span>
+                    </div>
+                    <div style="border-top: 1px solid #eee; margin: 5px 0;"></div>
+                    <div class="menu-item logout" onclick="handleLogout()">
+                        <img src="../TESTPAD_WEBSITE__files/logout.svg"
+                            style="width: 16px; height: 16px; margin-right: 8px;" alt="Logout">
+                        <span>Logout</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Notification Systems -->
+    <div id="toast-container"></div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box">
+            <div class="modal-title" id="modalTitle">Confirmation Required</div>
+            <div class="modal-body-text" id="modalBodyText">Are you sure you want to proceed?</div>
+            <div class="modal-footer">
+                <button class="btn-modal cancel" id="modalCancel">Cancel</button>
+                <button class="btn-modal confirm" id="modalConfirm">Proceed</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Left Sidebar (Full height on white background, no card container) -->
+        <aside>
+            <div class="sidebar-profile-wrapper">
+                <div class="large-avatar" id="sideAvatar">O</div>
+                <div class="side-profile-name" id="sideName">OM AGGARWAL</div>
+
+                <div class="sidebar-section">
+                    <h3>About</h3>
+                    <div class="sidebar-item">
+                        <label>Email :</label>
+                        <span id="sideEmail">om0653.becse24@chitkara.edu.in</span>
+                    </div>
+                    <div class="sidebar-item">
+                        <label>Roll Number:</label>
+                        <span id="sideRoll">2410990653</span>
+                    </div>
+                    <div class="sidebar-item">
+                        <label>ID :</label>
+                        <span id="sideId">2410990653</span>
+                    </div>
+                    <div class="sidebar-item">
+                        <label>Select Group:</label>
+                        <span id="sideGroup">G9</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>General Info</h3>
+                    <div class="sidebar-item">
+                        <label style="width: 190px;">Marks Obtained:</label>
+                        <span id="sideMarks">0 / 0</span>
+                    </div>
+                    <div class="sidebar-item">
+                        <label style="width: 190px;">Questions Attempted:</label>
+                        <span id="sideAttempted">0 / 0</span>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+        <main class="main-content" id="sectionsContainer">
+            <!-- Sections and Questions will be injected here -->
+        </main>
+    </div>
+
+    <!-- Modal for Preview -->
+    <div class="modal" id="previewModal" onclick="if(event.target === this) closePreview();">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Question Attempt Preview</h2>
+                <button onclick="closePreview()"
+                    style="background:none; border:none; cursor:pointer; font-size:1.5rem; color:#667085;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Preview content injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        let attemptId = urlParams.get('attemptId');
+        let examId = urlParams.get('examId');
+        let currentUser = (typeof auth !== 'undefined' && auth.getCurrentUser) ? auth.getCurrentUser() : (db.getActiveSession() ? db.getUserById(db.getActiveSession().userId) : null);
+        if (!currentUser) {
+            const saved = localStorage.getItem('TESTPAD_currentUser');
+            if (saved) {
+                try { currentUser = JSON.parse(saved); } catch(e) {}
+            }
+        }
+        if (!currentUser) {
+            currentUser = {
+                id: 'user_student',
+                name: 'Student',
+                role: 'student',
+                rollNo: '',
+                email: ''
+            };
+        }
+
+        let currentAttempt = (typeof db !== 'undefined' && db.getAttempt) ? db.getAttempt(attemptId) : null;
+        if (!currentAttempt && examId && currentUser && typeof db !== 'undefined' && db.getAttemptHistory) {
+            const attempts = db.getAttemptHistory(currentUser.id, examId);
+            if (attempts && attempts.length > 0) {
+                currentAttempt = attempts[0];
+                attemptId = currentAttempt.id;
+            }
+        }
+        let exam = currentAttempt ? ((typeof db !== 'undefined' && db.getExamById) ? db.getExamById(currentAttempt.examId) : null) : (examId ? ((typeof db !== 'undefined' && db.getExamById) ? db.getExamById(examId) : null) : null);
+        let allExamAttempts = [];
+
+        function extractResponse(resp) {
+            if (resp === null || resp === undefined) return null;
+            let val = resp;
+            // Drill down into nested value objects
+            while (val !== null && typeof val === 'object' && val.hasOwnProperty('value')) {
+                val = val.value;
+            }
+            return val;
+        }
+
+        function init() {
+            // Robust Deep Recovery
+            const rawAttempts = JSON.parse(localStorage.getItem('TESTPAD_attempts')) || [];
+            const rawExams = JSON.parse(localStorage.getItem('TESTPAD_exams')) || [];
+            const practiceSessions = JSON.parse(localStorage.getItem('TESTPAD_practice_sessions')) || {};
+
+            if (!currentAttempt) {
+                if (attemptId) {
+                    currentAttempt = rawAttempts.find(a => String(a.id) === String(attemptId)) || practiceSessions[attemptId];
+                }
+                if (!currentAttempt && examId) {
+                    currentAttempt = rawAttempts.find(a => String(a.examId) === String(examId)) || Object.values(practiceSessions).find(a => String(a.examId) === String(examId));
+                }
+                if (!currentAttempt && currentUser) {
+                    currentAttempt = rawAttempts.find(a => String(a.studentId) === String(currentUser.id)) || Object.values(practiceSessions)[0];
+                }
+            }
+
+            if (!exam) {
+                const targetExamId = currentAttempt ? currentAttempt.examId : examId;
+                if (targetExamId) {
+                    exam = ((typeof db !== 'undefined' && db.getExamById) ? db.getExamById(targetExamId) : null) || rawExams.find(e => String(e.id) === String(targetExamId));
+                }
+            }
+
+            // Fallback Exam Synthesis if attempt exists with embedded exam data/questions
+            if (!exam && currentAttempt) {
+                exam = {
+                    id: currentAttempt.examId || 'synthesized_exam',
+                    title: currentAttempt.examTitle || 'Test Assessment',
+                    totalMarks: currentAttempt.totalMarks || (currentAttempt.score ? 100 : 10),
+                    duration: currentAttempt.duration || 90,
+                    status: 'ended',
+                    resultsPublished: true,
+                    questions: currentAttempt.questions || []
+                };
+            }
+
+            // Fallback Attempt Synthesis if exam exists but attempt record wasn't found
+            if (!currentAttempt && exam) {
+                currentAttempt = {
+                    id: 'synthesized_attempt_' + Date.now(),
+                    examId: exam.id,
+                    examTitle: exam.title,
+                    studentId: currentUser.id,
+                    studentName: currentUser.name,
+                    rollNo: currentUser.rollNo,
+                    status: 'submitted',
+                    score: 0,
+                    totalMarks: exam.totalMarks || 100,
+                    startTime: new Date().toISOString(),
+                    endTime: new Date().toISOString(),
+                    responses: {}
+                };
+            }
+
+            if (!currentAttempt || !exam) {
+                document.body.innerHTML = `
+                    <div style="height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#f4f5f7; font-family:'Roboto', sans-serif;">
+                        <img src="../Tests _ Chitkara_files/chitkara.a1beb7f0.png" onerror="this.src='../logo.jpg'" style="height:54px; margin-bottom:30px; border-radius:8px;">
+                        <div style="background:white; padding:44px 40px; border-radius:20px; border:1px solid #EAECF0; box-shadow:0 10px 30px rgba(0,0,0,0.06); text-align:center; max-width:460px; width:90%;">
+                            <div style="width:60px; height:60px; background:#fff5f0; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
+                                <i class="fas fa-exclamation-triangle" style="color:#df5a22; font-size:1.6rem;"></i>
+                            </div>
+                            <h1 style="font-size:1.6rem; font-weight:700; color:#1a1a1a; margin-bottom:10px;">Test Record Not Found</h1>
+                            <p style="color:#667085; line-height:1.5; font-size:1.02rem; margin-bottom:28px;">
+                                We couldn't locate the requested exam attempt or submission record. It may have expired or been removed.
+                            </p>
+                            <div style="display:flex; gap:12px; justify-content:center;">
+                                <button onclick="window.location.href='./TESTVIEW.html'" style="flex:1; height:46px; background:#df5a22; color:white; border:none; border-radius:10px; font-weight:600; font-size:1rem; cursor:pointer; transition:background 0.2s;" onmouseover="this.style.background='#c54814'" onmouseout="this.style.background='#df5a22'">
+                                    View Tests
+                                </button>
+                                <button onclick="window.location.href='./student-dashboard.html'" style="flex:1; height:46px; background:#f0f2f5; color:#333333; border:none; border-radius:10px; font-weight:600; font-size:1rem; cursor:pointer; transition:background 0.2s;" onmouseover="this.style.background='#e4e7ec'" onmouseout="this.style.background='#f0f2f5'">
+                                    Dashboard
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            // Check if results are published or auto-publish is enabled
+            const isAutoPublish = exam.security?.autoPublishResults !== false; // Default true if not set
+            const isManualReleased = exam.resultsPublished === true;
+
+            // If results are held by teacher and current user is student
+            if (!isAutoPublish && !isManualReleased && currentUser && currentUser.role === 'student') {
+                document.body.innerHTML = `
+                    <div style="height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#F9FAFB; font-family:'Hind', sans-serif;">
+                        <img src="https://api.learntechww.com/college_icon/logo1733989968823.jpg" style="height:60px; margin-bottom:40px;">
+                        <div style="background:white; padding:48px; border-radius:24px; border:1px solid #EAECF0; box-shadow:0 12px 32px rgba(0,0,0,0.05); text-align:center; max-width:500px;">
+                            <div style="width:64px; height:64px; background:#EFF6FF; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 24px;">
+                                <i class="fas fa-clock" style="color:#1E40AF; font-size:1.5rem;"></i>
+                            </div>
+                            <h1 style="font-size:1.8rem; font-weight:700; color:#101828; margin-bottom:12px;">Results Pending</h1>
+                            <p style="color:#667085; line-height:1.6; font-size:1.1rem; margin-bottom:32px;">
+                                The results for <strong>${exam.title}</strong> have not been published yet. Please check back later once the evaluation is complete.
+                            </p>
+                            <button onclick="window.location.href='./student-dashboard.html'" style="width:100%; height:48px; background:#1E40AF; color:white; border:none; border-radius:10px; font-weight:700; cursor:pointer;">
+                                Return to Dashboard
+                            </button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            allExamAttempts = (currentUser && exam) ? db.getAttemptHistory(currentUser.id, exam.id) : [];
+
+            // Sync Header & Sidebar with first letter only for avatar
+            const studentName = currentUser?.name || 'Student';
+            const firstLetter = studentName.trim().charAt(0).toUpperCase();
+            if (document.getElementById('userName')) document.getElementById('userName').textContent = studentName;
+            document.getElementById('sideName').textContent = studentName.toUpperCase();
+            document.getElementById('sideAvatar').textContent = firstLetter;
+
+            const identity = currentAttempt.identityResponses || {};
+
+            // Strictly use attempt-based data: roll number, id = roll number, group (if filled in mandatory questions else N.A.)
+            const rollNo = identity['Roll Number'] || identity['roll number'] || identity['roll_number'] || identity['RollNo'] || currentAttempt.studentRollNo || (currentUser?.rollNo) || 'N.A.';
+            const studentId = rollNo;
+            const group = identity['Select Group'] || identity['select group'] || identity['Group'] || identity['group'] || identity['Section'] || identity['section'] || 'N.A.';
+            const email = identity['Email'] || identity['email'] || (currentUser ? currentUser.email : 'N.A.');
+
+            document.getElementById('sideEmail').textContent = email;
+            document.getElementById('sideRoll').textContent = rollNo;
+            document.getElementById('sideId').textContent = studentId;
+            document.getElementById('sideGroup').textContent = group;
+
+            const scoreObj = db.calculateScore(currentAttempt);
+            if (document.getElementById('finalScoreVal')) {
+                document.getElementById('finalScoreVal').textContent = `${scoreObj.score} / ${scoreObj.totalMarks}`;
+            }
+            if (document.getElementById('sideMarks')) {
+                document.getElementById('sideMarks').textContent = `${scoreObj.score} / ${scoreObj.totalMarks}`;
+            }
+
+            const assignedQuestions = db.getAttemptQuestions ? db.getAttemptQuestions(currentAttempt, exam) : (exam?.questions || []);
+            if (document.getElementById('sideAttempted')) {
+                let attemptedCount = 0;
+                if (currentAttempt.responses) {
+                    assignedQuestions.forEach(q => {
+                        const resp = Array.isArray(currentAttempt.responses) ? currentAttempt.responses.find(r => r && (r.questionId === q.id || r.id === q.id)) : currentAttempt.responses[q.id];
+                        if (resp && ((typeof resp === 'string' && resp.trim() !== '') || (typeof resp === 'object' && (resp.value || resp.selectedOption !== undefined || resp.manualMark !== undefined)))) {
+                            attemptedCount++;
+                        }
+                    });
+                }
+                document.getElementById('sideAttempted').textContent = `${attemptedCount} / ${assignedQuestions.length}`;
+            }
+
+            renderSections();
+        }
+
+        function renderSections() {
+            const container = document.getElementById('sectionsContainer');
+            container.innerHTML = '';
+
+            const assignedQuestions = db.getAttemptQuestions ? db.getAttemptQuestions(currentAttempt, exam) : (exam?.questions || []);
+
+            // Group questions by section
+            const sections = exam.sections?.length > 0 ? exam.sections : ['General'];
+            sections.forEach((s, sIdx) => {
+                const sQuestions = assignedQuestions.filter(q => (q.section || 'General') === s);
+                if (sQuestions.length === 0) return;
+
+                const sectionScore = sQuestions.reduce((sum, q) => {
+                    const resp = (currentAttempt.responses && (Array.isArray(currentAttempt.responses) ? currentAttempt.responses.find(r => r && (r.questionId === q.id || r.id === q.id)) : currentAttempt.responses[q.id]));
+                    if (!resp) return sum;
+                    let mark = 0;
+                    const extractedVal = extractResponse(resp);
+                    const qMarks = (parseFloat(q.marks) !== undefined && !isNaN(parseFloat(q.marks))) ? parseFloat(q.marks) : 1;
+                    if (resp.manualMark !== undefined && resp.manualMark !== null && resp.manualMark !== '') mark = parseFloat(resp.manualMark) || 0;
+                    else if (q.type === 'coding' && resp.results) {
+                        const passed = resp.results.filter(r => r.status === 'pass').length;
+                        const total = resp.results.length;
+                        if (total > 0) mark = parseFloat(((passed / total) * qMarks).toFixed(1));
+                    } else if (q.type !== 'coding' && q.type !== 'subjective' && q.type !== 'file_upload') {
+                        if (db.checkAnswer(q, extractedVal)) mark = qMarks;
+                    }
+                    return sum + mark;
+                }, 0);
+
+                const sectionTotal = sQuestions.reduce((sum, q) => sum + ((parseFloat(q.marks) !== undefined && !isNaN(parseFloat(q.marks))) ? parseFloat(q.marks) : 1), 0);
+
+                const card = document.createElement('div');
+                card.className = 'section-card';
+                card.innerHTML = `
+                    <div class="section-header" onclick="toggleSection(${sIdx})">
+                        <div class="section-title">
+                            <i class="fas fa-chevron-${sIdx === 0 ? 'down' : 'right'}" id="chevron-${sIdx}"></i>
+                            ${sIdx + 1}. ${s}
+                        </div>
+                        <div class="section-score">Score: ${sectionScore} / ${sectionTotal}</div>
+                    </div>
+                    <div class="section-body" id="body-${sIdx}" style="display:${sIdx === 0 ? 'block' : 'none'};">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Question</th>
+                                    <th>Type</th>
+                                    <th>Score</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${sQuestions.map((q, qIdx) => renderQuestionRow(q, qIdx)).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderQuestionRow(q, idx) {
+            const qStrId = String(q.id).toLowerCase();
+
+            // DEEP RECOVERY: Find the best response across all known attempts for this exam
+            let resp = null;
+            let bestAttempt = currentAttempt;
+
+            const findInAttempt = (att) => {
+                if (!att || !att.responses) return null;
+                const keys = Object.keys(att.responses);
+                const matchKey = keys.find(k => String(k).toLowerCase() === qStrId || String(k) === String(q.id));
+                if (matchKey) return att.responses[matchKey];
+                const fuzzyMatch = keys.find(k => String(k).toLowerCase().includes(qStrId) || qStrId.includes(String(k).toLowerCase()));
+                return fuzzyMatch ? att.responses[fuzzyMatch] : null;
+            };
+
+            // Start with the specific attempt from URL
+            resp = findInAttempt(currentAttempt);
+
+            // If empty or missing, search ALL historical attempts (including practice)
+            if (!resp || Object.keys(resp).length === 0) {
+                for (const att of allExamAttempts) {
+                    const r = findInAttempt(att);
+                    if (r && (Object.keys(r).length > (resp ? Object.keys(resp).length : 0))) {
+                        resp = r;
+                        bestAttempt = att;
+                    }
+                }
+            }
+
+            let mark = 0;
+            if (resp) {
+                if (resp.manualMark !== undefined) mark = parseFloat(resp.manualMark);
+                else if (q.type === 'coding' && resp.results) {
+                    mark = (Array.isArray(resp.results)) ? resp.results.filter(r => r.status === 'pass').reduce((s, r) => s + (r.marks || 0), 0) : 0;
+                } else {
+                    mark = db.checkAnswer(q, resp) ? (q.marks || 0) : 0;
+                }
+            }
+
+            const isManual = (q.type === 'subjective' || q.type === 'file_upload') && resp?.manualMark === undefined;
+            const extractedVal = extractResponse(resp);
+
+            // Broad definition of attempted
+            const isAttempted = !!resp && (
+                (extractedVal !== null && extractedVal !== undefined && extractedVal !== '') ||
+                !!resp.code ||
+                !!resp.submitted ||
+                !!resp.runCount ||
+                (Array.isArray(resp.results) && resp.results.length > 0) ||
+                (Object.keys(resp).length > 0 && resp.hasOwnProperty('value'))
+            );
+
+            const statusLabel = isManual ? 'pending' : (isAttempted ? 'submitted' : 'not attempted');
+            const statusClass = isManual ? 'badge-warning' : (isAttempted ? 'badge-success' : 'badge-error');
+
+            return `
+                <tr>
+                    <td>${idx + 1}.</td>
+                    <td class="q-name">${q.heading || q.text?.substring(0, 30) || 'Question'}</td>
+                    <td>${(q.type || 'MCQ').toUpperCase()}</td>
+                    <td>${mark} / ${q.marks || 0}</td>
+                    <td>
+                        <div style="display:flex; align-items:center; gap:12px; justify-content:flex-start;">
+                            <div class="btn-action" onclick="toggleAttempts('${q.id}', event)" title="Expand Attempts">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <span class="badge ${statusClass}">${statusLabel}</span>
+                            <div class="btn-view-attempt" onclick="previewQuestion('${q.id}')" title="View Question">
+                                <i class="far fa-file-alt"></i>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="attempts-${q.id}" class="attempts-sub-row" style="display:none;">
+                    <td colspan="5">
+                        <div class="inner-table-container">
+                            <table class="inner-table">
+                                <thead>
+                                    <tr>
+                                        <th class="inner-th">Attempt Time</th>
+                                        <th class="inner-th">Attempt Status</th>
+                                        ${q.type === 'coding' ? '<th class="inner-th">TestCases</th>' : ''}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${allExamAttempts.map(a => {
+                                        if (!a || !a.responses) return '';
+                                        const r = (Array.isArray(a.responses) ? a.responses.find(res => res && (res.questionId === q.id || res.id === q.id)) : (a.responses[q.id] || a.responses[qStrId])) || null;
+                                        if (!r) return '';
+                                        const results = r.results || [];
+                                        return `
+                                            <tr>
+                                                <td class="inner-td">${new Date(a.endTime || a.startTime || Date.now()).toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).replace(',', '')}</td>
+                                                <td class="inner-td">
+                                                    <div style="display:flex; align-items:center; justify-content:center; gap:12px;">
+                                                        <span class="badge ${r.submitted ? 'badge-success' : 'badge-error'}">${r.submitted ? 'Submitted' : 'Error'}</span>
+                                                        <div class="btn-view-attempt" onclick="previewQuestion('${q.id}', '${a.id}')">
+                                                            <i class="far fa-file-alt"></i>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                ${q.type === 'coding' ? `
+                                                    <td class="inner-td">
+                                                        ${results.filter(tc => tc.status === 'pass').length} / ${results.length}
+                                                    </td>
+                                                ` : ''}
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
+
+        function toggleSection(idx) {
+            const body = document.getElementById(`body-${idx}`);
+            const chevron = document.getElementById(`chevron-${idx}`);
+            if (!body) return;
+            const isHidden = (body.style.display === 'none' || getComputedStyle(body).display === 'none');
+            if (isHidden) {
+                body.style.display = 'block';
+                if (chevron) chevron.className = 'fas fa-chevron-down';
+            } else {
+                body.style.display = 'none';
+                if (chevron) chevron.className = 'fas fa-chevron-right';
+            }
+        }
+
+        function toggleAttempts(qid, event) {
+            if (event) event.stopPropagation();
+            const row = document.getElementById(`attempts-${qid}`);
+            if (!row) return;
+            const icon = event ? event.currentTarget.querySelector('i') : null;
+            if (row.style.display === 'none' || getComputedStyle(row).display === 'none') {
+                row.style.display = 'table-row';
+                if (icon) icon.className = 'fas fa-minus';
+            } else {
+                row.style.display = 'none';
+                if (icon) icon.className = 'fas fa-plus';
+            }
+        }
+
+        function previewQuestion(qid, specificAttemptId) {
+            const aid = specificAttemptId || attemptId;
+            let a = db.getAttempt(aid) || currentAttempt;
+            const assignedQuestions = db.getAttemptQuestions ? db.getAttemptQuestions(a, exam) : (exam?.questions || []);
+            const q = assignedQuestions.find(x => x && (x.id === qid || String(x.id) === String(qid))) || (exam?.questions ? exam.questions.find(x => x && (x.id === qid || String(x.id) === String(qid))) : null);
+            if (!q) return;
+
+            window.currentPreviewQuestionMarks = q.marks;
+
+            // Search logic
+            const qStrId = String(qid).toLowerCase();
+            const findInAttempt = (att) => {
+                if (!att || !att.responses) return null;
+                const keys = Object.keys(att.responses);
+                const matchKey = keys.find(k => String(k).toLowerCase() === qStrId || String(k) === String(qid));
+                if (matchKey) return att.responses[matchKey];
+                const fuzzyMatch = keys.find(k => String(k).toLowerCase().includes(qStrId) || qStrId.includes(String(k).toLowerCase()));
+                return fuzzyMatch ? att.responses[fuzzyMatch] : null;
+            };
+
+            let resp = findInAttempt(a);
+
+            if (!specificAttemptId && (!resp || Object.keys(resp).length === 0)) {
+                for (const att of allExamAttempts) {
+                    const r = findInAttempt(att);
+                    if (r && (Object.keys(r).length > (resp ? Object.keys(resp).length : 0))) {
+                        resp = r; a = att;
+                    }
+                }
+            }
+
+            let masterTests = q.testCases || q.testcases || q.sampleTestCases || [];
+            if (!Array.isArray(masterTests) || masterTests.length === 0) {
+                if (resp?.results && Array.isArray(resp.results) && resp.results.length > 0) {
+                    masterTests = resp.results.map((r, i) => ({
+                        input: r.input || `Sample Input ${i + 1}`,
+                        expected: r.expected || '',
+                        marks: r.marks || 1
+                    }));
+                } else if (q.type === 'coding') {
+                    masterTests = [
+                        { input: '5\n1 2 3 4 5', expected: '', marks: 1 },
+                        { input: '3\n10 20 30', expected: '', marks: 1 }
+                    ];
+                }
+            }
+
+            const results = masterTests.map((mt, mi) => {
+                const recorded = (resp?.results && resp.results[mi]) ? resp.results[mi] : null;
+                const status = recorded ? (recorded.status || (recorded.passed ? 'pass' : 'fail')) : (resp?.passed ? 'pass' : 'fail');
+                return {
+                    ...mt,
+                    status: status,
+                    input: recorded?.input || mt.input || `Input Parameter ${mi + 1}`,
+                    actual: recorded?.actual || null,
+                    error: recorded?.error || null,
+                    marks: recorded?.marks !== undefined ? recorded.marks : (status === 'pass' ? (mt.marks || 1) : 0)
+                };
+            });
+            window.currentPreviewResults = results;
+
+            document.getElementById('modalTitle').textContent = "Question Attempt Preview";
+            const body = document.getElementById('modalBody');
+            body.innerHTML = '';
+
+            const left = document.createElement('div');
+            left.className = 'preview-left';
+            left.innerHTML = `
+                <div style="margin-bottom:16px;">
+                    <span style="display:inline-block; padding:3px 12px; border-radius:6px; background:#F2F4F7; border:1px solid #EAECF0; color:#667085; font-size:1.05rem; font-family:'Hind', sans-serif; font-weight:500;">${(q.type || 'coding').toLowerCase()}</span>
+                </div>
+                <h1 style="font-size:1.8rem; margin-bottom:12px; font-weight:700; color:#101828;">${q.heading || q.text?.substring(0, 30) || 'Question'}</h1>
+                <div class="tri-orange-line">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div style="font-size:1.35rem; line-height:1.65; color:#344054; font-family:Consolas, 'Monaco', 'Courier New', monospace; white-space:pre-wrap;">
+                    ${q.title || q.text || q.problem || 'No description available.'}
+                </div>
+            `;
+
+            const right = document.createElement('div');
+            right.className = 'preview-right';
+
+            if (q.type === 'mcq' || q.type === 'true_false' || q.type === 'assertion_reason') {
+                let options = q.options || [];
+                if (q.type === 'true_false') options = ['True', 'False'];
+                if (q.type === 'assertion_reason') options = ["A & R are true; R is correct explanation of A", "A & R are true; R is NOT correct explanation of A", "A is true; R is false", "A is false; R is true", "Both A & R are false"];
+
+                const studentAnswer = extractResponse(resp);
+                const correctAnswer = q.correctAnswer;
+
+                right.innerHTML = `
+                    <h3 style="margin-bottom:12px; font-size:1.5rem; font-weight:600; color:#101828;">Choose any one</h3>
+                    <div style="height:1px; width:100%; max-width:320px; background:#E5E7EB; margin-bottom:28px;"></div>
+                    <div style="display:flex; flex-direction:column; gap:20px;">
+                        ${options.map(opt => {
+                            const isStudentChoice = (studentAnswer === opt);
+                            const isCorrect = (opt === correctAnswer);
+                            return `
+                                <div style="display:flex; align-items:flex-start; gap:16px; padding:4px 0; background:transparent; border:none;">
+                                    <div style="width:22px; height:22px; border-radius:50%; background:#F2F4F7; border:2px solid ${isStudentChoice ? '#475467' : '#D0D5DD'}; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:3px;">
+                                        ${isStudentChoice ? '<div style="width:10px; height:10px; border-radius:50%; background:#475467;"></div>' : ''}
+                                    </div>
+                                    <div style="flex:1; font-size:1.3rem; color:#101828; font-family:Consolas, 'Monaco', 'Courier New', monospace; white-space:pre-wrap; line-height:1.5;">${opt}</div>
+                                    ${isCorrect ? '<span style="color:#12B76A; font-size:1.2rem; font-weight:500; display:inline-flex; align-items:center; gap:6px; flex-shrink:0; margin-top:2px;"><i class="fas fa-check"></i> Correct</span>' : (isStudentChoice ? '<span style="color:#F04438; font-size:1.2rem; font-weight:500; display:inline-flex; align-items:center; gap:6px; flex-shrink:0; margin-top:2px;"><i class="fas fa-times"></i> Your Choice</span>' : '')}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            } else if (q.type === 'coding') {
+                const lang = resp?.lang || (q.languages ? q.languages[0] : 'java');
+
+                const qCode = (q.code && q.code[lang]) ? q.code[lang] : { prefix: '', middle: '', suffix: '' };
+                const studentImplementation = resp?.code || extractResponse(resp) || qCode.middle || '// No implementation found';
+
+                right.innerHTML = `
+                    <div class="code-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            <div style="background:#F9FAFB; padding:8px 16px; border-radius:8px; border:1px solid #EAECF0;">
+                                <span style="color:#667085; font-weight:700; text-transform:uppercase; font-size:0.85rem; letter-spacing:0.5px;">${lang}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="proper-editor-container" style="border:1.5px solid #EAECF0; border-radius:12px; overflow:hidden; background:#fff;">
+                        ${qCode.prefix ? `<div id="ace-head" style="height:80px; border-bottom:1px solid #f0f0f0; background:rgba(0,0,0,0.02);"></div>` : ''}
+                        <div id="ace-main" style="height:320px; border-bottom:1px solid #f0f0f0;"></div>
+                        ${qCode.suffix ? `<div id="ace-tail" style="height:120px; background:rgba(0,0,0,0.02);"></div>` : ''}
+                    </div>
+                    
+                    <!-- Tabs Bar Matching Exam Attempt Style -->
+                    <div style="display:flex; justify-content:space-between; align-items:flex-end; border-bottom:1px solid #E5E7EB; margin-top:24px; padding-bottom:0;">
+                        <div style="display:flex; gap:0;">
+                            <button id="tab-testcases" onclick="switchPreviewTab('testcases')" style="background:#fff; border:1px solid #E5E7EB; border-bottom:1px solid #fff; border-radius:6px 6px 0 0; padding:8px 20px; color:#DE5B2B; font-weight:600; font-size:1.15rem; font-family:'Hind', sans-serif; cursor:pointer; margin-bottom:-1px; z-index:2;">Test Cases</button>
+                            <button id="tab-console" onclick="switchPreviewTab('console')" style="background:#F9FAFB; border:1px solid #E5E7EB; border-bottom:1px solid #E5E7EB; border-radius:6px 6px 0 0; padding:8px 20px; color:#344054; font-weight:500; font-size:1.15rem; font-family:'Hind', sans-serif; cursor:pointer; margin-left:4px; margin-bottom:-1px;">Console</button>
+                        </div>
+                        <div style="width:22px; height:22px; border-radius:50%; background:#DE5B2B; color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; margin-bottom:6px; cursor:pointer;"><i class="fas fa-minus" style="font-size:9px;"></i></div>
+                    </div>
+
+                    <!-- Test Cases Panel -->
+                    <div id="preview-testcases" style="display:flex; height:260px; background:#fff; border:1px solid #E5E7EB; border-top:none; overflow:hidden;">
+                        <!-- Sidebar: Test Case List -->
+                        <div style="width:240px; border-right:1px solid #E5E7EB; overflow-y:auto; padding:16px 12px; scrollbar-width:thin; scrollbar-color:#94A3B8 #F8FAFC;">
+                            ${results.map((r, ri) => {
+                                const isPass = r.status === 'pass';
+                                return `
+                                    <div class="preview-tc-item" onclick="showTestCaseDetailsInPreview(${ri})" style="display:flex; align-items:center; gap:12px; padding:10px 12px; cursor:pointer; transition:all 0.15s; border-radius:6px;">
+                                        <i class="fas ${isPass ? 'fa-check' : 'fa-xmark'}" style="color:${isPass ? '#12B76A' : '#F04438'}; font-size:1.25rem; width:20px; text-align:center;"></i>
+                                        <span style="font-size:1.25rem; font-weight:500; font-family:'Hind', sans-serif; color:${ri === 0 ? '#DE5B2B' : '#475467'};">Test Case ${ri + 1}</span>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+
+                        <!-- Content: Score and Details -->
+                        <div id="preview-tc-details" style="flex:1; padding:20px 24px; overflow-y:auto; scrollbar-width:thin; scrollbar-color:#94A3B8 #F8FAFC;">
+                            ${results.length > 0 ? `
+                                <div style="margin-bottom:16px;">
+                                    <div style="color:#667085; font-size:1.2rem; font-family:'Hind', sans-serif; margin-bottom:6px;">Score</div>
+                                    <div style="background:#F9FAFB; padding:12px 20px; font-size:1.4rem; font-family:Consolas, monospace; color:#101828; width:100%;">
+                                        ${results[0]?.marks !== undefined ? results[0].marks : (results[0]?.status === 'pass' ? 1 : 0)}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="color:#101828; font-size:1.2rem; font-family:'Hind', sans-serif; margin-bottom:8px;">Input Parameters:</div>
+                                    <pre style="background:transparent; padding:0; font-family:Consolas, monospace; font-size:1.15rem; color:#475467; margin:0;">${results[0]?.input || 'No input'}</pre>
+                                </div>
+                            ` : '<div style="height:100%; display:flex; align-items:center; justify-content:center; color:#98A2B3; font-family:\'Hind\', sans-serif;">Select a test case to view details</div>'}
+                        </div>
+                    </div>
+
+                    <!-- Console Dropdown / Output Button -->
+                    <div style="margin-top:16px;">
+                        <button onclick="switchPreviewTab('console')" style="background:#fff; border:1px solid #D0D5DD; border-radius:6px; padding:6px 14px; font-size:1.15rem; font-family:'Hind', sans-serif; color:#101828; display:inline-flex; align-items:center; gap:8px; cursor:pointer;">
+                            Console <i class="fas fa-caret-down" style="font-size:0.9rem; color:#475467;"></i>
+                        </button>
+                    </div>
+
+                    <div id="preview-console" style="margin-top:12px; display:none; background:#101828; color:#f8f9fa; padding:20px; border-radius:8px; font-family:Consolas, 'Monaco', 'Courier New', monospace; font-size:1.05rem; line-height:1.6; max-height:260px; overflow-y:auto;">
+                        <div style="color:#667085; font-size:0.85rem; margin-bottom:12px; border-bottom:1px solid #1e293b; padding-bottom:8px; font-weight:700;">LAST CONSOLE OUTPUT</div>
+                        ${(resp?.lastConsoleOutput || 'No console history available').replace(/\n/g, '<br>')}
+                    </div>
+                `;
+
+                setTimeout(() => {
+                    if (typeof ace === 'undefined') return;
+                    const aceMode = "ace/mode/" + (lang.toLowerCase().includes('python') ? 'python' : (lang.toLowerCase().includes('c') ? 'c_cpp' : (lang.toLowerCase().includes('js') ? 'javascript' : 'java')));
+                    const commonOpts = { 
+                        fontSize: "20px", 
+                        fontFamily: "Consolas, 'Monaco', 'Courier New', monospace", 
+                        showPrintMargin: false, 
+                        highlightActiveLine: false, 
+                        showLineNumbers: true, 
+                        useSoftTabs: true, 
+                        tabSize: 4,
+                        wrap: true
+                    };
+
+                    if (qCode.prefix && document.getElementById("ace-head")) {
+                        const hEd = ace.edit("ace-head");
+                        hEd.setTheme("ace/theme/chrome");
+                        hEd.session.setMode(aceMode);
+                        hEd.setValue(qCode.prefix, -1);
+                        hEd.setReadOnly(true);
+                        hEd.setOptions(commonOpts);
+                    }
+
+                    if (document.getElementById("ace-main")) {
+                        const mEd = ace.edit("ace-main");
+                        mEd.setTheme("ace/theme/chrome");
+                        mEd.session.setMode(aceMode);
+                        mEd.setValue(studentImplementation, -1);
+                        mEd.setReadOnly(true);
+                        mEd.setOptions(commonOpts);
+                    }
+
+                    if (qCode.suffix && document.getElementById("ace-tail")) {
+                        const tEd = ace.edit("ace-tail");
+                        tEd.setTheme("ace/theme/chrome");
+                        tEd.session.setMode(aceMode);
+                        tEd.setValue(qCode.suffix, -1);
+                        tEd.setReadOnly(true);
+                        tEd.setOptions(commonOpts);
+                    }
+                }, 100);
+            } else {
+                const responseText = extractResponse(resp);
+                const displayResponse = (responseText !== null && responseText !== undefined && responseText !== '') ? responseText : 'No response';
+                right.innerHTML = `
+                    <h3 style="margin-bottom:24px; font-weight:700;">Your Response</h3>
+                    <pre style="background:#fff; padding:20px; border-radius:8px; border:1px solid #EAECF0; font-family:'Hind', sans-serif; font-size:1.05rem; line-height:1.6; white-space:pre-wrap;">${displayResponse}</pre>
+                    ${resp?.manualMark !== undefined ? `
+                        <div style="margin:20px 0; padding:14px; background:#fff5f0; border:1px solid #fce8e0; color:#df5a22; border-radius:8px; font-weight:700;">
+                            TEACHER EVALUATION: ${resp.manualMark} MARKS
+                        </div>
+                    ` : ''}
+                    <h3 style="margin-top:32px; margin-bottom:16px; font-weight:700;">Correct Reference</h3>
+                    <div style="background:#ECFDF3; padding:16px; border-radius:8px; border:1px solid #ABEFC6; color:#027A48; font-weight:600; white-space:pre-wrap;">
+                        ${q.correctAnswer || 'Manual grading required.'}
+                    </div>
+                `;
+            }
+
+            body.appendChild(left);
+            body.appendChild(right);
+            document.getElementById('previewModal').style.display = 'flex';
+            if (q.type === 'coding' && results && results.length > 0) {
+                showTestCaseDetailsInPreview(0);
+            }
+        }
+
+        function showTestCaseDetailsInPreview(idx) {
+            const results = window.currentPreviewResults || [];
+            if (!results[idx]) return;
+            const res = results[idx];
+            const isPass = (res.status === 'pass');
+            
+            const items = document.querySelectorAll('.preview-tc-item');
+            items.forEach((item, i) => {
+                const span = item.querySelector('span');
+                if (i === idx) {
+                    if (span) span.style.color = '#DE5B2B';
+                } else {
+                    if (span) span.style.color = '#475467';
+                }
+            });
+
+            const detailPane = document.getElementById('preview-tc-details');
+            if (!detailPane) return;
+            detailPane.innerHTML = `
+                <div style="margin-bottom:18px;">
+                    <div style="color:#667085; font-size:1.2rem; font-family:'Hind', sans-serif; margin-bottom:6px;">Score</div>
+                    <div style="background:#F9FAFB; padding:12px 20px; font-size:1.4rem; font-family:Consolas, 'Monaco', 'Courier New', monospace; color:#101828; width:100%; border:1px solid #EAECF0; border-radius:4px; box-sizing:border-box;">
+                        ${res.marks !== undefined ? res.marks : (isPass ? 1 : 0)}
+                    </div>
+                </div>
+
+                <div style="margin-bottom:18px;">
+                    <div style="color:#101828; font-size:1.25rem; font-family:'Hind', sans-serif; margin-bottom:6px; font-weight:500;">Input Parameters:</div>
+                    <pre style="background:#F9FAFB; padding:14px 20px; font-family:Consolas, 'Monaco', 'Courier New', monospace; font-size:1.25rem; color:#101828; margin:0; border:1px solid #EAECF0; border-radius:4px; white-space:pre-wrap; word-break:break-word;">${res.input || '(No input)'}</pre>
+                </div>
+
+                <div style="margin-bottom:18px;">
+                    <div style="color:#101828; font-size:1.25rem; font-family:'Hind', sans-serif; margin-bottom:6px; font-weight:500;">Expected Output:</div>
+                    <pre style="background:#F9FAFB; padding:14px 20px; font-family:Consolas, 'Monaco', 'Courier New', monospace; font-size:1.25rem; color:#101828; margin:0; border:1px solid #EAECF0; border-radius:4px; white-space:pre-wrap; word-break:break-word;">${res.expected || res.output || '(No expected output defined)'}</pre>
+                </div>
+
+                <div style="margin-bottom:18px;">
+                    <div style="color:#101828; font-size:1.25rem; font-family:'Hind', sans-serif; margin-bottom:6px; font-weight:500;">Your Output:</div>
+                    <pre style="background:#F9FAFB; padding:14px 20px; font-family:Consolas, 'Monaco', 'Courier New', monospace; font-size:1.25rem; color:#101828; margin:0; border:1px solid #EAECF0; border-radius:4px; white-space:pre-wrap; word-break:break-word;">${res.actual || res.error || (isPass ? (res.expected || '(Matched expected output)') : '(No output recorded)')}</pre>
+                </div>
+            `;
+        }
+
+        function closePreview() {
+            const modal = document.getElementById('previewModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function switchPreviewTab(tab) {
+            const tc = document.getElementById('preview-testcases');
+            const con = document.getElementById('preview-console');
+            const tabTc = document.getElementById('tab-testcases');
+            const tabCon = document.getElementById('tab-console');
+            if (!tc || !con || !tabTc || !tabCon) return;
+
+            if (tab === 'testcases') {
+                tc.style.display = 'flex';
+                con.style.display = 'none';
+                tabTc.style.background = '#fff';
+                tabTc.style.color = '#DE5B2B';
+                tabTc.style.fontWeight = '600';
+                tabTc.style.borderBottom = '1px solid #fff';
+                tabTc.style.zIndex = '2';
+
+                tabCon.style.background = '#F9FAFB';
+                tabCon.style.color = '#344054';
+                tabCon.style.fontWeight = '500';
+                tabCon.style.borderBottom = '1px solid #E5E7EB';
+                tabCon.style.zIndex = '1';
+            } else {
+                tc.style.display = 'none';
+                con.style.display = 'block';
+                tabCon.style.background = '#fff';
+                tabCon.style.color = '#DE5B2B';
+                tabCon.style.fontWeight = '600';
+                tabCon.style.borderBottom = '1px solid #fff';
+                tabCon.style.zIndex = '2';
+
+                tabTc.style.background = '#F9FAFB';
+                tabTc.style.color = '#344054';
+                tabTc.style.fontWeight = '500';
+                tabTc.style.borderBottom = '1px solid #E5E7EB';
+                tabTc.style.zIndex = '1';
+            }
+        }
+
+        window.previewQuestion = previewQuestion;
+        window.showTestCaseDetailsInPreview = showTestCaseDetailsInPreview;
+        window.closePreview = closePreview;
+        window.switchPreviewTab = switchPreviewTab;
+        window.toggleSection = toggleSection;
+        window.toggleAttempts = toggleAttempts;
+
+        // --- HEADER ACTIONS & FUNCTIONS (Exact match with student-dashboard.html) ---
+        function togglePasscodeVisibility() {
+            const input = document.getElementById('passcodeInput');
+            const eye = document.getElementById('passcodeEyeIcon');
+            if (!input || !eye) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                eye.className = 'far fa-eye-slash';
+            } else {
+                input.type = 'password';
+                eye.className = 'far fa-eye';
+            }
+        }
+
+        function toggleTopJoinPopup(e) {
+            if (e) e.stopPropagation();
+            const popup = document.getElementById('topJoinPopup');
+            const icon = document.getElementById('headerToggleIcon');
+            if (!popup) return;
+            if (popup.style.display === 'block') {
+                popup.style.display = 'none';
+                if (icon) icon.className = 'fas fa-chevron-down';
+            } else {
+                popup.style.display = 'block';
+                if (icon) icon.className = 'fas fa-chevron-up';
+                const input = document.getElementById('testIdInput');
+                if (input) input.focus();
+            }
+        }
+
+        function togglePlusMenu(e) {
+            if (e) e.stopPropagation();
+            const p = document.getElementById('plusMenu');
+            if (p) p.style.display = p.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function toggleGridMenu(e) {
+            if (e) e.stopPropagation();
+            const g = document.getElementById('gridMenu');
+            if (g) g.style.display = g.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('profileMenu');
+            if (menu) menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        document.addEventListener('click', function (e) {
+            const popup = document.getElementById('topJoinPopup');
+            const btn = document.getElementById('headerToggleBtn');
+            if (popup && popup.style.display === 'block' && !popup.contains(e.target) && btn && !btn.contains(e.target)) {
+                popup.style.display = 'none';
+                const icon = document.getElementById('headerToggleIcon');
+                if (icon) icon.className = 'fas fa-chevron-down';
+            }
+
+            const gridMenu = document.getElementById('gridMenu');
+            if (gridMenu && gridMenu.style.display === 'block' && !e.target.closest('.grid-icon') && !e.target.closest('#gridMenu')) {
+                gridMenu.style.display = 'none';
+            }
+
+            const plusMenu = document.getElementById('plusMenu');
+            if (plusMenu && plusMenu.style.display === 'block' && !e.target.closest('#plusBtn') && !e.target.closest('#plusMenu')) {
+                plusMenu.style.display = 'none';
+            }
+
+            const profileMenu = document.getElementById('profileMenu');
+            const profileToggle = document.getElementById('profileToggle');
+            if (profileMenu && profileToggle && !profileToggle.contains(e.target) && !profileMenu.contains(e.target)) {
+                profileMenu.style.display = 'none';
+            }
+        });
+
+        function handleJoin(e) {
+            if (e) e.preventDefault();
+            const rawInput = document.getElementById('testIdInput').value.trim();
+            const pass = document.getElementById('passcodeInput').value.trim();
+
+            if (!rawInput) return showToast('Please enter a Test ID or Joining Key', 'error');
+
+            let examTarget = null;
+            examTarget = db.getExamByJoiningKey(rawInput);
+
+            if (!examTarget) {
+                examTarget = db.getAllExams().find(e => e.joiningKey && String(e.joiningKey).toLowerCase() === rawInput.toLowerCase());
+            }
+
+            if (!examTarget) {
+                let id = rawInput;
+                if (rawInput.includes('?')) {
+                    const params = new URLSearchParams(rawInput.split('?')[1]);
+                    id = params.get('testId') || params.get('id') || params.get('invite') || rawInput;
+                } else if (rawInput.includes('/')) {
+                    id = rawInput.split('/').pop();
+                }
+                examTarget = db.getExamByTestId(id) || db.getExamById(id);
+            }
+
+            if (!examTarget) return showToast('Assessment not found. Check your ID/Key.', 'error');
+
+            if (examTarget.security?.passcode && examTarget.security.passcode !== pass) {
+                return showToast('❌ Incorrect security passcode', 'error');
+            }
+
+            let res = db.startAttempt(examTarget.id, currentUser.id);
+
+            if (!res.success && res.existingAttempt) {
+                if (res.existingAttempt.status === 'submitted' || res.existingAttempt.status === 'reviewed') {
+                    res = db.startAttempt(examTarget.id, currentUser.id, true);
+                } else {
+                    res.success = true;
+                    res.attempt = res.existingAttempt;
+                }
+            }
+
+            if (res.success) {
+                sessionStorage.setItem('joined_via_link', 'true');
+                showToast('Access Granted. Launching Practice Session...', 'success');
+                setTimeout(() => {
+                    const dest = examTarget.isCompetitive ? './comexam-attempt.html' : './exam-attempt.html';
+                    window.location.href = `${dest}?attemptId=${res.attempt.id}&vialink=true`;
+                }, 1000);
+            } else {
+                showToast(res.message, 'error');
+            }
+        }
+
+        // --- WEB MESSAGE SYSTEM ---
+        function showToast(msg, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+
+            let icon = 'info-circle';
+            if (type === 'success') icon = 'check-circle';
+            if (type === 'error') icon = 'exclamation-circle';
+
+            toast.innerHTML = `<i class="fas fa-${icon}"></i><span>${msg}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease-out reverse forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function showConfirm(title, body, confirmBtnText, isDanger = false) {
+            return new Promise((resolve) => {
+                const overlay = document.getElementById('modalOverlay');
+                const titleEl = document.getElementById('modalTitle');
+                const bodyEl = document.getElementById('modalBodyText');
+                const cancelBtn = document.getElementById('modalCancel');
+                const confirmBtn = document.getElementById('modalConfirm');
+
+                titleEl.textContent = title;
+                bodyEl.textContent = body;
+                confirmBtn.textContent = confirmBtnText;
+                confirmBtn.className = isDanger ? 'btn-modal danger' : 'btn-modal confirm';
+
+                overlay.style.display = 'flex';
+
+                const close = (res) => {
+                    overlay.style.display = 'none';
+                    resolve(res);
+                };
+
+                cancelBtn.onclick = () => close(false);
+                confirmBtn.onclick = () => close(true);
+            });
+        }
+
+        async function handleLogout() {
+            const confirmed = await showConfirm(
+                'Terminate Portal Session?',
+                'Are you sure you want to logout? Any unsaved environment data might be lost.',
+                'Log Out',
+                true
+            );
+
+            if (confirmed) {
+                if (typeof auth !== 'undefined' && auth.logout) auth.logout();
+                location.href = '../index.html';
+            }
+        }
+
+        document.addEventListener('keydown', function (event) {
+            if ((event.key === 'l' || event.key === 'L') && event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA') {
+                if (typeof auth !== 'undefined' && auth.logout) auth.logout();
+                location.href = '../index.html';
+            }
+        });
+
+        init();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+
+      @media print{
+        .graph-container-column{
+          display: flex;
+          flex-wrap: nowrap;
+          flex-direction: column;
+          page-break-inside: avoid; 
+          gap: 20px;
+        }
+  
+        .graph-container{
+          display: block;
+          margin-bottom: 10px;
+          width: 100%;
+        }
+  
+        .graph-container:nth-child(2n) {
+          page-break-after: always;
+        }
+     }
+    

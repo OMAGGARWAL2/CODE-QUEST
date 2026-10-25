@@ -1,0 +1,41 @@
+{
+    "name": "omtestpad",
+    "productName": "TesPad",
+    "version": "1.2.112",
+    "description": "CHITKARA UNIVERSITY",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "run": "electron .",
+        "pack": "electron-builder build",
+        "dist": "electron-builder"
+    },
+    "build": {
+        "appId": "com.custom.testpad",
+        "win": {
+            "target": "nsis",
+            "icon": "icon.png"
+        },
+        "extraResources": [
+            ".env"
+        ]
+    },
+    "keywords": [
+        "ERP",
+        "Proctoring",
+        "Secure"
+    ],
+    "author": "CHITKARA UNIVERSITY",
+    "license": "ISC",
+    "devDependencies": {
+        "electron": "^28.3.3",
+        "electron-builder": "^26.15.3"
+    },
+    "dependencies": {
+        "cors": "^2.8.6",
+        "dotenv": "^17.3.1",
+        "express": "^5.2.1",
+        "openai": "^6.25.0"
+    },
+    "type": "commonjs"
+}

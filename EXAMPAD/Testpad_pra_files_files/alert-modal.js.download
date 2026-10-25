@@ -1,0 +1,30 @@
+let timeOutTimer;
+const toggleAlertMsgModal = (message, color) => {
+  if (message) {
+    window.clearTimeout(timeOutTimer);
+    document.querySelector("#alert-message").innerHTML = message;
+    document.querySelector(".toast-alert").classList.remove('error-alert', 'success-alert');
+    
+    if (color == 1) {
+      document.querySelector(".toast-alert").classList.add('success-alert');
+    } else if (color == 2) {
+      document.querySelector(".toast-alert").classList.add('error-alert');
+    }
+
+    document.querySelector(".toast-alert").classList.add('visible');
+
+    timeOutTimer = setTimeout(function () {
+      document.querySelector(".toast-alert").classList.remove('visible', 'error-alert', 'success-alert');
+    }, 4000)
+
+    document.querySelector('.toast-alert').addEventListener('mouseover', () => {
+      window.clearTimeout(timeOutTimer);
+    })
+
+    document.querySelector('.toast-alert').addEventListener('mouseleave', () => {
+      timeOutTimer = setTimeout(function () {
+        document.querySelector(".toast-alert").classList.remove('visible', 'error-alert', 'success-alert');
+      }, 2000)
+    })
+  }
+}

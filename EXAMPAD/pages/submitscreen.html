@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <link rel="icon" type="image/x-icon" href="../logo.jpg">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800;900&family=Changa:wght@200;300;400;500;600;700;800&family=Changa+One&family=Mulish:wght@200;300;400;500;600;700;800;900&family=Hind:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Nunito:wght@200;300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&family=Varela+Round&family=Outfit:wght@200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hind', sans-serif;
+            background: #fff;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        #feedbackView {
+            background: #fff;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .feedback-header {
+            background: #FAF6F0;
+            padding: 50px 20px;
+            display: flex;
+            justify-content: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .feedback-inner-header {
+            width: 100%;
+            max-width: 850px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .feedback-icon {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+        }
+
+        .feedback-header-content h1 {
+            font-family: 'Inter', sans-serif !important;
+            color: #D35400;
+            font-size: 2.30rem !important;
+            font-weight: 600 !important;
+            margin-top: 0;
+            margin-bottom: 12px;
+            letter-spacing: -0.1px;
+        }
+
+        .feedback-header-content p {
+            color: #475467;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .feedback-header-content .time-took {
+            color: #344054;
+            font-weight: 600;
+        }
+
+        .feedback-header-content .time-took b {
+            color: #E67E22;
+        }
+
+        .feedback-body {
+            padding: 80px 20px;
+            background: #fff;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .feedback-inner-body {
+            width: 100%;
+            max-width: 850px;
+        }
+
+        .feedback-section {
+            width: 100%;
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+        }
+
+        .feedback-section.border-divider {
+            border-bottom: 1px solid #D1D5DB;
+        }
+
+        .feedback-section label {
+            display: block;
+            font-weight: 500;
+            color: #4B5563;
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+        }
+
+        .feedback-pills {
+            display: flex;
+            gap: 75px;
+            flex-wrap: wrap;
+        }
+
+        .pill-opt {
+            background: #DDCABD;
+            color: #2D3748;
+            border: none;
+            padding: 10px 45px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s;
+        }
+
+        .pill-opt:hover {
+            background: #C4B6A6;
+        }
+
+        .pill-opt.active {
+            background: #DE6834;
+            color: #fff;
+        }
+
+        .feedback-text-area {
+            width: 100%;
+            height: 140px;
+            background: #E8EBE9;
+            border: none;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: inherit;
+            font-size: 1rem;
+            color: #333;
+            outline: none;
+            resize: none;
+        }
+
+        .btn-feedback-done {
+            background: #C46210;
+            color: #fff;
+            border: none;
+            padding: 10px 35px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: none;
+        }
+
+        .btn-feedback-done.active {
+            background: #C46210;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(196, 98, 16, 0.2);
+            text-transform: none;
+        }
+
+        .btn-feedback-done.active:hover {
+            background: #ce5a2a;
+            transform: translateY(-1px);
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+    <div id="feedbackView">
+        <header class="feedback-header">
+            <div class="feedback-inner-header">
+                <img id="feedbackSuccessIcon" src="https://www.ragadesigners.com/services-images/theater/live.png"
+                    class="feedback-icon" alt="Success">
+                <div class="feedback-header-content">
+                    <h1>Test submitted successfully :)</h1>
+                    <p class="time-took">you took <b>49 mins</b> to finish the test</p>
+                    <p>Please take out a minute to submit your feedback. Your feedback helps us improve the quality of
+                        learning and the services we render to you.</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="feedback-body">
+            <div class="feedback-inner-body">
+                <div class="feedback-section border-divider">
+                    <label>How was the interpretation of questions</label>
+                    <div class="feedback-pills">
+                        <button class="pill-opt" onclick="togglePill(this)">EXCELLENT</button>
+                        <button class="pill-opt" onclick="togglePill(this)">GOOD</button>
+                        <button class="pill-opt" onclick="togglePill(this)">AVERAGE</button>
+                        <button class="pill-opt" onclick="togglePill(this)">POOR</button>
+                    </div>
+                </div>
+
+                <div class="feedback-section">
+                    <label>Any other suggestion or feedback?</label>
+                    <textarea class="feedback-text-area" id="finalFeedbackMsg"
+                        placeholder=".enter text here..."></textarea>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <button class="btn-feedback-done" id="feedbackSubmitBtn" onclick="submitFeedback()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function togglePill(btn) {
+            document.querySelectorAll('.pill-opt').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('feedbackSubmitBtn').classList.add('active');
+        }
+
+        function submitFeedback() {
+            const hasBridge = window.proctorBridge && typeof window.proctorBridge.close === 'function';
+            if (hasBridge) {
+                // Decisive close in Electron environment
+                window.proctorBridge.close();
+                return;
+            }
+
+            const btn = document.getElementById('feedbackSubmitBtn');
+            if (btn && btn.classList.contains('active')) {
+                // Show a success animation overlay
+                const finalOverlay = document.createElement('div');
+                finalOverlay.style.cssText = "position:fixed; inset:0; background:rgba(255,255,255,0.95); z-index:100000; display:flex; flex-direction:column; align-items:center; justify-content:center; animation: fadeIn 0.5s forwards;";
+                finalOverlay.innerHTML = `
+                    <div style="font-size: 8rem; color: #D35400; margin-bottom: 24px; animation: thumbPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+                        <i class="fas fa-thumbs-up"></i>
+                    </div>
+                    <h1 style="font-family: 'Inter', sans-serif; font-weight: 800; color: #101828; margin-bottom: 12px; font-size: 2.5rem;">SUCCESS!</h1>
+                    <p style="color: #475467; font-size: 1.2rem; font-weight: 600;">Your evaluation has been securely registered.</p>
+                    <style>
+                        @keyframes thumbPop {
+                            0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+                            70% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+                            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+                        }
+                        @keyframes fadeIn {
+                            from { opacity: 0; }
+                            to { opacity: 1; }
+                        }
+                    </style>
+                `;
+                document.body.appendChild(finalOverlay);
+
+                // Attempt to close decisively after visual confirmation (fallback for AI HUB, etc)
+                setTimeout(() => {
+                    console.log("[SYSTEM] Finalizing session...");
+                    
+                    // AI HUB Fallback: If bridge isn't detected correctly, try alternate Electron methods
+                    if (typeof require !== 'undefined' || window.process && window.process.versions && window.process.versions.electron) {
+                        try {
+                            const { ipcRenderer } = require('electron');
+                            ipcRenderer.send('window-control', 'close');
+                            return;
+                        } catch (e) { }
+                    }
+
+                    // Web Fallback: Try closing current window session
+                    try {
+                        window.close();
+                    } catch (e) { }
+
+                    // Ultimate fallback: Redirection to portal
+                    window.location.href = '../index.html';
+                }, 1000); 
+            }
+        }
+    </script>
+</body>
+
+</html>

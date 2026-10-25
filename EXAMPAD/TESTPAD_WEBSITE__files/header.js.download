@@ -1,0 +1,632 @@
+function openupdateprojectnamecontainer() {
+  document
+    .getElementById("projectname-header-container")
+    .classList.add("d-none");
+  document
+    .getElementById("projectname-edit-header-container")
+    .classList.remove("d-none");
+}
+
+function updateprojectname() {
+  // alert(document.getElementById('input-update-projectname').value)
+  document.getElementById("header-project-rename").innerHTML =
+    document.getElementById("input-update-projectname").value;
+  document
+    .getElementById("projectname-header-container")
+    .classList.remove("d-none");
+  document
+    .getElementById("projectname-edit-header-container")
+    .classList.add("d-none");
+}
+
+function openprojectlink() {
+  if (
+    document
+      .getElementById("div-share-link-main-container")
+      .classList.item(0) === "d-none"
+  ) {
+    // open
+    document
+      .getElementById("div-share-link-main-container")
+      .classList.remove("d-none");
+    document
+      .getElementById("share-link-container")
+      .setAttribute("style", "border:none; background-color:#FFEEE5");
+    document
+      .getElementById("new-link-container")
+      .setAttribute("style", "border-left:none;");
+    document
+      .getElementById("span-share-link")
+      .setAttribute("style", "color:#DE6834");
+    document.getElementById("icon-share-header-1").classList.add("d-none");
+    document.getElementById("icon-share-header-2").classList.remove("d-none");
+  } else {
+    // close
+    document
+      .getElementById("div-share-link-main-container")
+      .classList.add("d-none");
+    document
+      .getElementById("share-link-container")
+      .setAttribute(
+        "style",
+        "border-left:1px solid #c1c1c1; background-color:#FFFFF"
+      );
+    document
+      .getElementById("new-link-container")
+      .setAttribute("style", "border-left:1px solid #c1c1c1;");
+    document
+      .getElementById("span-share-link")
+      .setAttribute("style", "color:#000");
+    document.getElementById("icon-share-header-1").classList.remove("d-none");
+    document.getElementById("icon-share-header-2").classList.add("d-none");
+  }
+}
+
+$(document).ready(() => {
+  if (window.innerWidth < 992) {
+    if ($("#projectname-header-container").length) {
+      $("#startSharingButton").remove();
+      $("#collab-user-list-dropdown").remove();
+    }
+  }
+
+  $("#show-square-dropdown").click(() => {
+    if (
+      $("#square-dropdown-container").hasClass(
+        "square-dropdown-container-visible"
+      )
+    ) {
+      $("#square-dropdown-container").removeClass(
+        "square-dropdown-container-visible"
+      );
+      $("#square-icon-container").css({ background: "none" });
+    } else {
+      $("#square-dropdown-container").addClass(
+        "square-dropdown-container-visible"
+      );
+      $("#square-icon-container").css({ background: "#F4F4F4" });
+    }
+  });
+  $("#show-square-dropdown-mobile").click(() => {
+    if (
+      $("#square-dropdown-container").hasClass(
+        "square-dropdown-container-visible"
+      )
+    ) {
+      $("#square-dropdown-container").removeClass(
+        "square-dropdown-container-visible"
+      );
+      $("#square-icon-container-mobile").css({ background: "none" });
+    } else {
+      $("#square-dropdown-container").addClass(
+        "square-dropdown-container-visible"
+      );
+      $("#square-icon-container-mobile").css({ background: "#F4F4F4" });
+    }
+  });
+
+  //
+  $("#btn-question-header").click(() => {
+    if (
+      $("#rect-dropdown-container").hasClass(
+        "square-dropdown-container-visible"
+      )
+    ) {
+      $("#rect-dropdown-container").removeClass(
+        "square-dropdown-container-visible"
+      );
+      $("#rect-icon-container").css({ background: "none" });
+    } else {
+      $("#rect-dropdown-container").addClass(
+        "square-dropdown-container-visible"
+      );
+      $("#rect-icon-container").css({ background: "#F4F4F4" });
+    }
+  });
+
+  if (attachLearningModuleSearch) {
+    $("#input-search-header").bind("input", function search(e) {
+      const value = $(this)
+        .val()
+        .replace(/[^\w\s\][^,-@]/gi, "");
+
+      $(this).val(value);
+    });
+  }
+});
+
+const openNotificationsContainer = () => {
+  $(".notification-dropdown-container").toggleClass(
+    "notification-dropdown-container-visible"
+  );
+};
+$(document).mouseup((e) => {
+  const container = $("#square-dropdown-container");
+  const donBTn = $("#square-icon-container");
+  const donBTn2 = $("#square-icon-container-mobile");
+  if (
+    !container.is(e.target) &&
+    container.has(e.target).length === 0 &&
+    !donBTn.is(e.target) &&
+    donBTn.has(e.target).length === 0 &&
+    !donBTn2.is(e.target) &&
+    donBTn2.has(e.target).length === 0
+  ) {
+    $("#square-dropdown-container").removeClass(
+      "square-dropdown-container-visible"
+    );
+    $("#square-icon-container").css({ background: "none" });
+    $("#square-icon-container-mobile").css({ background: "none" });
+  }
+
+  const container1 = $("#rect-dropdown-container");
+  const donBTn1 = $("#btn-question-header");
+  if (
+    !container1.is(e.target) &&
+    container1.has(e.target).length === 0 &&
+    !donBTn1.is(e.target) &&
+    donBTn1.has(e.target).length === 0
+  ) {
+    $("#rect-dropdown-container").removeClass(
+      "square-dropdown-container-visible"
+    );
+    // $('#square-icon-container').css({ background: 'none' });
+  }
+
+  const container2 = $(".notification-dropdown-container");
+  // let btnn = $('#div-user-img-container');
+  const userImg = $("#user-img");
+  const instructorName = $("#div-instructor-name");
+  const instructorDesignation = $("#div-instructor-designation");
+  if (
+    !container2.is(e.target) &&
+    container2.has(e.target).length === 0 &&
+    !userImg.is(e.target) &&
+    userImg.has(e.target).length === 0 &&
+    !instructorName.is(e.target) &&
+    instructorName.has(e.target).length === 0 &&
+    !instructorDesignation.is(e.target) &&
+    instructorDesignation.has(e.target).length === 0
+  ) {
+    $(".notification-dropdown-container").removeClass(
+      "notification-dropdown-container-visible"
+    );
+  }
+
+  const containerShare = $("#div-share-link-main-container");
+  const sharebtn = $(".new-link-container");
+  if (
+    !containerShare.is(e.target) &&
+    containerShare.has(e.target).length === 0 &&
+    !sharebtn.is(e.target) &&
+    sharebtn.has(e.target).length === 0
+  ) {
+    $("#div-share-link-main-container").addClass("d-none");
+  }
+});
+
+function closeProjectCreateNewDropdown() {
+  $("#projectCreateNewDropdown").dropdown("dispose");
+}
+
+$(() => {
+  $("#projectCreateNewDropdown form, #project-dropdown-header").click((e) => {
+    e.stopPropagation();
+  });
+});
+
+
+
+async function ConnectionStatusNotifier({
+  connectedMsg = '<svg style="position: relative; top: -1px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 25.93 25.93"><defs><style>.a{fill:#25a734;}</style></defs><path class="a" d="M12.965,0A12.965,12.965,0,1,0,25.93,12.965,12.965,12.965,0,0,0,12.965,0ZM20.1,8.989,10.841,18.25a.926.926,0,0,1-1.309,0l-3.7-3.7a.926.926,0,1,1,1.287-1.332l.023.023,3.05,3.05L18.793,7.68A.926.926,0,0,1,20.1,8.989Z"/></svg>&nbsp;&nbsp;Connected!',
+  connectedMsgTimeout = 2000,
+  disconnectedMsg = '<svg style="position: relative; top: 0px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 57.611 54.289"><defs><style>.a{fill:#d61a1a;}</style></defs><g transform="translate(0 -14.759)"><g transform="translate(0 14.759)"><path class="a" d="M56.414,56.3,36.063,18.89a8.44,8.44,0,0,0-14.515,0L1.2,56.3A8.435,8.435,0,0,0,8.454,69.048h40.7A8.437,8.437,0,0,0,56.414,56.3Zm-27.608,6a3.376,3.376,0,1,1,3.376-3.376A3.38,3.38,0,0,1,28.805,62.3Zm3.376-13.5a3.376,3.376,0,0,1-6.751,0V31.916a3.376,3.376,0,1,1,6.751,0Z" transform="translate(0 -14.759)"/></g></g></svg>&nbsp;&nbsp;connection lost! retrying in 10 secs...',
+  disconnectedVisibilityTimeout = 3000,
+  reconnectingMsg = '<svg style="position: relative; top: 0px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 57.611 54.289"><defs><style>.a{fill:#d61a1a;}</style></defs><g transform="translate(0 -14.759)"><g transform="translate(0 14.759)"><path class="a" d="M56.414,56.3,36.063,18.89a8.44,8.44,0,0,0-14.515,0L1.2,56.3A8.435,8.435,0,0,0,8.454,69.048h40.7A8.437,8.437,0,0,0,56.414,56.3Zm-27.608,6a3.376,3.376,0,1,1,3.376-3.376A3.38,3.38,0,0,1,28.805,62.3Zm3.376-13.5a3.376,3.376,0,0,1-6.751,0V31.916a3.376,3.376,0,1,1,6.751,0Z" transform="translate(0 -14.759)"/></g></g></svg>&nbsp;&nbsp;Trying to connect...',
+  reconnectingVisibilityTimeout = 10000,
+  htmlParentElement = "#connection-status-container",
+} = {}) {
+  let disconnectTimeout;
+  let reconnectTimeout;
+
+  $(window).on("online", () => {
+    clearTimeout(disconnectTimeout);
+    clearTimeout(reconnectTimeout);
+
+    $(htmlParentElement).empty();
+    $(htmlParentElement).append(connectedMsg);
+
+    const timeout = setTimeout(() => {
+      $(htmlParentElement).empty();
+
+      clearTimeout(timeout);
+    }, connectedMsgTimeout);
+  });
+
+  $(window).on("offline", () => {
+    disconnectTimeout = setTimeout(() => {
+      $(htmlParentElement).empty();
+      $(htmlParentElement).append(disconnectedMsg);
+
+      reconnectTimeout = setTimeout(() => {
+        $(htmlParentElement).empty();
+        $(htmlParentElement).append(reconnectingMsg);
+
+        clearTimeout(reconnectTimeout);
+      }, reconnectingVisibilityTimeout);
+
+      clearTimeout(disconnectTimeout);
+    }, disconnectedVisibilityTimeout);
+  });
+}
+ConnectionStatusNotifier();
+
+const logoutAllSessions = () => {
+  const modal = document.getElementById("logout-all-session-modal");
+
+  document
+    .getElementById("close-logout-popup")
+    .addEventListener("click", () => {
+      modal.classList.remove("vissible-logout-session");
+    });
+
+  window.addEventListener("click", (event) => {
+    if (event.target == modal) {
+      modal.classList.remove("vissible-logout-session");
+    }
+  });
+
+  modal.classList.add("vissible-logout-session");
+};
+
+// create project modal script
+window.addEventListener(
+  "DOMContentLoaded",
+  () => {
+    $("#createNewProjectModal").on("hidden.bs.modal", (e) => {
+      $("#project-form-modal-projectTitle").val("");
+      $("#project-form-modal-projectLanguage").val("");
+      $("#project-form-modal-projectLanguage").removeAttr("disabled");
+      $("#project-form-modal-remoteAccountType").val("0");
+      $("#project-form-modal-remoteAccountType").removeAttr("disabled");
+    });
+
+    $("#project-form-modal-projectTitle").bind("input", function () {
+      $(this).val((index, value) =>
+        value.replace(/[^\w-]/gi, "").replace(/_/g, "")
+      );
+    });
+  },
+  false
+);
+
+function remoteAccountTypeChange(e) {
+  const value = $(e.target).val();
+
+  if (value !== "0") {
+    // hide for no use of it
+    $("#github-import-url-field").hide(300);
+  } else {
+    $("#github-import-url-field").hide(300);
+  }
+}
+
+if (typeof lockForCreateProject === "undefined") {
+  var lockForCreateProject = false;
+}
+
+function createProjectFromModal() {
+  const projectName = $(
+    "#project-create-new-form #project-form-modal-projectTitle"
+  ).val();
+  const language = $(
+    "#project-create-new-form #project-form-modal-projectLanguage"
+  ).val();
+  const remoteAccountType = $(
+    "#project-create-new-form #project-form-modal-remoteAccountType"
+  ).val();
+  const github_URL = $(
+    "#project-create-new-form #project-form-modal-github-url"
+  ).val();
+
+  if (!projectName.trim().length) {
+    toggleAlertMsgModal("add name of the project ",2);
+    return;
+  }
+
+  if (/\s/g.test(projectName.trim())) {
+    toggleAlertMsgModal("Spaces are not allowed in project title.",2);
+    return false;
+  }
+
+  if (!language) {
+    toggleAlertMsgModal("Select project language.",2);
+    return false;
+  }
+
+  const url = "/project/createProject";
+  const dataToSend = {
+    projectName,
+    language,
+  };
+
+  if (remoteAccountType != 0) {
+    dataToSend.remoteAccountType = remoteAccountType;
+    dataToSend.github_URL = github_URL;
+  }
+
+  if (lockForCreateProject) {
+    return;
+  }
+  lockForCreateProject = true;
+
+  toggleLoader(true);
+
+  $.ajax({
+    type: "POST",
+    url,
+    dataType: "json",
+    contentType: "application/json",
+    data: JSON.stringify(dataToSend),
+    success(data) {
+      if (data.error) {
+        console.log(data.error);
+        toggleLoader(false);
+        toggleAlertMsgModal(data.error.error,2);
+        lockForCreateProject = false;
+      } else {
+        toggleLoader(false);
+        lockForCreateProject = false;
+
+        window.location.href = `${PROJECTS_APP_HOST}/project/${data.name}-${data.uniqueId}`;
+      }
+    },
+    error(jqXHRCode, textStatusCode, errCode) {
+      toggleLoader(false);
+      toggleAlertMsgModal(`Error in adding project, ${errCode}`,2);
+
+      lockForCreateProject = false;
+    },
+  });
+}
+
+function handleSearch(e, _this) {
+  let searchValue = $(_this).val();
+  let keyCode = e.which || e.keyCode;
+
+  if (keyCode === 13) {
+    let uri = `/learning-modules?q=${searchValue}`;
+
+    window.location.href = encodeURI(uri);
+  }
+}
+
+$(() => {
+  if (location.pathname == "/user-dashboard") {
+    $("#homeIconMentor").addClass("active");
+  } else if (location.pathname == "/acc") {
+    $("#reportIconMentor").addClass("active");
+  }
+});
+
+
+// for Notifications
+console.log('workspacevar',WORKSPACES_API_HOST);
+// const socketNotificationWorkspace = io(WORKSPACES_API_HOST, {
+// 	autoConnect: false,
+// 	transports: ['websocket'],
+// 	reconnection: true,
+// 	reconnectionAttempts: Infinity,
+// 	reconnectionDelay: 1000,
+// 	reconnectionDelayMax: 5000,
+// 	timeout: 20000,
+// 	withCredentials: true,
+// });
+
+// socketNotificationWorkspace.on('connect',()=>{
+//   console.log('connected workspace');
+
+//   // Notification count emit
+//   socketNotificationWorkspace.emit('notificationsCount',(notificationsCount)=>{
+//     console.log(notificationsCount)
+//   })
+
+//   // if already notification-dropdown-menu-open
+//   if($(".notification-dropdown-menu").hasClass("notification-dropdown-menu-open")){
+//     if($(".notifications-body-lists").find('.socket-lost')){
+//       //$(".notification-img").trigger('click');
+//     }
+//   }
+
+//   // All unread Messages Count get & emit
+//   socketNotificationWorkspace.emit('getTotalUnreadMessagesCount',{},(obj)=>{
+//     let unreadMessagesCount = parseInt(obj.totalUnreadMessagesCount)
+//     console.log('unread messages: ',unreadMessagesCount)
+//     if(unreadMessagesCount){
+//       $("#unreadMessageCount").text(unreadMessagesCount > 9 ? '9+' : unreadMessagesCount);
+//     }else{
+//       $("#unreadMessageCount").html('');
+//     }
+//   })
+  
+// })
+
+// Notification count get
+// socketNotificationWorkspace.on('notificationsCount',(notifications)=>{
+//   let notificationCount = parseInt(notifications.count);
+//   console.log(notificationCount);
+//   if(notificationCount==0){
+//     $("#notification-count-div").hide();
+//   }else{
+//     $("#notification-count-div").show();
+//   }
+//   $("#notification-count").html(notificationCount > 9 ? '9+': notificationCount);
+
+//   // check notification-dropdown-menu already open or not..
+//   if($(".notification-dropdown-menu").hasClass("notification-dropdown-menu-open")){
+//     if(notificationCount>0){
+//       $(".reload-notification").addClass('active');
+//     }
+//   }
+
+// })
+
+let objLastSeen;
+// $(document).on('click', ".reload-notification.active", function(){
+//   console.warn('click event call...');
+//   $(".reload-notification").removeClass('active');
+//   $(".notifications-body-lists").html('');
+//   if(socketNotificationWorkspace.connected){
+//     $(".socket-lost").remove();
+//   }else{
+//     console.log('Socket connection lost..');
+//     $(".notifications-body-lists").html("<li class='empty-notification socket-lost loading_dots'>Trying to connect</li>")
+//   }
+//   objLastSeen='';
+//   var obj = {
+//     lastSeen: Date.now(),
+//     limit: 10
+//   }
+//   socketNotificationWorkspace.emit('notificationsList',obj,(notificationsList)=>{})
+// })
+
+// $(".notification-img").click(function () {
+//   if(socketNotificationWorkspace.connected){
+//     $(".socket-lost").remove();
+//   }else{
+//     console.log('Notification Socket connection lost..');
+//     $(".notifications-body-lists").html("<li class='empty-notification socket-lost loading_dots'>Trying to connect</li>")
+//     return;
+//   }
+
+//   if($(this).hasClass('active')) return;
+//   $(".notifications-body-lists").html('');
+  
+//   objLastSeen='';
+//   var obj = {
+//     lastSeen: Date.now(),
+//     limit: 10
+//   }
+//   socketNotificationWorkspace.emit('notificationsList',obj,(notificationsList)=>{})
+// })
+
+// $(".notification-body").scroll(function(){
+//   // console.log(Math.round($(this).scrollTop())+' + '+ $(this).height()+' = '+ Math.round($(this).scrollTop() + $(this).height())   +' _ '+ $(this)[0].scrollHeight);
+//   if( !$(".empty-notification")[0] &&  Math.floor($(this).scrollTop()) + $(this).height() + 1 >= $(this)[0].scrollHeight){
+//     console.log('scroll bottom')
+//     $(".notifications-body-lists").append(`<div class="notification-load text-center py-3">
+//     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 50 50">
+//         <path fill="#de6834" d="M25,5A20.14,20.14,0,0,1,45,22.88a2.51,2.51,0,0,0,2.49,2.26h0A2.52,2.52,0,0,0,50,22.33a25.14,25.14,0,0,0-50,0,2.52,2.52,0,0,0,2.5,2.81h0A2.51,2.51,0,0,0,5,22.88,20.14,20.14,0,0,1,25,5Z">
+//           <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.5s" repeatCount="indefinite"/>
+//         </path>
+//     </svg>
+//     </div>`);
+//     let lastSeen = $(".notifications-body-lists > li.notification-new-link:last").attr("arrived");
+//     if( objLastSeen != lastSeen ){
+//       console.log('lastseen',lastSeen);
+//       objLastSeen= lastSeen;
+//       var obj = {
+//         lastSeen: lastSeen,
+//         limit: 10
+//       }
+//       socketNotificationWorkspace.emit('notificationsList',obj,(notificationsList)=>{})
+//     }
+//   }else{
+//     $(".notification-load").remove();
+//     $(".empty-notification").html('');
+//     $(".empty-notification").css({'padding':'0px','line-height':'0px'});
+//     $(".empty-notification").removeClass("m-2")
+//   }
+// })
+
+// socketNotificationWorkspace.on('notificationsList',(notifications)=>{
+//      console.log(notifications);
+//      $(".notification-load").remove();
+//      $(".empty-notification").remove();
+//      if(notifications.notificationsArr.length==0){
+//       $(".notifications-body-lists").append("<li class='empty-notification'>There are no notifications as for now</li>")
+//       $(".empty-notification").css({'padding':'5px 15px 8px 15px','line-height':'20px'});
+//       $(".empty-notification").addClass("m-2")
+//       return;
+//      }
+//      $(".empty-notification").remove();
+//      notifications.notificationsArr.forEach((content,index)=>{
+//       index = $(".notification-new-link").length;
+      
+//       if(content.channel_name)
+//       content.channel_name = content.channel_name.replace(/>/g,"&gt;").replace(/</g,"&lt;");
+//       if(content.workspace_name)
+//       content.workspace_name = content.workspace_name.replace(/>/g,"&gt;").replace(/</g,"&lt;");
+
+//       var arrivalTime = arrivedNotification(content.created_at) || "";
+//         if(content.type == 2){ //mentioned type
+//           $(".notifications-body-lists").append(`<li class="notification-new-link ${index==0 ? '': 'border-top' }" arrived='${content.created_at}'>
+//           <a class="notification-new-text ${content.is_read ? 'read':'unread'}" href="/discussion?workspaceId=${content.workspace_id}&channelId=${content.channel_id}&messageId=${content.message_id}&notificationId=${content.id}">
+//             <div class='notification-inner-text'>${content.creatorName} has mentioned you in #${content.channel_name} (${content.workspace_name}).</div>
+//             <small class='notification-arrived'>${arrivalTime}</small>
+//           </a></li>`)
+//         }else if(content.type == 1){ //replied type
+//           $(".notifications-body-lists").append(`<li class="notification-new-link ${index==0 ? '': 'border-top' }" arrived='${content.created_at}'>
+//           <a class="notification-new-text ${content.is_read ? 'read':'unread'}" href="/discussion?workspaceId=${content.workspace_id}&channelId=${content.channel_id}&messageId=${content.message_id}&replyId=${content.reply_id}&notificationId=${content.id}">
+//           <div class='notification-inner-text'>${content.creatorName} has replied to your message in ${content.channel_type == '4' ? (content.workspace_name) : ('#' + content.channel_name + ' (' + content.workspace_name + ')')}.</div>
+//             <small class='notification-arrived'>${arrivalTime}</small>
+//           </a></li>`)
+//         }else if(content.type == 3){ //adding you in new channel
+//           $(".notifications-body-lists").append(`<li class="notification-new-link ${index==0 ? '': 'border-top' }" arrived='${content.created_at}'>
+//           <a class="notification-new-text ${content.is_read ? 'read':'unread'}" href="/discussion?workspaceId=${content.workspace_id}&channelId=${content.channel_id}&notificationId=${content.id}">
+//             <div class='notification-inner-text'>${content.channel_type == '4' ? (content.creatorName + " has begun a conversation with you in " + content.workspace_name + ".") : ("You have been added to the #" + content.channel_name + " channel." )}</div>
+//             <small class='notification-arrived'>${arrivalTime}</small>
+//           </a></li>`)
+//         }else if(content.type == 4){ //unread messages
+//           $(".notifications-body-lists").append(`<li class="notification-new-link ${index==0 ? '': 'border-top ' }" arrived='${content.created_at}'>
+//           <a class="notification-new-text ${content.is_read ? 'read':'unread'}" href="/discussion?workspaceId=${content.workspace_id}&notificationId=${content.id}">
+//             <div class='notification-inner-text'>You have ${content.total_unread_message_count} unread messages in ${content.workspace_name? content.workspace_name : 'workspace'}.</div>
+//             <small class='notification-arrived'>${arrivalTime}</small>
+//           </a></li>`)
+//         }
+//      })
+//     socketNotificationWorkspace.emit('setNotificationLastRead',(notificationsList)=>{
+//       //console.log(notificationsCount)
+//     })
+// })
+
+const arrivedNotification = (date)=>{
+  date = new Date(parseInt(date));
+  var diff = (((new Date()).getTime() - date.getTime()) / 1000)
+  var day_diff = Math.floor(diff / 86400);
+
+  if ( isNaN(day_diff) || day_diff < 0 )
+	  return;
+  
+    return day_diff == 0 && (
+			diff < 60 && "just now" ||
+			diff < 120 && "1 minute ago" ||
+			diff < 3600 && Math.floor( diff / 60 ) + " minutes ago" ||
+			diff < 7200 && "1 hour ago" ||
+			diff < 86400 && Math.floor( diff / 3600 ) + " hours ago") ||
+		day_diff == 1 && "Yesterday" ||
+		day_diff < 7 && day_diff + " days ago" ||
+		day_diff < 365 && Math.ceil( day_diff / 7 ) + " weeks ago" ||
+    day_diff > 364 && Math.ceil( day_diff / 365 ) + " years ago";
+}
+
+// socketNotificationWorkspace.on('disconnect',()=>{
+//   console.log('disconnected workspace');
+// })
+
+// socketNotificationWorkspace.connect()
+
+// for form notification
+let socketForm = io();
+socketForm.on('connect', function () {
+  console.log("socket connected");
+  socketForm.emit('getAssignedResponsesCount', {}, (data)=> {
+    console.log('getAssignedResponsesCount', data);
+    if(data && data.count) {
+      $("#formNotificationCount").html(data.count).show();
+    }else {
+      $("#formNotificationCount").html('0').hide();
+    }
+  });
+})
+

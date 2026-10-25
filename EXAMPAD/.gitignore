@@ -1,0 +1,14 @@
+node_modules/
+.env
+*.log
+dist/
+build/
+.vscode/
+.idea/
+*.swp
+*.bak
+.DS_Store
+Thumbs.db
+.system_generated/
+scratch/
+temp_*.js

@@ -1,0 +1,31 @@
+const isHidden = true;
+const toggleAlertModal = ({ message }, callback) => {
+  document.querySelector(".toast-alert").classList.remove('visible', 'error-alert', 'success-alert');
+  if (message) {
+    document.getElementById('confirm-text').innerText = message;
+  }
+  const modal = document.getElementById('myModal-confirm');
+  document
+    .getElementById('close-btn-confirm')
+    .addEventListener('click', () => {
+      // modal.style.display = "none";
+      modal.classList.remove('visible-modal-input-confirm');
+    });
+
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.classList.remove('visible-modal-input-confirm');
+    }
+  };
+
+  // modal.style.display = isHidden ? 'block':'none';
+  modal.classList.add('visible-modal-input-confirm');
+  document.getElementById('yes-btn-modal').onclick = () => {
+    callback(true);
+    modal.classList.remove('visible-modal-input-confirm');
+  };
+  document.getElementById('no-btn-modal').onclick = () => {
+    callback(false);
+    modal.classList.remove('visible-modal-input-confirm');
+  };
+};

@@ -1,0 +1,103 @@
+const imageURL = 'https://www.google.com/logos/doodles/2020/kaifi-azmis-101st-birthday-6753651837108259.5-l.png';
+const downloadSize = 47233; // bytes
+
+let socket;
+let netConnect = 0;
+
+
+function MeasureConnectionSpeed(cb) {
+  const startTime = (new Date()).getTime();
+  let endTime;
+  const download = new Image();
+  download.onload = () => {
+    endTime = (new Date()).getTime();
+
+    const duration = (endTime - startTime) / 1000;
+    const bitsLoaded = downloadSize;
+    const speedBps = (bitsLoaded / duration).toFixed(2);
+    const speedKbps = (speedBps / 1024).toFixed(2);
+    const speedMbps = (speedKbps / 1024).toFixed(2);
+
+    console.log(`Your connection speed is: ${speedBps} bps / ${speedKbps} Kbps / ${speedMbps} Mbps`);
+
+    if (cb) {
+      cb({
+        speedBps, speedKbps, speedMbps,
+      });
+    }
+  };
+
+  download.onerror = () => {
+    if (cb) cb({ error: 'Error while loading image' });
+
+    console.log('Invalid image, or error downloading');
+  };
+
+  const cacheBuster = `?nnn=${startTime}`;
+  download.src = imageURL + cacheBuster;
+}
+
+
+try {
+  socket = io.connect(`${window.location.protocol}//${window.location.host}`);
+} catch (error) {
+  console.error('socket connection error!');
+  // errorInLoadScript = 1;
+}
+
+if (socket) {
+  socket.on('connect', () => {
+    console.info('socket connected!');
+
+    if (!netConnect) {
+      netConnect = 1;
+      $('#netError').css('display', 'none');
+    }
+  });
+
+  socket.on('error', () => {
+    console.error('socket connection error!');
+  });
+
+  socket.on('session_expired', () => {
+    console.error('socket session expired!');
+
+    notie.alert({
+      type: 'error',
+      text: 'session expired! please login again.',
+      time: 3,
+    });
+  });
+
+  socket.on('disconnect', () => {
+    console.error('socket disconnected!');
+
+    MeasureConnectionSpeed((result) => {
+      let message = 'Please wait, server is taking too long to respond';
+
+      if (netConnect) {
+        if (result && result.speedKbps < 100) {
+          message = 'Please Check your internet connection, Too slow!';
+        }
+
+        notie.alert({
+          type: 'error',
+          text: message,
+          time: 3,
+        });
+        netConnect = 0;
+
+        $('#netError').css('display', 'block');
+      }
+    });
+  });
+
+  socket.on('auth_succeed', (data) => {
+    console.info('socket auth success');
+    console.log('auth data ------> ', data);
+
+    sessionStorage.setItem('sid', data.id);
+
+    $('#sid').attr('value', data.id);
+  });
+}

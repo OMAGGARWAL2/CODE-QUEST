@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Roboto:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+    <style>
+        :root {
+            --primary-orange: #de6834;
+            --bg-site: #f9f6f2;
+            --text-dark: #2d2d2d;
+            --text-muted: #6b7280;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', 'Inter', sans-serif;
+            background-color: var(--bg-site);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::after {
+            content: "";
+            background-image: url(../BGNEW01.png);
+            background-size: 100%;
+            background-repeat: no-repeat;
+            background-position: top;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: -5;
+        }
+
+        .bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-color: #ffffff;
+            overflow: hidden;
+        }
+
+        .bg-container svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .top-left-logo {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            width: 44px;
+            height: 44px;
+            z-index: 20;
+            background: #e30613;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+        }
+
+        .top-left-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: center;
+            padding: 0 40px;
+            z-index: 10;
+        }
+
+        .progress-bar-container {
+            display: flex;
+            width: 100%;
+            max-width: 320px;
+            height: 6px;
+            margin-bottom: 35px;
+            border-radius: 0px;
+            overflow: hidden;
+            align-self: flex-start;
+        }
+
+        .progress-segment {
+            height: 100%;
+        }
+
+        .segment-1 {
+            width: 15%;
+            background: #de6834;
+        }
+
+        .segment-2 {
+            width: 25%;
+            background: #de6834;
+        }
+
+        .segment-3 {
+            width: 60%;
+            background: #de6834;
+        }
+
+        .lobby-card {
+            width: 100%;
+            padding: 50px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: row;
+            gap: 50px;
+            align-items: stretch;
+            animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .instructions-pane {
+            flex: 1.5;
+            text-align: left;
+            padding-right: 40px;
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .verification-pane {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .stat-group {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #101828;
+            margin-bottom: 0;
+            font-family: 'Hind', sans-serif;
+        }
+
+        .stat-value {
+            font-size: 1.15rem;
+            font-weight: 400;
+            color: #b06543;
+            margin-left: 10px;
+            font-family: 'Hind', sans-serif;
+        }
+
+        .instruction-list {
+            font-size: 1.15rem;
+            color: #444;
+            line-height: 1.8;
+            padding-left: 20px;
+        }
+
+        .instruction-list li {
+            margin-bottom: 12px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        .clean-input {
+            width: 100%;
+            padding: 12px 0;
+            border: none;
+            border-bottom: 2px solid #eee;
+            background: transparent;
+            font-size: 1.2rem;
+            color: #333;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .clean-input:focus {
+            border-bottom-color: var(--primary-orange);
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 20px;
+            background-color: var(--primary-orange);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .start-btn:hover {
+            background-color: #c05126;
+            box-shadow: 0 10px 20px rgba(222, 104, 52, 0.3);
+            transform: translateY(-2px);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+    <style>
+        ::selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+
+        ::-moz-selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="top-left-logo">
+        <img src="../Tests _ Chitkara_files/chitkara.a1beb7f0.png" alt="Chitkara Logo" style="height: 50px;">
+    </div>
+
+    <div class="container">
+        <div style="width: 100%; max-width: 1100px; margin-bottom: 20px;">
+            <div class="progress-bar-container">
+                <div class="progress-segment segment-1"></div>
+                <div class="progress-segment segment-2"></div>
+                <div class="progress-segment segment-3"></div>
+            </div>
+            <h1 id="testTitle" style="font-size: 1.8rem; font-weight: 500; color: #2d2d2d; font-family: 'Hind', sans-serif; text-align: left; margin: 0;">Loading Test
+                Details...</h1>
+        </div>
+
+        <div class="lobby-card">
+            <div class="instructions-pane">
+                <div class="stat-group">
+                    <div class="stat-item">
+                        <span class="stat-label">Total Questions</span>
+                        <span id="lobbyQuestions" class="stat-value">--</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Time</span>
+                        <span id="lobbyTime" class="stat-value">-- mins</span>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 1.4rem; color: #333; margin-bottom: 20px;">General Instructions:</h3>
+                <ul class="instruction-list">
+                    <li>Ensure you have a stable internet connection before starting.</li>
+                    <li>The test will automatically submit when the timer runs out.</li>
+                    <li>Do not refresh the page or navigate away during the assessment.</li>
+                    <li>Each section may have its own specific rules and time limits.</li>
+                    <li>Your activity is being monitored for integrity purposes.</li>
+                </ul>
+            </div>
+
+            <div class="verification-pane">
+                <h2
+                    style="font-size: 2.5rem; color: #333; font-weight: 400; margin-bottom: 30px; letter-spacing: -1px; text-align: left;">
+                    Identity Verification</h2>
+                <div id="lobbyVerificationForm">
+                    <!-- Dynamic fields will be injected here -->
+                </div>
+                <button onclick="startActualTest()" class="start-btn">Begin Assessment</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <h2 style="color: #333; font-weight: 500;">Securing Environment...</h2>
+        <p style="color: #666;">Loading exam questions and assets.</p>
+    </div>
+
+    <script>
+        let currentExam = null;
+        let currentUser = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!auth.isLoggedIn()) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const testId = urlParams.get('testId');
+                window.location.href = `step2vialink.html${testId ? '?testId=' + testId : ''}`;
+                return;
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const examId = urlParams.get('testId');
+            const userId = urlParams.get('userId');
+
+            if (examId && userId) {
+                if (window.db && window.db.getExamById) {
+                    const exam = db.getExamById(examId) || db.getExamByTestId(examId);
+                    const user = db.getUserById ? db.getUserById(userId) : { id: userId, name: 'Student' };
+
+                    if (exam) {
+                        currentExam = exam;
+                        currentUser = user;
+
+                        document.getElementById('testTitle').textContent = exam.title || exam.name || 'Assessment Session';
+                        document.getElementById('lobbyQuestions').textContent = exam.questions ? exam.questions.length : (exam.totalQuestions || '0');
+                        document.getElementById('lobbyTime').textContent = (exam.duration || 90) + ' mins';
+
+                        setupVerificationFields(exam);
+                    }
+                }
+            } else {
+                // Try to get from session if URL params are missing
+                const sessionUser = auth.getCurrentUser();
+                const pendingId = sessionStorage.getItem('pending_test_id');
+                if (sessionUser && pendingId) {
+                    const exam = db.getExamByTestId(pendingId) || db.getExamById(pendingId);
+                    if (exam) {
+                        currentExam = exam;
+                        currentUser = sessionUser;
+                        document.getElementById('testTitle').textContent = exam.title || exam.name;
+                        document.getElementById('lobbyQuestions').textContent = exam.questions ? exam.questions.length : exam.totalQuestions;
+                        document.getElementById('lobbyTime').textContent = exam.duration + ' mins';
+                        setupVerificationFields(exam);
+                    }
+                }
+            }
+        });
+
+        function setupVerificationFields(exam) {
+            const form = document.getElementById('lobbyVerificationForm');
+            form.innerHTML = '';
+
+            const fields = exam.identityFields || [];
+            if (fields.length === 0) {
+                form.innerHTML = '<p style="color:#666; font-size:1.1rem; text-align:left; margin-bottom:30px;">No additional verification required. You are ready to start.</p>';
+            } else {
+                fields.forEach((f, i) => {
+                    const group = document.createElement('div');
+                    group.className = 'input-group';
+
+                    const label = document.createElement('label');
+                    label.textContent = `${f.label} *`;
+
+                    let input = document.createElement('input');
+                    input.type = f.type === 'testcode' ? 'text' : f.type;
+                    input.className = 'clean-input';
+                    input.placeholder = `Enter your ${f.label.toLowerCase()}`;
+                    input.id = `verify_field_${i}`;
+                    input.required = true;
+
+                    group.appendChild(label);
+                    group.appendChild(input);
+                    form.appendChild(group);
+                });
+            }
+        }
+
+        async function startActualTest() {
+            const fields = currentExam.identityFields || [];
+            const verificationData = {};
+
+            for (let i = 0; i < fields.length; i++) {
+                const input = document.getElementById(`verify_field_${i}`);
+                const val = input.value.trim();
+                if (!val) {
+                    alert(`Please fill in ${fields[i].label}`);
+                    input.focus();
+                    return;
+                }
+                verificationData[fields[i].label] = val;
+            }
+
+            // Show loading
+            document.getElementById('loadingOverlay').style.display = 'flex';
+
+            // Small delay for effect
+            setTimeout(() => {
+                let attemptRes = db.startAttempt(currentExam.id, currentUser.id);
+                if (!attemptRes.success && attemptRes.existingAttempt) {
+                    const status = attemptRes.existingAttempt.status;
+                    if (status === 'submitted' || status === 'reviewed' || status === 'completed') {
+                        // Start a fresh re-attempt
+                        attemptRes = db.startAttempt(currentExam.id, currentUser.id, true);
+                    }
+                }
+
+                if (attemptRes.success || attemptRes.existingAttempt) {
+                    const attempt = attemptRes.attempt || attemptRes.existingAttempt;
+                    if (Object.keys(verificationData).length > 0) {
+                        db.updateAttempt(attempt.id, { verificationData });
+                    }
+                    // Save roll number for the watermark in exam-attempt.html
+                    const roll = currentUser.rollNo || currentUser.id || 'STUDENT';
+                    sessionStorage.setItem('joined_via_link', 'true');
+                    window.location.href = 'exam-attempt.html?attemptId=' + attempt.id + '&vialink=true&ctrlE=true';
+                } else {
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                    alert(attemptRes.message || 'Failed to start exam.');
+                }
+            }, 1500);
+        }
+    </script>
+</body>
+
+</html>

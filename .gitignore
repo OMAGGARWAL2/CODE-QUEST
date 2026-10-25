@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Environment / secrets
+.env
+.env.local
+*.log
+
+# Build output
+dist/
+build/
+
+# Editor / OS
+.vscode/
+.idea/
+*.swp
+*.bak
+.DS_Store
+Thumbs.db
+
+# Scratch / temp
+.system_generated/
+scratch/
+_git_backup/
+temp_*.js
+temp_*.txt

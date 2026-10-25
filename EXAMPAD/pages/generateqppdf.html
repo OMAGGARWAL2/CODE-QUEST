@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+
+    <!-- Academic Typography and Math -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Noto+Serif+Devanagari:wght@400;700&family=STIX+Two+Text:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' },
+            options: { enableMenu: false }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            /* ERP INSTITUTIONAL THEME */
+            --sidebar-width: 380px;
+            --erp-navy: #1f4e79;
+            --erp-blue-dark: #0f172a;
+            --erp-border: #d9dee5;
+            --erp-bg: #f8f9fb;
+            --erp-accent: #1f4e79;
+            --erp-text: #334155;
+            --erp-gray-light: #e9edf3;
+
+            /* PAPER VARS - STRICT ACADEMIC */
+            --a4-width: 210mm;
+            --a4-height: 297mm;
+            --page-margin: 20mm;
+            --font-paper: "STIX Two Text", "Times New Roman", Times, serif;
+            --font-hindi: "Noto Serif Devanagari", serif;
+            --global-scale: 1;
+            --global-line-height: 1.5;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--erp-bg);
+            font-family: 'Inter', sans-serif;
+            color: var(--erp-text);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .erp-app {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* 🧭 TOP NAVIGATION - 3 ZONES */
+        .erp-top-nav {
+            height: 70px;
+            background: #ffffff;
+            border-bottom: 2px solid var(--erp-navy);
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            align-items: center;
+            padding: 0 24px;
+            flex-shrink: 0;
+            z-index: 2000;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-logo {
+            height: 40px;
+        }
+
+        .nav-system-name {
+            font-weight: 800;
+            font-size: 14px;
+            color: var(--erp-navy);
+            letter-spacing: 0.5px;
+        }
+
+        .nav-center {
+            text-align: center;
+        }
+
+        .nav-module-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            text-transform: uppercase;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 16px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .user-chip {
+            background: #f1f5f9;
+            padding: 4px 12px;
+            border-radius: 4px;
+            border: 1px solid var(--erp-border);
+        }
+
+        .logout-link {
+            color: #ef4444;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* MAIN SYSTEM LAYOUT */
+        .erp-main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* 📁 SIDEBAR STRUCTURED */
+        .erp-sidebar {
+            width: var(--sidebar-width);
+            background: #fff;
+            border-right: 1px solid var(--erp-border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .sidebar-section-header {
+            font-size: 11px;
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 20px 0 10px 0;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .sidebar-section-header:first-child {
+            margin-top: 0;
+        }
+
+        .erp-card {
+            background: #fff;
+            border: 1px solid var(--erp-border);
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .erp-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .erp-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--erp-border);
+            border-radius: 4px;
+            font-size: 13px;
+            margin-bottom: 10px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            background: #fafbfc;
+        }
+
+        .erp-input:focus {
+            outline: none;
+            border-color: var(--erp-navy);
+            background: #fff;
+        }
+
+        .erp-input:disabled {
+            background: #f1f5f9;
+            cursor: not-allowed;
+        }
+
+        /* 🧱 PREVIEW VIEWPORT CENTERED */
+        .erp-preview {
+            flex: 1;
+            background: var(--erp-gray-light);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 60px 0;
+            scroll-behavior: smooth;
+        }
+
+        /* 📑 A4 PAPER DESIGN - ACADEMIC AUTHORITY */
+        .a4-page {
+            background: #fff;
+            width: var(--a4-width);
+            min-height: var(--a4-height);
+            padding: var(--page-margin);
+            margin-bottom: 60px;
+            position: relative;
+            font-family: var(--font-paper);
+            color: #000;
+            font-size: calc(15px * var(--global-scale));
+            line-height: var(--global-line-height);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .confidential-strip {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #444;
+            border: 1px solid #444;
+            padding: 4px 10px;
+            text-transform: uppercase;
+        }
+
+        .academic-header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .uni-logo {
+            height: 65px;
+            margin-bottom: 10px;
+        }
+
+        .uni-name {
+            font-size: 24px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .exam-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 5px;
+        }
+
+        .meta-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .meta-table td {
+            border: 1px solid #000;
+            padding: 6px 12px;
+        }
+
+        .section-header {
+            text-align: center;
+            font-weight: 700;
+            font-size: 16px;
+            margin: 25px 0;
+            text-transform: uppercase;
+            text-decoration: underline;
+        }
+
+        .instruction-box {
+            border: 1px solid #000;
+            padding: 12px;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .q-row {
+            display: grid;
+            grid-template-columns: 18mm 1fr 12mm;
+            margin-bottom: 20px;
+            page-break-inside: avoid;
+        }
+
+        .q-num {
+            font-weight: 700;
+        }
+
+        .q-text {
+            font-weight: 400;
+            text-align: justify;
+        }
+
+        .q-hi {
+            font-family: var(--font-hindi);
+            display: block;
+            margin-top: 5px;
+            font-size: 0.95em;
+            line-height: 1.4;
+            color: #111;
+        }
+
+        .q-marks {
+            text-align: right;
+            font-weight: 700;
+        }
+
+        .sig-panel {
+            margin-top: 60px;
+            display: flex;
+            justify-content: space-between;
+            padding-top: 20px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .sig-authorized {
+            text-align: right;
+            margin-top: 100px;
+            font-weight: 700;
+        }
+
+        /* HUD CONTROLLER */
+        .scale-hud {
+            position: fixed;
+            top: 90px;
+            right: 40px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 4px;
+            border: 1px solid var(--erp-border);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            min-width: 260px;
+        }
+
+        .hud-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .hud-label {
+            font-size: 11px;
+            font-weight: 800;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+
+        .hud-val {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--erp-navy);
+        }
+
+        /* BUTTONS */
+        .btn-erp {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background: var(--erp-navy);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .btn-erp.secondary {
+            background: #f8fafc;
+            color: #1e293b;
+            border: 1px solid var(--erp-border);
+        }
+
+        .btn-erp:hover {
+            opacity: 0.9;
+        }
+
+        /* SYSTEM FOOTER */
+        .erp-footer {
+            height: 30px;
+            background: #fff;
+            border-top: 1px solid var(--erp-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: #94a3b8;
+            flex-shrink: 0;
+        }
+
+        #erp-toast {
+            position: fixed;
+            bottom: 50px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            background: #1e293b;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        #erp-toast.show {
+            opacity: 1;
+            transform: translate(-50%, -10px);
+        }
+
+        .q-card {
+            position: relative;
+            padding: 15px;
+            border: 1px solid var(--erp-border);
+            border-radius: 4px;
+            margin-bottom: 12px;
+            background: #fff;
+        }
+
+        .q-remove {
+            position: absolute;
+}
+
+        .q-remove {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            color: #ef4444;
+            font-weight: 800;
+        }
+
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 0;
+            }
+
+            html,
+            body,
+            .erp-app,
+            .erp-main,
+            .erp-preview,
+            #paper-viewport {
+                height: auto !important;
+                min-height: 100% !important;
+                overflow: visible !important;
+                background: #ffffff !important;
+                display: block !important;
+                position: static !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+            }
+
+            .erp-top-nav,
+            .erp-sidebar,
+            .scale-hud,
+            .erp-footer,
+            #erp-toast,
+            #staging-area {
+                display: none !important;
+            }
+
+            .a4-page {
+                box-shadow: none !important;
+                margin: 0 auto !important;
+                padding: var(--page-margin) !important;
+                page-break-after: always !important;
+                break-after: page !important;
+                height: auto !important;
+                min-height: var(--a4-height) !important;
+                box-sizing: border-box !important;
+                border: none !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+            }
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+
+    <div class="erp-app">
+        <!-- 🧭 TOP NAVIGATION -->
+        <nav class="erp-top-nav">
+            <div class="nav-left">
+                <img src="https://api.learntechww.com/college_icon/logo1733989968823.jpg" class="nav-logo">
+                <div class="nav-system-name">TESTPAD ERP | v5.4</div>
+            </div>
+            <div class="nav-center">
+                <div class="nav-module-title">Question Paper Authoring System</div>
+            </div>
+            <div class="nav-right">
+                <span id="save-indicator"
+                    style="font-size: 11px; color: #94a3b8; font-weight: 700; margin-right: 10px;">Checking
+                    status...</span>
+                <div class="user-chip">Role: Controller / Faculty</div>
+                <a href="#" class="logout-link">Logout</a>
+            </div>
+        </nav>
+
+        <div class="erp-main">
+            <!-- 📁 SIDEBAR -->
+            <aside class="erp-sidebar">
+                <div class="sidebar-scroll" id="sidebar-inputs">
+
+                    <div class="sidebar-section-header">📁 Paper Details</div>
+                    <div class="erp-card">
+                        <span class="erp-label">Examination Title</span>
+                        <input type="text" id="examName" class="erp-input" placeholder="End Term Examination"
+                            oninput="App.UI.onInput()">
+                        <span class="erp-label">Semester / Session</span>
+                        <input type="text" id="semester" class="erp-input" placeholder="4th Semester (2025-26)"
+                            oninput="App.UI.onInput()">
+                        <div style="display:flex; gap:10px;">
+                            <div style="flex:1;"><span class="erp-label">Max Marks</span><input type="text" id="marks"
+                                    class="erp-input" oninput="App.UI.onInput()"></div>
+                            <div style="flex:1;"><span class="erp-label">Time (Hrs)</span><input type="text" id="time"
+                                    class="erp-input" oninput="App.UI.onInput()"></div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section-header">📁 Subject Metadata</div>
+                    <div class="erp-card">
+                        <span class="erp-label">Subject Identifier</span>
+                        <input type="text" id="subEn" class="erp-input" placeholder="Subject Title"
+                            oninput="App.UI.onInput()">
+                        <span class="erp-label">Subject Code / ID</span>
+                        <input type="text" id="qpCode" class="erp-input" placeholder="E.g. CS-401"
+                            oninput="App.UI.onInput()">
+                        <span class="erp-label">Course Name</span>
+                        <input type="text" id="course" class="erp-input" placeholder="B.E. Computer Science"
+                            oninput="App.UI.onInput()">
+                    </div>
+
+                    <div class="sidebar-section-header">📁 Questions & Sections</div>
+                    <div id="authoring-questions"></div>
+                    <div style="display:flex; gap:10px; margin-top:20px;">
+                        <button class="btn-erp secondary" style="flex:1" onclick="App.UI.addSection()">+ Add
+                            Section</button>
+                        <button class="btn-erp secondary" style="flex:1" onclick="App.UI.addQuestion()">+ Add
+                            Question</button>
+                    </div>
+
+                    <div class="sidebar-section-header">📁 Security & Controls</div>
+                    <div class="erp-card">
+                        <label
+                            style="display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700; cursor:pointer; margin-bottom: 12px;">
+                            <input type="checkbox" id="showHindi"
+                                onchange="App.UI.onSettingChange('showHindi', this.checked)"> Bilingual (Hindi) Mode
+                        </label>
+                        <label
+                            style="display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700; cursor:pointer; margin-bottom: 12px;">
+                            <input type="checkbox" id="showWatermark"
+                                onchange="App.UI.onSettingChange('showWatermark', this.checked)"> Apply Confidential
+                            Strip
+                        </label>
+                        <label
+                            style="display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700; cursor:pointer; color: #c2410c;">
+                            <input type="checkbox" id="lockMode" onchange="App.UI.onLockChange(this.checked)"> Final
+                            Lock (Disable Edits)
+                        </label>
+                    </div>
+
+                    <div class="sidebar-section-header">📁 Document Export</div>
+                    <button class="btn-erp" style="width:100%; border-radius: 4px; padding: 14px;"
+                        onclick="window.print()">
+                        COMMIT TO INSTITUTIONAL PDF
+                    </button>
+
+                    <div style="height: 60px;"></div>
+                </div>
+            </aside>
+
+            <!-- 🧱 PREVIEW AREA -->
+            <main class="erp-preview">
+                <div class="scale-hud">
+                    <div class="hud-row">
+                        <span class="hud-label">Document Scale</span>
+                        <input type="range" id="fontScale" min="0.8" max="1.4" step="0.02" value="1.0" style="flex:1;"
+                            oninput="App.UI.onScaleChange(this.value)">
+                        <span id="scaleLabel" class="hud-val">1.00x</span>
+                    </div>
+                </div>
+                <div id="paper-viewport"></div>
+            </main>
+        </div>
+
+        <!-- 🏢 SYSTEM FOOTER -->
+        <footer class="erp-footer">
+            TESTPAD ERP v5.4 | Chitkara University | Internal Authorized Use Only | System Status: Operational
+        </footer>
+    </div>
+
+    <div id="erp-toast">Synchronized</div>
+    <div id="staging-area" style="position: absolute; left: -9999px; width: 170mm;"></div>
+
+    <!-- TEMPLATES -->
+    <template id="q-tpl">
+        <div class="q-card" data-uid="">
+            <span class="q-remove" onclick="App.UI.removeQuestion(this)">✖</span>
+            <div style="display:flex; gap:10px; margin-bottom:12px;">
+                <div style="width: 60px;"><span class="erp-label">NO.</span><input type="text"
+                        class="q-num-in erp-input"></div>
+                <div style="flex:1;"><span class="erp-label">MARK</span><input type="text" class="q-marks-in erp-input">
+                </div>
+            </div>
+            <span class="erp-label">ENGLISH PROMPT</span>
+            <textarea class="q-txt-en erp-input" style="min-height:50px;"></textarea>
+            <span class="erp-label hindi-only">अनुवाद (HINDI)</span>
+            <textarea class="q-txt-hi erp-input hindi-only"
+                style="min-height:50px; font-family: var(--font-hindi);"></textarea>
+            <div class="diag-hub" style="background:#f8fafc; padding:10px; border-radius:4px; margin-top:10px;">
+                <span class="erp-label">Attachment / Diagram URL</span>
+                <input type="text" class="q-diag erp-input" style="margin:0;" placeholder="Image URL">
+            </div>
+        </div>
+    </template>
+
+    <script src="../js/db.js"></script>
+    <script>
+        const App = {
+            State: {
+                meta: { semester: '4th Semester (2025-26)', course: 'B.E. Computer Science', examName: 'End Term Examination', qpCode: 'CS-401', subEn: 'Theory of Computation', time: '3 Hours', marks: '100' },
+                questions: [],
+                settings: { showHindi: true, showWatermark: true, signatures: ['Internal Examiner', 'HOD/Dean'], isLocked: false },
+                scale: 1.0,
+                lineHeight: 1.5
+            },
+
+            timers: { preview: null, storage: null },
+            renderLock: false,
+
+            init() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const examId = urlParams.get('examId');
+                
+                if (examId && window.db) {
+                    const exam = db.getExamById(examId);
+                    if (exam) {
+                        App.State.meta.examName = exam.title || '';
+                        App.State.meta.marks = exam.totalMarks || '';
+                        App.State.meta.time = exam.duration || '';
+                        App.State.meta.qpCode = exam.testId || '';
+                        
+                        let questions = [];
+                        if (exam.questions) {
+                            exam.questions.forEach((q, i) => {
+                                let textEn = q.text || q.questionText || '';
+                                if (q.type === 'coding') {
+                                    if (q.prefilledCode) {
+                                        textEn += '<br><br><strong>Prefixed Code:</strong><br><pre style="background:#f4f4f4;padding:10px;">' + q.prefilledCode.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
+                                    }
+                                    if (q.testCases && q.testCases.length > 0) {
+                                        textEn += '<br><strong>Test Cases:</strong><br>';
+                                        q.testCases.forEach((tc, idx) => {
+                                            textEn += `<em>Case ${idx+1}:</em> Input: <code>${tc.input}</code> | Output: <code>${tc.output}</code><br>`;
+                                        });
+                                    }
+                                } else if (q.type === 'mcq' && q.options) {
+                                    textEn += '<br><br>';
+                                    q.options.forEach((opt, idx) => {
+                                        textEn += String.fromCharCode(65 + idx) + ') ' + opt + '<br>';
+                                    });
+                                }
+                                questions.push({
+                                    type: 'question',
+                                    num: i + 1,
+                                    marks: q.marks || 1,
+                                    textEn: textEn,
+                                    textHi: '',
+                                    diag: q.image || q.diag || '',
+                                    uid: 'q' + i
+                                });
+                            });
+                        }
+                        App.State.questions = questions;
+                    }
+                } else {
+                    this.Persistence.load() || this.Persistence.loadSample();
+                }
+                
+                this.UI.syncInputsFromState();
+                this.UI.render();
+                this.Pagination.render();
+                this.UI.updateSaveStatus();
+            },
+
+            Persistence: {
+                save() {
+                    localStorage.setItem('CHITKARA_EXAM_ERP_V6_PRO', JSON.stringify(App.State));
+                    App.UI.updateSaveStatus();
+                },
+                load() {
+                    const r = localStorage.getItem('CHITKARA_EXAM_ERP_V6_PRO');
+                    if (!r) return false;
+                    try { App.State = JSON.parse(r); return true; } catch (e) { return false; }
+                },
+                loadSample() {
+                    App.State.questions = [
+                        { type: 'section', title: 'Part A (Multiple Choice Questions)', uid: 's1' },
+                        { type: 'question', num: '1', textEn: 'What is the minimum number of states in a DFA accepting empty string over {0,1}?', textHi: '{0,1} पर खाली स्ट्रिंग स्वीकार करने वाले डीएफए में राज्यों की न्यूनतम संख्या क्या है?', marks: '2', diag: '', uid: 'q1' },
+                        { type: 'question', num: '2', textEn: 'Specify the pumping length for regular language L = {0^n 1^n | n >= 0}.', textHi: 'नियमित भाषा L = {0^n 1^n | n >= 0} के लिए पंपिंग लंबाई निर्दिष्ट करें।', marks: '2', diag: '', uid: 'q2' },
+                        { type: 'section', title: 'Part B (Long Descriptor Questions)', uid: 's2' },
+                        { type: 'question', num: '3', textEn: 'Convert the following NFA into its equivalent DFA and describe the state transitions.', textHi: 'निम्नलिखित एनएफए को उसके समकक्ष डीएफए में बदलें और राज्य संक्रमण का वर्णन करें।', marks: '10', diag: '', uid: 'q3' }
+                    ];
+                },
+                reset() { if (confirm("Clear all draft data? This cannot be undone.")) { localStorage.removeItem('CHITKARA_EXAM_ERP_V6_PRO'); location.reload(); } }
+            },
+
+            UI: {
+                syncInputsFromState() {
+                    const m = App.State.meta;
+                    ['semester', 'course', 'examName', 'qpCode', 'subEn', 'time', 'marks'].forEach(k => { document.getElementById(k).value = m[k] || ''; });
+                    document.getElementById('fontScale').value = App.State.scale;
+                    document.getElementById('scaleLabel').innerText = App.State.scale.toFixed(2) + 'x';
+                    document.getElementById('showHindi').checked = App.State.settings.showHindi;
+                    document.getElementById('showWatermark').checked = App.State.settings.showWatermark;
+                    document.getElementById('lockMode').checked = App.State.settings.isLocked;
+                    this.toggleLock(App.State.settings.isLocked);
+                },
+                onInput() {
+                    if (App.State.settings.isLocked) return;
+                    const m = App.State.meta;
+                    ['semester', 'course', 'examName', 'qpCode', 'subEn', 'time', 'marks'].forEach(k => { m[k] = document.getElementById(k).value; });
+                    clearTimeout(App.timers.preview); App.timers.preview = setTimeout(() => App.Pagination.render(), 400);
+                    clearTimeout(App.timers.storage); App.timers.storage = setTimeout(() => App.Persistence.save(), 1000);
+                },
+                onSettingChange(k, v) { if (App.State.settings.isLocked) return; App.State.settings[k] = v; this.onInput(); },
+                onScaleChange(v) { App.State.scale = parseFloat(v); document.getElementById('scaleLabel').innerText = v + 'x'; document.documentElement.style.setProperty('--global-scale', v); this.onInput(); },
+                onLockChange(v) { App.State.settings.isLocked = v; this.toggleLock(v); this.onInput(); },
+
+                toggleLock(locked) {
+                    const inputs = document.querySelectorAll('.erp-input, button.secondary');
+                    inputs.forEach(el => {
+                        if (el.id !== 'lockMode') el.disabled = locked;
+                    });
+                },
+
+                updateSaveStatus() {
+                    const time = new Date().toLocaleTimeString();
+                    document.getElementById('save-indicator').innerText = `Last Saved: ${time}`;
+                },
+
+                renderQuestions() {
+                    const container = document.getElementById('authoring-questions');
+                    container.innerHTML = '';
+                    App.State.questions.forEach(q => {
+                        const card = document.createElement('div');
+                        if (q.type === 'section') {
+                            card.className = 'erp-card';
+                            card.innerHTML = `<span class="q-remove" onclick="App.UI.removeQuestion('${q.uid}')">✖</span><span class="erp-label">Section Title</span><input type="text" class="erp-input s-val" value="${q.title}" ${App.State.settings.isLocked ? 'disabled' : ''}>`;
+                            card.querySelector('.s-val').oninput = (e) => { q.title = e.target.value; App.UI.onInput(); };
+                        } else {
+                            const node = document.getElementById('q-tpl').content.cloneNode(true);
+                            const qCard = node.querySelector('.q-card');
+                            qCard.querySelector('.q-num-in').value = q.num || '';
+                            qCard.querySelector('.q-num-in').oninput = (e) => { q.num = e.target.value; App.UI.onInput(); };
+                            qCard.querySelector('.q-marks-in').value = q.marks || '';
+                            qCard.querySelector('.q-marks-in').oninput = (e) => { q.marks = e.target.value; App.UI.onInput(); };
+                            qCard.querySelector('.q-txt-en').value = q.textEn || '';
+                            qCard.querySelector('.q-txt-en').oninput = (e) => { q.textEn = e.target.value; App.UI.onInput(); };
+                            qCard.querySelector('.q-txt-hi').value = q.textHi || '';
+                            qCard.querySelector('.q-txt-hi').oninput = (e) => { q.textHi = e.target.value; App.UI.onInput(); };
+                            qCard.querySelector('.q-diag').value = q.diag || '';
+                            qCard.querySelector('.q-diag').oninput = (e) => { q.diag = e.target.value; App.UI.onInput(); };
+
+                            if (App.State.settings.isLocked) {
+                                qCard.querySelectorAll('.erp-input').forEach(i => i.disabled = true);
+                                qCard.querySelector('.q-remove').style.display = 'none';
+                            }
+                            qCard.querySelector('.q-remove').onclick = () => App.UI.removeQuestion(q.uid);
+                            card.appendChild(qCard);
+                        }
+                        container.appendChild(card);
+                    });
+                    this.toggleHindiUI();
+                },
+
+                addSection() { if (App.State.settings.isLocked) return; App.State.questions.push({ type: 'section', title: 'SECTION HEADER', uid: crypto.randomUUID() }); this.render(); this.onInput(); },
+                addQuestion() { if (App.State.settings.isLocked) return; App.State.questions.push({ type: 'question', uid: crypto.randomUUID(), num: '', marks: '2', textEn: '', textHi: '', diag: '' }); this.render(); this.onInput(); },
+                removeQuestion(uid) { if (App.State.settings.isLocked) return; App.State.questions = App.State.questions.filter(q => q.uid !== uid); this.render(); this.onInput(); },
+
+                toggleHindiUI() {
+                    const show = App.State.settings.showHindi;
+                    document.querySelectorAll('.hindi-only').forEach(el => el.style.display = show ? 'block' : 'none');
+                },
+
+                render() { this.renderQuestions(); }
+            },
+
+            Pagination: {
+                async render() {
+                    if (App.renderLock) return; App.renderLock = true;
+                    try {
+                        const vp = document.getElementById('paper-viewport');
+                        const stage = document.getElementById('staging-area');
+                        stage.innerHTML = '';
+
+                        const items = App.State.questions.map(q => {
+                            const el = document.createElement('div');
+                            if (q.type === 'section') {
+                                el.className = 'section-header'; el.innerText = q.title;
+                            } else {
+                                el.className = 'q-row';
+                                let diag = '';
+                                if (q.diag) {
+                                    if (q.diag.startsWith('http')) diag = `<div style="text-align:center; margin:10px 0;"><img src="${q.diag}" style="max-height:160px; max-width:100%;"></div>`;
+                                }
+                                const hi = App.State.settings.showHindi ? `<span class="q-hi">${q.textHi}</span>` : '';
+                                el.innerHTML = `<div class="q-num">${q.num}.</div><div class="q-text">${q.textEn}${hi}${diag}</div><div class="q-marks">[${q.marks}]</div>`;
+                            }
+                            stage.appendChild(el);
+                            return el;
+                        });
+
+                        if (window.MathJax) await MathJax.typesetPromise([stage]);
+                        const imgs = Array.from(stage.querySelectorAll('img'));
+                        await Promise.all(imgs.map(img => new Promise(res => { img.onload = res; img.onerror = res; if (img.complete) res(); })));
+
+                        vp.innerHTML = '';
+                        let pCount = 1;
+                        let activePage = this.newPage(pCount);
+                        vp.appendChild(activePage);
+
+                        let curH = activePage.querySelector('.academic-header').offsetHeight + activePage.querySelector('.meta-table').offsetHeight + activePage.querySelector('.instruction-box').offsetHeight + 40;
+                        const pageLimit = 1000;
+
+                        items.forEach(node => {
+                            const h = node.offsetHeight + 10;
+                            if (curH + h > pageLimit) {
+                                pCount++;
+                                activePage = this.newPage(pCount);
+                                vp.appendChild(activePage);
+                                curH = 40;
+                            }
+                            activePage.querySelector('.c-zone').appendChild(node.cloneNode(true));
+                            curH += h;
+                        });
+
+                        // Authorized Signatory on last page
+                        const sigZone = document.createElement('div');
+                        sigZone.className = 'sig-authorized';
+                        sigZone.innerHTML = `Controller of Examination<br>(Authorized Signatory)`;
+                        activePage.appendChild(sigZone);
+
+                    } finally { App.renderLock = false; }
+                },
+
+                newPage(num) {
+                    const page = document.createElement('div');
+                    page.className = 'a4-page';
+                    const m = App.State.meta;
+                    if (App.State.settings.showWatermark) page.innerHTML += `<div class="confidential-strip">CONFIDENTIAL | UNIVERSITY COPY</div>`;
+
+                    if (num === 1) {
+                        page.innerHTML += `
+                            <div class="academic-header">
+                                <img src="https://api.learntechww.com/college_icon/logo1733989968823.jpg" class="uni-logo">
+                                <div class="uni-name">Chitkara University, Punjab</div>
+                                <div class="exam-title">${m.examName}</div>
+                            </div>
+                            <table class="meta-table">
+                                <tr><td><strong>Course:</strong> ${m.course}</td><td><strong>Paper ID:</strong> ${m.qpCode}</td></tr>
+                                <tr><td><strong>Subject:</strong> ${m.subEn}</td><td><strong>Session:</strong> ${m.semester}</td></tr>
+                                <tr><td><strong>Max Marks:</strong> ${m.marks}</td><td><strong>Time Allowed:</strong> ${m.time}</td></tr>
+                            </table>
+                            <div class="instruction-box">
+                                <strong>Instructions to Candidates:</strong>
+                                <ul style="margin:5px 0 0 20px; padding:0;">
+                                    <li>Question paper consists of different sections. Attempt accordingly.</li>
+                                    <li>Marks for each question are indicated on the right-hand side.</li>
+                                    <li>Write your Registration Number clearly on the top right corner of the answer sheet.</li>
+                                </ul>
+                            </div>
+                        `;
+                    } else {
+                        page.innerHTML += `<div style="border-bottom:1px solid #000; padding:5px 0; margin-bottom:20px; font-size:11px; display:flex; justify-content:space-between;">
+                            <span>Subject ID: ${m.qpCode} | Page ${num}</span><span>Session: ${m.semester}</span>
+                        </div>`;
+                    }
+                    const cz = document.createElement('div'); cz.className = 'c-zone'; page.appendChild(cz);
+                    return page;
+                }
+            }
+        };
+
+        window.onload = () => App.init();
+    </script>
+</body>
+
+</html>

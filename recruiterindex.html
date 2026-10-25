@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Recruiter Portal</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Hind:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+    <style>
+        :root {
+            --primary: #D92D20;
+            --primary-hover: #B42318;
+            --primary-soft: #FEF3F2;
+            --secondary: #667085;
+            --text-main: #101828;
+            --text-secondary: #475467;
+            --text-tertiary: #667085;
+            --bg-body: #F9FAFB;
+            --bg-card: #FFFFFF;
+            --border: #EAECF0;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --shadow-premium: 0 10px 40px rgba(0, 0, 0, 0.06);
+            --green: #34A853;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+
+        .site-header { height: 72px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; position: sticky; top: 0; z-index: 1000; }
+        .header-left { display: flex; align-items: center; gap: 32px; }
+        .logo-container { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; transition: opacity 0.2s; }
+        .logo-container:hover { opacity: 0.8; }
+        .logo-square { width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .logo-square img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text { font-size: 1.35rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; text-transform: uppercase; line-height: 1; }
+        .logo-text small { display: block; font-size: 0.7rem; font-weight: 700; color: var(--primary); letter-spacing: 0.8px; margin-top: 3px; }
+        .header-nav { display: flex; align-items: center; gap: 14px; margin-left: 12px; }
+        .nav-icon-btn { width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--secondary); cursor: pointer; transition: all 0.2s; background: transparent; border: none; font-size: 1.4rem; position: relative; }
+        .nav-icon-btn img { width: 32px !important; height: 32px !important; }
+        .nav-icon-btn:hover { background: var(--bg-body); color: var(--primary); }
+        .nav-icon-btn.active { color: var(--primary); background: var(--primary-soft); }
+        .header-right { display: flex; align-items: center; gap: 20px; }
+        .grid-btn { width: 48px; height: 48px; color: var(--secondary); border: none; background: transparent; font-size: 1.4rem; cursor: pointer; border-radius: 12px; position: relative; }
+        .grid-btn img { width: 26px; height: 26px; opacity: 0.75; }
+        .grid-btn:hover { background: #f5f5f5; }
+        .grid-menu { display: none; position: absolute; top: calc(100% + 12px); right: 0; background: #fff; border: 1px solid #f0f0f0; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 14px; width: 320px; z-index: 1002; justify-content: space-between; }
+        .grid-item { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467; }
+        .grid-item:hover { background: var(--primary-soft); color: var(--primary); }
+        .grid-item i { font-size: 1.7rem; }
+        .grid-item span { font-family: 'Mulish', sans-serif; font-size: 0.9rem; font-weight: 600; }
+        .plus-btn { width: 48px; height: 72px; background: var(--primary-soft); color: var(--primary); border: none; border-left: 1px solid #f0f0f0; border-right: 1px solid #f0f0f0; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; cursor: pointer; transition: background 0.2s; }
+        .plus-btn:hover { background: #fde3e0; }
+        .profile-container { position: relative; }
+        .profile-bubble { display: flex; align-items: center; gap: 12px; padding-left: 16px; border-left: 1px solid var(--border); cursor: pointer; }
+        .user-info { text-align: right; }
+        .user-name { font-size: 1.05rem; font-weight: 700; font-family: 'Mulish', sans-serif; color: #444; text-transform: uppercase; }
+        .user-role { font-size: 0.72rem; font-weight: 800; font-family: 'Mulish', sans-serif; color: var(--primary); text-transform: uppercase; }
+        .avatar { width: 40px; height: 40px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow: hidden; }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-menu { display: none; position: absolute; right: 0; top: calc(100% + 10px); background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.12); width: 220px; z-index: 1001; overflow: hidden; border: 1px solid #eee; }
+        .profile-menu .pm-item { padding: 12px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; font-size: 0.95rem; font-weight: 500; color: #475467; transition: background 0.2s; }
+        .profile-menu .pm-item:hover { background: #f9fafb; }
+        .profile-menu .pm-item.logout { color: #d32f2f; }
+
+        .dashboard-container { flex: 1; width: 100%; }
+        .main-content { padding: 40px 64px; background: #fff; min-height: calc(100vh - 72px); }
+
+        .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; gap: 16px; }
+        .section-title { font-family: 'Mulish', sans-serif; font-size: 1.25rem; font-weight: 700; color: #222; display: flex; align-items: center; gap: 12px; }
+        .section-title .st-ico { width: 40px; height: 40px; border-radius: 10px; background: var(--primary); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+        .section-title span { font-weight: 400; color: #888; font-size: 1.1rem; margin-left: 8px; }
+        .section-create-btn { background: var(--primary); color: #fff; border: none; height: 38px; padding: 0 18px; font-size: 0.85rem; font-weight: 700; border-radius: 8px; font-family: 'Mulish', sans-serif; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s; }
+        .section-create-btn:hover { background: var(--primary-hover); }
+        .search-container { position: relative; width: 240px; }
+        .search-container i { position: absolute; left: 6px; top: 50%; transform: translateY(-50%); color: #999; font-size: 0.9rem; }
+        .search-input { width: 100%; padding: 6px 8px 6px 28px; border: none; border-bottom: 1px solid #e0e0e0; border-radius: 0; font-size: 0.9rem; outline: none; background: transparent; font-family: 'Mulish', sans-serif; color: #222; }
+        .search-input:focus { border-bottom-color: var(--primary); }
+
+        /* ===== TIMELINE (notification look) ===== */
+        .tl { position: relative; padding: 8px 0; }
+        .tl-date { text-align: center; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 1.15rem; color: #344054; margin: 18px 0 26px; position: relative; }
+        .tl-date::before, .tl-date::after { content: ''; position: absolute; top: 50%; width: 26%; height: 1px; background: #e6e8ec; }
+        .tl-date::before { left: 4%; } .tl-date::after { right: 4%; }
+        .tl-item { display: flex; gap: 20px; position: relative; padding-left: 6px; margin-bottom: 34px; }
+        .tl-item::before { content: ''; position: absolute; left: 40px; top: 46px; bottom: -34px; width: 3px; background: #cfe0f7; }
+        .tl-item:last-child::before { display: none; }
+        .tl-node { display: flex; align-items: center; gap: 12px; width: 130px; flex-shrink: 0; }
+        .tl-label { font-family: 'Mulish', sans-serif; font-weight: 700; color: var(--green); font-size: 0.98rem; }
+        .tl-ico { width: 52px; height: 52px; border-radius: 50%; background: var(--green); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 0 0 5px #fff; flex-shrink: 0; }
+        .tl-content { flex: 1; min-width: 0; padding-top: 4px; }
+        .tl-title { font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 1.15rem; color: #1a1a1a; line-height: 1.4; margin-bottom: 8px; }
+        .tl-desc { font-family: 'Hind', sans-serif; font-size: 1rem; color: #475467; line-height: 1.5; }
+        .tl-more { color: var(--primary); font-weight: 700; cursor: pointer; }
+        .tl-actions { margin-top: 12px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        .tl-chip { background: #f2f4f7; color: #475467; border-radius: 6px; padding: 4px 10px; font-size: 0.78rem; font-weight: 700; font-family: 'Mulish', sans-serif; }
+        .tl-att { display: inline-flex; align-items: center; gap: 6px; margin: 4px 8px 0 0; font-size: 0.85rem; color: var(--primary); cursor: pointer; }
+        .mini-btn { background: #fff; border: 1px solid #d0d5dd; color: #475467; border-radius: 7px; padding: 5px 12px; font-size: 0.8rem; font-weight: 700; font-family: 'Mulish', sans-serif; cursor: pointer; }
+        .mini-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .mini-btn.danger { color: #d32f2f; border-color: #fecdca; }
+        .mini-btn.danger:hover { background: #fef3f2; }
+        .tl-empty { text-align: center; padding: 60px; color: #98a2b3; font-family: 'Hind', sans-serif; font-size: 1.1rem; }
+        .tl-empty .em { font-size: 3rem; display: block; margin-bottom: 12px; }
+
+        .toast-box { position: fixed; bottom: 24px; right: 24px; background: #101828; color: #fff; padding: 14px 24px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; z-index: 100000; font-weight: 600; font-family: 'Mulish', sans-serif; }
+
+        @media (max-width: 900px) {
+            .main-content { padding: 24px 18px; }
+            .header-nav { display: none; }
+            .tl-node { width: auto; } .tl-label { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="header-left">
+        <a href="recruiterindex.html" class="logo-container">
+            <div class="logo-square"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest"></div>
+            <div class="logo-text">CodeQuest<small>Recruiter Portal</small></div>
+        </a>
+        <nav class="header-nav">
+            <button class="nav-icon-btn active" data-tip="Dashboard" onclick="scrollTo({top:0,behavior:'smooth'})"><img src="EXAMPAD/TESTPAD_WEBSITE__files/menu-1.svg" alt="Dashboard"></button>
+            <button class="nav-icon-btn" data-tip="Notifications" onclick="location.href='recPosts.html'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/statistics.svg" alt="Notifications"></button>
+            <button class="nav-icon-btn" data-tip="Job Postings" onclick="location.href='openjobposting.html'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/folder-2.svg" alt="Job Postings"></button>
+            <button class="nav-icon-btn" data-tip="Selection Test" onclick="location.href='interview-makerforrecruiter.html'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/quiz.svg" alt="Selection Test"></button>
+            <button class="nav-icon-btn" data-tip="My Applications" onclick="location.href='openjobposting.html?view=applications'"><i class="fas fa-users" style="font-size:1.15rem; color:#667085;"></i></button>
+        </nav>
+    </div>
+    <div class="header-right">
+        <button class="plus-btn" onclick="location.href='createpost.html'" title="Post Notification"><i class="fas fa-plus"></i></button>
+        <div style="position: relative;">
+            <button class="grid-btn" onclick="toggleGridMenu(event)" title="Apps"><img src="EXAMPAD/Testpad_pra_files_files/icons8-squared-menu-90.png" alt="Apps"></button>
+            <div class="grid-menu" id="gridMenu">
+                <div class="grid-item" onclick="location.href='createpost.html'"><i class="fas fa-bullhorn"></i><span>Post</span></div>
+                <div class="grid-item" onclick="location.href='openjobposting.html'"><i class="fas fa-briefcase"></i><span>Jobs</span></div>
+                <div class="grid-item" onclick="location.href='interview-makerforrecruiter.html'"><i class="fas fa-file-circle-check"></i><span>Test</span></div>
+                <div class="grid-item" onclick="location.href='recPosts.html'"><i class="fas fa-bell"></i><span>Feed</span></div>
+            </div>
+        </div>
+        <div class="profile-container">
+            <div class="profile-bubble" onclick="toggleMenu(event)">
+                <div class="user-info"><div class="user-name" id="userName">Recruiter</div><div class="user-role">Hiring Partner</div></div>
+                <div class="avatar"><img src="EXAMPAD/LINUX_TEST_CHITKARA_files/user-icon.3d6e2547.svg" alt="Profile"></div>
+            </div>
+            <div class="profile-menu" id="profileMenu">
+                <div class="pm-item" onclick="location.href='firstpage.html'"><i class="fas fa-user-circle"></i> Switch Account</div>
+                <div class="pm-item logout" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="dashboard-container">
+    <main class="main-content">
+
+        <section id="postsSection">
+            <div class="content-header">
+                <h2 class="section-title"><span class="st-ico"><i class="fas fa-bullhorn"></i></span> My Notifications <span id="postsCount">(0)</span></h2>
+                <div style="display:flex; align-items:center; gap:16px;">
+                    <button class="section-create-btn" onclick="location.href='createpost.html'"><i class="fas fa-plus"></i> Post Notification</button>
+                    <div class="search-container"><i class="fas fa-search"></i><input type="text" class="search-input" placeholder="Search posts..." onkeyup="renderPosts()"></div>
+                </div>
+            </div>
+            <div class="tl" id="postsTimeline"></div>
+        </section>
+
+    </main>
+</div>
+
+<div class="toast-box" id="recToast">Done</div>
+
+<script>
+    const POSTS_KEY = 'CodeQuest_recruiter_posts';
+    const CAT_EMOJI = { 'circular': '📄', 'job': '💼', 'notice': '📢', 'result': '📊' };
+
+    function readJSON(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
+    function getPosts() { return readJSON(POSTS_KEY, []); }
+    function savePosts(v) { try { localStorage.setItem(POSTS_KEY, JSON.stringify(v)); return true; } catch (e) { toast('Storage full.'); return false; } }
+    function esc(s) { return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function session() { return readJSON('CodeQuest_active_session', null) || readJSON('TESTPAD_current_user', {}); }
+    function fmtDate(iso) { const d = new Date(iso); return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + ', ' + d.toLocaleDateString(undefined, { weekday: 'long' }); }
+    function emojiFor(cat) { return CAT_EMOJI[(cat || 'circular').toLowerCase()] || '📄'; }
+
+    function renderPosts() {
+        const term = (document.querySelector('#postsSection .search-input').value || '').toLowerCase().trim();
+        const all = getPosts();
+        document.getElementById('postsCount').textContent = `(${all.length})`;
+        const posts = all.filter(p => !term || (p.title + ' ' + (p.company || '') + ' ' + (p.description || '')).toLowerCase().includes(term))
+            .sort((a, b) => b.createdAt - a.createdAt);
+        const el = document.getElementById('postsTimeline');
+        if (!posts.length) { el.innerHTML = `<div class="tl-empty"><span class="em">📭</span>No notifications yet. Click "Post Notification" to publish your first one.</div>`; return; }
+        let lastDay = '';
+        el.innerHTML = posts.map(p => {
+            const day = fmtDate(p.createdAt);
+            const sep = day !== lastDay ? `<div class="tl-date">${day}</div>` : '';
+            lastDay = day;
+            const atts = (p.attachments || []).map((a, i) => `<span class="tl-att" onclick="openAtt('${p.id}',${i})">📎 ${esc(a.name)}</span>`).join('');
+            return `${sep}
+            <div class="tl-item">
+                <div class="tl-node"><span class="tl-label">${esc(p.category || 'Circular')}</span><div class="tl-ico">${emojiFor(p.category)}</div></div>
+                <div class="tl-content">
+                    <div class="tl-title">${esc(p.company ? p.company + ' — ' : '')}${esc(p.title)}</div>
+                    <div class="tl-desc">${esc((p.description || '').slice(0, 160))}${(p.description || '').length > 160 ? '… ' : ''}<span class="tl-more" onclick="openPostDetail('${p.id}')">More</span></div>
+                    <div class="tl-actions"><span class="tl-chip">${esc(p.audience === 'all' ? 'Everyone' : p.audience || 'all')}</span>${atts}
+                        <span style="flex:1"></span>
+                        <button class="mini-btn" onclick="location.href='createpost.html?id=${p.id}'"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="mini-btn danger" onclick="deletePost('${p.id}')"><i class="fas fa-trash"></i> Delete</button>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function openPostDetail(id) { location.href = 'recPosts.html?post=' + encodeURIComponent(id); }
+    function openAtt(pid, i) { const p = getPosts().find(x => x.id === pid); if (p && p.attachments && p.attachments[i] && p.attachments[i].url) { window.open(p.attachments[i].url); } }
+    function deletePost(id) { if (!confirm('Delete this notification?')) return; savePosts(getPosts().filter(p => p.id !== id)); renderPosts(); toast('Notification removed.'); }
+
+    function toggleMenu(e) { e.stopPropagation(); const m = document.getElementById('profileMenu'); m.style.display = m.style.display === 'block' ? 'none' : 'block'; }
+    function toggleGridMenu(e) { e.stopPropagation(); const m = document.getElementById('gridMenu'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }
+    document.addEventListener('click', () => { const m = document.getElementById('profileMenu'); if (m) m.style.display = 'none'; const g = document.getElementById('gridMenu'); if (g) g.style.display = 'none'; });
+    function handleLogout() { localStorage.removeItem('CodeQuest_active_session'); window.location.href = 'firstpage.html'; }
+    function toast(msg) { const t = document.getElementById('recToast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(toast._h); toast._h = setTimeout(() => t.style.display = 'none', 3000); }
+
+    window.addEventListener('DOMContentLoaded', () => { const s = session(); if (s && s.name) document.getElementById('userName').textContent = s.name; renderPosts(); });
+</script>
+</body>
+
+</html>

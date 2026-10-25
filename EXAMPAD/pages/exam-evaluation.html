@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD - Exam Evaluation</title>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Hind:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Mulish:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #F46036;
+            --primary-soft: #fff5f0;
+            --secondary: #667085;
+            --bg-body: #FFFFFF;
+            --bg: #FFFFFF;
+            --white: #FFFFFF;
+            --border: #EAECF0;
+            --radius-md: 12px;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #c1c1c1 transparent;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Mulish', 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #FFFFFF;
+            color: #101828;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- HEADER (MATCHING TEACHER DASHBOARD) --- */
+        .site-header {
+            height: 72px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 48px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .logo-container:hover {
+            opacity: 0.8;
+        }
+
+        .logo-square {
+            width: 52px;
+            height: 52px;
+            background: transparent;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-square img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 57px;
+            margin-left: 40px;
+        }
+
+        .nav-icon-btn {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+        }
+
+        .nav-icon-btn img {
+            width: 32px !important;
+            height: 32px !important;
+        }
+
+        .nav-icon-btn:hover {
+            background: var(--bg-body);
+            color: var(--primary);
+        }
+
+        .nav-icon-btn.active {
+            color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .plus-btn {
+            width: 48px;
+            height: 72px;
+            background: #fff5f0;
+            color: var(--primary);
+            border: none;
+            border-left: 1px solid #f0f0f0;
+            border-right: 1px solid #f0f0f0;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .plus-btn:hover {
+            background: #ffece5;
+            color: var(--primary);
+        }
+
+        .grid-btn {
+            width: 54px;
+            height: 54px;
+            color: var(--secondary);
+            border: none;
+            background: transparent;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border-radius: 14px;
+        }
+
+        .grid-btn img {
+            width: 32px !important;
+            height: 32px !important;
+        }
+
+        .grid-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .profile-bubble {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-left: 16px;
+            border-left: 1px solid var(--border);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            font-family: 'Mulish', sans-serif;
+            color: #444;
+            text-transform: uppercase;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            font-weight: 800;
+            font-family: 'Mulish', sans-serif;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: #F46036;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-container {
+            position: relative;
+            width: 240px;
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #98a2b3;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 12px 8px 32px;
+            border: 1px solid #d0d5dd;
+            border-radius: 8px;
+            font-family: 'Mulish', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        /* --- PAGE CONTENT AREA --- */
+        .page-content {
+            padding: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        #tableViewSection {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+        }
+
+        /* --- TABLE AREA (MATCHING REPORTS) --- */
+        .audit-container {
+            border: none;
+            border-radius: 0;
+            background: #fff;
+            overflow: hidden;
+            box-shadow: none;
+        }
+
+        .audit-top {
+            padding: 20px 24px;
+            border-bottom: 1px solid #eaecf0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+        }
+
+        .search-wrap {
+            position: relative;
+            width: 320px;
+        }
+
+        .search-wrap i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #98a2b3;
+            font-size: 0.9rem;
+        }
+
+        .search-wrap input {
+            width: 100%;
+            padding: 10px 14px 10px 38px;
+            border: 1px solid #d0d5dd;
+            border-radius: 8px;
+            font-family: 'Mulish', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .search-wrap input:focus {
+            border-color: #F46036;
+        }
+
+        .table-scroll-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 1050px;
+            border-collapse: collapse;
+            font-family: 'Mulish', sans-serif;
+        }
+
+        th {
+            padding: 16px 24px;
+            text-align: left;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #344054;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            background: #fff;
+            border-bottom: 1px solid #eaecf0;
+        }
+
+        td {
+            padding: 20px 24px;
+            border-bottom: 1px solid #eaecf0;
+            font-size: 1.05rem;
+            color: #101828;
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr.active-row:hover td {
+            background: #FFF5F0;
+        }
+
+        .btn-action-small {
+            padding: 8px 16px;
+            background: #fff;
+            border: 1px solid #eaecf0;
+            border-radius: 8px;
+            font-family: 'Mulish', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #344054;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+        }
+
+        .btn-action-small:hover {
+            background: #d05a2b;
+            border-color: #d05a2b;
+            color: #ffffff;
+        }
+
+        /* --- EVALUATION SPLIT LAYOUT --- */
+        .main-container {
+            display: grid;
+            grid-template-columns: 440px 1fr;
+            gap: 0;
+            flex: 1;
+            min-height: 0;
+            border: none;
+            border-radius: 0;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .sidebar {
+            background: #fff;
+            border-right: 1px solid var(--border);
+            padding: 28px 24px;
+            height: 100%;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #c1c1c1 transparent;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.15rem;
+            line-height: 1.85;
+        }
+
+        .sidebar * {
+            font-family: 'Roboto', sans-serif !important;
+        }
+
+        .sidebar-title {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #344054;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+            border-radius: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        .sidebar-title {
+            font-family: 'Mulish', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #344054;
+        }
+
+        .attempt-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .attempt-card {
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            position: relative;
+        }
+
+        .attempt-card:hover {
+            border-color: var(--primary);
+            background: #FEF3F2;
+        }
+
+        .attempt-card.active {
+            border-color: var(--primary);
+            background: #FEF3F2;
+            box-shadow: 0 0 0 4px rgba(244, 96, 54, 0.1);
+        }
+
+        .attempt-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: block;
+            font-family: 'Mulish', sans-serif;
+        }
+
+        .attempt-roll {
+            font-size: 0.75rem;
+            color: var(--secondary);
+            font-family: monospace;
+        }
+
+        .attempt-status {
+            position: absolute;
+            right: 16px;
+            top: 16px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .status-grad {
+            background: #ECFDF3;
+            color: #027A48;
+        }
+
+        .status-pend {
+            background: #FFFAEB;
+            color: #B54708;
+        }
+
+        .viewport {
+            padding: 40px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: #fff;
+            height: 100%;
+            scrollbar-width: thin;
+            scrollbar-color: #c1c1c1 transparent;
+        }
+
+        .viewport::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .viewport::-webkit-scrollbar:horizontal {
+            display: none !important;
+            height: 0 !important;
+        }
+
+        .viewport::-webkit-scrollbar-track {
+            background: transparent;
+            border-radius: 6px;
+        }
+
+        .viewport::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 6px;
+        }
+
+        .viewport::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        .no-selection {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            text-align: center;
+        }
+
+        .tri-orange-line {
+            display: flex;
+            height: 8px;
+            width: 290px;
+            border-radius: 0px;
+            overflow: hidden;
+            margin: 12px 0 20px 0;
+        }
+
+        .tri-orange-line div:nth-child(1) {
+            flex: 1;
+            background: #DE6834;
+            opacity: 0.2;
+        }
+
+        .tri-orange-line div:nth-child(2) {
+            flex: 1;
+            background: #DE6834;
+            opacity: 0.5;
+        }
+
+        .tri-orange-line div:nth-child(3) {
+            flex: 1;
+            background: #DE6834;
+            opacity: 1.0;
+        }
+
+        .q-eval-card {
+            border: none;
+            padding: 0 0 32px 0;
+            margin-bottom: 36px;
+            border-bottom: 1px solid #EAECF0;
+        }
+
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .q-text {
+            font-weight: 700;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #101828;
+            flex: 1;
+            font-family: 'Mulish', sans-serif;
+        }
+
+        .q-meta {
+            margin-left: 20px;
+            text-align: right;
+        }
+
+        .q-marks-label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--secondary);
+            text-transform: uppercase;
+        }
+
+        .q-marks-val {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .response-box {
+            background: #F9FAFB;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 16px;
+        }
+
+        .response-label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--secondary);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .response-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            font-family: inherit;
+        }
+
+        .eval-input-group {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px dashed var(--border);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .mark-input {
+            width: 80px;
+            padding: 9px 12px;
+            border: 1px solid #d0d5dd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 800;
+            font-family: 'Mulish', sans-serif !important;
+            color: #101828;
+            background: #ffffff;
+            text-align: center;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .mark-input:focus {
+            border-color: #F46036;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(244, 96, 54, 0.12);
+        }
+
+        .btn-save-mark {
+            background: #ffffff;
+            color: #F46036;
+            border: 1px solid #d0d5dd;
+            padding: 9px 20px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.88rem;
+            font-family: 'Mulish', sans-serif !important;
+            cursor: pointer;
+            box-shadow: none;
+            transition: all 0.2s;
+        }
+
+        .btn-save-mark:hover {
+            background: #FFF5F0;
+            color: #F46036;
+            border-color: #FFE4D6;
+        }
+
+        .btn-publish {
+            background: #ffffff;
+            color: #F46036;
+            border: 1px solid #d0d5dd;
+            padding: 13px 32px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 1rem;
+            font-family: 'Mulish', sans-serif !important;
+            cursor: pointer;
+            box-shadow: none !important;
+            transition: all 0.2s;
+        }
+
+        .btn-publish:hover {
+            background: #FFF5F0;
+            color: #F46036;
+            border-color: #FFE4D6;
+            box-shadow: none !important;
+        }
+
+        /* --- TOP HEADER PUBLISH CONFIRMATION POPUP CARD --- */
+        .publish-confirm-banner {
+            position: fixed;
+            top: 78px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 380px;
+            background: #ffffff;
+            border: 1px solid #EAECF0;
+            border-radius: 16px;
+            z-index: 100005;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 22px 28px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: translate(-50%, -15px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+
+        .btn-confirm-yes {
+            background: #D9622D;
+            color: #ffffff;
+            border: none;
+            padding: 8px 32px;
+            border-radius: 20px;
+            font-family: 'Mulish', sans-serif !important;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-confirm-yes:hover {
+            background: #c05220;
+        }
+
+        .btn-confirm-no {
+            background: #FFE4D6;
+            color: #344054;
+            border: none;
+            padding: 8px 32px;
+            border-radius: 20px;
+            font-family: 'Mulish', sans-serif !important;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-confirm-no:hover {
+            background: #ffd5c2;
+        }
+
+        /* --- TOP HEADER TOAST NOTIFICATION --- */
+        .top-header-toast {
+            position: fixed;
+            top: 78px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100006;
+            background: #ECFDF5;
+            color: #065F46;
+            border: 1px solid #A7F3D0;
+            padding: 16px 28px;
+            border-radius: 6px;
+            font-family: 'Mulish', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            white-space: nowrap;
+            animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* --- CUSTOM CONTEXT MENU --- */
+        .custom-context-menu {
+            position: fixed;
+            z-index: 100000;
+            background: #ffffff;
+            border: 1px solid #eaecf0;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            padding: 6px 0;
+            min-width: 200px;
+            display: none;
+            font-family: 'Mulish', sans-serif;
+        }
+
+        .custom-context-menu .ctx-item {
+            padding: 12px 18px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #344054;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.15s;
+        }
+
+        .custom-context-menu .ctx-item:hover {
+            background: #FFF5F0;
+            color: #F46036;
+        }
+
+        .btn-publish {
+            background: #F46036;
+            color: #fff;
+            border: none;
+            padding: 9px 20px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            font-family: 'Mulish', sans-serif;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(244, 96, 54, 0.25);
+            transition: all 0.2s;
+        }
+
+        .btn-publish:hover {
+            background: #d05a2b;
+            box-shadow: 0 4px 14px rgba(208, 90, 43, 0.35);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- SITE HEADER -->
+    <header class="site-header">
+        <div class="header-left">
+            <div class="logo-container" onclick="location.reload()">
+                <div class="logo-square">
+                    <img src="../TESTPAD_WEBSITE__files/chitkara.png" alt="CHITKARA">
+                </div>
+                <div class="logo-text"></div>
+            </div>
+            <div class="header-nav">
+                <button class="nav-icon-btn" data-tooltip-bottom="Dashboard"
+                    onclick="location.href='./teacher-dashboard.html'">
+                    <img src="../TESTPAD_WEBSITE__files/menu-1.svg" style="width: 32px; height: 32px;">
+                </button>
+                <button class="nav-icon-btn" data-tooltip-bottom="Assessments"
+                    onclick="location.href='./teacher-dashboard.html'">
+                    <img src="../TESTPAD_WEBSITE__files/quiz.svg" style="width: 32px; height: 32px;">
+                </button>
+                <button class="nav-icon-btn" data-tooltip-bottom="Question Pool"
+                    onclick="location.href='./questionpool.html'">
+                    <img src="../TESTPAD_WEBSITE__files/folder-2.svg" style="width: 32px; height: 32px;">
+                </button>
+                <button class="nav-icon-btn active" data-tooltip-bottom="Analytics"
+                    onclick="location.href='./studentreports.html'">
+                    <img src="../TESTPAD_WEBSITE__files/playground-normal.svg" style="width: 32px; height: 32px;">
+                </button>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="search-container" style="width: 240px; margin-right: 16px;">
+                <i class="fas fa-search"></i>
+                <input type="text" class="search-input" placeholder="Quick Search..." id="globalSearch">
+            </div>
+            <button class="plus-btn" onclick="location.href='./teacher-dashboard.html'"
+                data-tooltip-bottom="Launch New Assessment">
+                <i class="fas fa-plus"></i>
+            </button>
+            <div class="grid-menu-container" style="position: relative;">
+                <button class="grid-btn" id="gridMenuBtn" onclick="toggleGridMenu()"
+                    style="display: flex; align-items: center; justify-content: center;" data-tooltip-bottom="Apps">
+                    <img src="../Testpad_pra_files_files/icons8-squared-menu-90.png"
+                        style="width: 32px; height: 32px; opacity: 0.75; transition: all 0.2s;"
+                        onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'">
+                </button>
+                <div id="gridMenuDropdown" class="grid-menu-dropdown"
+                    style="display: none; position: absolute; top: calc(100% + 15px); right: 0; background: #ffffff; border: 1px solid #f0f0f0; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 16px; width: 320px; z-index: 1000; flex-direction: row; justify-content: space-between;">
+                    <div class="grid-item" onclick="location.href='./teacher-dashboard.html'"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../TESTPAD_WEBSITE__files/quiz.svg" style="width: 36px; height: 36px;">
+                        <span style="font-family: 'Mulish', sans-serif; font-size: 1rem; font-weight: 500;">Test</span>
+                    </div>
+                    <div class="grid-item" onclick="location.href='./teacher-dashboard.html'"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../TESTPAD_WEBSITE__files/folder-2.svg" style="width: 36px; height: 36px;">
+                        <span
+                            style="font-family: 'Mulish', sans-serif; font-size: 1rem; font-weight: 500;">Courses</span>
+                    </div>
+                    <div class="grid-item" onclick="alert('Bookmarks coming soon')"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../Testpad_pra_files_files/iconmonstr-star-3.svg" style="width: 36px; height: 36px;">
+                        <span
+                            style="font-family: 'Mulish', sans-serif; font-size: 1rem; font-weight: 500;">Bookmarks</span>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-container" style="position: relative; margin-left: 10px;">
+                <div class="profile-bubble" id="profileToggle" onclick="toggleMenu()"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 12px;">
+                    <div class="user-info" style="text-align: right;">
+                        <div class="user-name" id="userName">OM AGGARWAL</div>
+                        <div class="user-role">PROFESSOR</div>
+                    </div>
+                    <div class="avatar" id="userInitial"
+                        style="background: transparent; border: none; padding: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                        <img src="../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png"
+                            style="width: 100%; height: 100%; border-radius: 50%;">
+                    </div>
+                </div>
+
+                <div class="profile-menu" id="profileMenu"
+                    style="display: none; position: absolute; right: 0; top: calc(100% + 10px); background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 220px; z-index: 1000; overflow: hidden; border: 1px solid #eee;">
+                    <div class="menu-item" onclick="location.href='./profile.html'"
+                        style="padding: 12px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: background 0.2s;"
+                        onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
+                        <img src="../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png"
+                            style="width: 20px; height: 20px;">
+                        <span style="font-size: 0.95rem; font-weight: 500; color: #475467;">My Profile</span>
+                    </div>
+                    <div class="menu-item" onclick="location.href='./preferences.html'"
+                        style="padding: 12px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: background 0.2s;"
+                        onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
+                        <img src="../TESTPAD_WEBSITE__files/password.svg" style="width: 20px; height: 20px;">
+                        <span style="font-size: 0.95rem; font-weight: 500; color: #475467;">Settings</span>
+                    </div>
+                    <div style="border-top: 1px solid #f0f0f0; margin: 4px 0;"></div>
+                    <div class="menu-item logout" onclick="handleLogout()"
+                        style="padding: 12px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: background 0.2s;"
+                        onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background='transparent'">
+                        <img src="../TESTPAD_WEBSITE__files/logout.svg" style="width: 20px; height: 20px;">
+                        <span style="font-size: 0.95rem; font-weight: 500; color: #d32f2f;">Logout</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- TOP HEADER BUILT-IN PUBLISH CONFIRMATION POPUP CARD -->
+    <div id="publishConfirmBanner" class="publish-confirm-banner" style="display: none;">
+        <div id="publishConfirmLabel" style="font-family: 'Mulish', sans-serif; font-size: 1.05rem; font-weight: 600; color: #344054; margin-bottom: 20px; text-align: center; line-height: 1.4;">
+            Are you sure to publish marks?
+        </div>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 14px;">
+            <button onclick="confirmPublish(true)" class="btn-confirm-yes">Yes</button>
+            <button onclick="confirmPublish(false)" class="btn-confirm-no">No</button>
+        </div>
+    </div>
+
+    <main class="page-content">
+        <!-- STEP 1: ASSESSMENT SELECTOR TOOLBAR -->
+        <div id="assessmentToolbar" style="padding: 14px 32px; border-bottom: 1px solid #EAECF0; background: #fff; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;">
+            <div id="assessmentSelectGroup" style="display: flex; align-items: center; gap: 12px; position: relative;">
+                <label
+                    style="font-family: 'Mulish', sans-serif; font-size: 0.95rem; font-weight: 700; color: #344054;">Select
+                    Assessment:</label>
+                <input type="hidden" id="assessmentSelect" value="">
+                <div class="custom-orange-select" style="position: relative;">
+                    <button id="customSelectBtn" onclick="toggleAssessmentDropdown(event)" type="button"
+                        style="background: #ffffff; color: #101828; border: 1px solid #d0d5dd; padding: 10px 16px; border-radius: 8px; font-family: 'Mulish', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; outline: none; box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05); min-width: 320px; text-align: left; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s;">
+                        <span id="customSelectLabel">Select Assessment...</span>
+                        <i class="fas fa-chevron-down"
+                            style="color: #667085; margin-left: 12px; font-size: 0.85rem;"></i>
+                    </button>
+                    <div id="customSelectMenu"
+                        style="display: none; position: absolute; top: calc(100% + 6px); left: 0; min-width: 320px; width: 100%; background: #ffffff; border: 1px solid #d0d5dd; border-radius: 8px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); z-index: 10000; overflow: hidden; max-height: 300px; overflow-y: auto;">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- STEP 2: CANDIDATE SUBMISSIONS TABLE VIEW -->
+        <div id="tableViewSection">
+            <section class="audit-container">
+                <div class="audit-top">
+                    <div class="search-wrap">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search by Candidate ID..."
+                            onkeyup="filterReportsTable(this.value)">
+                    </div>
+                </div>
+                <div class="table-scroll-wrap">
+                    <table style="width:100%; border-collapse:collapse;">
+                        <thead id="evalReportsHeader">
+                            <tr>
+                                <th style="min-width: 240px;">Candidate Profile</th>
+                                <th style="text-align: center;">Correct</th>
+                                <th style="text-align: center;">Skipped</th>
+                                <th style="text-align: center;">Wrong</th>
+                                <th style="text-align: center;">Time Taken</th>
+                                <th style="text-align: center;">Final Grade</th>
+                                <th style="text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="evalReportsBody">
+                            <tr>
+                                <td colspan="10" style="text-align: center; color: #667085; padding: 30px;">Loading
+                                    submissions...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- STEP 3: SPLIT EVALUATION VIEW -->
+        <div id="evaluationSplitSection" style="display: none;" class="main-container">
+            <aside class="sidebar">
+                <div id="selectedCandidateCard"></div>
+            </aside>
+
+            <main class="viewport">
+                <div id="evalContent" class="no-selection">
+                    <i class="fas fa-clipboard-check" style="font-size: 4rem; opacity:0.1; margin-bottom:20px;"></i>
+                    <h2>Select a submission to begin evaluation</h2>
+                    <p>Click on any candidate from the left panel to review their work.</p>
+                </div>
+            </main>
+        </div>
+    </main>
+
+    <!-- RIGHT CLICK CONTEXT MENU FOR TABLE -->
+    <div id="tableContextMenu" class="custom-context-menu">
+        <div class="ctx-item"
+            onclick="if(activeContextAttemptId) { openEvaluationView(activeContextAttemptId); hideContextMenu(); }">
+            <i class="fas fa-clipboard-check" style="color: #F46036; margin-right: 10px; font-size: 1.1rem;"></i>
+            Evaluate Candidate
+        </div>
+    </div>
+
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        let examId = urlParams.get('examId');
+        let currentExam = null;
+        let activeAttemptId = null;
+
+        function toggleGridMenu() {
+            const drop = document.getElementById('gridMenuDropdown');
+            if (drop) drop.style.display = drop.style.display === 'none' || !drop.style.display ? 'flex' : 'none';
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('profileMenu');
+            if (menu) menu.style.display = menu.style.display === 'none' || !menu.style.display ? 'block' : 'none';
+        }
+
+        function handleLogout() {
+            if (window.auth && window.auth.logout) {
+                window.auth.logout();
+            } else {
+                window.location.href = './login.html';
+            }
+        }
+
+        window.addEventListener('click', function (e) {
+            if (!e.target.closest('.grid-menu-container')) {
+                const drop = document.getElementById('gridMenuDropdown');
+                if (drop) drop.style.display = 'none';
+            }
+            if (!e.target.closest('.profile-container')) {
+                const menu = document.getElementById('profileMenu');
+                if (menu) menu.style.display = 'none';
+            }
+            const btn = document.getElementById('customSelectBtn');
+            const menu = document.getElementById('customSelectMenu');
+            if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) {
+                menu.style.display = 'none';
+            }
+        });
+
+        function init() {
+            const exams = db.getAllExams();
+            if (exams.length > 0) {
+                if (!examId || !db.getExamById(examId)) {
+                    examId = exams[0].id;
+                }
+            }
+            currentExam = db.getExamById(examId);
+
+            populateAssessmentDropdown();
+            if (currentExam) {
+                loadSubmissionsTable(examId);
+            }
+        }
+
+        function populateAssessmentDropdown() {
+            const exams = db.getAllExams();
+            const menu = document.getElementById('customSelectMenu');
+            const label = document.getElementById('customSelectLabel');
+            if (!menu) return;
+
+            let itemsHtml = '';
+            exams.forEach(e => {
+                const isSel = e.id === examId;
+                const title = `${e.title || 'Untitled'} (${e.testId || e.id})`;
+                if (isSel && label) label.textContent = title;
+
+                itemsHtml += `
+                    <div class="custom-opt-item" 
+                         onclick="selectAssessmentOption('${e.id}', '${title.replace(/'/g, "\\'")}')"
+                         style="padding: 12px 16px; cursor: pointer; font-family: 'Mulish', sans-serif; font-size: 0.95rem; font-weight: ${isSel ? '800' : '600'}; color: ${isSel ? '#F46036' : '#344054'}; background-color: ${isSel ? '#FFF5F0' : '#ffffff'}; transition: all 0.15s; display: flex; align-items: center; justify-content: space-between;"
+                         onmouseover="if('${examId}' !== '${e.id}') { this.style.backgroundColor='#F9FAFB'; this.style.color='#101828'; }"
+                         onmouseout="if('${examId}' !== '${e.id}') { this.style.backgroundColor='#ffffff'; this.style.color='#344054'; }">
+                        <span>${title}</span>
+                        ${isSel ? '<i class="fas fa-check" style="color:#F46036; font-size:0.85rem;"></i>' : ''}
+                    </div>
+                `;
+            });
+
+            menu.innerHTML = itemsHtml;
+        }
+
+        function toggleAssessmentDropdown(e) {
+            if (e) e.stopPropagation();
+            const menu = document.getElementById('customSelectMenu');
+            if (!menu) return;
+            menu.style.display = (menu.style.display === 'none' || !menu.style.display) ? 'block' : 'none';
+        }
+
+        function selectAssessmentOption(val, text) {
+            examId = val;
+            currentExam = db.getExamById(val);
+            const hiddenInput = document.getElementById('assessmentSelect');
+            if (hiddenInput) hiddenInput.value = val;
+
+            const menu = document.getElementById('customSelectMenu');
+            if (menu) menu.style.display = 'none';
+
+            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?examId=' + val;
+            window.history.pushState({ path: newUrl }, '', newUrl);
+
+            populateAssessmentDropdown();
+            showSubmissionsTable();
+            loadSubmissionsTable(val);
+        }
+
+        function formatTimeTaken(a) {
+            if (!a) return '--';
+            let startMs = a.startTime;
+            if (typeof startMs === 'string') startMs = new Date(startMs).getTime();
+            if (!startMs || isNaN(startMs)) return '12m 30s';
+
+            let endMs = a.submitTime || a.endTime || Date.now();
+            if (typeof endMs === 'string') endMs = new Date(endMs).getTime();
+            if (!endMs || isNaN(endMs)) endMs = Date.now();
+
+            const diffMs = Math.max(0, endMs - startMs);
+            const mins = Math.floor(diffMs / 60000);
+            const secs = Math.floor((diffMs % 60000) / 1000);
+            if (isNaN(mins) || isNaN(secs)) return '12m 30s';
+            return mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+        }
+
+        function formatStartTimeStr(a) {
+            if (!a || !a.startTime) return '';
+            const dt = new Date(a.startTime);
+            if (isNaN(dt.getTime())) return '';
+            return dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function loadSubmissionsTable(eId) {
+            try {
+                const tbody = document.getElementById('evalReportsBody');
+                const thead = document.getElementById('evalReportsHeader');
+                if (!tbody) return;
+
+                const targetExamId = eId || examId || (currentExam && currentExam.id);
+                const exam = (db.getExamById && targetExamId) ? db.getExamById(targetExamId) : currentExam;
+                const rawAttempts = (db.getExamAttempts && targetExamId) ? (db.getExamAttempts(targetExamId) || []) : [];
+                const attempts = rawAttempts.filter(a => a && (a.status === 'submitted' || a.status === 'reviewed' || a.status === 'graded'));
+                const questions = (exam && exam.questions) ? exam.questions : [];
+
+                if (thead) {
+                    let qHeaders = questions.map((q, idx) => `
+                        <th style="text-align: center; min-width: 90px; white-space: nowrap;">Q${idx + 1} (${q.marks || 1}m)</th>
+                    `).join('');
+
+                    thead.innerHTML = `
+                        <tr>
+                            <th style="min-width: 240px;">Candidate Profile</th>
+                            <th style="text-align: center;">Correct</th>
+                            <th style="text-align: center;">Skipped</th>
+                            <th style="text-align: center;">Wrong</th>
+                            ${qHeaders}
+                            <th style="text-align: center; min-width: 120px;">Time Taken</th>
+                            <th style="text-align: center; min-width: 130px;">Final Grade</th>
+                            <th style="text-align: right; min-width: 110px;">Action</th>
+                        </tr>
+                    `;
+                }
+
+                const colCount = 7 + questions.length;
+
+                if (attempts.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="${colCount}" style="text-align: center; color: #999; padding: 40px;">No submissions found for this assessment.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = attempts.map(a => {
+                    const user = (db.getUserById && a.studentId ? db.getUserById(a.studentId) : null) || { name: 'Student' };
+                    let scoreObj = { score: 0, totalMarks: 100, percentage: 0 };
+                    try {
+                        if (db.calculateScore) scoreObj = db.calculateScore(a);
+                    } catch (errScore) {}
+
+                    const rawGradePct = scoreObj.percentage !== undefined ? scoreObj.percentage : (scoreObj.totalMarks > 0 ? (scoreObj.score / scoreObj.totalMarks) * 100 : 0);
+                    const gradePct = parseFloat(rawGradePct) || 0;
+
+                    const studentQuestions = db.getAttemptQuestions ? db.getAttemptQuestions(a, exam) : (exam?.questions || []);
+                    const studentQIds = new Set(studentQuestions.map(q => String(q.id)));
+
+                    let correctCount = 0, wrongCount = 0, skippedCount = 0;
+                    let perQuestionCols = '';
+
+                    questions.forEach((q, idx) => {
+                        const isAssigned = studentQIds.has(String(q.id));
+                        if (!isAssigned) {
+                            perQuestionCols += `
+                                <td style="text-align: center; font-family:'Mulish', sans-serif; color: #94a3b8; font-weight: 600;">
+                                    <span>-</span>
+                                </td>
+                            `;
+                            return;
+                        }
+
+                        let resp = null;
+                        if (a && a.responses) {
+                            if (Array.isArray(a.responses)) {
+                                resp = a.responses.find(r => r && (r.questionId === q.id || r.id === q.id));
+                            } else {
+                                resp = a.responses[q.id];
+                            }
+                        }
+
+                        let qMark = 0;
+                        let isAttempted = false;
+
+                        if (resp) {
+                            if (typeof resp === 'string' && resp.trim() !== '') {
+                                isAttempted = true;
+                            } else if (typeof resp === 'object' && resp !== null) {
+                                if (resp.value !== undefined && resp.value !== null && String(resp.value).trim() !== '') {
+                                    isAttempted = true;
+                                }
+                                if (resp.manualMark !== undefined && resp.manualMark !== null) {
+                                    isAttempted = true;
+                                }
+                            }
+                        }
+
+                        if (!isAttempted || !resp) {
+                            skippedCount++;
+                        } else if (typeof resp === 'object' && resp.manualMark !== undefined && resp.manualMark !== null) {
+                            qMark = parseFloat(resp.manualMark) || 0;
+                            if (qMark > 0) correctCount++; else wrongCount++;
+                        } else if (!['subjective', 'file_upload', 'drawing'].includes(q.type)) {
+                            let isCorrect = false;
+                            try {
+                                if (db.checkAnswer) isCorrect = db.checkAnswer(q, resp);
+                            } catch (eCheck) {
+                                isCorrect = false;
+                            }
+                            if (isCorrect) {
+                                qMark = parseFloat(q.marks) || 1;
+                                correctCount++;
+                            } else {
+                                wrongCount++;
+                            }
+                        } else {
+                            skippedCount++;
+                        }
+
+                        perQuestionCols += `
+                            <td style="text-align: center; font-family:'Mulish', sans-serif;">
+                                <span style="font-weight:700; color:${qMark > 0 ? '#059669' : '#344054'}; font-size:1.05rem;">${qMark}</span>
+                            </td>
+                        `;
+                    });
+
+                    const timeTakenStr = formatTimeTaken(a);
+                    const timeStartStr = formatStartTimeStr(a);
+
+                    const rollDisplay = user.rollNo || user.rollNumber || a.studentRollNo || a.studentId || 'N/A';
+                    const avatarSrc = user.avatar || user.profileImage || '../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png';
+
+                    let gradeLetter = 'F', gradeColor = '#DC2626', gradeBg = '#FEF2F2';
+                    if (gradePct >= 90) { gradeLetter = 'A+'; gradeColor = '#059669'; gradeBg = '#ECFDF5'; }
+                    else if (gradePct >= 80) { gradeLetter = 'A'; gradeColor = '#059669'; gradeBg = '#ECFDF5'; }
+                    else if (gradePct >= 70) { gradeLetter = 'B'; gradeColor = '#2563EB'; gradeBg = '#EFF6FF'; }
+                    else if (gradePct >= 60) { gradeLetter = 'C'; gradeColor = '#D97706'; gradeBg = '#FEF3C7'; }
+                    else if (gradePct >= 50) { gradeLetter = 'D'; gradeColor = '#D97706'; gradeBg = '#FEF3C7'; }
+
+                    return `
+                        <tr class="active-row" oncontextmenu="handleRowContextMenu(event, '${a.id}')">
+                            <td style="padding: 16px 24px;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; background: #fff5f0; border: 1px solid #ffece5; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                                        <img src="${avatarSrc}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png'">
+                                    </div>
+                                    <div>
+                                        <div style="font-family:'Mulish', sans-serif; font-weight:700; color:#101828; font-size:1rem;">${user.name}</div>
+                                        <div style="font-family:'Mulish', sans-serif; font-size:0.8rem; color:#F46036; font-weight:700; margin-top: 2px;">Roll No: ${rollDisplay}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="text-align: center;">
+                                <span style="font-family:'Mulish', sans-serif; font-weight:700; color:#059669; font-size:1.05rem;">${correctCount}</span>
+                            </td>
+                            <td style="text-align: center;">
+                                <span style="font-family:'Mulish', sans-serif; font-weight:600; color:#667085; font-size:1.05rem;">${skippedCount}</span>
+                            </td>
+                            <td style="text-align: center;">
+                                <span style="font-family:'Mulish', sans-serif; font-weight:700; color:#DC2626; font-size:1.05rem;">${wrongCount}</span>
+                            </td>
+                            ${perQuestionCols}
+                            <td style="text-align: center;">
+                                <div style="font-family:'Mulish', sans-serif; font-weight:600; color:#344054; font-size:0.95rem;">${timeTakenStr}</div>
+                                <div style="font-family:'Mulish', sans-serif; font-size:0.75rem; color:#98A2B3;">${timeStartStr}</div>
+                            </td>
+                            <td style="text-align: center;">
+                                <div style="display: inline-flex; align-items: center; gap: 8px; background: ${gradeBg}; padding: 4px 12px; border-radius: 20px;">
+                                    <span style="font-family:'Mulish', sans-serif; font-weight:800; font-size:1rem; color:${gradeColor};">${gradeLetter}</span>
+                                    <span style="font-family:'Mulish', sans-serif; font-weight:600; font-size:0.85rem; color:${gradeColor};">(${gradePct.toFixed(0)}%)</span>
+                                </div>
+                                <div style="font-family:'Mulish', sans-serif; font-size:0.75rem; color:#667085; font-weight:700; margin-top:2px;">${scoreObj.score}/${scoreObj.totalMarks}</div>
+                            </td>
+                            <td style="text-align: right;">
+                                <button class="btn-action-small" onclick="openEvaluationView('${a.id}')">Audit Response</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            } catch (e) {
+                console.error("Error rendering evaluation table:", e);
+            }
+        }
+
+        function filterReportsTable(val) {
+            const term = val.toLowerCase();
+            const rows = document.querySelectorAll('#evalReportsBody tr.active-row');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(term) ? '' : 'none';
+            });
+        }
+
+        let activeContextAttemptId = null;
+
+        function handleRowContextMenu(e, attemptId) {
+            e.preventDefault();
+            activeContextAttemptId = attemptId;
+            const menu = document.getElementById('tableContextMenu');
+            if (!menu) return;
+
+            menu.style.left = e.clientX + 'px';
+            menu.style.top = e.clientY + 'px';
+            menu.style.display = 'block';
+        }
+
+        function hideContextMenu() {
+            const menu = document.getElementById('tableContextMenu');
+            if (menu) menu.style.display = 'none';
+        }
+
+        window.addEventListener('click', hideContextMenu);
+        window.addEventListener('contextmenu', function (e) {
+            if (!e.target.closest('#evalReportsBody tr.active-row')) {
+                hideContextMenu();
+            }
+        });
+        window.addEventListener('scroll', hideContextMenu, true);
+
+        function openEvaluationView(attemptId) {
+            document.getElementById('tableViewSection').style.display = 'none';
+            document.getElementById('evaluationSplitSection').style.display = 'grid';
+
+            const toolbar = document.getElementById('assessmentToolbar');
+            if (toolbar) toolbar.style.display = 'none';
+
+            selectAttempt(attemptId);
+        }
+
+        function showSubmissionsTable() {
+            document.getElementById('tableViewSection').style.display = 'block';
+            document.getElementById('evaluationSplitSection').style.display = 'none';
+
+            const toolbar = document.getElementById('assessmentToolbar');
+            if (toolbar) toolbar.style.display = 'flex';
+        }
+
+        function renderAttemptList() {
+            const list = document.getElementById('attemptList');
+            if (!list || !examId) return;
+
+            const attempts = db.getExamAttempts(examId).filter(a => a.status === 'submitted' || a.status === 'reviewed');
+            if (attempts.length === 0) {
+                list.innerHTML = '<div style="text-align:center; padding:20px; color:#999;">No submissions yet.</div>';
+                return;
+            }
+
+            list.innerHTML = attempts.map(a => {
+                const user = db.getUserById ? db.getUserById(a.studentId) : { name: 'Student' };
+                const scoreObj = db.calculateScore(a);
+                const hasPendingManual = scoreObj.isPendingManualReview;
+
+                return `
+                    <div class="attempt-card ${activeAttemptId === a.id ? 'active' : ''}" onclick="selectAttempt('${a.id}')">
+                        <span class="attempt-name">${user.name}</span>
+                        <span class="attempt-roll">ROLL: ${user.rollNo || a.studentRollNo || 'UID_' + a.studentId.substr(-4)}</span>
+                        <span class="attempt-status ${hasPendingManual ? 'status-pend' : 'status-grad'}">
+                            ${hasPendingManual ? 'PENDING' : 'GRADED'}
+                        </span>
+                        <div style="font-size:0.75rem; margin-top:8px; font-weight:700;">Score: ${scoreObj.score}/${scoreObj.totalMarks}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectAttempt(id) {
+            activeAttemptId = id;
+            const attempt = db.getAttempt(id);
+            renderSelectedCandidateCard(attempt);
+
+            const user = (db.getUserById && db.getUserById(attempt.studentId)) || { name: 'Student' };
+            const viewport = document.getElementById('evalContent');
+            if (!viewport) return;
+
+            viewport.className = '';
+
+            const rollDisplay = user.rollNo || user.rollNumber || attempt.studentRollNo || attempt.studentId || 'N/A';
+            const startTimeStr = formatStartTimeStr(attempt) || '09:00 AM';
+            const endTimeStr = attempt.submitTime ? new Date(attempt.submitTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '09:45 AM';
+
+            let html = `
+                <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 2px solid #EAECF0;">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+                        <div style="width: 42px; height: 42px; border-radius: 50%; overflow: hidden; border: 1px solid #FFE4D6; flex-shrink: 0; background: #fff5f0; display: flex; align-items: center; justify-content: center;">
+                            <img src="../Testpad_pra_files_files/portrait_placeholder_circle.png" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png'">
+                        </div>
+                        <h1 style="font-family: 'Mulish', sans-serif; font-size: 1.8rem; font-weight: 800; color: #101828; margin: 0; line-height: 1.1;">Candidate: ${user.name}</h1>
+                    </div>
+                    <div style="font-family: 'Mulish', sans-serif; font-size: 1.05rem; color: #475467; line-height: 1.7; margin-left: 54px;">
+                        <div><b>Roll number:</b> ${rollDisplay}</div>
+                        <div><b>Start time:</b> ${startTimeStr}</div>
+                        <div><b>End time:</b> ${endTimeStr}</div>
+                        <div><b>Gmail ID:</b> ${user.email || 'om0653.becse24@chitkara.edu.in'}</div>
+                    </div>
+                </div>
+            `;
+
+            const studentQuestions = db.getAttemptQuestions ? db.getAttemptQuestions(attempt, currentExam) : (currentExam?.questions || []);
+
+            if (studentQuestions && studentQuestions.length > 0) {
+                studentQuestions.forEach((q, i) => {
+                    const response = (attempt.responses && (Array.isArray(attempt.responses) ? attempt.responses.find(r => r && (r.questionId === q.id || r.id === q.id)) : attempt.responses[q.id])) || { value: '' };
+                    const isAuto = !['subjective', 'file_upload'].includes(q.type);
+                    const qMarks = (parseFloat(q.marks) !== undefined && !isNaN(parseFloat(q.marks))) ? parseFloat(q.marks) : 1;
+                    const currentMark = response.manualMark !== undefined ? response.manualMark : (isAuto ? (db.checkAnswer(q, response) ? qMarks : 0) : '');
+                    const heading = q.heading || (q.title ? q.title.replace(/<[^>]*>/g, '').substr(0, 60) : 'Question');
+
+                    html += `
+                        <div class="q-eval-card">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.25rem; color: #101828;">
+                                    ${i + 1}. ${heading}
+                                </div>
+                                <div style="font-family: 'Mulish', sans-serif; font-weight: 700; color: #667085; font-size: 1.1rem;">
+                                    ${qMarks} Marks
+                                </div>
+                            </div>
+                            <div class="tri-orange-line">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                            <div style="font-family: 'Mulish', sans-serif; font-size: 1.1rem; font-weight: 600; color: #000000; line-height: 1.6; margin-bottom: 20px;">
+                                ${q.title}
+                            </div>
+                            <div style="margin-bottom: 22px;">
+                                <span style="font-family: 'Mulish', sans-serif; font-size: 0.8rem; font-weight: 800; color: #667085; text-transform: uppercase; display: block; margin-bottom: 6px;">CANDIDATE RESPONSE</span>
+                                <div style="font-family: 'Mulish', sans-serif; font-size: 1.05rem; font-weight: 500; color: #000000; line-height: 1.6; font-style: ${!response.value ? 'italic' : 'normal'};">
+                                    ${typeof response.value === 'object' ? 'FILE ATTACHED: ' + response.value.name : (response.value || (response.selectedOption !== undefined ? response.selectedOption : 'No response provided'))}
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 16px; margin-top: 16px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <label style="font-family: 'Mulish', sans-serif; font-size: 0.85rem; font-weight: 800; color: #344054;">AWARD MARKS:</label>
+                                    <input type="number" class="mark-input" value="${currentMark}" max="${qMarks}" id="mark_${q.id}" placeholder="0" style="padding: 8px 12px; border: 1px solid #d0d5dd; background: #ffffff; color: #101828; border-radius: 8px; font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1rem; width: 80px; outline: none; text-align: center;">
+                                </div>
+                                <button class="btn-save-mark" onclick="saveManualMark('${q.id}')" style="background: #ffffff; color: #F46036; border: 1px solid #d0d5dd; padding: 10px 22px; border-radius: 8px; font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#FFF5F0'; this.style.color='#F46036'; this.style.borderColor='#FFE4D6';" onmouseout="this.style.background='#ffffff'; this.style.color='#F46036'; this.style.borderColor='#d0d5dd';">UPDATE MARKS</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                const isPub = currentExam && currentExam.resultsPublished;
+                html += `
+                    <div style="margin-top: 48px; padding: 32px 0 48px 0; border-top: 2px solid #EAECF0; text-align: center;">
+                        <button class="btn-publish" onclick="publishResults()" style="padding: 14px 36px; font-size: 1.05rem; border-radius: 8px; font-family: 'Mulish', sans-serif; font-weight: 800; box-shadow: none !important; background: #ffffff; color: #F46036; border: 1px solid #d0d5dd; cursor: pointer;" onmouseover="this.style.background='#FFF5F0'; this.style.color='#F46036'; this.style.borderColor='#FFE4D6';" onmouseout="this.style.background='#ffffff'; this.style.color='#F46036'; this.style.borderColor='#d0d5dd';">
+                            ${isPub ? '<i class="fas fa-sync-alt"></i> RE-PUBLISH UPDATED RESULTS' : 'PUBLISH FINAL RESULTS'}
+                        </button>
+                    </div>
+                `;
+            }
+
+            viewport.innerHTML = html;
+        }
+
+        function renderSelectedCandidateCard(attempt) {
+            const container = document.getElementById('selectedCandidateCard');
+            if (!container) return;
+
+            if (!attempt) {
+                container.innerHTML = '';
+                return;
+            }
+
+            const user = (db.getUserById && db.getUserById(attempt.studentId)) || { name: 'Candidate' };
+            const scoreObj = db.calculateScore(attempt);
+            const studentQuestions = db.getAttemptQuestions ? db.getAttemptQuestions(attempt, currentExam) : (currentExam?.questions || []);
+            const totalQuestions = studentQuestions.length;
+
+            let attemptedCount = 0;
+            if (attempt.responses) {
+                studentQuestions.forEach(q => {
+                    const resp = Array.isArray(attempt.responses) ? attempt.responses.find(r => r && (r.questionId === q.id || r.id === q.id)) : attempt.responses[q.id];
+                    if (resp && ((typeof resp === 'string' && resp.trim() !== '') || (typeof resp === 'object' && (resp.value || resp.selectedOption !== undefined || resp.manualMark !== undefined)))) {
+                        attemptedCount++;
+                    }
+                });
+            }
+
+            const initial = (user.name && user.name.trim()) ? user.name.trim().charAt(0).toUpperCase() : 'C';
+            const email = user.email || 'N/A';
+            const rollNo = user.rollNo || attempt.studentRollNo || 'N/A';
+            const studentId = attempt.studentId || attempt.studentRollNo || 'N/A';
+            const group = user.group || 'N/A';
+
+            container.innerHTML = `
+                <div style="padding: 14px 0; text-align: center;">
+                    <div style="width: 110px; height: 110px; border-radius: 50%; background: #D9622D; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 3.3rem; font-weight: 700; margin: 0 auto 16px auto; box-shadow: 0 4px 14px rgba(217, 98, 45, 0.25);">${initial}</div>
+                    <div style="font-size: 1.55rem; font-weight: 700; color: #101828; text-transform: uppercase; margin-bottom: 24px; letter-spacing: 0.02em;">${user.name || 'Candidate'}</div>
+                </div>
+                <div style="border-top: 1px solid #EAECF0; padding-top: 22px; margin-bottom: 22px; font-size: 1.15rem; line-height: 1.85;">
+                    <div style="font-weight: 700; font-size: 1.35rem; color: #101828; margin-bottom: 16px;">About</div>
+                    <div style="display: flex; flex-direction: column; gap: 14px;">
+                        <div><span style="color: #667085; width: 145px; display: inline-block; font-weight: 500;">Email:</span> <span style="color: #101828; font-weight: 600;">${email}</span></div>
+                        <div><span style="color: #667085; width: 145px; display: inline-block; font-weight: 500;">Roll Number:</span> <span style="color: #101828; font-weight: 600;">${rollNo}</span></div>
+                        <div><span style="color: #667085; width: 145px; display: inline-block; font-weight: 500;">ID:</span> <span style="color: #101828; font-weight: 600;">${studentId}</span></div>
+                        <div><span style="color: #667085; width: 145px; display: inline-block; font-weight: 500;">Select Group:</span> <span style="color: #101828; font-weight: 600;">${group}</span></div>
+                    </div>
+                </div>
+                <div style="border-top: 1px solid #EAECF0; padding-top: 22px; font-size: 1.15rem; line-height: 1.85;">
+                    <div style="font-weight: 700; font-size: 1.35rem; color: #101828; margin-bottom: 16px;">General Info</div>
+                    <div style="display: flex; flex-direction: column; gap: 14px;">
+                        <div><span style="color: #667085; width: 185px; display: inline-block; font-weight: 500;">Marks Obtained:</span> <span style="color: #101828; font-weight: 700;">${scoreObj.score} / ${scoreObj.totalMarks}</span></div>
+                        <div><span style="color: #667085; width: 185px; display: inline-block; font-weight: 500;">Questions Attempted:</span> <span style="color: #101828; font-weight: 700;">${attemptedCount} / ${totalQuestions}</span></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function saveManualMark(qid) {
+            const markInput = document.getElementById('mark_' + qid);
+            if (!markInput || markInput.value === '') return;
+            const mark = parseFloat(markInput.value);
+
+            const attempt = db.getAttempt(activeAttemptId);
+            if (!attempt) return;
+
+            let response;
+            if (Array.isArray(attempt.responses)) {
+                response = attempt.responses.find(r => r.questionId === qid);
+                if (!response) {
+                    response = { questionId: qid, value: '' };
+                    attempt.responses.push(response);
+                }
+            } else {
+                if (!attempt.responses) attempt.responses = {};
+                if (!attempt.responses[qid]) attempt.responses[qid] = { value: '' };
+                response = attempt.responses[qid];
+            }
+
+            response.manualMark = isNaN(mark) ? 0 : mark;
+
+            const scoreObj = db.calculateScore(attempt);
+            attempt.score = scoreObj.score;
+            attempt.totalMarks = scoreObj.totalMarks;
+            attempt.percentage = scoreObj.percentage;
+
+            if (attempt.status !== 'reviewed') {
+                attempt.status = scoreObj.isPendingManualReview ? 'submitted' : 'graded';
+            }
+
+            db.updateAttempt(activeAttemptId, attempt);
+
+            showToast("Marks updated! Click Re-Publish to push updated marks to candidates.");
+            renderAttemptList();
+            renderSelectedCandidateCard(attempt);
+            loadSubmissionsTable(examId);
+            selectAttempt(activeAttemptId);
+        }
+
+        function publishResults() {
+            if (!currentExam) return;
+            const banner = document.getElementById('publishConfirmBanner');
+            const isPub = currentExam && currentExam.resultsPublished;
+            const label = document.getElementById('publishConfirmLabel');
+            if (label) {
+                label.textContent = isPub ? 'Are you sure to re-publish updated marks?' : 'Are you sure to publish marks?';
+            }
+            if (banner) {
+                banner.style.display = 'flex';
+            }
+        }
+
+        function confirmPublish(shouldPublish) {
+            const banner = document.getElementById('publishConfirmBanner');
+            if (banner) banner.style.display = 'none';
+
+            if (!shouldPublish) return;
+
+            const isRePublish = currentExam && currentExam.resultsPublished;
+
+            currentExam.resultsPublished = true;
+            if (db.updateExam) db.updateExam(examId, currentExam);
+
+            const attempts = db.getExamAttempts(examId);
+            attempts.forEach(a => {
+                a.status = 'reviewed';
+                if (db.updateAttempt) db.updateAttempt(a.id, a);
+            });
+
+            if (activeAttemptId) {
+                selectAttempt(activeAttemptId);
+            }
+
+            showToast(isRePublish ? "Updated results re-published successfully!" : "Results published successfully!");
+        }
+
+        function showToast(msg) {
+            let toast = document.getElementById('topHeaderToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'topHeaderToast';
+                toast.className = 'top-header-toast';
+                document.body.appendChild(toast);
+            }
+
+            toast.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-check-circle" style="color: #059669; font-size: 1.15rem;"></i>
+                    <span>${msg}</span>
+                </div>
+                <i class="fas fa-times" onclick="document.getElementById('topHeaderToast').style.display='none'" style="cursor: pointer; opacity: 0.6;"></i>
+            `;
+            toast.style.display = 'flex';
+
+            clearTimeout(window.toastTimer);
+            window.toastTimer = setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3500);
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

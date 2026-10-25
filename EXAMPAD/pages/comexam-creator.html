@@ -1,0 +1,3722 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Quill Rich Text Editor -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="https://api.learntechww.com/college_icon/logo1733989968823.jpg">
+    <!-- Monaco Editor Resources -->
+    <link rel="stylesheet" data-name="vs/editor/editor.main"
+        href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs/editor/editor.main.min.css">
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-light);
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-light: #60a5fa;
+            --bg-body: #ffffff;
+            --bg-sidebar: #f8f9fa;
+            --text-nav: #3c4043;
+            --text-main: #202124;
+            --text-secondary: #5f6368;
+            --border: #e0e0e0;
+            --radius: 8px;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: transparent;
+            color: var(--text-main);
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .workspace {
+            background: transparent !important;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* Real Site Header */
+        .site-header {
+            height: 64px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            background: transparent;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .logo {
+            width: 36px;
+            height: 36px;
+            background: transparent;
+            color: white;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 20px;
+            color: var(--text-secondary);
+        }
+
+        .nav-icon {
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+
+        .nav-icon:hover {
+            background: #f1f3f4;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .plus-btn {
+            background: #eff6ff;
+            color: var(--primary);
+            border: 1px solid #dbeafe;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .profile-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .profile-circle {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .profile-circle:hover {
+            transform: scale(1.05);
+        }
+
+        .profile-menu {
+            position: absolute;
+            top: 120%;
+            right: 0;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            display: none;
+            flex-direction: column;
+            padding: 8px;
+            z-index: 1000;
+            border: 1px solid #eee;
+        }
+
+        .profile-menu.active {
+            display: flex;
+        }
+
+        .menu-item {
+            padding: 12px 16px;
+            font-size: 0.9rem;
+            color: #444;
+            border-radius: 8px;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+        }
+
+        .menu-item:hover {
+            background: #f0f9ff;
+            color: var(--primary);
+        }
+
+        .menu-divider {
+            height: 1px;
+            background: #eee;
+            margin: 8px 0;
+        }
+
+        .logo {
+            cursor: pointer;
+        }
+
+        .nav-icon {
+            cursor: pointer;
+        }
+
+        /* Layout */
+        .workspace {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            min-height: calc(100vh - 64px);
+            transition: grid-template-columns 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .workspace.sidebar-collapsed {
+            grid-template-columns: 1fr 0px;
+        }
+
+
+        .main-editor {
+            border-right: 1px solid var(--border);
+            padding: 40px 60px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Form Styling */
+        .editor-section {
+            margin-bottom: 48px;
+        }
+
+        .section-tag {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        h2.title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1a1a1b;
+            margin: 0 0 24px 0;
+            border-left: 4px solid var(--primary);
+            padding-left: 16px;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .clean-input {
+            width: 100%;
+            padding: 12px 0;
+            border: none;
+            border-bottom: 2px solid #f1f3f4;
+            font-size: 1.1rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            outline: none;
+            background: transparent;
+        }
+
+        .clean-input:focus {
+            border-bottom-color: var(--primary);
+        }
+
+        .clean-textarea {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            outline: none;
+            background: #fafafa;
+        }
+
+        .clean-textarea:focus {
+            border-color: var(--primary);
+            background: #fff;
+        }
+
+        /* Grid inputs */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-top: 24px;
+        }
+
+        /* Real Website Buttons */
+        .btn {
+            height: 44px;
+            padding: 0 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-run {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-run:hover {
+            background: var(--primary-light);
+            transform: translateY(-1px);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-ghost:hover {
+            background: #f8f9fa;
+            color: var(--text-main);
+        }
+
+        /* Question Builder Cards */
+        .type-tabs {
+            display: flex;
+            border-bottom: 2px solid #f1f3f4;
+            margin-bottom: 32px;
+        }
+
+        .type-tab {
+            padding: 12px 24px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .type-tab.active {
+            color: var(--primary);
+        }
+
+        .type-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        /* Sidebar Stats */
+        .sidebar {
+            background: transparent;
+            padding: 32px;
+            border-left: 1px solid var(--border);
+            position: sticky;
+            top: 64px;
+            height: calc(100vh - 64px);
+            overflow-y: auto;
+            overflow-x: hidden;
+            width: 100%;
+            min-width: 350px;
+            transition: opacity 0.2s;
+        }
+
+        .workspace.sidebar-collapsed .sidebar {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .sidebar-toggle-btn {
+            position: fixed;
+            right: 335px;
+            top: 84px;
+            width: 36px;
+            height: 36px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s;
+        }
+
+        .workspace.sidebar-collapsed .sidebar-toggle-btn {
+            right: 20px;
+            transform: rotate(180deg);
+        }
+
+        /* --- PRENIUM STEP 3 ENHANCEMENTS --- */
+        .type-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 12px;
+            width: fit-content;
+        }
+
+        .type-tab {
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #666;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: transparent;
+        }
+
+        .type-tab:hover {
+            color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .type-tab.active {
+            background: #fff;
+            color: var(--primary);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .split-builder {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 24px;
+            background: transparent;
+            border: none;
+            overflow: visible;
+        }
+
+        .builder-left,
+        .builder-right {
+            background: transparent;
+            border-radius: 0;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+        }
+
+        .form-card {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            margin-bottom: 40px !important;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #1a1a1b;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .question-id-wrapper {
+            margin-bottom: 30px;
+        }
+
+        #questionHeading {
+            font-size: 1.8rem;
+            letter-spacing: -0.5px;
+            color: #1a1a1b;
+            padding: 12px 0;
+            width: 100%;
+        }
+
+        .tri-orange-line {
+            height: 4px;
+            border-radius: 2px;
+            margin: 0 0 32px 0;
+        }
+
+        .commit-section {
+            display: flex;
+            gap: 16px;
+            margin-top: 40px;
+            padding: 24px;
+            background: #fff;
+            border-radius: 16px;
+            border: 1px solid #eee;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-commit {
+            flex: 1;
+            height: 56px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+            transition: all 0.3s;
+        }
+
+        .btn-commit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.4);
+            background: var(--primary-light);
+        }
+
+        /* --- DESIGNER SIDEBAR & ADVANCED EDITOR --- */
+        .editor-wrapper {
+            display: flex;
+            gap: 24px;
+            margin-top: 24px;
+            align-items: flex-start;
+        }
+
+        .editor-canvas {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #eee;
+            min-width: 0;
+            /* Critical for flex child overflow */
+        }
+
+        #editor-container {
+            height: 480px;
+            border: none !important;
+            font-size: 1.1rem;
+        }
+
+        .ql-toolbar.ql-snow {
+            border: none !important;
+            border-bottom: 1px solid #eee !important;
+            background: #fcfcfc;
+            padding: 12px !important;
+        }
+
+        .designer-sidebar {
+            width: 280px;
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .ql-snow.ql-toolbar button {
+            width: 32px !important;
+            height: 32px !important;
+            border-radius: 6px !important;
+            margin-right: 4px !important;
+            transition: all 0.2s !important;
+        }
+
+        .ql-snow.ql-toolbar button:hover {
+            background: var(--primary-soft) !important;
+            color: var(--primary) !important;
+        }
+
+        .ql-snow.ql-toolbar button.ql-active {
+            color: var(--primary) !important;
+        }
+
+        /* --- QUILL PICKER ENHANCEMENTS --- */
+        .ql-picker.ql-size .ql-picker-label::before,
+        .ql-picker.ql-size .ql-picker-item::before {
+            content: attr(data-value) !important;
+        }
+
+        .ql-picker.ql-font .ql-picker-label::before,
+        .ql-picker.ql-font .ql-picker-item::before {
+            content: attr(data-value) !important;
+        }
+
+        /* Font Family Previews in Picker */
+        .ql-picker-item[data-value="Roboto"]::before {
+            font-family: "Roboto" !important;
+        }
+
+        .ql-picker-item[data-value="Inter"]::before {
+            font-family: "Inter" !important;
+        }
+
+        .ql-picker-item[data-value="Outfit"]::before {
+            font-family: "Outfit" !important;
+        }
+
+        .ql-picker-item[data-value="JetBrains Mono"]::before {
+            font-family: "JetBrains Mono" !important;
+        }
+
+        .ql-picker-item[data-value="Arial"]::before {
+            font-family: "Arial" !important;
+        }
+
+        .ql-picker-item[data-value="Times New Roman"]::before {
+            font-family: "Times New Roman" !important;
+        }
+
+        .ql-picker-item[data-value="Georgia"]::before {
+            font-family: "Georgia" !important;
+        }
+
+        .ql-picker-item[data-value="Garamond"]::before {
+            font-family: "Garamond" !important;
+        }
+
+        .ql-picker-item[data-value="Tex Gyre Schola"]::before {
+            font-family: "Tex Gyre Schola" !important;
+        }
+
+        .ql-picker-item[data-value="Century Schoolbook"]::before {
+            font-family: "Century Schoolbook" !important;
+        }
+
+        .ql-picker.ql-font {
+            width: 140px !important;
+        }
+
+        .ql-picker.ql-size {
+            width: 80px !important;
+        }
+
+        .design-group-title {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #f9f9f9;
+            padding-bottom: 4px;
+        }
+
+        .design-control {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .design-control label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .design-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            background: #fff;
+            transition: border-color 0.2s;
+        }
+
+        .design-input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .mini-tool-btn {
+            padding: 10px;
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: #444;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .mini-tool-btn:hover {
+            background: var(--bg-sidebar);
+            border-color: #ddd;
+        }
+
+        .color-preview {
+            width: 100%;
+            height: 32px;
+            border-radius: 6px;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 1px #eee;
+            cursor: pointer;
+        }
+
+        /* Dark Mode for Architect */
+        .architect-dark-mode {
+            background: #1a1a1b !important;
+            color: #eee !important;
+        }
+
+        .architect-dark-mode .builder-left,
+        .architect-dark-mode .builder-right,
+        .architect-dark-mode .designer-sidebar {
+            background: #252627 !important;
+            border-color: #333 !important;
+        }
+
+        .architect-dark-mode .clean-input,
+        .architect-dark-mode .design-input {
+            background: #1a1a1b !important;
+            color: #fff !important;
+            border-color: #333 !important;
+        }
+
+        .architect-dark-mode #editor-container {
+            background: #1a1a1b !important;
+            border-color: #333 !important;
+        }
+
+        .architect-dark-mode .ql-editor {
+            color: #fff !important;
+        }
+
+        .architect-dark-mode .ql-toolbar {
+            background: #252627 !important;
+            border-color: #333 !important;
+        }
+
+        .architect-dark-mode .ql-stroke {
+            stroke: #aaa !important;
+        }
+
+        .architect-dark-mode .ql-picker {
+            color: #aaa !important;
+        }
+
+        .stat-group {
+            background: #fff;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* Sidebar Detailed Question Cards */
+        .q-item {
+            padding: 16px;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 12px;
+            transition: all 0.2s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .q-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+        }
+
+        .q-item.active {
+            border-color: var(--primary);
+            background: #f4f9ff;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.1);
+        }
+
+        .q-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2px;
+            padding-right: 10px;
+        }
+
+        .q-item-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 140px;
+        }
+
+        .q-item-marks {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+
+        .q-item-actions {
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+            display: flex;
+            gap: 6px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .q-item:hover .q-item-actions {
+            opacity: 1;
+        }
+
+        .q-action-btn {
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            transition: all 0.2s;
+        }
+
+        .q-action-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: #eff6ff;
+        }
+
+        .q-action-btn.delete-btn:hover {
+            border-color: #F04438;
+            color: #F04438;
+            background: #FEF3F2;
+        }
+
+        /* Architect Navigation Grid Style */
+        .q-nav-section {
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .q-nav-header {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 12px 0 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .q-nav-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            padding: 0 12px;
+        }
+
+        .q-nav-item {
+            width: 56px;
+            height: 56px;
+            background: #fff;
+            border: 2px solid #12B76A;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            color: #12B76A;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .q-nav-item:hover {
+            border-color: #0E9F5D;
+            background: #F0FDF4;
+            color: #0E9F5D;
+        }
+
+        .q-nav-item.completed {
+            background: #12B76A;
+            color: #fff;
+            border-color: #12B76A;
+        }
+
+        .q-nav-item.completed:hover {
+            background: #0E9F5D;
+            border-color: #0E9F5D;
+        }
+
+        .q-nav-item.active {
+            background: #eff6ff !important;
+            color: var(--primary) !important;
+            border-color: var(--primary) !important;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
+        }
+
+        .q-nav-item i.status-tick {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            font-size: 0.65rem;
+            color: #12B76A;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .q-nav-actions {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            border-radius: 50%;
+        }
+
+        .q-nav-actions .q-mini-btn {
+            width: 18px;
+            height: 18px;
+            font-size: 0.55rem;
+            border-radius: 50%;
+        }
+
+        .q-nav-item:hover .q-nav-actions {
+            opacity: 1;
+        }
+
+        .q-mini-btn {
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            border-radius: 4px;
+            transition: all 0.2s;
+            background: #f8f9fa;
+            border: 1px solid #eee;
+        }
+
+        .q-mini-btn:hover {
+            color: var(--primary);
+            background: #eff6ff;
+            border-color: var(--primary);
+        }
+
+        .q-mini-btn.del:hover {
+            color: #F04438;
+            background: #FEF3F2;
+            border-color: #FDA29B;
+        }
+
+        /* Q-Builder Inline Nav */
+        .builder-nav-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .nav-link-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-link-btn:hover {
+            color: var(--primary);
+            background: #f0f9ff;
+        }
+
+        .save-btn-architect {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .save-btn-architect:hover {
+            background: var(--primary-light);
+            transform: translateY(-1px);
+        }
+
+        /* Architect Context Rail */
+        .q-rail {
+            width: 80px;
+            background: #fff;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            z-index: 10;
+        }
+
+        /* Footer Action Bar */
+        .footer-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: #fff;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 1000;
+        }
+
+
+        .split-builder {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .builder-left {
+            padding: 0;
+            background: transparent;
+            border-right: none;
+        }
+
+        .builder-right {
+            padding: 0;
+            background: transparent;
+        }
+
+        /* Custom Dots Loader */
+        .page-loader {
+            position: fixed;
+            inset: 0;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+
+        .dots-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            animation: dot-pulse 1.4s infinite ease-in-out both;
+        }
+
+        .dot:nth-child(1) {
+            animation-delay: -0.32s;
+            background: #2563eb;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: -0.16s;
+            background: #e38250;
+        }
+
+        .dot:nth-child(3) {
+            background: #b05020;
+        }
+
+        @keyframes dot-pulse {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1.0);
+            }
+        }
+
+        /* Custom Modal */
+        .custom-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            backdrop-filter: blur(4px);
+        }
+
+        .custom-modal {
+            background: #fff;
+            width: 100%;
+            max-width: 800px;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Security Blackout */
+        .security-blackout {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 11000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            text-align: center;
+        }
+
+        /* Quill Formatting */
+        #editor-container {
+            height: 300px;
+            margin-bottom: 24px;
+            border-radius: 8px;
+            border-color: var(--border);
+        }
+
+        /* Tri-Shade Orange Line (SCR 1) */
+        .tri-orange-line {
+            display: flex;
+            height: 8px;
+            width: 240px;
+            border-radius: 0;
+            overflow: hidden;
+            margin: 12px 0 24px 0;
+        }
+
+        .tri-orange-line>div {
+            height: 100%;
+        }
+
+        .tol-light {
+            background: #dbeafe;
+            flex: 1;
+        }
+
+        .tol-mid {
+            background: #93c5fd;
+            flex: 1;
+        }
+
+        .tol-dark {
+            background: #3b82f6;
+            flex: 2;
+        }
+
+        /* Wizard Workflow */
+        .wizard-container {
+            padding: 40px 0;
+            width: 100%;
+        }
+
+        .wizard-header,
+        .wizard-step:not(#step-4) {
+            max-width: 95%;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        #step-4 {
+            width: 100%;
+            padding: 0;
+        }
+
+        .wizard-step {
+            display: none;
+            position: relative;
+        }
+
+        .wizard-step.active {
+            display: block;
+        }
+
+        .wizard-header {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .step-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            color: #ef4444;
+            font-weight: 700;
+            font-size: 1rem;
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+            transition: color 0.2s;
+            font-family: 'Hind', sans-serif;
+        }
+
+        .step-indicator.active {
+            color: var(--primary);
+        }
+
+        .step-indicator.completed {
+            color: #10b981;
+        }
+
+        .step-num {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #fff;
+            color: #ef4444;
+            border: 2px solid #ef4444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-family: 'Hind', sans-serif;
+            font-weight: 700;
+        }
+
+        .step-indicator.active .step-num {
+            background: #fff;
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .step-indicator.completed .step-num {
+            background: #fff;
+            color: #10b981;
+            border-color: #10b981;
+        }
+
+        /* Modernized Calendar (Eye-Relaxer) */
+        input[type="datetime-local"] {
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f9f9f9;
+            color: #333;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.5) sepia(1) saturate(5) hue-rotate(175deg);
+            /* Subtle blue-ish tint */
+            cursor: pointer;
+            opacity: 0.6;
+        }
+
+        input[type="datetime-local"]:focus {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .select-all-btn {
+            font-size: 0.7rem;
+            color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .select-all-btn:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .workspace-lang-title {
+            background: #f2f2f2;
+            color: #333;
+            padding: 14px 24px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            text-transform: uppercase;
+        }
+
+        .code-workspace-block {
+            margin-bottom: 40px;
+            padding-bottom: 32px;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .ql-toolbar.ql-snow {
+            border-color: #eee !important;
+            background: #fafafa !important;
+            border-top-left-radius: 8px !important;
+            border-top-right-radius: 8px !important;
+            padding: 12px !important;
+        }
+
+        .ql-container.ql-snow {
+            border-color: #eee !important;
+            border-bottom-left-radius: 8px !important;
+            border-bottom-right-radius: 8px !important;
+            font-family: 'Inter', sans-serif !important;
+            font-size: 1.05rem !important;
+        }
+
+        /* Target the </> Code Block Box inside the Editor */
+        .ql-editor pre.ql-syntax {
+            background-color: #f2f2f2 !important;
+            color: #333 !important;
+            border: 1px solid #e0e0e0 !important;
+            border-radius: 8px !important;
+            padding: 20px !important;
+            font-family: 'JetBrains Mono', monospace !important;
+            margin: 15px 0 !important;
+            line-height: 1.6 !important;
+        }
+
+        /* Target Inline Code snippets if used */
+        .ql-editor code {
+            background-color: #f2f2f2 !important;
+            color: var(--primary) !important;
+            padding: 3px 8px !important;
+            border-radius: 6px !important;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: 600 !important;
+            font-size: 0.9em !important;
+        }
+
+        .code-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .code-label-main {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #444;
+            letter-spacing: 0.3px;
+        }
+
+        .code-controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .monaco-inline-wrapper {
+            height: 200px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f2f2f2;
+            /* Grey color from screenshot */
+            border: 1px solid #e0e0e0;
+        }
+
+        .btn-fullscreen-toggle {
+            height: 32px;
+            padding: 0 16px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            color: #666;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-fullscreen-toggle:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Test Case UI Refined */
+        .test-case-card {
+            background: #fff;
+            padding: 28px;
+            border-bottom: 2px solid #f8f8f8;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .test-case-card:hover {
+            background: #fdfdfd;
+        }
+
+        .test-case-card .label {
+            font-size: 0.85rem;
+            color: #777;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .test-case-input-group {
+            margin-bottom: 20px;
+        }
+
+        .remove-case {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        /* Fullscreen Editor Overlay */
+        #editorOverlay {
+            position: fixed;
+            inset: 0;
+            background: #1e1e1e;
+            z-index: 20000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .overlay-header {
+            padding: 12px 24px;
+            background: #252526;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+
+        #monaco-container {
+            flex: 1;
+        }
+
+        /* Rich Text Fonts Support */
+        .ql-font-inter {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .ql-font-outfit {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .ql-font-roboto {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .ql-font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .ql-font-serif {
+            font-family: 'Merriweather', serif;
+        }
+
+        .ql-font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .ql-font-slab {
+            font-family: 'Roboto Slab', serif;
+        }
+
+        .ql-font-script {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* MCQ Selection UI */
+        .option-row {
+            display: grid;
+            grid-template-columns: 40px 1fr 32px;
+            gap: 12px;
+            align-items: center;
+            background: #fff;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #f1f3f4;
+            transition: all 0.2s;
+        }
+
+        .option-selector {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .option-row.is-correct {
+            border-color: var(--primary);
+            background: #f0f9ff;
+        }
+
+        .option-row.is-correct .option-selector {
+            border-color: var(--primary);
+            background: var(--primary);
+        }
+
+        .option-selector::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .option-row.is-correct .option-selector::after {
+            opacity: 1;
+        }
+
+        /* Question Preview Line */
+        .q-preview-header {
+            margin-bottom: 24px;
+        }
+
+        .q-preview-heading {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0 0 8px 0;
+        }
+
+        .q-preview-line {
+            height: 4px;
+            background: #dbeafe;
+            /* Light orange base */
+            width: 100%;
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .q-preview-line::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 40%;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        /* Custom Context Menu */
+        .custom-context-menu {
+            position: fixed;
+            z-index: 10000;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
+            border: 1px solid #dbeafe;
+            min-width: 220px;
+            display: none;
+            flex-direction: column;
+            padding: 8px;
+            animation: menuFadeIn 0.2s ease-out;
+        }
+
+        @keyframes menuFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .ctx-item {
+            padding: 12px 16px;
+            font-size: 0.9rem;
+            color: #444;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .ctx-item:hover {
+            background: #eff6ff;
+            color: var(--primary);
+        }
+
+        .ctx-item i {
+            width: 18px;
+            text-align: center;
+            color: var(--primary);
+        }
+
+        .ctx-divider {
+            height: 1px;
+            background: #eee;
+            margin: 6px 0;
+        }
+
+        .security-bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background-color: #f4f9ff;
+            overflow: hidden;
+            pointer-events: none;
+            display: block;
+        }
+
+        .security-bg-container svg {
+            width: 100%;
+            height: 100%;
+            transform: scale(1.1);
+            filter: blur(3px);
+        }
+    </style>
+
+    <style>
+        ::selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+
+        ::-moz-selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+    </style>
+</head>
+
+<div class="page-loader" id="pageLoader">
+    <div class="dots-container">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+    <div
+        style="font-family: 'Outfit', sans-serif; font-weight: 600; color: var(--text-secondary); letter-spacing: 1px;">
+        TESTPAD CREATOR</div>
+</div>
+<div class="security-bg-container" id="globalSecurityBg">
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="350" fill="#dbeafe" opacity="0.4"></circle>
+        <circle cx="1300" cy="800" r="450" fill="#dbeafe" opacity="0.4"></circle>
+    </svg>
+</div>
+
+<div class="security-blackout" id="securityBlackout">
+    <div>
+        <h1 style="font-size: 3rem; margin-bottom: 1rem;">SECURITY ALERT</h1>
+        <p>External recording/screenshot activities detected.<br>This session has been locked for integrity.</p>
+    </div>
+</div>
+
+<div class="custom-modal-overlay" id="customModalOverlay">
+    <div class="custom-modal">
+        <h3 id="modalTitle" style="margin-top:0; font-family:'Outfit';">Modal Title</h3>
+        <p id="modalDesc" style="color:var(--text-secondary); margin-bottom: 1.5rem;">Description goes here.</p>
+        <div id="modalContent"></div>
+        <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:24px;">
+            <button class="btn btn-ghost" id="modalCancel">Cancel</button>
+            <button class="btn btn-run" id="modalConfirm">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<div class="custom-context-menu" id="customContextMenu">
+    <div class="ctx-item" onclick="promptAddSection()"><i data-lucide="plus-circle"></i> Add Section</div>
+    <div class="ctx-divider"></div>
+    <div class="ctx-item" onclick="gotoExcelUpload('comexcelupload.html')"><i data-lucide="file-spreadsheet"></i>
+        Upload MCQ via Excel</div>
+    <div class="ctx-item" onclick="gotoExcelUpload('exceluploadcode.html')"><i data-lucide="code-2"></i> Code Upload
+        via Excel</div>
+</div>
+
+<!-- Fullscreen Monaco Editor Overlay -->
+<div id="editorOverlay">
+    <div class="overlay-header">
+        <h3 id="overlayTitle" style="color: #fff; font-family: 'Outfit', sans-serif; margin: 0;">CODE WORKSPACE</h3>
+        <button class="btn btn-ghost" onclick="closeEditorOverlay()"
+            style="color: #fff; border-color: #555;">CLOSE</button>
+    </div>
+    <div id="monaco-container"></div>
+</div>
+
+<header class="site-header">
+    <div class="header-left">
+        <div class="logo" onclick="goBack()">
+            <img src="../icon.png" alt="Chitkara">
+        </div>
+        <div class="wizard-header" style="margin-bottom: 0; margin-left: 40px; display: flex; gap: 40px;">
+            <div class="step-indicator active" id="ind1" onclick="goToStep(1)">
+                <div class="step-num">1</div>
+                <span>BASIC DETAILS</span>
+            </div>
+            <div class="step-indicator" id="ind2" onclick="goToStep(2)">
+                <div class="step-num">2</div>
+                <span>SECTIONS & RULES</span>
+            </div>
+            <div class="step-indicator" id="ind3" onclick="goToStep(3)">
+                <div class="step-num">3</div>
+                <span>NETWORK ACCESS</span>
+            </div>
+            <div class="step-indicator" id="ind4" onclick="goToStep(4)">
+                <div class="step-num">4</div>
+                <span>QUESTION ARCHITECT</span>
+            </div>
+            <div class="step-indicator" id="ind5" onclick="goToStep(5)">
+                <div class="step-num">5</div>
+                <span>SECURE DEPLOYMENT</span>
+            </div>
+        </div>
+    </div>
+    <div class="header-right" style="display: flex; align-items: center; padding-right: 20px; gap: 12px;">
+        <button onclick="refreshAndSave()"
+            style="background: transparent; border: 1px solid #ccc; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; color: #333; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+        <!-- Sidebar Toggle Button -->
+        <button onclick="toggleSidebar()"
+            style="background: var(--primary); color: white; border: none; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; box-shadow: 0 2px 8px rgba(217,108,51,0.3);">
+            <i class="fas fa-chevron-left" id="sidebarToggleIcon"></i>
+        </button>
+    </div>
+</header>
+
+<div class="workspace">
+    <main class="wizard-container">
+
+        <div id="step-1" class="wizard-step active">
+            <div class="form-card">
+                <div class="section-title"
+                    style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <i data-lucide="fingerprint" style="color:var(--primary); width: 28px; height: 28px;"></i>
+                        Competitive Exam Identity
+                    </div>
+                    <button class="btn btn-ghost" onclick="showCloneModal()"
+                        style="font-size: 0.8rem; height: 32px; padding: 0 12px; border-radius: 20px;">
+                        <i class="far fa-copy"></i> Clone Existing Test
+                    </button>
+                </div>
+
+                <div class="input-group">
+                    <label class="label">COMPETITIVE EXAM TITLE</label>
+                    <input type="text" id="examTitle" class="clean-input" style="font-size:1.2rem; font-weight:600;"
+                        placeholder="e.g. JEE Mains 2026">
+                </div>
+
+                <div class="input-group">
+                    <label class="label">SUBTITLE / DESCRIPTION</label>
+                    <textarea id="examDescription" class="clean-textarea" style="min-height:100px;"
+                        placeholder="Add instructions or overview..."></textarea>
+                </div>
+
+                <div class="form-grid"
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px;">
+                    <div class="input-group">
+                        <label class="label">DURATION (MINUTES)</label>
+                        <div style="position:relative;">
+                            <input type="number" id="examDuration" class="clean-input" value="60"
+                                style="padding-left:36px; background:#fdfdfd;">
+                            <i class="far fa-clock"
+                                style="position:absolute; left:12px; top:12px; color:var(--primary); opacity:0.6;"></i>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label class="label">TOTAL CAPACITY (MARKS)</label>
+                        <div style="position:relative;">
+                            <input type="number" id="examTotalMarks" class="clean-input" value="100"
+                                style="padding-left:36px; background:#fdfdfd;">
+                            <i class="fas fa-star"
+                                style="position:absolute; left:12px; top:12px; color:var(--primary); opacity:0.6;"></i>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label class="label">ACADEMIC CREDITS</label>
+                        <div style="position:relative;">
+                            <input type="number" id="examCredits" class="clean-input" value="1" step="0.5"
+                                style="padding-left:36px; background:#fdfdfd;">
+                            <i class="fas fa-graduation-cap"
+                                style="position:absolute; left:12px; top:12px; color:var(--primary); opacity:0.6;"></i>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label class="label"
+                            style="display: flex; align-items: center; justify-content: space-between;">
+                            <span>NEGATIVE MARKING</span>
+                            <label class="sec-toggle" style="margin-left: 10px; transform: scale(0.8);">
+                                <input type="checkbox" id="enableNegativeMarking"
+                                    onchange="document.getElementById('negativeMarking').disabled = !this.checked; if(!this.checked) document.getElementById('negativeMarking').value = 0;">
+                            </label>
+                        </label>
+                        <div style="position:relative;">
+                            <input type="number" id="negativeMarking" class="clean-input" value="0" disabled
+                                style="padding-left:36px; background:#fdfdfd;" step="0.25">
+                            <i class="fas fa-minus-circle"
+                                style="position:absolute; left:12px; top:12px; color:var(--primary); opacity:0.6;"></i>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label class="label">SCHEDULED START</label>
+                        <input type="datetime-local" id="scheduleDate" class="clean-input"
+                            style="background:#fdfeff; border-color:#eef0f2;">
+                    </div>
+                    <div class="input-group">
+                        <label class="label">SCHEDULED END</label>
+                        <input type="datetime-local" id="scheduleEndDate" class="clean-input"
+                            style="background:#fdfeff; border-color:#eef0f2;">
+                    </div>
+
+                </div>
+
+                <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #eee;">
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom: 20px;">
+                        <i data-lucide="palette" style="color:#9b59b6; width: 24px; height: 24px;"></i>
+                        <h3 style="margin:0; font-size: 1.1rem; font-family: 'Outfit';">Exam Visual Theme Designer</h3>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 24px;">
+                        <div class="input-group">
+                            <label class="label">BRAND COLOR</label>
+                            <input type="color" id="themePrimaryColor" value="#2563eb"
+                                style="width:100%; height:44px; border-radius: 8px; border: 1px solid #ddd; cursor:pointer;">
+                        </div>
+                        <div class="input-group">
+                            <label class="label">INTERFACE FONT</label>
+                            <select id="themeFont" class="clean-input">
+                                <option value="Outfit">Outfit (Dynamic)</option>
+                                <option value="Inter">Inter (Professional)</option>
+                                <option value="Roboto">Roboto (Clean)</option>
+                                <option value="JetBrains Mono">Standard Mono</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label class="label">DARK MODE</label>
+                            <label class="sec-toggle"><input type="checkbox" id="themeDarkMode"> <span>Enable Dark
+                                    Theme</span></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-card"
+                style="margin-top: 40px; border-left: 4px solid #2ecc71; padding-left: 24px !important; background:transparent;">
+                <div class="section-title">
+                    <i data-lucide="shield-check" style="color:#2ecc71; width: 28px; height: 28px;"></i> Integrity
+                    Shield & Policy
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <div
+                        style="background:transparent; border:1px solid rgba(0,0,0,0.05); padding:20px; border-radius:12px;">
+                        <label class="sec-toggle"
+                            style="display:flex; align-items:center; gap:12px; cursor:pointer; margin-bottom:12px;">
+                            <input type="checkbox" id="blockCopyPaste" style="width:18px; height:18px;">
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <i data-lucide="clipboard-off" style="width:16px; height:16px; color:#666;"></i>
+                                <span style="font-size:0.9rem; font-weight:500;">Block Copy-Paste Activity</span>
+                            </div>
+                        </label>
+                        <label class="sec-toggle" style="display:flex; align-items:center; gap:12px; cursor:pointer;">
+                            <input type="checkbox" id="blockScreenshot" style="width:18px; height:18px;">
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <i data-lucide="camera-off" style="width:16px; height:16px; color:#666;"></i>
+                                <span style="font-size:0.9rem; font-weight:500;">Block PrintScreen & Snipping</span>
+                            </div>
+                        </label>
+                        <label class="sec-toggle"
+                            style="display:flex; align-items:center; gap:12px; cursor:pointer; margin-top:12px; padding:10px; background:rgba(37, 99, 235, 0.05); border-radius:8px; border:1px dashed rgba(37, 99, 235, 0.3);">
+                            <input type="checkbox" id="isPracticeTest" style="width:18px; height:18px;"
+                                onchange="exams.isPracticeTest = this.checked">
+                            <span style="font-size:0.9rem; font-weight:700; color:#2563eb;">PRACTICE TEST MODE</span>
+                        </label>
+                    </div>
+                    <div class="security-card"
+                        style="background:#fcfcfc; border:1px solid #f0f0f0; padding:20px; border-radius:12px;">
+                        <label class="sec-toggle"
+                            style="display:flex; align-items:center; gap:12px; cursor:pointer; margin-bottom:12px;">
+                            <input type="checkbox" id="fullScreenRequired" style="width:18px; height:18px;">
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <i data-lucide="maximize" style="width:16px; height:16px; color:#666;"></i>
+                                <span style="font-size:0.9rem; font-weight:500;">Enforce Strict Fullscreen</span>
+                            </div>
+                        </label>
+                        <div style="margin-top:12px; padding-top:12px; border-top:1px dashed #eee;">
+                            <label class="label" style="font-size:0.7rem; color:#A01E17;">MAX VIOLATIONS ALLOWED</label>
+                            <input type="number" id="maxTabSwitches" class="clean-input" value="3"
+                                style="font-size:0.8rem; padding:8px; width:80px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div style="margin-top: 40px; display: flex; justify-content: space-between; align-items: center;">
+                <button class="btn btn-ghost" onclick="goBack()">&larr; Exit to Dashboard</button>
+                <div style="display: flex; gap: 16px;">
+                    <button class="btn btn-ghost" onclick="saveDraft()"
+                        style="padding: 0 32px; height: 50px; font-weight:600;">SAVE AS DRAFT</button>
+                    <button class="btn btn-run" onclick="goToStep(2)"
+                        style="width: 260px; height: 50px; font-weight:700; font-size:1rem; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);">
+                        CONFIGURE SECTIONS <i class="fas fa-chevron-right" style="margin-left:10px;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="step-2" class="wizard-step">
+            <div class="form-card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div class="section-title">
+                        <i data-lucide="layers" style="color:var(--primary); width: 28px; height: 28px;"></i> Sectional
+                        Architecture
+                    </div>
+                    <button class="btn btn-ghost" onclick="promptAddSection()">+ Define New Section</button>
+                </div>
+                <p style="color:#777; font-size: 0.9rem; margin-bottom: 24px;">Add sections to categorize questions
+                    (Objective, Subjective, Lab, etc.)</p>
+                <div id="sectionsList" style="display: flex; flex-direction: column; gap: 12px;"></div>
+            </div>
+
+            <!-- Sectional Navigation Policy -->
+            <div class="form-card"
+                style="margin-top: 40px; border-left: 4px solid #3498db; padding-left: 24px !important; background:transparent;"
+                id="sectionLockCard">
+                <div class="section-title">
+                    <i data-lucide="navigation-2" style="color:#3498db; width: 28px; height: 28px;"></i> Sectional
+                    Navigation Policy
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px;">
+                    <div
+                        style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 24px; border-radius: 16px; border: 1px solid #dee2e6; box-shadow: 0 4px 12px rgba(0,0,0,0.03); transition: all 0.3s ease;">
+                        <label class="sec-toggle" style="display:flex; align-items:center; gap:16px; cursor:pointer;">
+                            <input type="checkbox" id="sectionLockEnabled" style="width:24px; height:24px;"
+                                onchange="exams.sectionLockEnabled = this.checked; if(document.getElementById('lockSections')) document.getElementById('lockSections').checked = this.checked;">
+                            <div>
+                                <span
+                                    style="font-size:1.1rem; font-weight:800; color:#2c3e50; display:block; margin-bottom: 4px;">Enable
+                                    Section Locking</span>
+                                <span style="font-size:0.85rem; color:#6c757d; font-weight: 500;">Enforce a strict
+                                    sequential order for assessment sections.</span>
+                            </div>
+                        </label>
+                    </div>
+                    <div
+                        style="background: linear-gradient(135deg, #e7f3ff 0%, #d0e7ff 100%); padding: 24px; border-radius: 16px; border: 1px solid #b8daff; box-shadow: 0 4px 12px rgba(0,0,0,0.03); transition: all 0.3s ease;">
+                        <label class="sec-toggle" style="display:flex; align-items:center; gap:16px; cursor:pointer;">
+                            <input type="checkbox" id="requireNetworkConfig" style="width:24px; height:24px;"
+                                onchange="document.getElementById('ipRestrictionEnabled').checked = this.checked; if(this.checked) toggleIPConfig(true);">
+                            <div>
+                                <span
+                                    style="font-size:1.1rem; font-weight:800; color:#0056b3; display:block; margin-bottom: 4px;">Network
+                                    & IP Security</span>
+                                <span style="font-size:0.85rem; color:#495057; font-weight: 500;">Restrict access to
+                                    specific institutional IP ranges or WiFi.</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; display: flex; justify-content: space-between;">
+                <button class="btn btn-ghost" onclick="goToStep(1)">&larr; Back to Details</button>
+                <button class="btn btn-run" onclick="nextStep()" style="width: 200px; height: 50px;">Continue
+                    &rarr;</button>
+            </div>
+        </div>
+
+        <!-- STEP 3: IP Settings (NEW) -->
+        <div id="step-3" class="wizard-step">
+            <div class="step-header">
+                <h2 class="step-title">Step 3: Network & IP Access Control</h2>
+                <p class="step-desc">Restrict this assessment to specific institutional networks or WiFi zones.</p>
+            </div>
+
+            <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px;">
+                <div class="form-card"
+                    style="border-left: 4px solid #3498db; padding-left: 24px !important; background:transparent;">
+                    <label class="sec-toggle"
+                        style="display:flex; justify-content:space-between; align-items:center; background:rgba(240, 247, 255, 0.5); padding:20px; border-radius:12px; border:1px solid #d6eaf8; cursor:pointer;">
+                        <div style="display:flex; align-items:center; gap:15px;">
+                            <i data-lucide="shield" style="color:#2980b9; width: 24px; height: 24px;"></i>
+                            <div class="section-title" style="margin:0; font-size:1rem;">
+                                Enable IP/WiFi Restriction
+                            </div>
+                        </div>
+                        <input type="checkbox" id="ipRestrictionEnabled" style="width:24px; height:24px;">
+                    </label>
+
+                    <div id="ipConfigArea"
+                        style="margin-top:20px; padding: 20px; background: transparent; border-radius: 12px; border: 1px dashed #3498db; display: none; flex-direction: column; gap: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <label style="font-size: 0.8rem; font-weight: 700; color: #555;">ALLOWED IP ADDRESSES / WIFI
+                                NETWORKS</label>
+                            <button onclick="detectIP()"
+                                style="background:#3498db; color:#fff; border:none; padding:6px 14px; border-radius:6px; font-size:0.75rem; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                                <i data-lucide="map-pin" style="width:14px; height:14px;"></i> Detect My IP
+                            </button>
+                        </div>
+                        <input type="text" id="allowedIPAddress" placeholder="e.g. 192.168.1.1, 10.0.0.1"
+                            style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; font-family: 'JetBrains Mono'; font-size: 0.95rem;">
+                        <div style="font-size: 0.75rem; color: #777; font-style: italic;">Separate multiple IPs with
+                            commas. Leave empty for all access.</div>
+
+                        <label class="sec-toggle"
+                            style="display:flex; justify-content:space-between; align-items:center; background:#f9f9f9; padding:15px; border-radius:10px; margin-top:10px;">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <i class="fas fa-unlink" style="color:#555;"></i>
+                                <div style="font-weight:700; font-size:0.9rem;">Block WiFi Switching</div>
+                            </div>
+                            <input type="checkbox" id="blockWifiSwitching" style="width:20px; height:20px;">
+                        </label>
+                    </div>
+
+                    <div
+                        style="margin-top:20px; padding: 15px; background: #fff8f0; border-radius: 10px; border: 1px solid #fee2e2; font-size: 0.8rem; color: #b91c1c; display: flex; align-items: flex-start; gap: 10px;">
+                        <i class="fas fa-info-circle" style="margin-top: 3px;"></i>
+                        <span>Note: These restrictions will be automatically bypassed for <b>Practice Tests</b> to
+                            ensure accessibility.</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; display: flex; justify-content: space-between;">
+                    <button class="btn btn-ghost" onclick="prevStep()">&larr; Back to Sections</button>
+                    <button class="btn btn-run" onclick="nextStep()" style="width: 240px; height: 50px;">Architect
+                        Questions &rarr;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 4: Question Builder -->
+        <div id="step-4" class="wizard-step">
+            <div id="builder-anchor"></div>
+            <div class="type-selector" style="overflow-x: auto; white-space: nowrap; max-width: 100%;">
+                <div class="type-tab active" id="type-mcq" onclick="selectQuestionType('mcq')">Multiple Choice</div>
+                <div class="type-tab" id="type-true_false" onclick="selectQuestionType('true_false')">TF Logic</div>
+                <div class="type-tab" id="type-assertion_reason" onclick="selectQuestionType('assertion_reason')">
+                    Assertion Reason</div>
+                <div class="type-tab" id="type-subjective" onclick="selectQuestionType('subjective')">Short/Long Answer
+                </div>
+                <div class="type-tab" id="type-drawing" onclick="selectQuestionType('drawing')">Diagram Drawing
+                </div>
+                <div class="type-tab" id="type-single_integer" onclick="selectQuestionType('single_integer')">Single
+                    Integer</div>
+                <div class="type-tab" id="type-numeric" onclick="selectQuestionType('numeric')">Numeric Value</div>
+                <div class="type-tab" id="type-file_upload" onclick="selectQuestionType('file_upload')">File Upload
+                </div>
+                <div class="type-tab" id="type-coding" onclick="selectQuestionType('coding')">Advanced Coding</div>
+            </div>
+
+            <!-- New Architect Workspace -->
+            <div style="display: flex; gap: 20px; align-items: flex-start; margin-top: 24px;">
+                <!-- Main Worksite -->
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 20px; width: 100%;">
+                    <!-- BULK UPLOAD CTA BANNER -->
+                    <div class="bulk-upload-banner"
+                        style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 20px 24px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.05); margin-bottom: 30px;">
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <div
+                                style="width: 48px; height: 48px; background: #2563eb; color: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="file-spreadsheet" style="width: 24px; height: 24px;"></i>
+                            </div>
+                            <div>
+                                <div
+                                    style="font-weight: 800; color: #1e3a8a; font-size: 1.1rem; font-family: 'Outfit';">
+                                    Bulk MCQ Spreadsheet Architect</div>
+                                <div style="font-size: 0.85rem; color: #1d4ed8; font-weight: 500; margin-top:2px;">
+                                    Fill your assessment instantly using Excel.
+                                    <span
+                                        style="color: #1e40af; text-decoration: underline; cursor: pointer; margin-left:8px;"
+                                        onclick="showExcelFormat()">[ View Required Format ]</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 12px;">
+                            <button class="btn btn-ghost" onclick="downloadExcelTemplate()"
+                                style="border-color: #2563eb; color: #2563eb; background: #fff; font-weight: 700; border-radius: 10px;">
+                                <i data-lucide="download" style="width:16px; height:16px;"></i> TEMPLATE
+                            </button>
+                            <button class="btn btn-ghost" onclick="gotoExcelUpload('comexcelupload.html')"
+                                style="border-color: #2563eb; color: #2563eb; background: #eff6ff; font-weight: 700; border-radius: 10px;">
+                                <i data-lucide="table" style="width:16px; height:16px;"></i> WEB ARCHITECT
+                            </button>
+                            <button class="btn btn-ghost" onclick="gotoExcelUpload('exceluploadcode.html')"
+                                style="border-color: #1890ff; color: #1890ff; background: #e6f7ff; font-weight: 700; border-radius: 10px;">
+                                <i data-lucide="terminal" style="width:16px; height:16px;"></i> CODING ARCHITECT
+                            </button>
+                            <button class="btn btn-run" onclick="document.getElementById('excelUploadBanner').click()"
+                                style="background: #2563eb; color: #fff; border: none; font-weight: 700; height: 44px; padding: 0 24px; border-radius: 10px; box-shadow: 0 6px 15px rgba(37, 99, 235, 0.25);">
+                                UPLOAD FILE
+                            </button>
+                        </div>
+                        <input type="file" id="excelUploadBanner" style="display:none" accept=".xlsx, .xls"
+                            onchange="handleExcelUpload(event)">
+                    </div>
+
+                    <div class="split-builder"
+                        style="display: flex; flex-direction: row; gap: 24px; align-items: stretch;">
+                        <!-- Center: Problem -->
+                        <div class="builder-left"
+                            style="background: transparent !important; border: none !important; box-shadow: none !important; padding: 16px 32px 16px 16px; border-right: 2px dashed rgba(0,0,0,0.1) !important; position: relative; width: 60%; resize: horizontal; overflow: hidden; min-width: 400px; max-width: 85%;">
+                            <div class="question-id-wrapper">
+                                <div class="question-id-wrapper">
+                                    <div
+                                        style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 8px;">
+                                        <input type="file" id="excelUploadBtn" style="display:none" accept=".xlsx, .xls"
+                                            onchange="handleExcelUpload(event)">
+                                        <div id="qStatusIndicator" style="display: none; gap: 8px;">
+                                            <button class="nav-icon-btn" onclick="duplicateCurrent()"
+                                                title="Duplicate"><i class="far fa-copy"></i></button>
+                                            <button class="nav-icon-btn" onclick="deleteCurrent()" title="Delete"
+                                                style="color: #F04438;"><i class="far fa-trash-alt"></i></button>
+                                        </div>
+                                    </div>
+                                    <input type="text" id="questionHeading" class="clean-input"
+                                        placeholder="e.g. OOP Constructs & Recursion"
+                                        style="border:none; font-size: 1.4rem; font-weight: 700;">
+                                    <div class="tri-orange-line">
+                                        <div class="tol-light"></div>
+                                        <div class="tol-mid"></div>
+                                        <div class="tol-dark"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <div id="editor-container"
+                                    style="height: 400px; border: 1px solid #f0f0f0; border-radius: 8px;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Logic & Preview -->
+                        <div class="builder-right"
+                            style="background: transparent !important; border: none !important; box-shadow: none !important; padding: 16px 0 16px 16px; display: flex; flex-direction: column; flex: 1; min-width: 350px;">
+
+                            <!-- Panel Toggle -->
+                            <div
+                                style="display: flex; gap: 4px; margin-bottom: 24px; background: #e2e8f0; padding: 4px; border-radius: 8px;">
+                                <button onclick="toggleRightPanel('logic')" id="panel-btn-logic"
+                                    style="flex:1; font-size: 0.85rem; padding: 8px 16px; font-weight: 700; border-radius: 6px; border: none; background: #fff; color: #2563eb; border-bottom: 2px solid #2563eb; cursor: pointer; font-family: Arial, sans-serif; transition: all 0.2s;">Logic
+                                    & Grading</button>
+                                <button onclick="toggleRightPanel('preview')" id="panel-btn-preview"
+                                    style="flex:1; font-size: 0.85rem; padding: 8px 16px; font-weight: 700; border-radius: 6px; border: none; background: transparent; color: #64748b; border-bottom: 2px solid transparent; cursor: pointer; font-family: Arial, sans-serif; transition: all 0.2s;">Student
+                                    Preview</button>
+                            </div>
+
+                            <div id="logicPanel">
+                                <div class="form-grid"
+                                    style="grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 0;">
+                                    <div class="input-group">
+                                        <label class="label">SECTION</label>
+                                        <select id="questionSection" class="clean-input"
+                                            style="font-size: 0.9rem;"></select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label class="label">MARKS</label>
+                                        <input type="number" id="questionMarks" class="clean-input" value="1"
+                                            style="font-size: 0.9rem;">
+                                    </div>
+                                    <div
+                                        style="grid-column: 1 / -1; margin-top: 4px; border-top: 1px dashed #eee; padding-top: 12px;">
+                                        <button type="button"
+                                            onclick="var c = document.getElementById('additionalInfoContainer'); var i = document.getElementById('additionalInfoIcon'); if(c.style.display==='none'){c.style.display='block'; i.className='fas fa-chevron-up';}else{c.style.display='none'; i.className='fas fa-chevron-down';}"
+                                            style="background: transparent; border: none; color: #2563eb; font-size: 0.8rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 0;">
+                                            Additional Information <i id="additionalInfoIcon"
+                                                class="fas fa-chevron-down"></i>
+                                        </button>
+                                    </div>
+
+                                    <div id="additionalInfoContainer" style="display: none; grid-column: 1 / -1;">
+                                        <div class="form-grid"
+                                            style="grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 0;">
+                                            <div class="input-group">
+                                                <label class="label">TIMER (SEC)</label>
+                                                <input type="number" id="questionTimer" class="clean-input" value="0"
+                                                    style="font-size: 0.9rem;" placeholder="0 = No limit">
+                                            </div>
+                                            <div class="input-group">
+                                                <label class="label">TEACHER NOTES</label>
+                                                <input type="text" id="teacherNotes" class="clean-input"
+                                                    style="font-size: 0.9rem;" placeholder="Internal only...">
+                                            </div>
+                                            <div class="input-group">
+                                                <label class="label">DIFFICULTY</label>
+                                                <select id="questionDifficulty" class="clean-input"
+                                                    style="font-size: 0.9rem;">
+                                                    <option value="easy">Easy</option>
+                                                    <option value="medium" selected>Medium</option>
+                                                    <option value="hard">Hard</option>
+                                                </select>
+                                            </div>
+                                            <div class="input-group" id="shuffleOptionsGroup" style="display: none;">
+                                                <label class="label">ANTI-CHEAT</label>
+                                                <label class="sec-toggle" style="font-size: 0.8rem; margin-top: 10px;">
+                                                    <input type="checkbox" id="shuffleOptions"
+                                                        style="width:16px; height:16px;">
+                                                    <span>Shuffle MCQ Options</span>
+                                                </label>
+                                            </div>
+                                            <div class="input-group">
+                                                <label class="label">PREREQUISITE Q</label>
+                                                <select id="prereqQuestion" class="clean-input"
+                                                    style="font-size: 0.8rem;">
+                                                    <option value="">None</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="optionsContainer">
+                                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                                        <label class="label" style="margin:0;">Choose any one</label>
+                                        <button class="btn btn-ghost" onclick="autofillNumericOptions()"
+                                            style="border:1px dashed #ddd; background:#fff; font-size: 0.75rem; color: var(--primary); padding: 4px 12px; display: flex; align-items: center; gap: 6px; border-radius: 6px; cursor: pointer; font-weight: 600;"
+                                            title="Auto-fill options with 1, 2, 3, 4...">
+                                            <i class="fas fa-pen"></i> Auto-fill 1, 2, 3...
+                                        </button>
+                                    </div>
+                                    <div id="optionsList"
+                                        style="display: flex; flex-direction: column; gap: 12px; margin: 16px 0;"></div>
+                                    <div style="display: flex; gap: 8px; width: 100%;">
+                                        <button class="btn btn-ghost" onclick="addOption()"
+                                            style="flex: 1; border:1px dashed #ddd; background:#fff; font-size: 0.8rem;">+
+                                            Add Option</button>
+                                    </div>
+                                </div>
+
+                                <div id="subjectiveContainer" style="display: none;">
+                                    <label class="label">Grading Rubric</label>
+                                    <textarea id="keywords" class="clean-textarea"
+                                        placeholder="Enter keywords separated by commas for auto-grading..."
+                                        style="min-height: 150px; font-family: 'JetBrains Mono';"></textarea>
+                                </div>
+
+                                <div id="numericContainer" style="display: none;">
+                                    <div class="form-group" style="margin-bottom: 16px;">
+                                        <label class="label">Correct Numeric Answer</label>
+                                        <input type="number" step="any" id="correctNumeric" class="clean-input"
+                                            placeholder="e.g. 10.5">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">Allowed Error Tolerance (&plusmn;)</label>
+                                        <input type="number" step="any" id="numericTolerance" class="clean-input"
+                                            value="0">
+                                    </div>
+                                </div>
+
+                                <div id="fileUploadContainer" style="display: none;">
+                                    <div class="form-group" style="margin-bottom: 16px;">
+                                        <label class="label">Allowed File Extensions</label>
+                                        <input type="text" id="allowedExtensions" class="clean-input"
+                                            placeholder="e.g. .pdf, .jpg, .zip">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">Max File Size (MB)</label>
+                                        <input type="number" id="maxFileSize" class="clean-input" value="10">
+                                    </div>
+                                </div>
+
+                                <div id="codingContainer" style="display: none;">
+                                    <!-- Coding Logic -->
+                                    <div id="langSelectorGrid"
+                                        style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;"></div>
+                                    <div id="languageCodeTemplates" style="margin-top: 16px;"></div>
+                                    <div id="testCasesContainer" style="margin-top: 16px;"></div>
+                                </div>
+                            </div> <!-- End logicPanel -->
+
+                            <!-- Live Student Preview Panel -->
+                            <div id="previewPanel" style="display: none; flex: 1; overflow-y: auto;">
+                                <div
+                                    style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 24px; min-height: 400px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
+                                    <div id="livePreviewTitle"
+                                        style="font-family: 'Outfit'; font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; color: #1a1a1b;">
+                                    </div>
+                                    <div id="livePreviewContent"
+                                        style="font-size: 0.95rem; line-height: 1.6; color: #444; margin-bottom: 24px;">
+                                    </div>
+                                    <div id="livePreviewInteraction"
+                                        style="padding-top: 20px; border-top: 1px dashed #eee;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="builder-nav-footer">
+                        <div style="display:flex; gap:16px;">
+                            <button class="nav-link-btn" onclick="navigateBuilder(-1)">
+                                <i class="fas fa-caret-left"></i> previous
+                            </button>
+                            <button class="nav-link-btn" onclick="navigateBuilder(1)">
+                                next <i class="fas fa-caret-right"></i>
+                            </button>
+                        </div>
+
+                        <div style="display:flex; gap:12px;">
+                            <button class="btn btn-ghost" onclick="resetBuilder()">Reset</button>
+                            <button class="save-btn-architect" onclick="addQuestion()" id="saveBtnArchitect">
+                                <i class="fas fa-check-circle"></i> Save Question
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 50px; display: flex; justify-content: space-between;">
+                <button class="btn btn-ghost" onclick="prevStep()">&larr; Go Back</button>
+                <div style="display: flex; gap: 12px;">
+                    <button class="btn btn-ghost" onclick="saveDraft()">SYNC DRAFT</button>
+                    <button class="btn btn-run" onclick="nextStep()" style="padding: 0 40px;">Finalize Architecture
+                        &rarr;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 5: Finalization & Deployment -->
+        <div id="step-5" class="wizard-step">
+            <div style="max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px;">
+                <!-- Entry Control & Security -->
+                <div class="form-card"
+                    style="background:transparent; border-left: 4px solid var(--primary); padding-left: 24px !important;">
+                    <div class="section-title">
+                        <i data-lucide="shield-alert" style="color:var(--primary); width: 28px; height: 28px;"></i>
+                        Entry Control & Security
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px;">
+                        <label class="sec-toggle"
+                            style="display:flex; justify-content:space-between; align-items:center; background:#eff6ff; padding:20px; border-radius:12px; border: 1.5px dashed var(--primary); cursor: pointer;">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <i data-lucide="monitor" style="color:var(--primary); width: 24px; height: 24px;"></i>
+                                <div>
+                                    <div style="font-weight:800; font-size:1rem; color: #101828;">Mandatory Desktop
+                                        Application</div>
+                                    <div style="font-size:0.8rem; color:#666; font-weight: 500;">Enforce proctoring by
+                                        blocking browser attempts</div>
+                                </div>
+                            </div>
+                            <input type="checkbox" id="desktopOnly" style="width:24px; height:24px;">
+                        </label>
+
+                        <label class="sec-toggle"
+                            style="display:flex; justify-content:space-between; align-items:center; background:#EBF5FF; padding:20px; border-radius:12px; border: 1.5px dashed #007bff; cursor: pointer;">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <i data-lucide="graduation-cap" style="color:#007bff; width: 24px; height: 24px;"></i>
+                                <div>
+                                    <div style="font-weight:800; font-size:1rem; color: #101828;">Practice Test Mode
+                                    </div>
+                                    <div style="font-size:0.8rem; color:#666; font-weight: 500;">Disable Kiosk mode and
+                                        tab-switch alerts</div>
+                                </div>
+                            </div>
+                            <input type="checkbox" id="isPracticeTest" style="width:24px; height:24px;">
+                        </label>
+
+                        <label class="sec-toggle"
+                            style="display:flex; justify-content:space-between; align-items:center; background:#F4F1FA; padding:20px; border-radius:12px; border: 1.5px dashed #7b61ff; cursor: pointer;">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <i data-lucide="edit-3" style="color:#7b61ff; width: 24px; height: 24px;"></i>
+                                <div>
+                                    <div style="font-weight:800; font-size:1rem; color: #101828;">ALLOW CTRL+E
+                                        OPERATIONS
+                                    </div>
+                                    <div style="font-size:0.8rem; color:#666; font-weight: 500;">Enable Live Edit mode
+                                        for Student (Practice Only)</div>
+                                </div>
+                            </div>
+                            <input type="checkbox" id="allowCtrlE" style="width:24px; height:24px;">
+                        </label>
+
+                        <label class="sec-toggle"
+                            style="display:flex; justify-content:space-between; align-items:center; background:#FFF4E6; padding:20px; border-radius:12px; border: 1.5px dashed #FF9900; cursor: pointer;">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <i data-lucide="eye" style="color:#FF9900; width: 24px; height: 24px;"></i>
+                                <div>
+                                    <div style="font-weight:800; font-size:1rem; color: #101828;">SHOW MARKS AT END
+                                    </div>
+                                    <div style="font-size:0.8rem; color:#666; font-weight: 500;">Display calculated
+                                        total marks beautifully at the end of the test</div>
+                                </div>
+                            </div>
+                            <input type="checkbox" id="showMarksAtEnd" style="width:24px; height:24px;">
+                        </label>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 24px;">
+                        <div class="input-group">
+                            <label class="label">ENTRANCE PASSCODE</label>
+                            <input type="text" id="examPasscode" class="clean-input" placeholder="e.g. EXAM2024"
+                                style="font-family:'JetBrains Mono'; font-weight:700; font-size: 1.1rem;">
+                            <label
+                                style="display:flex; align-items:center; gap:8px; margin-top:12px; font-size:0.85rem; cursor:pointer;">
+                                <input type="checkbox" id="strictPasscode" style="width:18px; height:18px;" checked>
+                                <span style="color:#555; font-weight:600;">Strict Exact Match Required</span>
+                            </label>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="label">MAX TAB SWITCHES</label>
+                            <input type="number" id="maxTabSwitches" class="clean-input" value="3"
+                                style="font-weight:700; font-size: 1.1rem;">
+                        </div>
+
+                        <div class="input-group">
+                            <label class="label">EXAM HEADER IMAGE</label>
+                            <div style="background: #fcfcfc; padding: 24px; border: 1px dashed #ccc; border-radius: 12px; text-align: center; cursor: pointer;"
+                                onclick="document.getElementById('examHeaderImage').click()">
+                                <i data-lucide="image"
+                                    style="color:var(--primary); width: 32px; height: 32px; margin-bottom: 12px;"></i>
+                                <div style="font-weight: 700; color: #333; margin-bottom: 8px;">Upload Competitive Exam
+                                    Header Image</div>
+                                <div style="font-size: 0.85rem; color: #777;">Preferred size: 1200x300px. JPG, PNG</div>
+                                <input type="file" id="examHeaderImage" accept="image/*" style="display: none;"
+                                    onchange="const fr=new FileReader();fr.onload=(e)=>{this.dataset.src=e.target.result;};fr.readAsDataURL(this.files[0]);">
+                                <button type="button" class="btn btn-primary"
+                                    onclick="document.getElementById('examHeaderImage').click()"
+                                    style="margin-top:10px;">Choose Image</button>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="label"
+                                style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>NUMBER OF STUDENTS</span>
+                                <div style="display: flex; gap: 8px;">
+                                    <button type="button" class="btn btn-ghost" onclick="loadSavedRoster()"
+                                        style="font-size: 0.8rem; padding: 4px 8px;"><i class="fas fa-download"></i>
+                                        Load Roster</button>
+                                    <button type="button" class="btn btn-primary" onclick="saveCurrentRoster()"
+                                        style="font-size: 0.8rem; padding: 4px 8px;"><i class="fas fa-save"></i> Save
+                                        Roster</button>
+                                </div>
+                            </label>
+                            <input type="number" id="numberOfStudents" class="clean-input" placeholder="e.g. 50"
+                                style="font-weight:700; font-size: 1.1rem;" onchange="generateStudentRows(this.value)"
+                                min="0">
+                        </div>
+
+                        <div class="input-group"
+                            style="background: #fdfdfd; padding: 24px; border: 1px solid #eee; border-radius: 12px;">
+                            <label class="label"
+                                style="color: var(--primary); font-weight: 800; letter-spacing: 1px;">REGISTERED
+                                CANDIDATES</label>
+                            <div style="font-size: 0.85rem; color: #666; margin-bottom: 16px;">
+                                Add registered candidates below. They will be authenticated during the exam.
+                            </div>
+                            <div style="overflow-x: auto; border: 1px solid #eee; border-radius: 12px;">
+                                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                                    <thead style="background: #f8f9fa; border-bottom: 2px solid #eee;">
+                                        <tr>
+                                            <th style="padding: 16px; font-size: 0.85rem; color: #555;">ROLL NUMBER</th>
+                                            <th style="padding: 16px; font-size: 0.85rem; color: #555;">NAME</th>
+                                            <th style="padding: 16px; font-size: 0.85rem; color: #555;">DATE OF BIRTH
+                                            </th>
+                                            <th style="padding: 16px; font-size: 0.85rem; color: #555;">PICTURE UPLOAD
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="studentTableBody">
+                                        <tr>
+                                            <td colspan="4"
+                                                style="padding: 24px; text-align: center; color: #888; font-style: italic;">
+                                                Enter number of students to add candidates</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <script>
+                            function generateStudentRows(num) {
+                                const tbody = document.getElementById('studentTableBody');
+                                tbody.innerHTML = '';
+                                const count = parseInt(num) || 0;
+
+                                if (count <= 0) {
+                                    tbody.innerHTML = '<tr><td colspan="4" style="padding: 24px; text-align: center; color: #888; font-style: italic;">Enter number of students to add candidates</td></tr>';
+                                    return;
+                                }
+
+                                for (let i = 0; i < count; i++) {
+                                    const tr = document.createElement('tr');
+                                    tr.style.borderBottom = '1px solid #eee';
+                                    tr.innerHTML = `
+                                        <td style="padding: 12px 16px;"><input type="text" class="clean-input" placeholder="Roll No" style="padding: 8px 0; font-size: 0.95rem;"></td>
+                                        <td style="padding: 12px 16px;"><input type="text" class="clean-input" placeholder="Candidate Name" style="padding: 8px 0; font-size: 0.95rem;"></td>
+                                        <td style="padding: 12px 16px;"><input type="text" placeholder="DDMMYYYY" class="clean-input" style="padding: 8px 0; font-size: 0.95rem;"></td>
+                                        <td style="padding: 12px 16px;"><input type="file" accept="image/*" class="clean-input" onchange="const fr=new FileReader();fr.onload=(e)=>{this.closest('tr').dataset.photo=e.target.result;};fr.readAsDataURL(this.files[0]);" style="font-size: 0.85rem; padding: 4px; border-bottom: none;"></td>
+                                    `;
+                                    tbody.appendChild(tr);
+                                }
+                                if (typeof lucide !== 'undefined') {
+                                    lucide.createIcons();
+                                }
+                            }
+
+                            function getRosterData() {
+                                const tbody = document.getElementById('studentTableBody');
+                                const rows = tbody.querySelectorAll('tr');
+                                const candidates = [];
+                                rows.forEach(tr => {
+                                    const inputs = tr.querySelectorAll('input');
+                                    if (inputs.length >= 3) {
+                                        const rollNo = inputs[0].value.trim();
+                                        const name = inputs[1].value.trim();
+                                        const dob = inputs[2].value.trim();
+                                        const photo = tr.dataset.photo || null;
+                                        candidates.push({ rollNo, name, dob, photo });
+                                    }
+                                });
+                                return candidates;
+                            }
+
+                            function saveCurrentRoster() {
+                                const roster = getRosterData();
+                                if (roster.length === 0 || roster.every(r => !r.rollNo && !r.name)) {
+                                    showToast('Cannot save an empty or blank roster!');
+                                    return;
+                                }
+                                const rosterName = prompt("Enter a name to save this student roster (e.g., 'Batch A 2026'):");
+                                if (rosterName) {
+                                    const savedRosters = JSON.parse(localStorage.getItem('TESTPAD_saved_rosters') || '{}');
+                                    savedRosters[rosterName] = roster;
+                                    localStorage.setItem('TESTPAD_saved_rosters', JSON.stringify(savedRosters));
+                                    showToast(`Roster '${rosterName}' saved successfully!`);
+                                }
+                            }
+
+                            function loadSavedRoster() {
+                                const savedRosters = JSON.parse(localStorage.getItem('TESTPAD_saved_rosters') || '{}');
+                                const rosterNames = Object.keys(savedRosters);
+                                if (rosterNames.length === 0) {
+                                    showToast("No saved rosters found.");
+                                    return;
+                                }
+
+                                const nameStr = rosterNames.map((n, i) => `${i + 1}. ${n}`).join('\\n');
+                                const selection = prompt(`Select a roster to load by typing its number:\\n${nameStr}`);
+                                const idx = parseInt(selection) - 1;
+
+                                if (!isNaN(idx) && idx >= 0 && idx < rosterNames.length) {
+                                    const selectedRoster = savedRosters[rosterNames[idx]];
+                                    document.getElementById('numberOfStudents').value = selectedRoster.length;
+                                    generateStudentRows(selectedRoster.length);
+
+                                    const tbody = document.getElementById('studentTableBody');
+                                    const rows = tbody.querySelectorAll('tr');
+                                    selectedRoster.forEach((c, i) => {
+                                        if (rows[i]) {
+                                            const inputs = rows[i].querySelectorAll('input');
+                                            if (inputs.length >= 3) {
+                                                inputs[0].value = c.rollNo || '';
+                                                inputs[1].value = c.name || '';
+                                                inputs[2].value = c.dob || '';
+                                            }
+                                            if (c.photo) {
+                                                rows[i].dataset.photo = c.photo;
+                                            }
+                                        }
+                                    });
+                                    showToast(`Roster '${rosterNames[idx]}' loaded successfully!`);
+                                    autoSave();
+                                }
+                            }
+                        </script>
+
+                        <div class="input-group">
+                            <label class="label">LATE ENTRY DEADLINE</label>
+                            <input type="datetime-local" id="entryDeadline" class="clean-input"
+                                style="font-size: 1rem;">
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <label class="sec-toggle"
+                                style="display:flex; align-items:center; gap:12px; cursor:pointer; background:#fff3e0; padding:16px; border-radius:10px; border:1px solid #ffe0b2;">
+                                <input type="checkbox" id="allowEarlySubmit" style="width:20px; height:20px;">
+                                <span style="font-size:0.9rem; font-weight:600; color:#e67e22;">Allow early submission
+                                    before end time</span>
+                            </label>
+                            <label class="sec-toggle"
+                                style="display:flex; align-items:center; gap:12px; cursor:pointer; background:#f0f9ff; padding:16px; border-radius:10px; border:1px solid #dbeafe;">
+                                <input type="checkbox" id="showResults" checked style="width:20px; height:20px;">
+                                <span style="font-size:0.9rem; font-weight:600; color:#333;">Show Results/Answers to
+                                    Student after Submission</span>
+                            </label>
+                            <label class="sec-toggle"
+                                style="display:flex; align-items:center; gap:12px; cursor:pointer; background:rgba(46, 204, 113, 0.05); padding:16px; border-radius:10px; border:1px solid #2ecc7133;">
+                                <input type="checkbox" id="autoPublishResults" checked style="width:20px; height:20px;">
+                                <span style="font-size:0.9rem; font-weight:700; color:#27ae60;">Upload and Publish Marks
+                                    after Test</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Proctoring -->
+                <div class="form-card"
+                    style="background:transparent; border-left: 4px solid #2ecc71; padding-left: 24px !important;">
+                    <div class="section-title">
+                        <i data-lucide="cpu" style="color:#2ecc71; width: 28px; height: 28px;"></i> Advanced Proctoring
+                        (AI)
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        <label class="sec-toggle"
+                            style="display:flex; justify-content:space-between; align-items:center; background:#f9f9f9; padding:20px; border-radius:12px; cursor: pointer;">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <i class="fas fa-video" style="color:#555; width: 20px;"></i>
+                                <div>
+                                    <div style="font-weight:700; font-size:1rem;">Enable Webcam Proctoring</div>
+                                    <div style="font-size:0.8rem; color:#888;">AI will monitor eye-movement and presence
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="checkbox" id="webcamEnabled" style="width:22px; height:22px;">
+                        </label>
+
+                        <label class="sec-toggle"
+                            style="display:flex; justify-content:space-between; align-items:center; background:#f9f9f9; padding:20px; border-radius:12px; cursor: pointer;">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <i class="fas fa-microphone" style="color:#555; width: 20px;"></i>
+                                <div>
+                                    <div style="font-weight:700; font-size:1rem;">Enable Microphone Audio-Audit</div>
+                                    <div style="font-size:0.8rem; color:#888;">Listen for unauthorized voice assistance
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="checkbox" id="micEnabled" style="width:22px; height:22px;">
+                        </label>
+
+                        <label class="sec-toggle"
+                            style="display:flex; justify-content:space-between; align-items:center; background:#f9f9f9; padding:20px; border-radius:12px; cursor: pointer;">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <i class="fas fa-lock" style="color:#555; width: 20px;"></i>
+                                <div>
+                                    <div style="font-weight:700; font-size:1rem;">Enable Sequential Section Locking
+                                    </div>
+                                    <div style="font-size:0.8rem; color:#888;">Students must complete sections in order
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="checkbox" id="lockSections" style="width:22px; height:22px;"
+                                onchange="exams.sectionLockEnabled = this.checked; if(document.getElementById('sectionLockEnabled')) document.getElementById('sectionLockEnabled').checked = this.checked;">
+                        </label>
+
+                        <label class="sec-toggle"
+                            style="display:flex; justify-content:space-between; align-items:center; background:#f9f9f9; padding:20px; border-radius:12px; cursor: pointer;">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <i class="fas fa-network-wired" style="color:#555; width: 20px;"></i>
+                                <div>
+                                    <div style="font-weight:700; font-size:1rem;">Block VPN & Proxy</div>
+                                    <div style="font-size:0.8rem; color:#888;">Prevent IP spoofing and location bypass
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="checkbox" id="vpnBlocked" style="width:22px; height:22px;">
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Evaluation Configuration -->
+                <div class="form-card"
+                    style="background:transparent; border-left: 4px solid #f39c12; padding-left: 24px !important;">
+                    <div class="section-title">
+                        <i data-lucide="clipboard-check" style="color:#f39c12; width: 28px; height: 28px;"></i>
+                        Evaluation Configuration
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <label class="sec-toggle"
+                            style="display:flex; justify-content:space-between; align-items:center; background:#fef9e7; padding:20px; border-radius:12px; border:1px solid #f9e79f; cursor: pointer;">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <i class="fas fa-marker" style="color:#d4ac0d;"></i>
+                                <div>
+                                    <div style="font-weight:700; font-size:1rem;">Enable Manual Teacher Review</div>
+                                    <div style="font-size:0.8rem; color:#888;">Subjective questions will be manually
+                                        graded</div>
+                                </div>
+                            </div>
+                            <input type="checkbox" id="manualGrading" style="width:22px; height:22px;">
+                        </label>
+                        <p style="font-size: 0.8rem; color: #777; font-style: italic; margin-top: 8px;">
+                            Note: MCQs and objective questions are always graded automatically.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Final Release Configuration -->
+                <div class="form-card"
+                    style="background:transparent; border:2px solid #dbeafe; padding: 32px !important; border-radius: 20px;">
+                    <div class="section-title">
+                        <i data-lucide="send" style="color:var(--primary); width: 28px; height: 28px;"></i> Final
+                        Release Configuration
+                    </div>
+                    <p style="font-size:0.9rem; color:#666; margin-bottom:24px;">Review your settings before taking this
+                        assessment live.</p>
+
+
+                    <div style="margin-bottom:32px;">
+                        <label class="label" style="margin-bottom: 16px; display: block;">FINAL VALIDATION</label>
+                        <div style="display:flex; flex-direction:column; gap:12px;">
+                            <label
+                                style="display:flex; align-items:center; gap:12px; font-size:0.95rem; cursor:pointer; background: #f8f9fa; padding: 12px; border-radius: 8px;">
+                                <input type="checkbox" id="val_points" required style="width: 18px; height: 18px;">
+                                <span>I have verified all question points</span>
+                            </label>
+                            <label
+                                style="display:flex; align-items:center; gap:12px; font-size:0.95rem; cursor:pointer; background: #f8f9fa; padding: 12px; border-radius: 8px;">
+                                <input type="checkbox" id="val_security" required style="width: 18px; height: 18px;">
+                                <span>Security protocols are configured correctly</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-run" onclick="publishExam()"
+                        style="width:100%; height:64px; font-size:1.2rem; border-radius:16px; box-shadow:0 8px 25px rgba(37, 99, 235,0.25); font-weight: 800;">
+                        <i class="fas fa-globe" style="margin-right:12px;"></i> DEPLOY LIVE ASSESSMENT
+                    </button>
+
+                    <button class="btn btn-ghost" onclick="previewAsStudent()"
+                        style="width:100%; height:54px; margin-top:16px; border:1px dashed #ddd; font-weight:700; border-radius: 12px;">
+                        <i class="fas fa-eye" style="margin-right:12px;"></i> PREVIEW STUDENT EXPERIENCE
+                    </button>
+
+                    <button class="btn btn-ghost"
+                        onclick="if(typeof editExamId !== 'undefined' && editExamId) { downloadExamPDF(editExamId); } else { alert('Please save/publish the exam first before downloading the PDF.'); }"
+                        style="width:100%; height:54px; margin-top:16px; border:1px dashed #ddd; font-weight:700; border-radius: 12px; background: #eff6ff; color: var(--primary); border-color: var(--primary);">
+                        <i class="fas fa-file-pdf" style="margin-right:12px;"></i> DOWNLOAD ONLINE COPY OF TEST IN PDF
+                    </button>
+                </div>
+
+                <!-- Exam Blueprint Review -->
+                <div class="form-card" style="background:transparent; border: 1px solid #eee;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+                        <h2 class="section-title" style="margin:0;">Exam Blueprint Review</h2>
+                        <button class="btn btn-ghost" onclick="openPoolModal()"
+                            style="font-size:0.75rem; padding: 8px 16px; border:1px solid #6366f1; color:#6366f1; background:rgba(99,102,241,0.05);">
+                            <i class="fas fa-database" style="margin-right:8px;"></i> Import from Pool
+                        </button>
+                    </div>
+                    <div id="previewQuestionsList"
+                        style="max-height:500px; overflow-y:auto; border:1px solid #f0f0f0; border-radius:12px; background: #fff; padding: 12px;">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 50px; display: flex; justify-content: flex-start;">
+                <button class="btn btn-ghost" onclick="goToStep(3)">&larr; Return to Questions</button>
+            </div>
+        </div>
+    </main>
+
+    <div class="sidebar-toggle-btn" onclick="toggleSidebar()">
+        <i class="fas fa-chevron-right"></i>
+    </div>
+
+    <aside class="sidebar" id="mainSidebar">
+        <div style="position: sticky; top: 32px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+                <h3
+                    style="font-weight: 700; font-size: 1.1rem; margin: 0; display: flex; align-items: center; gap: 8px;">
+                    EXAM TIMELINE
+                </h3>
+                <div id="totalQuestionsCount"
+                    style="background:var(--primary); color:white; padding: 2px 8px; border-radius: 20px; font-size: 0.75rem; font-weight:700;">
+                    0</div>
+            </div>
+
+            <!-- GLOBAL BULK UPLOAD -->
+            <button class="btn btn-ghost" onclick="document.getElementById('excelUploadGlobal').click()"
+                style="width:100%; margin-bottom: 10px; border:1px solid #2ecc71; color:#2ecc71; background:rgba(46,204,113,0.05);">
+                <i class="fas fa-file-excel" style="margin-right:8px;"></i> Bulk Import (File)
+            </button>
+            <button class="btn btn-ghost" onclick="gotoExcelUpload('comexcelupload.html')"
+                style="width:100%; margin-bottom: 20px; border:1px solid #2ecc71; color:#2ecc71; background:transparent;">
+                <i class="fas fa-table" style="margin-right:8px;"></i> Web Excel Architect
+            </button>
+            <input type="file" id="excelUploadGlobal" style="display:none" accept=".xlsx, .xls"
+                onchange="handleExcelUpload(event)">
+
+            <div class="input-group" style="margin-bottom: 20px;">
+                <input type="text" id="sidebarSearch" class="clean-input" placeholder="Search Questions..."
+                    style="font-size: 0.85rem; padding: 8px 0; border-bottom: 1px solid #ddd;"
+                    oninput="filterQuestions()">
+            </div>
+
+            <div id="questionsList"
+                style="display: flex; flex-direction: column; gap: 0; max-height: 70vh; overflow-y: auto; padding-right: 5px;">
+            </div>
+
+            <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #eee;">
+                <div style="display:flex; justify-content:space-between; margin-bottom: 12px;">
+                    <span style="color: #666; font-size: 0.9rem;">Estimated Marks</span>
+                    <strong id="totalMarksCount">0</strong>
+                </div>
+
+                <div id="analyticsSection" style="margin-top: 20px;">
+                    <div
+                        style="font-size: 0.75rem; font-weight: 700; color: #999; margin-bottom: 10px; text-transform: uppercase;">
+                        Marks Distribution</div>
+                    <div id="marksChart" style="display: flex; flex-direction: column; gap: 8px;">
+                        <!-- Updated via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <div
+                style="margin-top: 32px; padding: 15px; background: #fff; border-radius: 12px; border: 1px solid #eee; font-size: 0.8rem;">
+                <div style="font-weight: 700; color: #555; margin-bottom: 8px;"><i class="fas fa-keyboard"></i>
+                    Shortcuts</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; color: #888;">
+                    <span>Ctrl + S</span> <span>Save</span>
+                    <span>Ctrl + Z</span> <span>Undo</span>
+                    <span>Q / A</span> <span>Prev/Next</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+</div>
+
+<script src="../js/db.js"></script>
+<script src="../js/auth.js"></script>
+<!-- Quill Library -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<!-- Monaco Editor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs/loader.min.js"></script>
+<!-- SortableJS for Drag & Drop -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<!-- SheetJS for Excel Upload -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<script>
+    // Custom Font & Size registration for Quill
+    const Font = Quill.import('attributors/style/font');
+    Font.whitelist = ['Inter', 'Outfit', 'Roboto', 'Arial', 'Times New Roman', 'Georgia', 'Garamond', 'Tex Gyre Schola', 'Century Schoolbook', 'JetBrains Mono'];
+    Quill.register(Font, true);
+
+    const Size = Quill.import('attributors/style/size');
+    Size.whitelist = ['10px', '12px', '13px', '14px', '16px', '18px', '20px', '22px', '24px', '28px', '32px', '36px', '48px', '64px'];
+    Quill.register(Size, true);
+
+    // Monaco State Management
+    let activeMonacoEditor = null;
+    let monacoTargetId = null;
+    let inlineMonacoEditors = {}; // Storage for inline editors by DIV ID
+    let editingQIndex = -1; // Track which question is being edited
+
+    require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs' } });
+
+    // State management for Undo/Redo
+    let history = [];
+    let historyStep = -1;
+
+    function saveToHistory() {
+        if (historyStep < history.length - 1) {
+            history = history.slice(0, historyStep + 1);
+        }
+        history.push(JSON.stringify(exams));
+        if (history.length > 50) history.shift();
+        historyStep = history.length - 1;
+    }
+
+    function undo() {
+        if (historyStep > 0) {
+            historyStep--;
+            exams = JSON.parse(history[historyStep]);
+            updateQuestionsList();
+            updateSectionsList();
+            showToast('Undo performed (Ctrl+Z)');
+        }
+    }
+
+    function redo() {
+        if (historyStep < history.length - 1) {
+            historyStep++;
+            exams = JSON.parse(history[historyStep]);
+            updateQuestionsList();
+            updateSectionsList();
+            showToast('Redo performed (Ctrl+Shift+Z)');
+        }
+    }
+
+    function showVersionHistory() {
+        if (history.length === 0) { showToast('No history available yet'); return; }
+        let versions = history.map((h, i) => `Option ${i + 1}: ${JSON.parse(h).questions.length} questions`).join('\n');
+        let choice = prompt(`Select version to restore (1 to ${history.length}):\n${versions}`);
+        if (choice && choice > 0 && choice <= history.length) {
+            historyStep = choice - 1;
+            exams = JSON.parse(history[historyStep]);
+            updateQuestionsList();
+            updateSectionsList();
+            showToast('Version Restored');
+        }
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 'z') {
+            e.preventDefault();
+            undo();
+        }
+        if (e.ctrlKey && e.shiftKey && e.key === 'Z') {
+            e.preventDefault();
+            redo();
+        }
+        if (e.ctrlKey && e.key === 'n') {
+            if (currentStep === 2) {
+                e.preventDefault();
+                promptAddSection();
+            }
+        }
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && !e.target.isContentEditable && !e.target.closest('.ql-editor')) {
+            if (e.key === 'q' || e.key === 'Q') navigateBuilder(-1);
+            if (e.key === 'a' || e.key === 'A') navigateBuilder(1);
+            if (currentQuestionType === 'mcq' && ['1', '2', '3', '4'].includes(e.key)) {
+                const rows = document.querySelectorAll('.option-row');
+                const idx = parseInt(e.key) - 1;
+                if (rows[idx]) {
+                    setCorrectOption(rows[idx].id);
+                }
+            }
+        }
+    });
+
+    // Context Menu Logic
+    document.addEventListener('contextmenu', (e) => {
+        if (currentStep === 2) {
+            e.preventDefault();
+            const menu = document.getElementById('customContextMenu');
+            menu.style.display = 'flex';
+            menu.style.left = e.clientX + 'px';
+            menu.style.top = e.clientY + 'px';
+
+            // Adjust position if it goes off screen
+            const rect = menu.getBoundingClientRect();
+            if (rect.right > window.innerWidth) {
+                menu.style.left = (e.clientX - rect.width) + 'px';
+            }
+            if (rect.bottom > window.innerHeight) {
+                menu.style.top = (e.clientY - rect.height) + 'px';
+            }
+        }
+    });
+
+    document.addEventListener('click', () => {
+        const menu = document.getElementById('customContextMenu');
+        if (menu) menu.style.display = 'none';
+    });
+
+    function toggleRightPanel(panel) {
+        document.getElementById('logicPanel').style.display = panel === 'logic' ? 'block' : 'none';
+        document.getElementById('previewPanel').style.display = panel === 'preview' ? 'block' : 'none';
+
+        const logicBtn = document.getElementById('panel-btn-logic');
+        const previewBtn = document.getElementById('panel-btn-preview');
+
+        if (panel === 'logic') {
+            logicBtn.style.background = '#fff';
+            logicBtn.style.color = '#2563eb';
+            logicBtn.style.borderBottom = '2px solid #2563eb';
+            previewBtn.style.background = 'transparent';
+            previewBtn.style.color = '#64748b';
+            previewBtn.style.borderBottom = '2px solid transparent';
+        } else {
+            previewBtn.style.background = '#fff';
+            previewBtn.style.color = '#2563eb';
+            previewBtn.style.borderBottom = '2px solid #2563eb';
+            logicBtn.style.background = 'transparent';
+            logicBtn.style.color = '#64748b';
+            logicBtn.style.borderBottom = '2px solid transparent';
+        }
+
+        if (panel === 'preview') updateLivePreview();
+    }
+
+    function updateLivePreview() {
+        const heading = document.getElementById('questionHeading').value || 'Question Heading';
+        const content = quill ? quill.root.innerHTML : '';
+        const type = currentQuestionType;
+
+        document.getElementById('livePreviewTitle').textContent = heading;
+        document.getElementById('livePreviewContent').innerHTML = content;
+
+        let interactionHtml = '';
+        if (type === 'mcq' || type === 'true_false') {
+            const options = Array.from(document.querySelectorAll('.option-row .ql-editor')).map(i => i.innerHTML).filter(v => v !== '<p><br></p>' && v.trim() !== '');
+            interactionHtml = options.map((opt, i) => `
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px; padding: 12px; border: 1px solid #eee; border-radius: 8px; background: #fafafa;">
+                    <div style="width: 20px; height: 20px; border: 2px solid #ddd; border-radius: 50%;"></div>
+                    <div style="flex:1; font-size: 0.9rem;">${opt || 'Option ' + (i + 1)}</div>
+                </div>
+            `).join('');
+        } else if (type === 'subjective') {
+            interactionHtml = `<textarea class="clean-textarea" style="height: 120px;" placeholder="Student response area..."></textarea>`;
+        } else if (type === 'coding') {
+            const selectedLangs = Array.from(document.querySelectorAll('#langSelectorGrid input:checked')).map(c => c.value.toUpperCase());
+            const displayLang = selectedLangs.length > 0 ? selectedLangs[0] : 'PYTHON';
+
+            interactionHtml = `
+                <div style="margin-bottom:10px; font-size:0.7rem; font-weight:700; color:#666;">PREVIEWING AS: <span style="color:var(--primary);">${displayLang}</span></div>
+                <div style="background: #252526; color: #fff; padding: 12px; border-radius: 8px; font-family: 'JetBrains Mono'; font-size: 0.8rem; height: 150px; overflow: hidden; position: relative;">
+                    <div style="color: #6a9955;">// Student Writes ${displayLang} Code Here...</div>
+                    <div style="margin-top: 10px; color:#aaa;">[ Monaco Editor Interface Mock ]</div>
+                    
+                    <div style="position: absolute; bottom: 10px; right: 10px;">
+                        <button onclick="simulateExecution()" class="btn-run" style="height: 32px; font-size: 0.75rem; padding: 0 15px;">RUN CODE</button>
+                    </div>
+                </div>
+                <div id="executionConsole" style="display: none; margin-top: 10px; background: #000; color: #0f0; font-family: 'JetBrains Mono'; font-size: 0.7rem; padding: 10px; border-radius: 6px; min-height: 80px;">
+                </div>
+            `;
+        }
+        document.getElementById('livePreviewInteraction').innerHTML = interactionHtml;
+    }
+
+    function simulateExecution() {
+        const console = document.getElementById('executionConsole');
+        console.style.display = 'block';
+        console.innerHTML = '> Initializing Sandbox...<br>> Loading Python Interpreter...<br>> Running Test Cases...<br>';
+
+        setTimeout(() => {
+            console.innerHTML += '<span style="color: #fbbf24;">[WAITING]</span> Case 1: Checking constraints...<br>';
+        }, 1000);
+
+        setTimeout(() => {
+            console.innerHTML += '<span style="color: #10b981;">[PASSED]</span> Case 1: Basic functionality<br>';
+            console.innerHTML += '<span style="color: #10b981;">[PASSED]</span> Case 2: Edge cases<br>';
+            console.innerHTML += '<br><strong style="color: #fff;">SCORE: 100/100</strong>';
+            showToast('Simulation: Execution Success!');
+        }, 2500);
+    }
+
+    function initMonacoInline(divId, lang, initialValue = '') {
+        require(['vs/editor/editor.main'], function () {
+            // Define Grey Theme
+            monaco.editor.defineTheme('grey-theme', {
+                base: 'vs',
+                inherit: true,
+                rules: [],
+                colors: {
+                    'editor.background': '#f2f2f2',
+                    'editor.lineHighlightBackground': '#eeeeee',
+                    'editor.selectionBackground': '#d0d0d0'
+                }
+            });
+
+            const mlang = lang.toLowerCase() === 'c++' ? 'cpp' : lang.toLowerCase();
+            const editor = monaco.editor.create(document.getElementById(divId), {
+                value: initialValue,
+                language: mlang,
+                theme: 'grey-theme', // Grey Mode per request
+                fontSize: 14,
+                fontFamily: 'JetBrains Mono',
+                automaticLayout: true,
+                minimap: { enabled: false },
+                suggestOnTriggerCharacters: true,
+                quickSuggestions: true,
+                scrollBeyondLastLine: false,
+                lineNumbers: 'on',
+                renderLineHighlight: 'none',
+                scrollbar: { vertical: 'auto', horizontal: 'auto' }
+            });
+            inlineMonacoEditors[divId] = editor;
+        });
+    }
+
+    function openEditorOverlay(sourceId, lang, title) {
+        monacoTargetId = sourceId;
+        document.getElementById('overlayTitle').textContent = `${lang.toUpperCase()} ARCHITECT - ${title}`;
+        document.getElementById('editorOverlay').style.display = 'flex';
+
+        // Get content from inline editor or textarea
+        const initialValue = inlineMonacoEditors[sourceId] ? inlineMonacoEditors[sourceId].getValue() : '';
+        const monacoLang = lang.toLowerCase() === 'c++' ? 'cpp' : lang.toLowerCase();
+
+        if (!activeMonacoEditor) {
+            require(['vs/editor/editor.main'], function () {
+                activeMonacoEditor = monaco.editor.create(document.getElementById('monaco-container'), {
+                    value: initialValue,
+                    language: monacoLang,
+                    theme: 'vs', // White Mode
+                    fontSize: 18,
+                    fontFamily: 'JetBrains Mono',
+                    automaticLayout: true,
+                    minimap: { enabled: true },
+                    suggestOnTriggerCharacters: true,
+                    quickSuggestions: true
+                });
+            });
+        } else {
+            activeMonacoEditor.setValue(initialValue);
+            monaco.editor.setModelLanguage(activeMonacoEditor.getModel(), monacoLang);
+        }
+    }
+
+    function closeEditorOverlay() {
+        if (activeMonacoEditor && monacoTargetId) {
+            if (inlineMonacoEditors[monacoTargetId]) {
+                inlineMonacoEditors[monacoTargetId].setValue(activeMonacoEditor.getValue());
+            }
+        }
+        document.getElementById('editorOverlay').style.display = 'none';
+        monacoTargetId = null;
+    }
+
+    // State & Quill init
+    let quill;
+    let examStatus = 'Draft';
+
+    window.addEventListener('load', () => {
+        quill = new Quill('#editor-container', {
+            theme: 'snow',
+            placeholder: 'Craft your question prompt or problem statement here...',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    [{ 'font': Font.whitelist }, { 'size': Size.whitelist }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    [{ 'align': [] }],
+                    ['code-block', 'link'],
+                    ['clean']
+                ]
+            }
+        });
+
+        // Hide Loader
+        hideLoader();
+
+        // Initialize SortableJS
+        if (typeof Sortable !== 'undefined') {
+            const el = document.getElementById('questionsList');
+            if (el) {
+                Sortable.create(el, {
+                    animation: 150,
+                    onEnd: function (evt) {
+                        const itemEl = evt.item;
+                        // Logic to reorder exams.questions based on DOM order
+                        reorderQuestionsFromUI();
+                    }
+                });
+            }
+        }
+    });
+
+    function reorderQuestionsFromUI() {
+        const listItems = document.querySelectorAll('#questionsList .q-item');
+        const newOrder = [];
+        listItems.forEach(item => {
+            const idx = parseInt(item.getAttribute('data-global-idx'));
+            newOrder.push(exams.questions[idx]);
+        });
+        exams.questions = newOrder;
+        updateQuestionsList();
+        showToast('Sequence updated via Drag & Drop');
+    }
+
+    function filterQuestions() {
+        const query = document.getElementById('sidebarSearch').value.toLowerCase();
+        const items = document.querySelectorAll('#questionsList .q-item');
+        items.forEach(item => {
+            const text = item.innerText.toLowerCase();
+            item.style.display = text.includes(query) ? 'block' : 'none';
+        });
+    }
+
+    function showProcessing() {
+        const loader = document.getElementById('pageLoader');
+        loader.style.display = 'flex';
+        loader.style.opacity = '1';
+    }
+
+    function toggleRandomization(sectionName, enabled, index) {
+        if (!exams.pools) exams.pools = {};
+        if (!exams.pools[sectionName]) exams.pools[sectionName] = { enabled: false, pickCount: 0, totalGoal: 0 };
+
+        // If it was just a number from old format, convert it
+        if (typeof exams.pools[sectionName] !== 'object') {
+            exams.pools[sectionName] = { enabled: true, pickCount: parseInt(exams.pools[sectionName]) || 0, totalGoal: 0 };
+        }
+
+        exams.pools[sectionName].enabled = enabled;
+        const configArea = document.getElementById(`randConfig_${index}`);
+        if (configArea) configArea.style.display = enabled ? 'flex' : 'none';
+
+        autoSave();
+        showToast(`Randomization ${enabled ? 'Enabled' : 'Disabled'} for ${sectionName}`);
+    }
+
+    function updatePoolMeta(sectionName, key, value) {
+        if (!exams.pools) exams.pools = {};
+        if (!exams.pools[sectionName] || typeof exams.pools[sectionName] !== 'object') {
+            exams.pools[sectionName] = { enabled: true, pickCount: 0, totalGoal: 0 };
+        }
+
+        exams.pools[sectionName][key] = parseInt(value) || 0;
+        autoSave();
+    }
+
+    function updatePool(section, size) {
+        // Legacy support
+        updatePoolMeta(section, 'pickCount', size);
+    }
+
+    function generateJoiningKey() {
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        const gen = (len) => Array.from({ length: len }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
+        return `${gen(3)}-${gen(5)}-${gen(3)}`;
+    }
+
+    function regenJoiningKey() {
+        const newKey = generateJoiningKey();
+        document.getElementById('joiningKey').value = newKey;
+        exams.joiningKey = newKey;
+        showToast('New Joining Key generated');
+    }
+
+    function generateAIQuestion() {
+        const topic = prompt("Enter topic for AI generation (e.g. Binary Search Tree):");
+        if (!topic) return;
+
+        showProcessing();
+        setTimeout(() => {
+            document.getElementById('questionHeading').value = `Advanced ${topic} Analysis`;
+            quill.root.innerHTML = `<p>Implement a solution for <strong>${topic}</strong> that optimizes for time complexity O(log n). Ensure you handle edge cases such as empty inputs.</p>`;
+            selectQuestionType('coding');
+            const pyCheck = document.querySelector('#langSelectorGrid input[value="python"]');
+            if (pyCheck) pyCheck.checked = true;
+            updateLanguages();
+            hideLoader();
+            showToast(`AI Generated ${topic} template!`);
+        }, 1200);
+    }
+
+    window.openPoolModal = function () {
+        try {
+            if (typeof db === 'undefined') {
+                showToast('Error: Database module not loaded');
+                return;
+            }
+            if (typeof showModal === 'undefined') {
+                showToast('Error: Modal system not loaded');
+                return;
+            }
+
+            const pool = db.getQuestionPool();
+            if (!pool || pool.length === 0) {
+                showToast('Question Pool is currently empty');
+                return;
+            }
+
+            const html = `
+                <div style="margin-bottom: 20px; display: flex; gap: 15px; align-items: center; background: #f0f9ff; padding: 15px; border-radius: 12px; border: 1px solid #dbeafe;">
+                    <div style="flex: 1; position: relative;">
+                        <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary); opacity: 0.6;"></i>
+                        <input type="text" id="poolSearchInput" placeholder="Search by title (e.g. cn/)..." 
+                               style="width: 100%; padding: 12px 12px 12px 45px; border-radius: 10px; border: 1.5px solid #eee; font-size: 0.95rem; outline: none; transition: all 0.2s;"
+                               oninput="filterPoolModalItems(this.value)">
+                    </div>
+                    <select id="poolTargetSection" style="height: 48px; padding: 0 15px; border-radius: 10px; border: 1.5px solid #eee; font-weight: 600; outline: none; background: white;">
+                        ${(exams.sections && exams.sections.length > 0 ? exams.sections : ['General']).map(s => `<option value="${s}">${s}</option>`).join('')}
+                    </select>
+                    <button class="btn btn-ghost" onclick="importAllFilteredFromPool()" id="importAllPoolBtn" style="height: 48px; border-color: var(--primary); color: var(--primary); font-weight: 700;">IMPORT ALL</button>
+                    <button class="btn btn-run" onclick="importSelectedFromPool()" id="importSelectedPoolBtn" style="height: 48px; padding: 0 30px;">IMPORT SELECTED (0)</button>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding: 0 10px;">
+                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 700; color: #666; cursor: pointer;">
+                        <input type="checkbox" id="poolSelectAll" onchange="togglePoolSelectAll(this.checked)" style="width: 18px; height: 18px;">
+                        SELECT ALL
+                    </label>
+                    <span id="poolMatchCount" style="font-size: 0.75rem; color: #999; font-weight: 600;">Showing ${pool.length} questions</span>
+                </div>
+                <div id="poolModalList" style="max-height: 450px; overflow-y: auto; border: 1px solid #eee; border-radius: 12px; background: #fcfcfc;">
+                    ${pool.map(q => {
+                const heading = q.heading || q.title || 'Untitled Question';
+                const dateStr = q.addedAt ? new Date(q.addedAt).toDateString() : '';
+                return `
+                        <div class="pool-item" data-heading="${heading.toLowerCase()}" data-id="${q.poolId}" style="padding: 15px 20px; border-bottom: 1px solid #f0f0f0; display: flex; gap: 15px; align-items: center; background: #fff; transition: all 0.2s;">
+                            <input type="checkbox" class="pool-item-check" value="${q.poolId}" onchange="updatePoolSelectedCount()" style="width: 20px; height: 20px; cursor: pointer;">
+                            <div style="flex:1;">
+                                <div style="font-weight: 800; font-size: 1rem; color: #1a1a1b;">${heading}</div>
+                                <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; font-weight: 700; margin-top:4px; display: flex; align-items: center; gap: 10px;">
+                                    <span style="color: var(--primary); background: #eff6ff; padding: 2px 8px; border-radius: 4px;">${q.type || 'MCQ'}</span>
+                                    <span><i class="fas fa-star" style="margin-right: 4px; color: #fbbf24;"></i> ${q.marks || 0} Marks</span>
+                                </div>
+                                ${dateStr ? `<div style="font-size: 0.65rem; color: #bbb; margin-top: 6px; font-weight:500;"><i class="far fa-calendar-alt"></i> Stored: ${dateStr}</div>` : ''}
+                            </div>
+                            <button class="btn btn-ghost" onclick="importQuestionFromPool('${q.poolId}')" style="height: 36px; font-size: 0.75rem; padding: 0 20px; width:auto; border-radius: 8px;">IMPORT</button>
+                        </div>
+                    `;
+            }).join('')}
+                </div>
+            `;
+
+            showModal({
+                title: 'Question Pool Database',
+                desc: 'Select questions to import into your active assessment.',
+                content: html,
+                confirmText: 'Done',
+                onConfirm: () => {}
+            });
+        } catch (e) {
+            console.error('Error opening question pool:', e);
+            showToast('Error opening question pool: ' + e.message);
+        }
+    };
+
+    function previewAsStudent() {
+        syncState();
+        if (exams.questions.length === 0) {
+            showToast('Add questions before previewing');
+            return;
+        }
+
+        // Save to specific preview slot
+        localStorage.setItem('TESTPAD_preview_data', JSON.stringify(exams));
+
+        showToast('Entering Simulation Mode...');
+        setTimeout(() => {
+            window.open('./comexam-attempt.html?mode=preview', '_blank');
+        }, 800);
+    }
+
+    // --- Session Timer Logic ---
+    let sessionSeconds = parseInt(localStorage.getItem('TESTPAD_creator_timer')) || 0;
+    function startSessionTimer() {
+        setInterval(() => {
+            sessionSeconds++;
+            localStorage.setItem('TESTPAD_creator_timer', sessionSeconds);
+            const h = Math.floor(sessionSeconds / 3600).toString().padStart(2, '0');
+            const m = Math.floor((sessionSeconds % 3600) / 60).toString().padStart(2, '0');
+            const s = (sessionSeconds % 60).toString().padStart(2, '0');
+            const timerEl = document.getElementById('sessionTimer');
+            if (timerEl) timerEl.textContent = `${h}:${m}:${s}`;
+        }, 1000);
+    }
+
+    function editQuestion(index) {
+        editingQIndex = index;
+        const q = exams.questions[index];
+        selectQuestionType(q.type);
+        document.getElementById('questionHeading').value = q.heading || '';
+        quill.root.innerHTML = q.title;
+        document.getElementById('questionMarks').value = q.marks;
+        document.getElementById('questionSection').value = q.section;
+        document.getElementById('questionTimer').value = q.timer || 0;
+        document.getElementById('teacherNotes').value = q.teacherNotes || '';
+        document.getElementById('questionDifficulty').value = q.difficulty || 'medium';
+        if (document.getElementById('shuffleOptions')) document.getElementById('shuffleOptions').checked = q.shuffleOptions || false;
+
+        // Toggle shuffle options visibility
+        const shuffleGrp = document.getElementById('shuffleOptionsGroup');
+        if (shuffleGrp) shuffleGrp.style.display = (q.type === 'mcq') ? 'block' : 'none';
+
+        if (q.options) {
+            document.getElementById('optionsList').innerHTML = '';
+            q.options.forEach(o => addOptionWithValue(o, o === q.correctAnswer));
+        }
+
+        if (q.type === 'coding') {
+            const checkBoxes = document.querySelectorAll('#langSelectorGrid input[type="checkbox"]');
+            checkBoxes.forEach(cb => cb.checked = q.languages.includes(cb.value));
+            updateLanguages(q.code);
+            if (q.testCases) {
+                document.getElementById('testCasesContainer').innerHTML = '';
+                q.testCases.forEach(tc => addTestCaseRow(tc.input, tc.output, tc.marks, tc.isSample));
+            }
+        }
+
+        if (q.type === 'subjective') {
+            document.getElementById('keywords').value = (q.keywords || []).join(', ');
+        }
+
+        if (q.type === 'numeric' || q.type === 'single_integer') {
+            document.getElementById('correctNumeric').value = q.correctNumeric || '';
+            document.getElementById('numericTolerance').value = q.tolerance || 0;
+        }
+
+        if (q.type === 'file_upload') {
+            document.getElementById('allowedExtensions').value = (q.allowedExtensions || []).join(', ');
+            document.getElementById('maxFileSize').value = q.maxFileSize || 10;
+        }
+
+        updateQuestionsList();
+        document.getElementById('builder-anchor').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function resetBuilder() {
+        editingQIndex = -1;
+        if (document.getElementById('questionHeading')) document.getElementById('questionHeading').value = '';
+        if (quill) quill.setContents([]);
+        if (document.getElementById('questionMarks')) document.getElementById('questionMarks').value = 1;
+        if (document.getElementById('questionTimer')) document.getElementById('questionTimer').value = 0;
+        if (document.getElementById('teacherNotes')) document.getElementById('teacherNotes').value = '';
+        if (document.getElementById('optionsList')) document.getElementById('optionsList').innerHTML = '';
+        if (document.getElementById('testCasesContainer')) document.getElementById('testCasesContainer').innerHTML = '';
+        if (document.getElementById('keywords')) document.getElementById('keywords').value = '';
+        if (document.getElementById('correctNumeric')) document.getElementById('correctNumeric').value = '';
+        if (document.getElementById('numericTolerance')) document.getElementById('numericTolerance').value = '0';
+        if (document.getElementById('allowedExtensions')) document.getElementById('allowedExtensions').value = '';
+        if (document.getElementById('maxFileSize')) document.getElementById('maxFileSize').value = '10';
+
+        selectQuestionType('mcq');
+        updateQuestionsList();
+    }
+
+    function handleExcelUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                const json = XLSX.utils.sheet_to_json(worksheet);
+
+                if (json.length === 0) {
+                    showToast('The excel file appears to be empty');
+                    return;
+                }
+
+                let addedCount = 0;
+                json.forEach(row => {
+                    // Normalize keys to handle minor formatting differences (trim and lowercase)
+                    const getVal = (patterns) => {
+                        const key = Object.keys(row).find(k => patterns.some(p => k.toLowerCase().trim().includes(p)));
+                        return key ? row[key] : null;
+                    };
+
+                    const heading = getVal(['question title']) || getVal(['title']);
+                    const qText = getVal(['question text']) || getVal(['text']) || getVal(['question']);
+                    const choice1 = getVal(['ans choice 1']) || getVal(['choice 1']) || getVal(['option 1']);
+                    const choice2 = getVal(['ans choice 2']) || getVal(['choice 2']) || getVal(['option 2']);
+                    const choice3 = getVal(['ans choice 3']) || getVal(['choice 3']) || getVal(['option 3']);
+                    const choice4 = getVal(['ans choice 4']) || getVal(['choice 4']) || getVal(['option 4']);
+                    const correctChoice = getVal(['correct option']) || getVal(['answer']) || getVal(['correct ans']);
+                    const section = getVal(['section to add in']) || getVal(['section']) || 'General';
+                    const marks = parseInt(getVal(['marks'])) || 1;
+
+                    if (heading && qText && choice1 && choice2) {
+                        const options = [choice1, choice2, choice3, choice4].filter(o => o !== null && o !== undefined && o !== '');
+
+                        // Handle correct option mapping (text, letter A-D, or number 1-4)
+                        let correctAnswer = correctChoice;
+                        if (correctChoice !== null) {
+                            const ccStr = String(correctChoice).trim().toUpperCase();
+                            if (ccStr === 'A' || ccStr === '1') correctAnswer = choice1;
+                            else if (ccStr === 'B' || ccStr === '2') correctAnswer = choice2;
+                            else if (ccStr === 'C' || ccStr === '3') correctAnswer = choice3;
+                            else if (ccStr === 'D' || ccStr === '4') correctAnswer = choice4;
+                        }
+
+                        const q = {
+                            id: 'q_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                            source: 'exam',
+                            type: 'mcq',
+                            heading: String(heading).trim(),
+                            title: `<p>${String(qText).trim()}</p>`,
+                            marks: marks,
+                            section: String(section).trim(),
+                            options: options.map(o => String(o).trim()),
+                            correctAnswer: String(correctAnswer).trim(),
+                            timer: 0,
+                            teacherNotes: 'Imported via Excel Bulk Upload'
+                        };
+
+                        // Add section if it doesn't exist
+                        if (!exams.sections.includes(q.section)) {
+                            exams.sections.push(q.section);
+                        }
+
+                        exams.questions.push(q);
+                        db.addToQuestionPool(q);
+                        addedCount++;
+                    }
+                });
+
+                if (addedCount > 0) {
+                    updateQuestionsList();
+                    updateSectionsList();
+                    autoSave();
+                    showToast(`Successfully imported ${addedCount} MCQs!`);
+                } else {
+                    showToast('No valid MCQs found. Check format: question title, question text, choices 1-4, correct option, marks, section.');
+                }
+            } catch (err) {
+                console.error('Excel Parsing Error:', err);
+                showToast('Error parsing Excel file. Please ensure it is a valid .xlsx or .xls file.');
+            }
+            // Clear input for next upload
+            event.target.value = '';
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    function showExcelFormat() {
+        const columns = [
+            'Question Title',
+            'Question Text',
+            'Ans Choice 1',
+            'Ans Choice 2',
+            'Ans Choice 3',
+            'Ans Choice 4',
+            'Correct Option (Text or 1-4)',
+            'Section',
+            'Marks'
+        ];
+
+        const html = `
+            <div style="padding: 10px;">
+                <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Your spreadsheet should have these exact column headers in the first row:</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f9f9f9; padding: 20px; border-radius: 12px; border: 1px solid #eee;">
+                    ${columns.map(c => `<div style="font-family:'JetBrains Mono'; font-size: 0.75rem; background:#fff; padding:6px 12px; border-radius:6px; border:1px solid #eee;">${c}</div>`).join('')}
+                </div>
+                <div style="margin-top: 20px; padding: 15px; background: #eff6ff; border-radius: 8px; border: 1px solid #bfdbfe; font-size: 0.8rem; color: #795548;">
+                    <strong>Tip:</strong> The 'Correct Option' can be the text of the answer or just the number (1-4).
+                </div>
+            </div>
+        `;
+
+        showModal({
+            title: 'Excel MCQ Format Guide',
+            desc: 'Follow this structure to ensure successful auto-population.',
+            content: html,
+            confirmText: 'I Understand',
+            onConfirm: () => { }
+        });
+    }
+
+    function downloadExcelTemplate() {
+        const data = [
+            ["Question Title", "Question Text", "Ans Choice 1", "Ans Choice 2", "Ans Choice 3", "Ans Choice 4", "Correct Option", "Section", "Marks"],
+            ["OOP Basics", "What is encapsulation?", "Data Hiding", "Inheritance", "Polymorphism", "Abstraction", "Data Hiding", "Technical", 2],
+            ["Logic Check", "Is Java an OOP language?", "Yes", "No", "Maybe", "Partially", "1", "General", 1]
+        ];
+
+        const worksheet = XLSX.utils.aoa_to_sheet(data);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "MCQ Template");
+
+        XLSX.writeFile(workbook, "Testpad_MCQ_Template.xlsx");
+        showToast('Template downloaded!');
+    }
+
+    function showToast(msg) {
+        const toast = document.createElement('div');
+        toast.style.position = 'fixed';
+        toast.style.bottom = '80px';
+        toast.style.right = '40px';
+        toast.style.background = '#333';
+        toast.style.color = '#fff';
+        toast.style.padding = '12px 24px';
+        toast.style.borderRadius = '8px';
+        toast.style.fontFamily = 'Inter';
+        toast.style.fontSize = '0.9rem';
+        toast.style.zIndex = '11000';
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    function createNewExam() {
+        localStorage.removeItem('exam_step_new');
+        localStorage.removeItem('TESTPAD_creator_temp');
+        localStorage.removeItem('TESTPAD_creator_timer');
+        window.location.href = './exam-creator.html';
+    }
+
+
+
+    function goBack() { window.location.href = './teacher-dashboard.html'; }
+    window.gotoExcelUpload = function (url) {
+        try {
+            if (window.event) window.event.preventDefault();
+            syncState();
+            localStorage.setItem('TESTPAD_creator_temp', JSON.stringify(exams));
+            window.location.href = url;
+        } catch (e) {
+            console.error('gotoExcelUpload error:', e);
+            alert('Failed to navigate: ' + e.message);
+        }
+    };
+
+    window.addEventListener('beforeunload', function () {
+        syncState();
+        localStorage.setItem('TESTPAD_creator_temp', JSON.stringify(exams));
+        localStorage.setItem('TESTPAD_creator_last_id', editExamId || 'new');
+    });
+
+    initPage();
+    startSessionTimer();
+    selectQuestionType('mcq');
+    lucide.createIcons();
+</script>
+</body>
+
+</html>
+```

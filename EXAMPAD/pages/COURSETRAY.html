@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts: Roboto -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="../logo.jpg">
+    <script src="../js/theme-engine.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+
+    <style>
+        :root {
+            --primary: #df5a22;
+            --primary-dark: #c54814;
+            --primary-light: #fff5f0;
+            --primary-tint: #fdf2ec;
+            --bg: #f2f4f7;
+            --white: #ffffff;
+            --text-main: #222222;
+            --text-light: #667085;
+            --border: #eaecf0;
+            --radius: 10px;
+        }
+
+        html {
+            font-size: 17px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body,
+        button,
+        input,
+        select,
+        textarea {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-size: 17px;
+        }
+
+        /* --- HEADER (Identical to Student Dashboard & TESTVIEW) --- */
+        .site-header {
+            height: 84px;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 120px;
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .logo-box:hover {
+            opacity: 0.85;
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 70px;
+            color: #555;
+            font-size: 1.2rem;
+        }
+
+        .icon-btn-box {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .icon-btn-box:hover {
+            background: #fff5f0;
+        }
+
+        .icon-btn-box.active {
+            background: transparent;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .plus-btn {
+            width: 44px;
+            height: 84px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff5f0;
+            color: var(--primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-left: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+
+        .plus-btn:hover {
+            background: #ffece5;
+        }
+
+        .profile-container {
+            position: relative;
+        }
+
+        .profile-stack {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 30px;
+            transition: background 0.2s;
+        }
+
+        .profile-stack:hover {
+            background: #f8f8f8;
+        }
+
+        .profile-text {
+            text-align: right;
+            line-height: 1.2;
+        }
+
+        .profile-name {
+            display: block;
+            font-weight: 600;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            color: #444;
+        }
+
+        .profile-role {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .avatar-circle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Dropdowns */
+        .profile-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 200px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin-top: 10px;
+            padding: 10px;
+            display: none;
+            z-index: 2000;
+            border: 1px solid #eee;
+            animation: fadeInDown 0.2s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-item {
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            color: #444;
+            transition: background 0.2s;
+        }
+
+        .menu-item:hover {
+            background: #fdf5f2;
+            color: var(--primary);
+        }
+
+        .menu-item.logout {
+            color: #d32f2f;
+        }
+
+        .menu-item.logout:hover {
+            background: #fff5f5;
+        }
+
+        /* --- PAGE CONTENT AREA --- */
+        .course-tray-wrapper {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 30px 40px 60px 40px;
+        }
+
+        /* Top Navigation Tabs matching reference */
+        .tray-top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #eef0f2;
+            padding-bottom: 0px;
+            margin-bottom: 28px;
+        }
+
+        .tabs-container {
+            display: flex;
+            align-items: center;
+            gap: 36px;
+        }
+
+        .tray-tab {
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: #555555;
+            padding-bottom: 12px;
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+            transition: color 0.15s ease;
+        }
+
+        .tray-tab:hover {
+            color: #111111;
+        }
+
+        .tray-tab.active {
+            color: #111111;
+            font-weight: 600;
+        }
+
+        .tray-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2.5px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .tray-search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #999999;
+            font-size: 1.05rem;
+            cursor: pointer;
+            padding-bottom: 12px;
+        }
+
+        .tray-search-input {
+            border: none;
+            outline: none;
+            font-size: 1.0rem;
+            color: #333;
+            width: 0;
+            opacity: 0;
+            transition: width 0.3s ease, opacity 0.3s ease;
+            background: transparent;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .tray-search-input.open {
+            width: 180px;
+            opacity: 1;
+            border-bottom: 1px solid #df5a22;
+            padding-bottom: 2px;
+        }
+
+        /* --- COURSE MODULE ROW COMPONENT --- */
+        .course-module-block {
+            margin-bottom: 40px;
+        }
+
+        /* Course Header Card */
+        .course-header-bar {
+            background: var(--primary-tint);
+            border-radius: 4px;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+        }
+
+        .course-header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .course-title-link {
+            color: var(--primary);
+            font-size: 1.08rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.15s ease;
+        }
+
+        .course-title-link:hover {
+            text-decoration: underline;
+            color: var(--primary-dark);
+        }
+
+        .course-sections-count {
+            color: #777777;
+            font-size: 0.88rem;
+            font-weight: 400;
+        }
+
+        .course-header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .course-progress-track {
+            width: 140px;
+            height: 4.5px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .course-progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 4px;
+            transition: width 0.4s ease;
+        }
+
+        .course-progress-text {
+            color: #555555;
+            font-size: 0.95rem;
+            font-weight: 500;
+            min-width: 75px;
+            text-align: right;
+        }
+
+        /* Horizontal Carousel of Section Cards */
+        .sections-carousel-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+            margin-top: 14px;
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 10px 4px 18px 4px;
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE/Edge */
+            width: 100%;
+        }
+
+        .carousel-track::-webkit-scrollbar {
+            display: none;
+            /* Chrome/Safari */
+        }
+
+        .carousel-nav-btn {
+            background: transparent;
+            border: none;
+            color: #d6531d;
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            transition: transform 0.15s ease, opacity 0.15s ease;
+            z-index: 10;
+            flex-shrink: 0;
+        }
+
+        .carousel-nav-btn:hover:not(:disabled) {
+            transform: scale(1.15);
+            color: var(--primary-dark);
+        }
+
+        .carousel-nav-btn:disabled {
+            opacity: 0.25;
+            cursor: default;
+        }
+
+        /* Section Card */
+        .section-card {
+            background: #ffffff;
+            border: 1px solid #eaecf0;
+            border-radius: 8px;
+            padding: 16px 18px;
+            min-width: 180px;
+            max-width: 195px;
+            flex-shrink: 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 152px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .section-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+            border-color: #df5a22;
+        }
+
+        .card-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-number-pill {
+            background: #e2e8f0;
+            color: #475569;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .section-status-badge {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .section-status-badge.done {
+            color: var(--primary);
+        }
+
+        .section-status-badge.progress {
+            color: #888888;
+            font-weight: 500;
+        }
+
+        .section-title {
+            font-size: 1.02rem;
+            font-weight: 500;
+            color: #1e293b;
+            line-height: 1.35;
+            margin: 6px 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-bottom-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #64748b;
+            font-size: 0.88rem;
+        }
+
+        .card-resource-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .card-resource-tag i {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header (Identical to Student Dashboard & TESTVIEW) -->
+    <header class="site-header" style="position: relative;">
+        <div class="header-left">
+            <!-- Top-Left Logo refreshes the page on click -->
+            <div class="logo-box" onclick="window.location.reload();" style="cursor: pointer;" title="Refresh Page">
+                <img src="../Tests _ Chitkara_files/chitkara.a1beb7f0.png" onerror="this.src='../chitkara_icon.png'"
+                    style="height: 44px; border-radius: 6px;">
+            </div>
+            <nav class="nav-icons">
+                <!-- Dashboard -->
+                <div class="icon-btn-box" data-tooltip="Dashboard"
+                    onclick="window.location.href='./student-dashboard.html';"
+                    style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <img src="../TESTPAD_WEBSITE__files/menu-1.svg" alt="Dashboard"
+                        style="width: 32px; height: 32px;" />
+                </div>
+                <!-- Courses (Active on this page) -->
+                <div class="icon-btn-box active" data-tooltip="Courses" onclick="window.location.reload();"
+                    style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <img src="../TESTPAD_WEBSITE__files/folder-2.svg" alt="Courses"
+                        style="width: 32px; height: 32px;" />
+                </div>
+                <!-- Performance -->
+                <div class="icon-btn-box" data-tooltip="Performance Analytics"
+                    onclick="location.href='./studentreports.html'"
+                    style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <img src="../TESTPAD_WEBSITE__files/statistics.svg" alt="Performance"
+                        style="width: 32px; height: 32px;" />
+                </div>
+            </nav>
+        </div>
+
+        <div class="header-right">
+            <div class="plus-btn" id="plusBtn" title="Create New" onclick="togglePlusMenu(event)"><i
+                    class="fas fa-plus"></i></div>
+
+            <!-- Plus Popover -->
+            <div class="popover plus-popover" id="plusMenu"
+                style="display: none; position: absolute; top: 84px; right: 60px; background: #fff; border-radius: 8px; border: 1px solid #EAECF0; box-shadow: 0 10px 30px rgba(0,0,0,0.12); z-index: 2000; width: 210px; padding: 6px 0;">
+                <div class="plus-item" onclick="window.location.href='./playground.html';"
+                    style="display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: background 0.2s;"
+                    onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
+                    <img src="../Testpad_pra_files_files/playground.svg" style="width: 26px; height: 26px;">
+                    <span style="font-size: 15px; color: #344054; font-weight: 500;">Playground</span>
+                </div>
+                <div class="plus-item" onclick="window.location.href='./playground.html';"
+                    style="display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: background 0.2s;"
+                    onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
+                    <img src="../Testpad_pra_files_files/playground.svg" style="width: 26px; height: 26px;">
+                    <span style="font-size: 15px; color: #344054; font-weight: 500;">Python Notebook</span>
+                </div>
+            </div>
+
+            <div class="grid-menu-container" style="position: relative;">
+                <button class="grid-btn" id="gridMenuBtn" onclick="toggleGridMenu(event)"
+                    style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: none; background: transparent; border-radius: 8px; cursor: pointer; transition: background 0.2s;"
+                    onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='transparent'"
+                    data-tooltip-bottom="Apps">
+                    <img src="../Testpad_pra_files_files/icons8-squared-menu-90.png"
+                        style="width: 24px; height: 24px; opacity: 0.75; transition: all 0.2s;"
+                        onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'">
+                </button>
+                <div id="gridMenuDropdown" class="grid-menu-dropdown"
+                    style="display: none; position: absolute; top: calc(100% + 15px); right: 0; background: #ffffff; border: 1px solid #f0f0f0; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 16px; width: 320px; z-index: 2000; flex-direction: row; justify-content: space-between;">
+                    <div class="grid-item" onclick="window.location.href='./TESTVIEW.html';"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../TESTPAD_WEBSITE__files/quiz.svg" style="width: 36px; height: 36px;">
+                        <span style="font-family: 'Roboto', sans-serif; font-size: 1rem; font-weight: 500;">Test</span>
+                    </div>
+                    <div class="grid-item" onclick="window.location.reload(); toggleGridMenu();"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../TESTPAD_WEBSITE__files/folder-2.svg" style="width: 36px; height: 36px;">
+                        <span
+                            style="font-family: 'Roboto', sans-serif; font-size: 1rem; font-weight: 500;">Courses</span>
+                    </div>
+                    <div class="grid-item" onclick="location.href='./mybookmarks.html'"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../Testpad_pra_files_files/iconmonstr-star-3.svg" style="width: 36px; height: 36px;">
+                        <span
+                            style="font-family: 'Roboto', sans-serif; font-size: 1rem; font-weight: 500;">Bookmarks</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-container">
+                <div class="profile-stack" id="profileToggle" onclick="toggleMenu()">
+                    <div class="profile-text">
+                        <span class="profile-name" id="userName">Student</span>
+                        <span class="profile-role" id="userRole">Student</span>
+                    </div>
+                    <div class="avatar-circle" id="userInitial">
+                        <img src="../LINUX_TEST_CHITKARA_files/user-icon.3d6e2547.svg"
+                            style="width: 100%; height: 100%; border-radius: 50%;">
+                    </div>
+                </div>
+                <!-- Profile Dropdown -->
+                <div class="profile-menu" id="profileMenu">
+                    <div class="menu-item" onclick="location.href='./profile.html'">
+                        <img src="../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png"
+                            style="width: 16px; height: 16px; margin-right: 8px;">
+                        <span>My Profile</span>
+                    </div>
+                    <div class="menu-item" onclick="location.href='./preferences.html'">
+                        <img src="../TESTPAD_WEBSITE__files/password.svg"
+                            style="width: 16px; height: 16px; margin-right: 8px;">
+                        <span>Preferences</span>
+                    </div>
+                    <div style="border-top: 1px solid #eee; margin: 5px 0;"></div>
+                    <div class="menu-item logout" onclick="handleLogout()">
+                        <img src="../TESTPAD_WEBSITE__files/logout.svg"
+                            style="width: 16px; height: 16px; margin-right: 8px;">
+                        <span>Logout</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN COURSETRAY CONTENT -->
+    <div class="course-tray-wrapper">
+        <!-- Top Navigation Tabs -->
+        <div class="tray-top-bar">
+            <div class="tabs-container">
+                <div class="tray-tab active" id="tabLearningModules" onclick="switchTrayTab('modules')">
+                    Learning Modules
+                </div>
+                <div class="tray-tab" id="tabAssignments" onclick="switchTrayTab('assignments')">
+                    Assignments
+                </div>
+            </div>
+            <div class="tray-search-box" onclick="toggleSearchInput()">
+                <input type="text" id="traySearchInput" class="tray-search-input" placeholder="Search modules..."
+                    oninput="handleSearch(this.value)" onclick="event.stopPropagation()">
+                <i class="fas fa-search" id="traySearchIcon"></i>
+            </div>
+        </div>
+
+        <!-- Course Module Rows Container -->
+        <div id="courseModulesContainer">
+            <!-- Dynamic Module Rows Injected via JS -->
+        </div>
+    </div>
+
+    <script>
+        // Check Authentication & User Profile dynamically
+        let currentUser = (typeof auth !== 'undefined' && auth.getCurrentUser) ? auth.getCurrentUser() : null;
+        if (!currentUser) {
+            const saved = localStorage.getItem('TESTPAD_currentUser');
+            if (saved) {
+                try { currentUser = JSON.parse(saved); } catch (e) { }
+            }
+        }
+        if (!currentUser) {
+            currentUser = {
+                id: 'user_student',
+                name: 'Student',
+                role: 'student',
+                rollNo: '',
+                email: ''
+            };
+        }
+
+        let currentTab = 'modules';
+        let searchQuery = '';
+
+        function initPage() {
+            // Update Profile Info
+            const userNameEl = document.getElementById('userName');
+            if (userNameEl) userNameEl.textContent = currentUser.name || (currentUser.rollNo ? currentUser.rollNo : 'Student');
+            const userRoleEl = document.getElementById('userRole');
+            if (userRoleEl) userRoleEl.textContent = (currentUser.role || 'Student').toUpperCase();
+
+            renderCourseModules();
+        }
+
+        function switchTrayTab(tab) {
+            currentTab = tab;
+            document.getElementById('tabLearningModules').classList.toggle('active', tab === 'modules');
+            document.getElementById('tabAssignments').classList.toggle('active', tab === 'assignments');
+            renderCourseModules();
+        }
+
+        function toggleSearchInput() {
+            const input = document.getElementById('traySearchInput');
+            input.classList.toggle('open');
+            if (input.classList.contains('open')) {
+                input.focus();
+            } else {
+                input.value = '';
+                searchQuery = '';
+                renderCourseModules();
+            }
+        }
+
+        function handleSearch(val) {
+            searchQuery = val.trim().toLowerCase();
+            renderCourseModules();
+        }
+
+        function getStudentCourses() {
+            let courses = [];
+            if (typeof db !== 'undefined' && db.getAllCourses) {
+                courses = db.getAllCourses() || [];
+            }
+            if (courses.length === 0) {
+                try {
+                    courses = JSON.parse(localStorage.getItem('TESTPAD_courses')) || [];
+                } catch (e) {
+                    courses = [];
+                }
+            }
+
+            // Remove any legacy mock/benchmark IDs
+            const mockIds = ['24CSE0101_python', '24CSE0102_frontend', '24CSE0208_dsoops', 'mock_course_1', 'mock_course_2'];
+            courses = courses.filter(c => c && !mockIds.includes(c.id) && !String(c.id).startsWith('mock_'));
+
+            // Deduplicate courses by normalized title and ID
+            const seen = new Set();
+            const uniqueCourses = [];
+            courses.forEach(c => {
+                const normKey = (c.title || c.name || c.id || '').trim().toLowerCase();
+                if (!seen.has(normKey)) {
+                    seen.add(normKey);
+
+                    // If student targeting is specified on the course, verify student assignment
+                    let isAssigned = true;
+                    if (currentUser && currentUser.id) {
+                        if (Array.isArray(c.assignedStudents) && c.assignedStudents.length > 0) {
+                            isAssigned = c.assignedStudents.includes(currentUser.id) ||
+                                (currentUser.rollNo && c.assignedStudents.includes(currentUser.rollNo)) ||
+                                (currentUser.email && c.assignedStudents.includes(currentUser.email));
+                        } else if (Array.isArray(c.enrolledStudents) && c.enrolledStudents.length > 0) {
+                            isAssigned = c.enrolledStudents.includes(currentUser.id) ||
+                                (currentUser.rollNo && c.enrolledStudents.includes(currentUser.rollNo));
+                        } else if (Array.isArray(c.studentIds) && c.studentIds.length > 0) {
+                            isAssigned = c.studentIds.includes(currentUser.id);
+                        }
+                    }
+
+                    if (isAssigned) {
+                        uniqueCourses.push(c);
+                    }
+                }
+            });
+
+            // Clean localStorage duplicate entries
+            try {
+                localStorage.setItem('TESTPAD_courses', JSON.stringify(uniqueCourses));
+            } catch (e) { }
+
+            return uniqueCourses;
+        }
+
+        function renderCourseModules() {
+            const container = document.getElementById('courseModulesContainer');
+            container.innerHTML = '';
+
+            const courses = getStudentCourses();
+
+            // Filter by search query if any
+            let filteredCourses = courses.filter(c => {
+                if (!searchQuery) return true;
+                const courseTitle = (c.title || c.name || c.code || '').toLowerCase();
+                const matchCourse = courseTitle.includes(searchQuery);
+                const modulesList = c.modules || c.sections || c.chapters || [];
+                const matchModule = modulesList.some(m => (m.title || m.name || '').toLowerCase().includes(searchQuery));
+                return matchCourse || matchModule;
+            });
+
+            if (filteredCourses.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding:90px 20px; color:#888888;">
+                        <div style="width:72px; height:72px; background:#fff5f0; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
+                            <i class="fas fa-folder-open" style="font-size:2.2rem; color:#df5a22;"></i>
+                        </div>
+                        <h3 style="font-size:1.3rem; font-weight:600; color:#222; margin-bottom:8px;">No Courses Available</h3>
+                        <p style="font-size:1.0rem; color:#667085;">There are no active enrolled courses or modules in your account.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredCourses.forEach((course, courseIdx) => {
+                const block = document.createElement('div');
+                block.className = 'course-module-block';
+
+                const courseTitle = course.title || course.name || course.code || `Course ${courseIdx + 1}`;
+                const modules = course.modules || course.sections || course.chapters || [];
+
+                // Calculate progress
+                let progressVal = 0;
+                if (typeof course.progress === 'number') {
+                    progressVal = course.progress;
+                } else if (typeof db !== 'undefined' && db.getCourseProgress && currentUser) {
+                    const prog = db.getCourseProgress(course.id, currentUser.id);
+                    const totalLessons = modules.reduce((acc, m) => acc + (m.lessons ? m.lessons.length : 1), 0);
+                    const doneCount = prog && prog.completedItems ? prog.completedItems.length : 0;
+                    progressVal = totalLessons > 0 ? Math.round((doneCount / totalLessons) * 100) : 0;
+                } else if (modules.length > 0) {
+                    const doneMods = modules.filter(m => m.status === 'DONE' || m.completed === true || m.progress === 100).length;
+                    progressVal = Math.round((doneMods / modules.length) * 100);
+                }
+
+                block.innerHTML = `
+                    <!-- Course Header Bar with Course Name in Orange -->
+                    <div class="course-header-bar">
+                        <div class="course-header-left">
+                            <a class="course-title-link" onclick="openCourse('${course.id}')" title="Open ${courseTitle}">
+                                ${courseTitle}
+                            </a>
+                            <span class="course-sections-count">${modules.length} ${modules.length === 1 ? 'Module' : 'Modules'}</span>
+                        </div>
+                        <div class="course-header-right">
+                            <div class="course-progress-track">
+                                <div class="course-progress-fill" style="width: ${progressVal}%;"></div>
+                            </div>
+                            <span class="course-progress-text">${progressVal}% done</span>
+                        </div>
+                    </div>
+
+                    <!-- Horizontal Carousel of Module Boxes -->
+                    <div class="sections-carousel-container">
+                        ${modules.length > 4 ? `
+                            <button class="carousel-nav-btn left" id="prevBtn_${courseIdx}" onclick="scrollCarousel('${courseIdx}', -1)" title="Scroll Left">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                        ` : ''}
+                        
+                        <div class="carousel-track" id="track_${courseIdx}">
+                            ${modules.length === 0 ? `
+                                <div style="padding: 24px; color: #888; font-size: 0.95rem; font-style: italic;">
+                                    No modules uploaded for this course yet.
+                                </div>
+                            ` : modules.map((mod, modIdx) => {
+                    const modNumber = mod.number || (modIdx + 1);
+                    const modTitle = mod.title || mod.name || `Module ${modNumber}`;
+                    const isDone = mod.status === 'DONE' || mod.completed === true || mod.progress === 100;
+                    const statusLabel = isDone ? 'DONE' : (typeof mod.progress === 'number' ? `${mod.progress}%` : (mod.status || '0%'));
+
+                    const lessons = mod.lessons || [];
+                    const notesCount = mod.notesCount !== undefined ? mod.notesCount : lessons.filter(l => l.type === 'notes' || l.type === 'pdf' || l.type === 'document' || !l.type).length;
+                    const codeCount = mod.codeCount !== undefined ? mod.codeCount : lessons.filter(l => l.type === 'code' || l.type === 'quiz' || l.type === 'practice').length;
+
+                    return `
+                                    <div class="section-card" onclick="openModule('${course.id}', '${mod.id || modIdx}')" title="${modTitle}">
+                                        <div class="card-top-row">
+                                            <span class="section-number-pill">${modNumber}</span>
+                                            <span class="section-status-badge ${isDone ? 'done' : 'progress'}">
+                                                ${statusLabel}
+                                            </span>
+                                        </div>
+                                        <div class="section-title" title="${modTitle}">
+                                            ${modTitle}
+                                        </div>
+                                        <div class="card-bottom-row">
+                                            ${notesCount > 0 ? `
+                                                <span class="card-resource-tag" title="${notesCount} Notes">
+                                                    <i class="far fa-file-alt"></i> ${notesCount}
+                                                </span>
+                                            ` : ''}
+                                            ${codeCount > 0 ? `
+                                                <span class="card-resource-tag" title="${codeCount} Exercises">
+                                                    <i class="far fa-file-code"></i> ${codeCount}
+                                                </span>
+                                            ` : ''}
+                                        </div>
+                                    </div>
+                                `;
+                }).join('')}
+                        </div>
+
+                        ${modules.length > 4 ? `
+                            <button class="carousel-nav-btn right" id="nextBtn_${courseIdx}" onclick="scrollCarousel('${courseIdx}', 1)" title="Scroll Right">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+
+                container.appendChild(block);
+            });
+        }
+
+        function scrollCarousel(idx, direction) {
+            const track = document.getElementById(`track_${idx}`);
+            if (track) {
+                const scrollAmount = 380 * direction;
+                track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+        }
+
+        function openCourse(courseId) {
+            // Direct redirect to that particular course
+            window.location.href = `./course-dashboard.html?courseId=${encodeURIComponent(courseId)}`;
+        }
+
+        function openModule(courseId, moduleId) {
+            // Direct redirect to that particular course module
+            window.location.href = `./course-player.html?courseId=${encodeURIComponent(courseId)}&moduleId=${encodeURIComponent(moduleId)}`;
+        }
+
+        // --- HEADER MENUS ---
+        function togglePlusMenu(e) {
+            if (e) e.stopPropagation();
+            const menu = document.getElementById('plusMenu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function toggleGridMenu(e) {
+            if (e) e.stopPropagation();
+            const grid = document.getElementById('gridMenuDropdown');
+            grid.style.display = grid.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('profileMenu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function handleLogout() {
+            if (typeof auth !== 'undefined' && auth.logout) {
+                auth.logout();
+            } else {
+                localStorage.removeItem('TESTPAD_currentUser');
+                localStorage.removeItem('TESTPAD_active_session');
+                window.location.href = './joinvialink.html';
+            }
+        }
+
+        document.addEventListener('click', (e) => {
+            const pm = document.getElementById('profileMenu');
+            const pt = document.getElementById('profileToggle');
+            if (pm && pt && !pt.contains(e.target) && !pm.contains(e.target)) pm.style.display = 'none';
+
+            const gm = document.getElementById('gridMenuDropdown');
+            const gb = document.getElementById('gridMenuBtn');
+            if (gm && gb && !gb.contains(e.target) && !gm.contains(e.target)) gm.style.display = 'none';
+
+            const plusMenu = document.getElementById('plusMenu');
+            const plusBtn = document.getElementById('plusBtn');
+            if (plusMenu && plusBtn && !plusBtn.contains(e.target) && !plusMenu.contains(e.target)) plusMenu.style.display = 'none';
+        });
+
+        window.onload = initPage;
+    </script>
+</body>
+
+</html>

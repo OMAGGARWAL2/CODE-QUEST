@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="logo.jpg">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --primary: #dc2626;
+            --primary-dark: #b91c1c;
+            --primary-soft: #fef2f2;
+            --bg-site: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --text-light: #94a3b8;
+            --card-border: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -1px rgba(15, 23, 42, 0.03);
+            --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.04);
+            --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 10px 10px -5px rgba(15, 23, 42, 0.04);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            /* Modern, crisp Segoe UI foundation */
+            font-family: "Segoe UI", "Segoe WP", "Helvetica Neue", Roboto, sans-serif;
+            background: #ffffff url('BGNEW01.png') no-repeat top center / cover fixed;
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(220, 38, 38, 0.4);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(220, 38, 38, 0.6);
+        }
+
+        /* Ambient Geometric Background */
+        .page-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-color: #ffffff;
+            background-image: url('BGNEW01.png');
+            background-size: cover;
+            background-position: top center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+
+
+        .container {
+            max-width: 1360px;
+            margin: 0 auto;
+            padding: 0 40px;
+            width: 100%;
+        }
+
+        /* --- Header / Navigation --- */
+        header {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+        }
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .brand-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-subtitle {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .system-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.05);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #064e3b;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 2px 8px -2px rgba(16, 185, 129, 0.1);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+            animation: pulse-green 2s infinite;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            padding: 40px 0 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(220, 38, 38, 0.06);
+            color: var(--primary);
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            border: 1px solid rgba(220, 38, 38, 0.15);
+            box-shadow: 0 4px 20px -2px rgba(220, 38, 38, 0.08);
+            animation: slideUpFade 0.8s ease-out;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 7vw, 4.5rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: var(--text-main);
+            max-width: 950px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.15;
+            animation: slideUpFade 0.8s ease-out 0.1s both;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, var(--primary) 0%, #f43f5e 60%, #fb7185 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero-title span::after {
+            display: none;
+        }
+
+        .hero-desc {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 750px;
+            margin: 0 auto 4rem;
+            font-weight: 400;
+            line-height: 1.7;
+            animation: slideUpFade 0.8s ease-out 0.2s both;
+        }
+
+        /* --- Portals Layout --- */
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto 60px;
+            animation: slideUpFade 0.8s ease-out 0.3s both;
+        }
+
+        .portal-card {
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid var(--card-border);
+            border-radius: 6px;
+            padding: 56px 32px;
+            min-height: 420px;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+            cursor: pointer;
+        }
+
+        .portal-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary);
+        }
+
+        .card-icon-wrapper {
+            width: 110px;
+            height: 110px;
+            background: var(--bg-site);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--text-main);
+            margin-bottom: 32px;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+        }
+
+        .portal-card:hover .card-icon-wrapper {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 0;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-watermark {
+            position: absolute;
+            right: -30px;
+            bottom: -30px;
+            width: 320px !important;
+            height: 320px !important;
+            stroke-width: 1px;
+            color: var(--text-muted);
+            opacity: 0.03;
+            transform: rotate(-10deg);
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .portal-card:hover .card-watermark {
+            opacity: 0.06;
+            color: var(--primary);
+            transform: rotate(0deg) scale(1.05);
+        }
+
+
+
+
+
+        .direct-orange-link,
+        .sub-orange-link {
+            color: #DE5B2B !important;
+            text-decoration: none !important;
+            font-size: 1.35rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            letter-spacing: -0.01em;
+            font-family: 'Segoe UI', sans-serif;
+            display: inline-block;
+        }
+
+        .direct-orange-link:hover,
+        .sub-orange-link:hover {
+            color: #b91c1c !important;
+            text-decoration: underline !important;
+            text-underline-offset: 6px;
+            text-decoration-thickness: 2px;
+            transform: translateY(-2px);
+        }
+
+        /* --- Feature Highlights (Commented Out) --- */
+        /*
+        .features-section {
+            padding: 40px 0;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid var(--card-border);
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 20px;
+            animation: slideUpFade 0.8s ease-out 0.4s both;
+            cursor: pointer;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-item:hover .feature-icon {
+            transform: scale(1.15) translateY(-3px);
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 8px 16px rgba(220, 38, 38, 0.25);
+        }
+
+        .feature-text h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .feature-text p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+        */
+
+        /* --- Footer --- */
+        footer {
+            margin-top: auto;
+            padding: 40px 0;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        footer .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--card-border);
+            padding-top: 32px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0.8;
+            filter: grayscale(100%);
+            transition: filter 0.3s;
+        }
+
+        .footer-logo:hover {
+            filter: grayscale(0%);
+        }
+
+        .footer-copyright {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .footer-links a {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Animations */
+        @keyframes slideUpFade {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .portal-grid {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            footer .container {
+                flex-direction: column;
+                gap: 24px;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+
+    <style>
+        ::selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+
+        ::-moz-selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Ambient Background Elements -->
+    <div class="page-bg"></div>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="container">
+            <a href="index.html" class="brand-container" style="padding: 0;">
+                <img src="https://www.chitkara.edu.in/chitkara-university-logo.png" alt="Chitkara University"
+                    style="height: 60px; object-fit: contain;">
+            </a>
+
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <button onclick="clearStorage()"
+                    style="background: #fee2e2; border: 1px solid #fca5a5; width: auto; height: 38px; padding: 0 16px; border-radius: 30px; cursor: pointer; color: #b91c1c; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); transition: all 0.2s; font-weight: 600; font-size: 0.8rem; font-family: 'Segoe UI', sans-serif;"
+                    onmouseover="this.style.background='#fecaca'; this.style.transform='translateY(-1px)'; this.style.boxShadow='var(--shadow-md)'"
+                    onmouseout="this.style.background='#fee2e2'; this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)'"
+                    title="Clear Storage (Fix 5MB Quota)">
+                    <i data-lucide="trash-2" style="width: 14px; height: 14px; margin-right: 6px;"></i> Free Space
+                </button>
+                <button onclick="window.location.reload()"
+                    style="background: white; border: 1px solid var(--card-border); width: 38px; height: 38px; border-radius: 50%; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); transition: all 0.2s;"
+                    onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'; this.style.transform='translateY(-1px)'; this.style.boxShadow='var(--shadow-md)'"
+                    onmouseout="this.style.borderColor='var(--card-border)'; this.style.color='var(--text-muted)'; this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)'"
+                    title="Refresh">
+                    <i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section class="hero container">
+
+            <!-- Portal Boxes (Commented Out) -->
+            <!--
+            <div class="portal-grid">
+                <div class="portal-card" onclick="transitionTo('pages/login.html?role=teacher')">
+                    <i data-lucide="presentation" class="card-watermark"></i>
+                    <div class="card-icon-wrapper">
+                        <i data-lucide="presentation"></i>
+                    </div>
+                    <h2 class="card-title">Instructor Portal</h2>
+                </div>
+
+                <div class="portal-card" onclick="transitionTo('pages/login.html?role=student')">
+                    <i data-lucide="book-open" class="card-watermark"></i>
+                    <div class="card-icon-wrapper">
+                        <i data-lucide="book-open"></i>
+                    </div>
+                    <h2 class="card-title">Candidate Gateway</h2>
+                </div>
+            </div>
+            -->
+
+            <!-- Direct Orange Login Links -->
+            <div class="direct-login-links-wrap"
+                style="display: flex; justify-content: center; align-items: center; gap: 40px; margin: 120px auto 36px; flex-wrap: wrap; animation: slideUpFade 0.8s ease-out 0.2s both;">
+                <a href="#" onclick="transitionTo('pages/login.html?role=teacher')" class="direct-orange-link">
+                    Login as Instructor
+                </a>
+                <span style="color: #cbd5e1; font-size: 1.35rem; font-weight: 300;">|</span>
+                <a href="#" onclick="transitionTo('pages/login.html?role=student')" class="direct-orange-link">
+                    Login as Candidate
+                </a>
+            </div>
+
+            <div
+                style="margin-top: 10px; margin-bottom: 20px; display: flex; justify-content: center; gap: 40px; align-items: center; animation: slideUpFade 0.8s ease-out 0.4s both;">
+                <a href="#" onclick="transitionTo('pages/login.html?tab=signup&role=student')" class="sub-orange-link">
+                    NEW STUDENT? CREATE ID
+                </a>
+                <span style="color: #cbd5e1; font-size: 1.35rem; font-weight: 300;">|</span>
+                <a href="#" onclick="transitionTo('pages/login.html?tab=signup&role=teacher')" class="sub-orange-link">
+                    NEW FACULTY? GENERATE IDENTITY
+                </a>
+            </div>
+        </section>
+
+        <!-- Feature Highlights (Commented Out) -->
+        <!--
+        <section class="features-section">
+            <div class="container">
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><i data-lucide="code-2"></i></div>
+                        <div class="feature-text">
+                            <h4>Advanced IDE Integration</h4>
+                            <p>Seamless Ace-powered coding challenges with real-time compilation capabilities
+                                directly inside the assessment.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i data-lucide="fingerprint"></i></div>
+                        <div class="feature-text">
+                            <h4>Proctoring & Identity</h4>
+                            <p>Continuous AI-based visual monitoring, tab-switching detection, and strict environment
+                                lockdown for total integrity.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i data-lucide="trending-up"></i></div>
+                        <div class="feature-text">
+                            <h4>Data & Analytics</h4>
+                            <p>Deep insights generation, historical logs, and professional PDF rendering via LaTeX
+                                automation for all exam data.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        -->
+    </main>
+
+
+
+    <script>
+        function transitionTo(url) {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.4s ease';
+            setTimeout(() => {
+                window.location.href = url;
+            }, 400);
+        }
+
+        // --- Deep Link Integration ---
+        if (window.proctorBridge && window.proctorBridge.onOpenExam) {
+            window.proctorBridge.onOpenExam(({ examId }) => {
+                console.log(`[DEEP LINK] Navigating to Exam: ${examId}`);
+                transitionTo(`pages/login.html?testId=${examId}`);
+            });
+        }
+
+        // Initialize Lucide Icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+
+        function handleQuickStart() {
+            try {
+                const users = JSON.parse(localStorage.getItem('TESTPAD_users')) || [];
+                const student = users.reverse().find(u => u.role === 'student');
+                if (!student) {
+                    alert("No student accounts found. Please log in manually.");
+                    return;
+                }
+
+                const exams = JSON.parse(localStorage.getItem('TESTPAD_exams')) || [];
+                const attempts = JSON.parse(localStorage.getItem('TESTPAD_attempts')) || [];
+
+                // Find latest exam that is NOT submitted or reviewed
+                const latestExam = exams.reverse().find(e => {
+                    const hasFinished = attempts.some(a => a.examId === e.id && a.studentId === student.id && (a.status === 'submitted' || a.status === 'reviewed'));
+                    return !hasFinished;
+                });
+
+                if (!latestExam) {
+                    alert("All available exams have been completed or no exams found.");
+                    return;
+                }
+
+                if (window.db) db.createSession(student.id, 'student');
+                let res = db.startAttempt(latestExam.id, student.id, true);
+                const att = res.attempt || res.existingAttempt;
+                if (att) sessionStorage.removeItem(`exam_started_${att.id}`);
+                window.location.href = `./pages/exam-attempt.html?examId=${latestExam.id}&quickStart=true&vialink=true&reattempt=true`;
+            } catch (e) {
+                console.error("Quick Start failed:", e);
+                alert("Quick Start failed.");
+            }
+        }
+        function clearStorage() {
+            if (confirm("Storage limit reached. Are you sure you want to clear your saved exams? This will free up browser storage space but delete past drafts and exams.")) {
+                localStorage.removeItem('TESTPAD_exams');
+                localStorage.removeItem('TESTPAD_question_pool');
+                localStorage.removeItem('TESTPAD_preview_data');
+                alert("Storage successfully cleared! You can now create new exams without quota errors.");
+                window.location.reload();
+            }
+        }
+
+        // Quick login shortcuts
+        document.addEventListener('keydown', function (e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+
+            const key = e.key.toLowerCase();
+            if (key === 'v') {
+                window.location.href = './pages/joinvialink.html';
+                return;
+            }
+
+            if (key === 'c' || key === 'i') {
+                const users = JSON.parse(localStorage.getItem('TESTPAD_users')) || [];
+                const history = JSON.parse(localStorage.getItem('TESTPAD_login_history')) || [];
+
+                const loginAndRedirect = (user, url) => {
+                    if (!user) return;
+                    const sessions = JSON.parse(localStorage.getItem('TESTPAD_sessions')) || [];
+                    sessions.forEach(s => s.isActive = false);
+                    sessions.push({
+                        sessionId: 'session_' + Date.now(),
+                        userId: user.id,
+                        role: user.role,
+                        loginTime: new Date().toISOString(),
+                        lastActivityTime: new Date().toISOString(),
+                        isActive: true
+                    });
+                    localStorage.setItem('TESTPAD_sessions', JSON.stringify(sessions));
+                    window.location.href = url;
+                };
+
+                if (key === 'c') {
+                    const lastStudent = history.find(h => h.r === 'student');
+                    let targetUser = null;
+                    if (lastStudent) {
+                        const email = atob(lastStudent.e);
+                        targetUser = users.find(u => u.email === email || String(u.rollNo) === email);
+                    }
+                    if (!targetUser) targetUser = users.slice().reverse().find(u => u.role === 'student');
+                    loginAndRedirect(targetUser, './pages/student-dashboard.html');
+                } else if (key === 'i') {
+                    const lastTeacher = history.find(h => h.r === 'teacher' || h.r === 'superadmin');
+                    let targetUser = null;
+                    if (lastTeacher) {
+                        const email = atob(lastTeacher.e);
+                        targetUser = users.find(u => u.email === email || String(u.rollNo) === email);
+                    }
+                    if (!targetUser) targetUser = users.slice().reverse().find(u => u.role === 'teacher' || u.role === 'superadmin');
+                    loginAndRedirect(targetUser, './pages/teacher-dashboard.html');
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="https://api.learntechww.com/college_icon/logo1733989968823.jpg">
+    <!-- Quill Rich Text Editor -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <!-- Security: DOMPurify -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
+    <style>
+        :root {
+            --primary: #F46036;
+            --primary-soft: #fff5f0;
+            --secondary: #64748b;
+            --bg-body: #f8fafc;
+            --border: #e2e8f0;
+            --text-main: #101828;
+            --sidebar-width: 380px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Mulish', sans-serif !important;
+        }
+
+        body {
+            background: #f8fafc url('../BGNEW01.png') center center fixed;
+            background-size: cover;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER --- */
+        .site-header {
+            height: 72px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 48px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .logo-container:hover {
+            opacity: 0.8;
+        }
+
+        .logo-square {
+            width: 52px;
+            height: 52px;
+            background: transparent;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-square img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 57px;
+            margin-left: 40px;
+        }
+
+        .nav-icon-btn {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+        }
+
+        .nav-icon-btn img {
+            width: 32px !important;
+            height: 32px !important;
+        }
+
+        .nav-icon-btn:hover {
+            background: var(--bg-body);
+            color: var(--primary);
+        }
+
+        .nav-icon-btn.active {
+            color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .plus-btn {
+            width: 48px;
+            height: 72px;
+            background: #fff5f0;
+            color: var(--primary);
+            border: none;
+            border-left: 1px solid #f0f0f0;
+            border-right: 1px solid #f0f0f0;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .plus-btn:hover {
+            background: #ffece5;
+            color: var(--primary);
+        }
+
+        .grid-btn {
+            width: 54px;
+            height: 54px;
+            color: var(--secondary);
+            border: none;
+            background: transparent;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border-radius: 14px;
+        }
+
+        .grid-btn img {
+            width: 32px !important;
+            height: 32px !important;
+        }
+
+        .grid-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .profile-bubble {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-left: 16px;
+            border-left: 1px solid var(--border);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            font-family: 'Mulish', sans-serif;
+            color: #444;
+            text-transform: uppercase;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            font-weight: 800;
+            font-family: 'Mulish', sans-serif;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: #F46036;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-container {
+            max-width: 860px;
+            margin: 40px auto;
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+            border: none;
+        }
+
+        .form-title {
+            font-size: 26px;
+            font-weight: 900;
+            color: #F46036;
+            margin-bottom: 6px;
+            border: none;
+            padding: 0;
+            font-family: 'Mulish', sans-serif !important;
+            letter-spacing: -0.3px;
+        }
+
+        .tri-orange-line {
+            display: flex;
+            height: 6px !important;
+            width: 290px !important;
+            border-radius: 0px;
+            overflow: hidden;
+            margin: 8px 0 24px 0;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 900;
+            color: #101828;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px !important;
+            font-size: 15px;
+            font-weight: 700;
+            color: #101828;
+            background: #ffffff;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #F46036;
+            box-shadow: 0 0 0 3px rgba(244, 96, 54, 0.15);
+        }
+
+        textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        .btn-submit {
+            background: #F46036;
+            color: #fff;
+            border: 1px solid #E05328;
+            padding: 15px 30px;
+            font-weight: 900;
+            font-size: 14px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 0px !important;
+            width: 100%;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(244, 96, 54, 0.2);
+        }
+
+        .btn-submit:hover {
+            background: #e05328;
+        }
+
+        .status-msg {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 4px;
+            display: none;
+            font-weight: 700;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .status-msg.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            display: block;
+        }
+
+        .status-msg.error {
+            background: #ffebee;
+            color: #c62828;
+            display: block;
+        }
+
+        .editor-wrapper {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .attachment-tag {
+            background: #f1f3f5;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            border: 1px solid #e9ecef;
+            transition: all 0.2s;
+        }
+
+        .attachment-tag:hover {
+            background: #e9ecef;
+        }
+
+        .attachment-tag i.fa-times:hover {
+            color: var(--primary);
+        }
+
+        .upload-zone.dragging {
+            border-color: var(--primary);
+            background: #fdf2f2;
+            transform: scale(1.01);
+        }
+
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .category-preview {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .cat-Circular {
+            background: #008080;
+        }
+
+        .cat-Notice {
+            background: #026AA2;
+        }
+
+        .cat-Urgent {
+            background: #D92D20;
+        }
+
+        .draft-notice {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #101828;
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 10001;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* --- HIGH-FIDELITY EDITOR BOX --- */
+        #editor-container {
+            min-height: 400px;
+            background: #fff;
+            display: block;
+            width: 100%;
+        }
+
+        .editor-box {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #fff;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            margin-bottom: 5px;
+        }
+
+        /* Target the internal Quill toolbar */
+        .ql-toolbar.ql-snow {
+            background: #fdfdfd;
+            border: none !important;
+            border-bottom: 1px solid var(--border) !important;
+            padding: 12px !important;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .ql-toolbar button:hover {
+            background: #f3f4f6;
+            border-radius: 4px;
+        }
+
+        /* Target the internal Quill container */
+        .ql-container.ql-snow {
+            border: none !important;
+            min-height: 400px;
+            max-height: 600px;
+            font-family: 'Outfit', sans-serif !important;
+            font-size: 16px !important;
+            background: #fff;
+            overflow-y: auto;
+        }
+
+        .ql-editor {
+            line-height: 1.7;
+            padding: 20px 25px !important;
+            cursor: text;
+            min-height: 400px;
+        }
+
+        .ql-editor.ql-blank::before {
+            left: 25px !important;
+            font-style: normal;
+            color: #aaa;
+        }
+
+        .char-counter {
+            padding: 10px 20px;
+            font-size: 11px;
+            font-weight: 800;
+            color: #777;
+            text-align: right;
+            background: #fdfdfd;
+            border-top: 1px solid var(--border);
+            text-transform: uppercase;
+        }
+
+        /* Quill Typography Overrides */
+        .ql-snow .ql-picker.ql-size .ql-picker-label::before,
+        .ql-snow .ql-picker.ql-size .ql-picker-item::before {
+            content: attr(data-value) !important;
+        }
+
+        .ql-snow .ql-picker.ql-size {
+            width: 75px !important;
+        }
+
+        .upload-zone p {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        #attachmentList {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        /* Modal Overlay System */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 20000;
+        }
+
+        .modal-box {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-modal {
+            flex: 1;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-modal.primary {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .btn-modal.secondary {
+            background: #eee;
+            color: #333;
+        }
+    </style>
+
+    <style>
+        ::selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+
+        ::-moz-selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="draftNotice" class="draft-notice">AUTOSAVING DRAFT...</div>
+
+    <!-- SITE HEADER (MATCHING TEACHER DASHBOARD) -->
+    <header class="site-header">
+        <div class="header-left">
+            <div class="logo-container" onclick="location.reload()" data-tooltip-bottom="Refresh Page">
+                <div class="logo-square">
+                    <img src="../TESTPAD_WEBSITE__files/chitkara.png" alt="CHITKARA">
+                </div>
+                <div class="logo-text"></div>
+            </div>
+            <div class="header-nav">
+                <button class="nav-icon-btn" data-tooltip-bottom="Dashboard"
+                    onclick="location.href='./teacher-dashboard.html'">
+                    <img src="../TESTPAD_WEBSITE__files/menu-1.svg" style="width: 20px; height: 20px;">
+                </button>
+                <button class="nav-icon-btn" data-tooltip-bottom="Assessments"
+                    onclick="location.href='./teacher-dashboard.html#examsList'">
+                    <img src="../TESTPAD_WEBSITE__files/quiz.svg" style="width: 20px; height: 20px;">
+                </button>
+                <button class="nav-icon-btn" data-tooltip-bottom="Question Pool"
+                    onclick="location.href='./questionpool.html'">
+                    <img src="../TESTPAD_WEBSITE__files/folder-2.svg" style="width: 20px; height: 20px;">
+                </button>
+                <button class="nav-icon-btn" data-tooltip-bottom="Analytics & Registry Archives"
+                    onclick="location.href='./analyticshistory.html'">
+                    <img src="../TESTPAD_WEBSITE__files/playground-normal.svg" style="width: 20px; height: 20px;">
+                </button>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="search-container" style="width: 240px; margin-right: 16px; position: relative;">
+                <i class="fas fa-search"
+                    style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+                <input type="text" class="search-input" placeholder="Quick Search..." id="globalSearch"
+                    style="width: 100%; padding: 8px 12px 8px 32px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; outline: none;">
+            </div>
+            <button class="plus-btn" onclick="location.href='./exam-creator.html'"
+                data-tooltip-bottom="Launch New Assessment">
+                <i class="fas fa-plus"></i>
+            </button>
+            <div class="grid-menu-container" style="position: relative;">
+                <button class="grid-btn" id="gridMenuBtn" onclick="toggleGridMenu()"
+                    style="display: flex; align-items: center; justify-content: center;" data-tooltip-bottom="Apps">
+                    <img src="../Testpad_pra_files_files/icons8-squared-menu-90.png"
+                        style="width: 24px; height: 24px; opacity: 0.75; transition: all 0.2s;"
+                        onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'">
+                </button>
+                <div id="gridMenuDropdown" class="grid-menu-dropdown"
+                    style="display: none; position: absolute; top: calc(100% + 15px); right: 0; background: #ffffff; border: 1px solid #f0f0f0; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 16px; width: 320px; z-index: 1000; flex-direction: row; justify-content: space-between;">
+                    <div class="grid-item" onclick="location.href='./teacher-dashboard.html'"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../TESTPAD_WEBSITE__files/quiz.svg" style="width: 36px; height: 36px;">
+                        <span style="font-family: 'Mulish', sans-serif; font-size: 1rem; font-weight: 500;">Test</span>
+                    </div>
+                    <div class="grid-item" onclick="location.href='./course-dashboard.html'"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../TESTPAD_WEBSITE__files/folder-2.svg" style="width: 36px; height: 36px;">
+                        <span
+                            style="font-family: 'Mulish', sans-serif; font-size: 1rem; font-weight: 500;">Courses</span>
+                    </div>
+                    <div class="grid-item"
+                        onclick="if (typeof showToast === 'function') showToast('Bookmarks coming soon', 'info')"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../Testpad_pra_files_files/iconmonstr-star-3.svg" style="width: 36px; height: 36px;">
+                        <span
+                            style="font-family: 'Mulish', sans-serif; font-size: 1rem; font-weight: 500;">Bookmarks</span>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-container" style="position: relative; margin-left: 10px;">
+                <div class="profile-bubble" id="profileToggle" onclick="toggleMenu()"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 12px;">
+                    <div class="user-info" style="text-align: right;">
+                        <div class="user-name" id="userName">OM AGGARWAL</div>
+                        <div class="user-role">PROFESSOR</div>
+                    </div>
+                    <div class="avatar" id="userInitial"
+                        style="background: transparent; border: none; padding: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                        <img src="../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png"
+                            style="width: 100%; height: 100%; border-radius: 50%;">
+                    </div>
+                </div>
+
+                <div class="profile-menu" id="profileMenu"
+                    style="display: none; position: absolute; right: 0; top: calc(100% + 10px); background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 220px; z-index: 1000; overflow: hidden; border: 1px solid #eee;">
+                    <div class="menu-item" onclick="location.href='./profile.html'"
+                        style="padding: 12px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: background 0.2s;"
+                        onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
+                        <img src="../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png"
+                            style="width: 20px; height: 20px;">
+                        <span style="font-size: 0.95rem; font-weight: 500; color: #475467;">My Profile</span>
+                    </div>
+                    <div class="menu-item" onclick="location.href='./preferences.html'"
+                        style="padding: 12px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: background 0.2s;"
+                        onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
+                        <img src="../TESTPAD_WEBSITE__files/password.svg" style="width: 20px; height: 20px;">
+                        <span style="font-size: 0.95rem; font-weight: 500; color: #475467;">Preferences</span>
+                    </div>
+                    <div class="menu-item" onclick="location.href='./login.html'"
+                        style="padding: 12px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; border-top: 1px solid #eee; transition: background 0.2s;"
+                        onmouseover="this.style.background='#fff5f0'" onmouseout="this.style.background='transparent'">
+                        <i class="fas fa-sign-out-alt" style="color: #F46036; font-size: 1.1rem;"></i>
+                        <span style="font-size: 0.95rem; font-weight: 600; color: #F46036;">Logout</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <h2 class="form-title" style="display:flex; justify-content:space-between; align-items:center;">
+            <span>Official Circular</span>
+            <span id="currentDate" style="font-size:13px; color:#64748b; font-weight:700;"></span>
+        </h2>
+        <div class="tri-orange-line">
+            <div style="background: #FFF1E7; flex: 2.5;"></div>
+            <div style="background: #E6BCA5; flex: 3.5;"></div>
+            <div style="background: #DE5B2B; flex: 5;"></div>
+        </div>
+
+        <form id="circularForm">
+            <div class="form-group">
+                <label>Circular Category</label>
+                <div class="custom-dropdown-container" style="max-width: 300px; position: relative;">
+                    <!-- Hidden native select for form compatibility -->
+                    <select id="category" hidden required onchange="updateCatStyle()">
+                        <option value="Circular" selected>General Circular (Teal)</option>
+                        <option value="Notice">Public Notice (Blue)</option>
+                        <option value="Urgent">Urgent / Important Alert (Red)</option>
+                    </select>
+
+                    <!-- Custom Select Trigger -->
+                    <div class="custom-select-trigger" id="customSelectTrigger" onclick="toggleCustomSelect()"
+                        style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #ffffff; border: 1px solid #eaecf0; border-radius: 8px; cursor: pointer; user-select: none; box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span id="selectedCatDot"
+                                style="width: 10px; height: 10px; border-radius: 50%; background: #0d9488; display: inline-block;"></span>
+                            <span id="selectedCatText"
+                                style="font-size: 14px; font-weight: 700; color: #101828; font-family: 'Mulish', sans-serif;">General
+                                Circular (Teal)</span>
+                        </div>
+                        <i class="fas fa-chevron-down" id="customSelectArrow"
+                            style="font-size: 11px; color: #667085; transition: transform 0.2s;"></i>
+                    </div>
+
+                    <!-- Custom Options Menu -->
+                    <div class="custom-select-menu" id="customSelectMenu"
+                        style="display: none; position: absolute; top: calc(100% + 6px); left: 0; right: 0; background: #ffffff; border: 1px solid #eaecf0; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); z-index: 1000; overflow: hidden;">
+                        <div class="custom-option active"
+                            onclick="selectCatOption('Circular', 'General Circular (Teal)', '#0d9488', this)"
+                            style="padding: 12px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; font-size: 14px; font-weight: 700; color: #F46036; background: #fff5f0; border-bottom: 1px solid #f2f4f7; transition: all 0.15s;">
+                            <span style="width: 10px; height: 10px; border-radius: 50%; background: #0d9488;"></span>
+                            <span>General Circular (Teal)</span>
+                        </div>
+                        <div class="custom-option"
+                            onclick="selectCatOption('Notice', 'Public Notice (Blue)', '#2563eb', this)"
+                            style="padding: 12px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; font-size: 14px; font-weight: 700; color: #344054; background: #ffffff; border-bottom: 1px solid #f2f4f7; transition: all 0.15s;">
+                            <span style="width: 10px; height: 10px; border-radius: 50%; background: #2563eb;"></span>
+                            <span>Public Notice (Blue)</span>
+                        </div>
+                        <div class="custom-option"
+                            onclick="selectCatOption('Urgent', 'Urgent / Important Alert (Red)', '#dc2626', this)"
+                            style="padding: 12px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; font-size: 14px; font-weight: 700; color: #344054; background: #ffffff; transition: all 0.15s;">
+                            <span style="width: 10px; height: 10px; border-radius: 50%; background: #dc2626;"></span>
+                            <span>Urgent / Important Alert (Red)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Document Title / Heading</label>
+                <input type="text" id="title" placeholder="" required
+                    style="text-transform:uppercase; font-weight:800; border:1px solid #101828; border-radius:0px; outline:none; background:#ffffff; color:#101828; padding:12px 15px;">
+            </div>
+
+            <div class="form-group">
+                <label>Detailed Content / Body (ADMIN REGISTRY EDITOR)</label>
+                <div class="editor-box"
+                    style="border:1px solid #101828; border-radius:0px; background:#ffffff; overflow:hidden;">
+                    <div id="editor-container"></div>
+                    <div class="char-counter" style="border-top:1px solid #101828;">REGISTRY RECORD LENGTH: <span
+                            id="charCount">0</span> CHARACTERS</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Official Attachments (MAX 5MB PER FILE)</label>
+                <div class="upload-zone-clean" id="dropZone" onclick="document.getElementById('fileUpload').click()"
+                    style="padding: 6px 0; margin-bottom: 12px; cursor: pointer;">
+                    <p style="font-size:14px; font-weight:700; color:#101828; font-family:'Mulish', sans-serif;">
+                        Click or drag to <u style="color:#F46036; font-weight:900; cursor:pointer;">upload here</u>
+                        academic attachments (PDF/Images)
+                    </p>
+                    <input type="file" id="fileUpload" accept=".pdf,image/*" hidden multiple
+                        onchange="handleFileUpload(this)">
+                </div>
+                <div id="attachmentList"></div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 24px;">
+                <button type="submit" class="btn-submit" id="submitBtn"
+                    style="width: auto; padding: 10px 24px; font-weight: 800; font-size: 13px; border-radius: 4px;">
+                    CONFIRM &amp; PUBLISH LIVE
+                </button>
+            </div>
+        </form>
+
+        <div id="statusMsg" class="status-msg" role="status"></div>
+    </main>
+    <!-- Modal System -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-box">
+            <h3 id="modalTitle" style="margin-bottom:15px; font-weight:800; color:var(--primary);">Confirm Action</h3>
+            <p id="modalBody" style="font-size:0.95rem; color:#444; line-height:1.5;"></p>
+            <div class="modal-btn-group">
+                <button class="btn-modal secondary" id="modalCancel">Cancel</button>
+                <button class="btn-modal primary" id="modalConfirm">Proceed</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Persistent Toast -->
+    <div id="toastRoot" style="position:fixed; bottom:20px; right:20px; z-index:10000; pointer-events:none;"></div>
+
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        // Use DOMContentLoaded for high-reliability initialization
+        document.addEventListener("DOMContentLoaded", () => {
+
+            // 1. ADVANCED EDITOR CONFIGURATION (Priority Level: HIGH)
+            const Font = Quill.import('attributors/style/font');
+            Font.whitelist = ['Inter', 'Outfit', 'Roboto', 'Arial', 'Times-New-Roman', 'Georgia', 'JetBrains-Mono'];
+            Quill.register(Font, true);
+
+            const Size = Quill.import('attributors/style/size');
+            Size.whitelist = ['10px', '12px', '14px', '16px', '18px', '20px', '22px', '24px', '28px', '32px', '36px', '48px', '64px'];
+            Quill.register(Size, true);
+
+            // 2. INITIALIZE EDITOR IMMEDIATELY (Prevent White-Box Issue)
+            window.quill = new Quill('#editor-container', {
+                modules: {
+                    toolbar: [
+                        [{ 'font': Font.whitelist }],
+                        [{ 'size': Size.whitelist }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                        [{ 'align': [] }],
+                        ['link', 'image', 'video'],
+                        ['blockquote', 'code-block'],
+                        ['clean']
+                    ]
+                },
+                placeholder: 'Click here to start drafting official registry content...',
+                theme: 'snow'
+            });
+
+            // 3. LOAD ADMINISTRATIVE LOGIC
+            const db = new TestpadDB();
+            const DRAFT_KEY = 'TESTPAD_circular_draft';
+
+            // Set Current Date
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-GB', {
+                day: '2-digit', month: 'short', year: 'numeric'
+            }).toUpperCase();
+
+            // Check Admin Auth
+            if (!auth.isLoggedIn() || !auth.isTeacher()) {
+                window.location.replace('./login.html?role=teacher');
+            }
+
+            // 4. CONNECT INTERACTIVE FEATURES
+            // Character Counter
+            window.quill.on('text-change', () => {
+                const length = window.quill.getText().trim().length;
+                document.getElementById('charCount').textContent = length;
+            });
+
+            // Restore Draft Workflow
+            const savedData = localStorage.getItem(DRAFT_KEY);
+            if (savedData) {
+                const draft = JSON.parse(savedData);
+                modal.open(
+                    'RESTORE DRAFT?',
+                    'Found an unsaved circular from ' + new Date(draft.timestamp).toLocaleTimeString() + '. Restore it?',
+                    () => {
+                        document.getElementById('title').value = draft.title;
+                        document.getElementById('category').value = draft.category;
+                        window.quill.root.innerHTML = draft.content;
+                        updateCatStyle();
+                        showToast('Draft restored successfully.');
+                    }
+                );
+            }
+
+            // Start Auto-save Engine
+            setInterval(() => {
+                if (window.quill && window.quill.getText().trim().length > 10) {
+                    localStorage.setItem(DRAFT_KEY, JSON.stringify({
+                        title: document.getElementById('title').value,
+                        category: document.getElementById('category').value,
+                        content: window.quill.root.innerHTML,
+                        timestamp: Date.now()
+                    }));
+                    showDraftStatus();
+                }
+            }, 15000);
+
+            // Register Submit Handler
+            const form = document.getElementById('circularForm');
+            form.onsubmit = async (e) => {
+                e.preventDefault();
+                await handleFormPublication(db, DRAFT_KEY);
+            };
+        });
+
+        // --- GLOBAL UI HELPERS ---
+        const attachments = [];
+        const submitBtn = document.getElementById('submitBtn');
+        const statusMsg = document.getElementById('statusMsg');
+        const draftNotice = document.getElementById('draftNotice');
+
+        // Category Preview
+        function updateCatStyle() {
+            const cat = document.getElementById('category').value;
+            const prev = document.getElementById('catPreview');
+            if (prev) prev.className = `category-preview cat-${cat}`;
+        }
+
+        function showDraftStatus() {
+            draftNotice.style.display = 'block';
+            setTimeout(() => draftNotice.style.display = 'none', 1500);
+        }
+
+        // Custom Modal Logic
+        const modal = {
+            el: document.getElementById('confirmModal'),
+            title: document.getElementById('modalTitle'),
+            body: document.getElementById('modalBody'),
+            confirmAction: null,
+            open: function (title, body, onConfirm) {
+                this.title.textContent = title;
+                this.body.textContent = body;
+                this.confirmAction = onConfirm;
+                this.el.style.display = 'flex';
+            },
+            close: function () { this.el.style.display = 'none'; }
+        };
+
+        document.getElementById('modalCancel').onclick = () => modal.close();
+        document.getElementById('modalConfirm').onclick = () => {
+            if (modal.confirmAction) modal.confirmAction();
+            modal.close();
+        };
+
+        // Load Draft on Init
+        window.onload = () => {
+            const savedData = localStorage.getItem(DRAFT_KEY);
+            if (savedData) {
+                const draft = JSON.parse(savedData);
+                modal.open(
+                    'RESTORE DRAFT?',
+                    'We found an unsaved circular from your previous session (' + new Date(draft.timestamp).toLocaleTimeString() + '). Would you like to restore it?',
+                    () => {
+                        document.getElementById('title').value = draft.title;
+                        document.getElementById('category').value = draft.category;
+                        quill.root.innerHTML = draft.content;
+                        updateCatStyle();
+                        showToast('Draft restored successfully.');
+                    }
+                );
+            }
+        };
+
+        // --- DRAG AND DROP LOGIC ---
+        const dropZone = document.getElementById('dropZone');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.add('dragging'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragging'), false);
+        });
+
+        dropZone.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            handleFileUpload({ files: dt.files });
+        }
+
+        // --- FILE HANDLING 2.0 (Real Upload Simulation) ---
+        async function handleFileUpload(input) {
+            const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+            const list = document.getElementById('attachmentList');
+
+            for (const file of input.files) {
+                // Validation 1: Size
+                if (file.size > MAX_SIZE) {
+                    showToast(`ERROR: ${file.name} exceeds 5MB limit.`, true);
+                    continue;
+                }
+
+                // Validation 2: Duplicates
+                if (attachments.some(a => a.name === file.name)) {
+                    showToast(`SKIPPED: ${file.name} is already attached.`);
+                    continue;
+                }
+
+                // File Reader for DataURL (Persistence)
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const fileData = {
+                        name: file.name,
+                        type: file.type.includes('pdf') ? 'pdf' : 'img',
+                        size: (file.size / 1024).toFixed(1) + ' KB',
+                        data: e.target.result // Base64 Content
+                    };
+
+                    attachments.push(fileData);
+                    renderAttachment(fileData);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function renderAttachment(file) {
+            const list = document.getElementById('attachmentList');
+            const tag = document.createElement('div');
+            tag.className = 'attachment-tag';
+            tag.id = `att-${file.name.replace(/[^a-z0-9]/gi, '_')}`;
+            const icon = file.type === 'pdf' ? 'fa-file-pdf' : 'fa-image';
+            tag.innerHTML = `
+                <i class="fas ${icon}" style="color:var(--primary)"></i> 
+                <span>${file.name} (${file.size})</span>
+                <i class="fas fa-times" onclick="removeAttachment('${file.name}')"></i>
+            `;
+            list.appendChild(tag);
+        }
+
+        function removeAttachment(name) {
+            const index = attachments.findIndex(a => a.name === name);
+            if (index > -1) {
+                attachments.splice(index, 1);
+                const tagId = `att-${name.replace(/[^a-z0-9]/gi, '_')}`;
+                document.getElementById(tagId).remove();
+                showToast(`Removed: ${name}`);
+            }
+        }
+
+        // Toast System (Spam Protection)
+        let activeToast = null;
+        function showToast(msg, isError = false) {
+            if (activeToast) activeToast.remove();
+
+            const toast = document.createElement('div');
+            toast.style = `background:${isError ? '#D92D20' : '#101828'}; color:#fff; padding:12px 25px; border-radius:8px; margin-bottom:10px; font-size:13px; font-weight:700; box-shadow:0 8px 16px rgba(0,0,0,0.2); animation:slideUp 0.3s; pointer-events:auto; display:flex; align-items:center; gap:10px;`;
+            toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${msg}`;
+
+            document.getElementById('toastRoot').appendChild(toast);
+            activeToast = toast;
+            setTimeout(() => { if (toast === activeToast) { toast.remove(); activeToast = null; } }, 3000);
+        }
+
+        const handleFormPublication = async (db, DRAFT_KEY) => {
+            const titleRaw = document.getElementById('title').value;
+            if (!titleRaw.trim()) {
+                showToast('CRITICAL: Empty Title is not allowed.', true);
+                return;
+            }
+
+            // SECURITY: Sanitize Content
+            const rawContent = window.quill.root.innerHTML;
+            const safeContent = DOMPurify.sanitize(rawContent);
+            const textOnly = window.quill.getText().trim();
+
+            if (textOnly.length === 0 && !safeContent.includes('<img')) {
+                modal.open('Empty Content', 'You cannot publish a circular without content.', () => { });
+                return;
+            }
+
+            modal.open(
+                'PUBLISH CONFIRMATION',
+                'This content will be live for thousands of students. Are you sure you want to proceed?',
+                () => executeSubmission(db, DRAFT_KEY, titleRaw, safeContent)
+            );
+        };
+
+        const executeSubmission = async (db, DRAFT_KEY, title, content) => {
+            // UI: Loading State
+            submitBtn.disabled = true;
+            const oldText = submitBtn.textContent;
+            submitBtn.textContent = 'PUBLISHING TO REGISTRY...';
+
+            const data = {
+                category: document.getElementById('category').value,
+                title: title.trim().toUpperCase(),
+                content: content,
+                attachments: attachments,
+                author: auth.getCurrentUser().name,
+                createdAt: new Date().toISOString()
+            };
+
+            // Simulate Network Delay
+            setTimeout(() => {
+                try {
+                    db.addCircular(data);
+                    statusMsg.className = 'status-msg success';
+                    statusMsg.textContent = 'REGISTRY UPDATED: Official circular is now live for all students.';
+
+                    // Cleanup
+                    document.getElementById('circularForm').reset();
+                    window.quill.setContents([]);
+                    document.getElementById('attachmentList').innerHTML = '';
+                    attachments.length = 0;
+                    localStorage.removeItem(DRAFT_KEY);
+
+                    showToast('Announcement Deployed Successfully!');
+                } catch (err) {
+                    statusMsg.className = 'status-msg error';
+                    statusMsg.textContent = 'TRANSACTION FAILED: Database storage limit exceeded.';
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = oldText;
+                }
+            }, 1200);
+        };
+
+        function toggleCustomSelect() {
+            const menu = document.getElementById('customSelectMenu');
+            const arrow = document.getElementById('customSelectArrow');
+            if (!menu) return;
+            const isVisible = menu.style.display === 'block';
+            menu.style.display = isVisible ? 'none' : 'block';
+            if (arrow) arrow.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
+        }
+
+        function selectCatOption(val, text, color, el) {
+            const sel = document.getElementById('category');
+            if (sel) {
+                sel.value = val;
+                sel.dispatchEvent(new Event('change'));
+            }
+            const txtEl = document.getElementById('selectedCatText');
+            const dotEl = document.getElementById('selectedCatDot');
+            if (txtEl) txtEl.textContent = text;
+            if (dotEl) dotEl.style.background = color;
+
+            document.querySelectorAll('.custom-option').forEach(opt => {
+                opt.style.background = '#ffffff';
+                opt.style.color = '#344054';
+            });
+            if (el) {
+                el.style.background = '#fff5f0';
+                el.style.color = '#F46036';
+            }
+
+            const menu = document.getElementById('customSelectMenu');
+            const arrow = document.getElementById('customSelectArrow');
+            if (menu) menu.style.display = 'none';
+            if (arrow) arrow.style.transform = 'rotate(0deg)';
+        }
+
+        function toggleGridMenu() {
+            const grid = document.getElementById('gridMenuDropdown');
+            const profile = document.getElementById('profileMenu');
+            if (profile) profile.style.display = 'none';
+            if (grid) grid.style.display = grid.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function toggleMenu() {
+            const profile = document.getElementById('profileMenu');
+            const grid = document.getElementById('gridMenuDropdown');
+            if (grid) grid.style.display = 'none';
+            if (profile) profile.style.display = profile.style.display === 'block' ? 'none' : 'block';
+        }
+
+        document.addEventListener('click', (e) => {
+            const gridBtn = document.getElementById('gridMenuBtn');
+            const gridDrop = document.getElementById('gridMenuDropdown');
+            const profToggle = document.getElementById('profileToggle');
+            const profMenu = document.getElementById('profileMenu');
+            const customTrigger = document.getElementById('customSelectTrigger');
+            const customMenu = document.getElementById('customSelectMenu');
+            const customArrow = document.getElementById('customSelectArrow');
+
+            if (gridDrop && gridBtn && !gridBtn.contains(e.target) && !gridDrop.contains(e.target)) {
+                gridDrop.style.display = 'none';
+            }
+            if (profMenu && profToggle && !profToggle.contains(e.target) && !profMenu.contains(e.target)) {
+                profMenu.style.display = 'none';
+            }
+            if (customMenu && customTrigger && !customTrigger.contains(e.target) && !customMenu.contains(e.target)) {
+                customMenu.style.display = 'none';
+                if (customArrow) customArrow.style.transform = 'rotate(0deg)';
+            }
+        });
+    </script>
+</body>
+
+</html>

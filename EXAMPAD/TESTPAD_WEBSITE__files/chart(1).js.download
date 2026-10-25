@@ -1,0 +1,1190 @@
+/// <reference path="elements-builder.js"/>
+
+const STATS_GRAPH_LOADER = Symbol();
+
+/** @typedef {import("chart.js").ChartTooltipCallback} */
+/** @typedef {{ title: string; min?: number }} StatsGraphAxisLabel */
+/**
+ * @template {GraphDataType} T
+ * @typedef {{ title: string; description: string; labels: { x: StatsGraphAxisLabel; y: StatsGraphAxisLabel }; messages?: { [ K in "noData" | "error" ]?: string }; observedParams?: (keyof T)[]; dataGetter: (properties: T, graph: StatsGraph<T>) => Promise<{ [ key: string ]: number } | {}[] | typeof STATS_GRAPH_LOADER; listeners?: (this: StatsGraph<T>, properties: T) => { onClick?: (event: PointerEvent) => any }; callbacks?: (data: { [ key: string ]: number } | {}[]) => { title?: ChartTooltipCallback; label?: ChartTooltipCallback } }} StatsGraphPropertiesMap
+*/
+/** @typedef {{ dateRange: [ from: Date | null, to: Date | null ] }} GraphDataType */
+/** @typedef {GraphDataType & { userId: string; batchId: string; courseId: string; sectionId: string; segmentIndex: number; courseData: { courseSegments: { questionIds: string[] }[] } }} UserGraphData */
+/** @typedef {GraphDataType & { batchId: string; courseId: string; sectionId: string; segmentIndex: number; courseData: { courseSegments: { questionIds: string[] }[] } } & { reportData?: { questionIds: [] }[] }} CourseGraphData */
+/**
+ * @template {GraphDataType} T
+ * @typedef {{ [ K in keyof T ]: { initialValue?: T[K]; isEqual?: (newValue: T[K], oldValue: T[K]) => boolean } | null }} StatsGraphSpaceParamDefs
+*/
+
+/** @template {GraphDataType} T */
+class StatsGraph {
+
+  static Error;
+
+  static constants = Object.freeze({
+    LOADER: STATS_GRAPH_LOADER
+  });
+
+  static #defaultMessages = Object.freeze({
+    noData: "No record available",
+    error: "Failed to load records"
+  });
+
+  static #chartPlugins;
+
+  #config;
+  #elements = {
+    /** @type {HTMLDivElement | null} */
+    element: null,
+    /** @type {HTMLDivElement | null} */
+    canvasHolder: null,
+    /** @type {HTMLDivElement | null} */
+    skeletonHolder: null,
+    /** @type {HTMLDivElement | null} */
+    messageHolder: null
+  };
+  #loader = false;
+
+  /** @param {StatsGraphPropertiesMap<T>} config */
+  constructor(config) {
+    this.#config = Object.assign({}, config);
+  }
+
+  get title() {
+    return this.#config.title;
+  }
+
+  get labelTitles() {
+    return [ this.#config.labels.x.title, this.#config.labels.y.title ];
+  }
+
+  /** @param {boolean} show */
+  #setLoader(show) {
+    this.#loader = Boolean(show);
+    this.#elements.messageHolder.classList.add("hidden");
+    this.#elements.canvasHolder.classList.toggle("hidden", this.#loader);
+    this.#elements.skeletonHolder.classList.toggle("hidden", !this.#loader);
+  }
+
+  /** @param {Set<keyof T>} updatedParams */
+  areParamsUpdated(updatedParams) {
+    if(this.#config.observedParams === undefined) {
+      return true;
+    }
+    for(const param of this.#config.observedParams) {
+      if(updatedParams.has(param)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /** @param {boolean} state `true` means show, `false` means hide */
+  setVisibility(state) {
+    this.#elements.element?.classList.toggle("hidden", !state);
+  }
+
+  /** @param {T} params */
+  async dataGetter(params) {
+    this.#setLoader(true);
+    try {
+      const data = await this.#config.dataGetter(params, this);
+      if(data === StatsGraph.constants.LOADER) {
+        return data;
+      }
+      if(data instanceof Array && data.length === 0) {
+        throw new StatsGraph.Error(this.#config.messages?.noData ?? StatsGraph.#defaultMessages.noData);
+      }
+      if(Object.keys(data).length === 0) {
+        throw new StatsGraph.Error(this.#config.messages?.noData ?? StatsGraph.#defaultMessages.noData);
+      }
+      return data;
+    } catch(ex) {
+      if(ex instanceof StatsGraph.Error) {
+        throw ex;
+      }
+      console.log(ex);
+      throw new StatsGraph.Error(this.#config.messages?.error ?? StatsGraph.#defaultMessages.error);
+    } finally {
+      this.#setLoader(false);
+    }
+  }
+
+  create(id) {
+    this.#elements.element = this.#createElement(id);
+    this.#elements.canvasHolder = this.#elements.element.getElementsByClassName("canvas-holder")[0];
+    this.#elements.skeletonHolder = this.#elements.element.getElementsByClassName("skeleton-chart")[0];
+    this.#elements.messageHolder = this.#elements.element.getElementsByClassName("message-holder")[0];
+    return this.#elements.element;
+  }
+
+  unload() {
+    this.#setLoader(true);
+    const canvas = this.#elements.canvasHolder.querySelector("canvas");
+    if(canvas.chart) {
+      canvas.chart.destroy();
+      canvas.chart = null;
+    }
+  }
+
+  /**
+   * @param {T} params
+   * @param {{}[]} data
+  */
+  fillData(params, data) {
+    const canvas = this.#elements.canvasHolder.querySelector("canvas");
+    const listeners = this.#config.listeners?.call(this, params);
+    /** @type {import("chart.js")} */
+    const chart = this.#createChart(canvas, this.#config.title, this.#config.labels.x.title, this.#config.labels.y.title, data, {
+      min: {
+        x: this.#config.labels.x.min,
+        y: this.#config.labels.y.min
+      },
+      callbacks: this.#config.callbacks?.(data),
+      onClick: listeners?.onClick
+    });
+    this.#setLoader(false);
+  }
+
+  /** @param {string} message */
+  showError(message) {
+    this.#elements.canvasHolder.classList.add("hidden");
+    this.#elements.skeletonHolder.classList.add("hidden");
+    this.#elements.messageHolder.classList.remove("hidden");
+    this.#elements.messageHolder.textContent = message;
+  }
+
+  /** @param {HTMLCanvasElement} canvas */
+  #createChart(canvas, title, xTitle, yTitle, chartData, otherOptions) {
+    const { chartType = "line", callbacks, onClick, min } = otherOptions ?? {};
+    const context = canvas.getContext('2d');
+    this.unload();
+
+    /** @type {Chart.ChartOptions["scales"]} */
+    let scale = {
+      x: {
+        offset: true,
+        border: {
+          display: true
+        },
+        ticks: {
+          color: "#888"
+        },
+        grid: {
+            display: false
+          },
+          title: {
+            display: true,
+            text: xTitle,
+            align: 'center',
+            color: colors.secondaryColor,
+            font: {
+              size: 16
+            },
+          },
+        },
+        y: {
+          offset: true,
+          border: {
+            display: true
+          },
+          grid: {
+            display: false,
+          },
+          min: min?.y,
+          ticks: {
+            color: "#888",
+            precision: 0
+          },
+          title: {
+            display: true,
+            text: yTitle,
+            align: 'center',
+            color: colors.secondaryColor,
+            font: {
+              size: 16
+            },
+          },
+        }
+    }
+    if(chartType === 'pie') {
+      scale = {};
+    }
+    let labels, datasetData;
+    if(chartData instanceof Array) {
+      labels = chartData.map(entry => entry[0]);
+      datasetData = chartData.map(entry => entry[1]);
+    } else {
+      labels = Object.keys(chartData).sort((a,b) => {
+        if(typeof a == "number" && typeof b == "number") {
+          return a - b;
+        }
+        if(typeof a === "string") {
+          const isNumber = !isNaN(Number(a))
+          if(isNumber) {
+            a = parseInt(a);
+          }
+          a = new Date(a).getTime();
+        }
+        if(typeof b === "string") {
+          const isNumber = !isNaN(Number(b))
+          if(isNumber) {
+            b = parseInt(b);
+          }
+          b = new Date(b).getTime();
+        }
+        return a - b;
+      });
+      datasetData = labels.map((dateKey) => {
+        return chartData[dateKey];
+      });
+    }
+    const shouldShowPoints = labels?.length <= 2;
+
+    /** @type {Chart.ChartData} */
+    const data = {
+      labels: labels, // Dates as labels
+      datasets: [{
+        data: datasetData, // User scores data
+        fill: "start",
+        backgroundColor: (chartType !== 'line')?generateLighterShades("#de6834", labels?.length): function({ chart }) {
+          if(chart === undefined || !chart.chartArea) {
+            // This case happens on initial chart load
+            return;
+          }
+          const gradient = chart.ctx.createLinearGradient(0, chart.chartArea.top, 0, chart.chartArea.bottom);
+          gradient.addColorStop(0, "#de683488");
+          gradient.addColorStop(0.9, "#fff");
+          return gradient;
+        },
+        borderColor: (chartType !== 'line')?generateLighterShades("#de6834", labels?.length):colors.primaryColor,
+        pointStyle : "circle",
+        pointRadius: 5,
+        pointHoverRadius: 5,
+        pointBorderWidth: 2,
+        pointHoverBorderWidth: 2,
+        pointBackgroundColor: shouldShowPoints ? colors.primaryLight : "transparent",
+        pointBorderColor: shouldShowPoints ? colors.primaryColor : "transparent",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: colors.primaryColor,
+        lineTension: 0.15,
+      }]
+    };
+
+    /** @type {Chart.ChartOptions} */
+    const options = {
+      responsive: true,
+      plugins: {
+        title: {
+          display: false,
+          text: title,
+          position: 'top',
+          font: {
+            size: 20
+          },
+          color: colors.secondaryColor,
+        },
+        legend: {
+          display: false,
+        },
+        tooltip: {
+          titleAlign: "left",
+          enabled: true,
+          titleColor: colors.secondaryColor,
+          bodyColor: colors.secondaryColor,
+          displayColors: false,
+          callbacks: {
+            title: callbacks?.title ?? function(tooltipItem, data) {
+              return `${yTitle}: ${tooltipItem[tooltipItem.length - 1].formattedValue}`;
+            },
+            label: callbacks?.label ?? function(tooltipItem, data) {
+              return `${xTitle}: ${tooltipItem.label}`;
+            },
+            labelColor: function (tooltipItem, chart) {
+              return {
+                backgroundColor: 'rgb(255, 255, 255)',
+              };
+            },
+          },
+          backgroundColor: '#000',
+        },
+      },
+      scales: scale,
+      interaction: {
+        intersect: false,
+        mode: 'index'
+      },
+      onClick
+    }
+
+    if(chartType === 'bubble') {
+      options.radius = '5';
+    }
+
+    const chart = new Chart(context, {
+      type: chartType,
+      data: data,
+      options: options,
+      plugins: [ StatsGraph.#chartPlugins.verticalHoverLine ]
+    });
+    canvas.chart = chart;
+    return chart;
+  }
+
+  /** @param {string} id Element id */
+  #createElement(id) {
+    const element = ElementsBuilder.html("div", {
+      id,
+      className: "graph-container",
+      append: [
+        ElementsBuilder.html("div", {
+          className: "head",
+          append: [
+            ElementsBuilder.html("div", {
+              className: "group-column",
+              append: [
+                ElementsBuilder.html("div", { className: "title", textContent: this.#config.title })(),
+                ElementsBuilder.html("div", { className: "sub-title", textContent: this.#config.description })()
+              ]
+            })(), // div.group-column
+            ElementsBuilder.html("div", {
+              className: "group-column",
+              appendChild: ElementsBuilder.html("button", {
+                type: "button",
+                className: "graph-expand-button",
+                title: "Toggle fullscreen",
+                innerHTML: `<svg class="icon-enter" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-200h80q17 0 28.5 11.5T320-160q0 17-11.5 28.5T280-120H160q-17 0-28.5-11.5T120-160v-120q0-17 11.5-28.5T160-320q17 0 28.5 11.5T200-280v80Zm560 0v-80q0-17 11.5-28.5T800-320q17 0 28.5 11.5T840-280v120q0 17-11.5 28.5T800-120H680q-17 0-28.5-11.5T640-160q0-17 11.5-28.5T680-200h80ZM200-760v80q0 17-11.5 28.5T160-640q-17 0-28.5-11.5T120-680v-120q0-17 11.5-28.5T160-840h120q17 0 28.5 11.5T320-800q0 17-11.5 28.5T280-760h-80Zm560 0h-80q-17 0-28.5-11.5T640-800q0-17 11.5-28.5T680-840h120q17 0 28.5 11.5T840-800v120q0 17-11.5 28.5T800-640q-17 0-28.5-11.5T760-680v-80Z"></path></svg> <svg class="icon-exit" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M240-240h-80q-17 0-28.5-11.5T120-280q0-17 11.5-28.5T160-320h120q17 0 28.5 11.5T320-280v120q0 17-11.5 28.5T280-120q-17 0-28.5-11.5T240-160v-80Zm480 0v80q0 17-11.5 28.5T680-120q-17 0-28.5-11.5T640-160v-120q0-17 11.5-28.5T680-320h120q17 0 28.5 11.5T840-280q0 17-11.5 28.5T800-240h-80ZM240-720v-80q0-17 11.5-28.5T280-840q17 0 28.5 11.5T320-800v120q0 17-11.5 28.5T280-640H160q-17 0-28.5-11.5T120-680q0-17 11.5-28.5T160-720h80Zm480 0h80q17 0 28.5 11.5T840-680q0 17-11.5 28.5T800-640H680q-17 0-28.5-11.5T640-680v-120q0-17 11.5-28.5T680-840q17 0 28.5 11.5T720-800v80Z"></path></svg>`,
+                $listeners: {
+                  click() {
+                    if(document.fullscreenElement === element) {
+                      return void document.exitFullscreen();
+                    }
+                    element.requestFullscreen({ navigationUI: "show" });
+                  }
+                }
+              })() // button.graph-expand-button
+            })() // div.group-column
+          ]
+        })(), //div.head
+        ElementsBuilder.html("div", {
+          className: "canvas-holder hidden",
+          appendChild: ElementsBuilder.html("canvas", { width: 650 })()
+        })(), // div.canvas-holder
+        ElementsBuilder.html("div", {
+          className: "skeleton skeleton-chart",
+          appendChild: ElementsBuilder.html("div", { className: "skeleton-rect" })()
+        })(), // div.skeleton.skeleton-chart
+        ElementsBuilder.html("div", {
+          className: "message-holder hidden",
+          textContent: ""
+        })() // div.skeleton.skeleton-chart
+      ]
+    })(); // div.graph-container
+    return element;
+  }
+
+  static {
+
+    this.Error = class extends Error {};
+
+    this.#chartPlugins = {
+      /** @type {Chart.PluginServiceRegistrationOptions} */
+      verticalHoverLine: {
+        id: "verticalHoverLine",
+        afterDatasetsDraw(chart, easing, options) {
+          const { ctx } = chart
+          const datasetMeta = chart.getDatasetMeta(0);
+          const activeDataPoint = datasetMeta.data.find(dataPoint => dataPoint.active);
+          if(activeDataPoint === undefined) {
+            return;
+          }
+          const pointTotalRadius = (chart.data?.datasets[0]?.pointRadius ?? 0) + (chart.data?.datasets[0]?.pointBorderWidth ?? 0) - 1;
+          ctx.save();
+
+          ctx.beginPath();
+          ctx.strokeStyle = "#bbb";
+          ctx.lineWidth = 1;
+          ctx.moveTo(activeDataPoint.x, chart.chartArea.top);
+          ctx.lineTo(activeDataPoint.x, activeDataPoint.y - pointTotalRadius);
+          ctx.stroke();
+          ctx.closePath();
+
+          ctx.beginPath();
+          ctx.strokeStyle = colors.primaryColor;
+          ctx.lineWidth = 2;
+          ctx.moveTo(activeDataPoint.x, activeDataPoint.y + pointTotalRadius);
+          ctx.lineTo(activeDataPoint.x, chart.chartArea.bottom);
+          ctx.stroke();
+          ctx.closePath();
+
+          // ctx.beginPath();
+          // ctx.strokeStyle = "#bbb";
+          // ctx.lineWidth = 1;
+          // ctx.moveTo(chart.chartArea.left, activeDataPoint.y);
+          // ctx.lineTo(activeDataPoint.x - pointTotalRadius, activeDataPoint.y);
+          // ctx.stroke();
+          // ctx.closePath();
+
+          // ctx.beginPath();
+          // ctx.strokeStyle = "#bbb";
+          // ctx.lineWidth = 1;
+          // ctx.moveTo(activeDataPoint.x + pointTotalRadius, activeDataPoint.y);
+          // ctx.lineTo(chart.chartArea.right, activeDataPoint.y);
+          // ctx.stroke();
+          // ctx.closePath();
+
+          ctx.restore();
+        }
+      }
+    };
+
+  }
+
+};
+
+/**
+ * @template {GraphDataType} T
+ * @template {string} [K=string]
+*/
+class StatsGraphSpace {
+
+  /** @type {T} */
+  #params = {};
+  /** @type {{ [ K in keyof T ]: (newValue: T[K], oldValue: T[K]) => boolean }} */
+  #paramsDef = {};
+  /** @type {Map<K, StatsGraph<T>>} */
+  #graphs = new Map;
+  #graphsOrder;
+  /** @type {HTMLDivElement | null} */
+  #element = null;
+
+  /**
+   * @param {Iterable<K>} graphsOrder
+   * @param {StatsGraphSpaceParamDefs<T>} paramsDefs
+  */
+  constructor(graphsOrder = [], paramsDefs) {
+    this.#graphsOrder = Array.from(graphsOrder);
+    for(const graphId of this.#graphsOrder) {
+      this.#graphs.set(graphId, null);
+    }
+    for(const paramKey in paramsDefs) {
+      this.#params[paramKey] = paramsDefs[paramKey]?.initialValue ?? undefined;
+      this.#paramsDef[paramKey] = paramsDefs[paramKey]?.isEqual ?? StatsGraphSpace.#paramValueIsEqual;
+    }
+  }
+
+  static #paramValueIsEqual(newValue, oldValue) {
+    return oldValue === newValue;
+  }
+
+  /** @param {boolean} state `true` means show, `false` means hide */
+  setVisibility(state) {
+    this.#element?.classList.toggle("hidden", !state);
+  }
+
+  /**
+   * @param {K} id
+   * @param {StatsGraph<T>} graph
+  */
+  createGraph(id, graph) {
+    if(!this.#graphs.has(id)) {
+      return null;
+    }
+    this.#graphs.set(id, graph);
+    return graph;
+  }
+
+  /**
+   * @param {K} id
+   * @param {StatsGraphPropertiesMap<T>} config
+  */
+  emplaceGraph(id, config) {
+    if(!this.#graphs.has(id)) {
+      return null;
+    }
+    const graph = new StatsGraph(config);
+    this.#graphs.set(id, graph);
+    return graph;
+  }
+
+  /** @param {HTMLElement} parentElement */
+  async init(parentElement, id) {
+    // what if initiated already?
+    this.#element = StatsGraphSpace.#createElement(id);
+    parentElement.appendChild(this.#element);
+
+    for(const [ graphId, graph ] of this.graphEntries()) {
+      const element = graph.create(graphId);
+      this.#element.appendChild(element);
+    }
+
+  }
+
+  /** @param {Set<T>} updatedParams */
+  async refresh(updatedParams) {
+    for(const graph of this.graphs()) {
+      const doGraphNeedsUpdate = graph.areParamsUpdated(updatedParams);
+      if(!doGraphNeedsUpdate) {
+        continue;
+      }
+      graph.unload();
+    }
+    if(updatedParams.size === 0) {
+      console.log("GraphSpace upto date");
+      return updatedParams;
+    }
+    for(const [ graphId, graph ] of this.graphEntries()) {
+      const doGraphNeedsUpdate = graph.areParamsUpdated(updatedParams);
+      if(!doGraphNeedsUpdate) {
+        console.log(`%cGraph '${ graphId }' upto date`, "color: #e44", updatedParams);
+        continue;
+      }
+      void async function(params) {
+        try {
+          const data = await graph.dataGetter(params);
+          if(data === StatsGraph.constants.LOADER) {
+            return void graph.unload();
+          }
+          graph.fillData(params, data);
+        } catch(error) {
+          console.log({error});
+          graph.showError(error.message);
+        }
+        console.log(`%cGraph '${ graphId }' updated`, "color: #4e4", updatedParams);
+      }(this.#params);
+    }
+    return updatedParams;
+  }
+
+  /** @param {T} newParams */
+  updateParams(newParams) {
+    /** @type {Set<T>} */
+    const updatedParamsSet = new Set;
+    for(const paramKey in this.#paramsDef) {
+      const newParamValue = newParams[paramKey];
+      const isParamUpdated = !this.#paramsDef[paramKey](newParamValue, this.#params[paramKey]);
+      if(isParamUpdated) {
+        console.table({ paramKey, isParamUpdated, newValue: newParamValue?.toString(), oldValue: this.#params[paramKey]?.toString() })
+        updatedParamsSet.add(paramKey);
+      }
+      this.#params[paramKey] = newParamValue;
+    }
+    return updatedParamsSet;
+  }
+  /** @param {T} newParams */
+  async updateParamsAndRefresh(newParams) {
+    const updatedParams = this.updateParams(newParams);
+    await this.refresh(updatedParams);
+    return updatedParams;
+  }
+
+  static #createElement(id) {
+    return ElementsBuilder.html("div", { id, className: "graph-container-column" })();
+  }
+
+  *params() {
+    for(const param in this.#paramsDef) {
+      yield param;
+    }
+  }
+
+  *graphs() {
+    for(const graphId of this.#graphsOrder) {
+      const graph = this.#graphs.get(graphId);
+      if(graph === null || graph === undefined) {
+        continue;
+      }
+      yield graph;
+    }
+  }
+
+  *graphEntries() {
+    for(const graphId of this.#graphsOrder) {
+      const graph = this.#graphs.get(graphId);
+      if(graph === null || graph === undefined) {
+        continue;
+      }
+      yield /** @type {const} */ ([ graphId, graph ]);
+    }
+  }
+
+}
+
+function isDateRangeEqual(oldRange, newRange) {
+  return newRange[0] === oldRange[0] && newRange[1] === oldRange[1];
+}
+
+const UserStatsGraphSpace = new StatsGraphSpace(
+
+  [ "userScore", "userRank", "userEngagement", "questionWiseScore" ],
+
+  /** @type {StatsGraphSpaceParamDefs<UserGraphData>} */ ({
+    batchId: null,
+    courseId: null,
+    sectionId: null,
+    segmentIndex: null,
+    userId: null,
+    courseData: null,
+    dateRange: {
+      initialValue: [ null, null ],
+      isEqual: isDateRangeEqual
+    }
+  })
+
+);
+
+const CourseStatsGraphSpace = new StatsGraphSpace(
+
+  [ "activeUsers", "completionPrecentage", "completedSegments", "scoreDistribution" ],
+
+  /** @type {StatsGraphSpaceParamDefs<CourseGraphData>} */ ({
+    batchId: null,
+    courseId: null,
+    sectionId: null,
+    segmentIndex: null,
+    courseData: null,
+    reportData: null,
+    dateRange: {
+      initialValue: [ null, null ],
+      isEqual: isDateRangeEqual
+    }
+  })
+
+);
+
+
+UserStatsGraphSpace.emplaceGraph("userScore", {
+  title: "User Score",
+  description: "The user's score progression over time.",
+  labels: {
+    x: { title: "Date" },
+    y: { title: "Score" }
+  },
+  observedParams: Array.from(UserStatsGraphSpace.params()),
+  async dataGetter(params) {
+    const url = new URL(`/api/course/getUserScore/${ params.userId }/${ params.courseId }`, window.location.origin);
+    if(params.segmentIndex !== undefined) {
+      url.searchParams.set("segmentIndex", params.segmentIndex);
+    }
+    if(params.sectionId !== undefined) {
+      url.searchParams.set("sectionId", params.sectionId);
+    }
+    if(params.batchId !== undefined) {
+      url.searchParams.set("batchId", params.batchId);
+    }
+    const rowResponse = await fetch(url);
+    /** @type {({ data: { [ key: string ]: number  } })} */
+    const response = await rowResponse.json();
+
+    for(const key in response.data) {
+      const keyAsDate = new Date(key);
+      if(keyAsDate < params.dateRange[0] || keyAsDate > params.dateRange[1]) {
+        delete response.data[key];
+      }
+    }
+    return response.data;
+  }
+});
+
+UserStatsGraphSpace.emplaceGraph("userRank", {
+  title: "User Rank",
+  description: "Changes in the user's rank relative to others over time.",
+  labels: {
+    x: { title: "Date" },
+    y: { title: "Rank", min: 0 }
+  },
+  observedParams: Array.from(UserStatsGraphSpace.params()),
+  async dataGetter(params, graph) {
+    if((params.sectionId !== undefined || params.segmentIndex !== undefined) && params.userId !== undefined) {
+      graph.setVisibility(false);
+      throw new StatsGraph.Error("User rank stats are not available for a specific section");
+    }
+    graph.setVisibility(true);
+    const url = new URL(`/api/course/getUserRank/${ params.userId }/${ params.courseId }`, window.location.origin);
+    if(params.batchId !== undefined) {
+      url.searchParams.set('batchId', params.batchId);
+    }
+    if(params.sectionId !== undefined) {
+      url.searchParams.set('sectionId', params.sectionId);
+    }
+    if(params.segmentIndex !== undefined) {
+      url.searchParams.set('segmentIndex', params.segmentIndex);
+    }
+    const rowResponse = await fetch(url.toString());
+    const response = await rowResponse.json();
+
+    for(const key in response.data) {
+      const keyAsDate = new Date(key);
+      if(keyAsDate < params.dateRange[0] || keyAsDate > params.dateRange[1]) {
+        delete response.data[key];
+      }
+    }
+    return response.data;
+  }
+});
+
+UserStatsGraphSpace.emplaceGraph("userEngagement", {
+  title: "Hackathon Engagement",
+  description: "The user's number of hackathon attempts over time.",
+  labels: {
+    x: { title: "Date" },
+    y: { title: "Attempts", min: 0 }
+  },
+  observedParams: Array.from(UserStatsGraphSpace.params()),
+  async dataGetter(params) {
+    const url = new URL( `/api/course/userEngagement/${ params.userId }/${ params.courseId }`, window.location.origin);
+    if(params.segmentIndex !== undefined) {
+      url.searchParams.set("segmentIndex", params.segmentIndex);
+    }
+    if(params.sectionId !== undefined) {
+      url.searchParams.set("sectionId", params.sectionId);
+    }
+    if(params.batchId !== undefined) {
+      url.searchParams.set("batchId", params.batchId);
+    }
+    const rowResponse = await fetch(url);
+    const response = await rowResponse.json();
+
+    for(const key in response.data) {
+      const keyAsDate = new Date(key);
+      if(keyAsDate < params.dateRange[0] || keyAsDate > params.dateRange[1]) {
+        delete response.data[key];
+      }
+    }
+    return response.data;
+  }
+});
+
+UserStatsGraphSpace.emplaceGraph("questionWiseScore", {
+  title: "Question Completion Time",
+  description: "The average time taken by the user to complete each coding question.",
+  labels: {
+    x: { title: "Question" },
+    y: { title: "Minutes", min: 0 }
+  },
+  callbacks(chartData) {
+    return {
+      title(tooltipItem) {
+        const data = chartData[tooltipItem[0].dataIndex];
+        return `Question ${ data[0] }: ${ data[2] }`;
+      },
+      label(tooltipItem) {
+        const data = chartData[tooltipItem.dataIndex];
+        return `Minutes: ${ data[1] }`;
+      }
+    }
+  },
+  observedParams: [ "sectionId", "segmentIndex", "userId", "batchId", "courseId", "courseData" ],
+  async dataGetter(params) {
+    const url = new URL( `/api/course/timeTakenGraph/${ params.userId }/${ params.courseId }`, window.location.origin);
+    if(params.segmentIndex !== undefined) {
+      url.searchParams.set("segmentIndex", params.segmentIndex);
+    }
+    if(params.sectionId !== undefined) {
+      url.searchParams.set('sectionId', params.sectionId);
+    }
+    if(params.batchId !== undefined) {
+      url.searchParams.set("batchId", params.batchId);
+    }
+    const rowResponse = await fetch(url.toString());
+    const response = await rowResponse.json();
+
+    const questionTitleObject = Object.fromEntries(response.questionObj.map(question => [ question._id, question.title ]));
+    const sectionWiseQuestionIndex = params.courseData.courseSegments.flatMap(
+      (segment, sectionIndex) => segment.questionIds.map(
+        (questionId, questionIndex) => ({
+          _id: questionId,
+          title: questionTitleObject[questionId],
+          sectionNumber: sectionIndex + 1,
+          number: `${ sectionIndex + 1 }.${ questionIndex + 1 }`,
+          timeTaken: secondsToMinuteString(response.data[questionId])
+        })
+      )
+    ).filter(questionData => questionData._id in response.data);
+    return sectionWiseQuestionIndex.map(question => [ question.number, question.timeTaken, question.title ]);
+  }
+});
+
+
+CourseStatsGraphSpace.emplaceGraph("scoreDistribution", {
+  title: "Score Distribution",
+  description: "The distribution of scores among users in the course.",
+  labels: {
+    x: { title: "Scores" },
+    y: { title: "Users", min: 0 }
+  },
+  listeners(params) {
+    const { title, labelTitles } = this;
+    return {
+      async onClick(event, elements, chart) {
+        const [ activeDataPoint ] = elements;
+        const value = chart.data.labels[activeDataPoint.index];
+        const url = new URL(`/api/leaderboard/getScoreCount/${ params.courseId }`, window.location.origin);
+        url.searchParams.set("value", value);
+        if(params.segmentIndex !== undefined) {
+          url.searchParams.set("segmentIndex", params.segmentIndex);
+        }
+        if(params.sectionId !== undefined) {
+          url.searchParams.set("sectionId", params.sectionId);
+        }
+        if(params.batchId !== undefined) {
+          url.searchParams.set("batchId", params.batchId);
+        }
+        toggleLoader(true);
+        const response = await fetch(url).catch(console.log);
+        const { data: list = [] } = await response?.json() ?? {};
+        if(list.length === 0) {
+          return;
+        }
+        toggleLoader(false);
+        createUserListDialog(`${ title } (${ labelTitles[0] }: ${ value } )`, list);
+
+      }
+    }
+  },
+  observedParams: [ "courseId", "segmentIndex", "sectionId", "batchId" ],
+  async dataGetter(params) {
+    const url = new URL(`/api/course/getScoreCount/${ params.courseId }`, window.location.origin);
+    if(params.segmentIndex !== undefined) {
+      url.searchParams.set("segmentIndex", params.segmentIndex);
+    }
+    if(params.sectionId !== undefined) {
+      url.searchParams.set("sectionId", params.sectionId);
+    }
+    if(params.batchId !== undefined) {
+      url.searchParams.set("batchId", params.batchId);
+    }
+    const rowResponse = await fetch(url);
+    const response = await rowResponse.json();
+
+    return response.data;
+  }
+});
+
+CourseStatsGraphSpace.emplaceGraph("completedSegments", {
+  title: "Completed Sections",
+  description: "The number of users who have completed each section of the course.",
+  labels: {
+    x: { title: "Section" },
+    y: { title: "Users", min: 0 }
+  },
+  listeners(params) {
+    const { title, labelTitles } = this;
+    return {
+      async onClick(event, elements, chart) {
+        const [ activeDataPoint ] = elements;
+        const value = chart.data.labels[activeDataPoint.index];
+        const list = await getSectionCompletionUserList(params, value);
+        if(list.length === 0) {
+          return;
+        }
+        toggleLoader(false);
+        createUserListDialog(`${ title } (${ labelTitles[0] }: ${ value } )`, list);
+
+      }
+    }
+  },
+  callbacks(chartData) {
+    return {
+      title(tooltipItem) {
+        const data = chartData[tooltipItem[0].dataIndex];
+        return `Section ${ data[0] }: ${ data[2] }`;
+      },
+      label(tooltipItem) {
+        const data = chartData[tooltipItem.dataIndex];
+        return `Users: ${ data[1] }`;
+      }
+    }
+  },
+  observedParams: [ "courseData", "reportData" ],
+  async dataGetter(params) {
+    if(params.reportData instanceof Array === false) {
+      return StatsGraph.constants.LOADER;
+    }
+    const numberOfSegmentsCompleted = new Array(params.courseData.courseSegments.length).fill(0); // [1,2,3]
+    const segmentTitle = params.courseData.courseSegments.map((element) => element.title); // ["test","adsfa","fasdfsa"]; 
+
+    const questionIdsSet = (params.reportData ?? []).map((userData) => {
+      return new Set(userData.questionIds);
+    });
+
+    params.courseData.courseSegments.forEach((segments, index) => {
+      questionIdsSet.forEach((element) => {
+        let areAllQuestionPresent = true;
+        for (let index = 0; index < segments.questionIds.length; ++index) {
+          const questionId = segments.questionIds[index];
+          if(!element.has(questionId)) {
+            areAllQuestionPresent = false;
+            break;
+          }
+        }
+        if(areAllQuestionPresent) {
+          numberOfSegmentsCompleted[index]++;
+        }
+      })
+    });
+
+    return numberOfSegmentsCompleted.map((element, index) => {
+      return [ index + 1, numberOfSegmentsCompleted[index], segmentTitle[index] ];
+    });
+  }
+
+});
+
+CourseStatsGraphSpace.emplaceGraph("completionPrecentage", {
+  title: "Percentage Completion",
+  description: "The distribution of course completion percentages among users.",
+  labels: {
+    x: { title: "Percentage" },
+    y: { title: "Users", min: 0 }
+  },
+  listeners(params) {
+    const { title, labelTitles } = this;
+    return {
+      async onClick(event, elements, chart) {
+        const [ activeDataPoint ] = elements;
+        const value = chart.data.labels[activeDataPoint.index];
+        const list = await getReportUserList(params, value);
+        if(list.length === 0) {
+          return;
+        }
+        toggleLoader(false);
+        createUserListDialog(`${ title } (${ labelTitles[0] }: ${ value } )`, list);
+
+      }
+    }
+  },
+  observedParams: [ "sectionId", "courseId", "batchId", "segmentIndex", "courseData", "reportData" ],
+  async dataGetter(params) {
+    if(params.reportData instanceof Array === false) {
+      return StatsGraph.constants.LOADER;
+    }
+    const points = [ "0", "0.1-10", "10-20", "20-30", "30-40", "40-50", "50-60", "60-70", "70-80", "80-90", "90-100" ];
+    const data = new Array(points.length).fill(0);
+    if(params.sectionId !== undefined) {
+      const url = new URL(`/api/course/getQuestionIds/${ params.courseId }`, window.location.origin);
+      url.searchParams.set('sectionId', params.sectionId);
+      url.searchParams.set('contentType', '3');
+      if(params.segmentIndex !== undefined) {
+        url.searchParams.set('segmentIndex', params.segmentIndex);
+      }
+      const rowResponse = await fetch(url);
+      // const responsef = await caches.match(url) ?? await fetch(url);
+      const response = await rowResponse.json();
+      const { questionIds } = response;
+      (params?.reportData ?? []).forEach((userCourseData) => {
+        let completedQustions = 0;
+        let keyToAppend = 0;
+        const completedQuestionSet = new Set(userCourseData.questionIds);
+        questionIds.forEach((id) => {
+          if(completedQuestionSet.has(id)) {
+            completedQustions++
+          }
+        });
+        let percentageCompletion = 0;
+        percentageCompletion = ((completedQustions) / (questionIds.length)) * 100;
+        if(!questionIds.length) {
+          percentageCompletion = 100;
+        }
+        if(percentageCompletion === 100) {
+          keyToAppend = 9;
+        } else {
+          keyToAppend = Math.floor(percentageCompletion/10);
+        }
+        if (completedQustions == 0) {
+          keyToAppend = 0;
+        } else {
+          keyToAppend++;
+        }
+        data[keyToAppend]++;
+      })
+    } else {
+      (params?.reportData ?? []).forEach((singleUserData) => {
+        const completionPrecentage = parseFloat(singleUserData.percentageCompletion);
+        let keyToAppend = 0;
+        if(completionPrecentage === 0) {
+          keyToAppend = 0;
+        } else if(parseInt(completionPrecentage) === 100) {
+          keyToAppend = 10;
+        } else {
+            keyToAppend = Math.floor(completionPrecentage/10);
+            if (completionPrecentage % 10 != 0) {
+              keyToAppend++;
+            }
+        }
+        data[keyToAppend]++;
+      });
+    }
+    const objToShow = {};
+    points.forEach((element, index) => {
+      objToShow[element] = data[index];
+    });
+    return objToShow;
+  }
+});
+
+CourseStatsGraphSpace.emplaceGraph("activeUsers", {
+  title: "Active Users",
+  description: "The trend of active users in the course over time.",
+  labels: {
+    x: { title: "Date" },
+    y: { title: "Users", min: 0 }
+  },
+  listeners(params) {
+    const { title, labelTitles } = this;
+    return {
+      async onClick(event, elements, chart) {
+        const [ activeDataPoint ] = elements;
+        const value = chart.data.labels[activeDataPoint.index];
+        const url = new URL(`/api/leaderboard/getActiveUsersGraphData/${ params.courseId }`, window.location.origin);
+        url.searchParams.set("value", value);
+        if(params.segmentIndex !== undefined) {
+          url.searchParams.set("segmentIndex", params.segmentIndex);
+        }
+        if(params.sectionId !== undefined) {
+          url.searchParams.set("sectionId", params.sectionId);
+        }
+        if(params.batchId !== undefined) {
+          url.searchParams.set("batchId", params.batchId);
+        }
+        toggleLoader(true);
+        const response = await fetch(url).catch(console.log);
+        const { data: list = [] } = await response?.json() ?? {};
+        if(list.length === 0) {
+          return;
+        }
+        toggleLoader(false);
+        createUserListDialog(`${ title } Users (${ labelTitles[0] }: ${ value })`, list);
+
+      }
+    }
+  },
+  observedParams: [ "batchId", "courseId", "dateRange", "sectionId", "segmentIndex" ],
+  async dataGetter(params) {
+    const url = new URL(`/api/course/getActiveUsersGraphData/${ params.courseId }`, window.location.origin);
+    if(params.segmentIndex !== undefined) {
+      url.searchParams.set("segmentIndex", params.segmentIndex);
+    }
+    if(params.sectionId !== undefined) {
+      url.searchParams.set("sectionId", params.sectionId);
+    }
+    if(params.batchId !== undefined) {
+      url.searchParams.set("batchId", params.batchId);
+    }
+    const rowResponse = await fetch(url);
+    const response = await rowResponse.json();
+
+    for(const key in response.data) {
+      const keyAsDate = new Date(key);
+      if(keyAsDate < params.dateRange[0] || keyAsDate > params.dateRange[1]) {
+        delete response.data[key];
+      }
+    }
+    return response.data;
+  }
+});
+
+async function getSectionCompletionUserList(params, value) {
+  const numberOfSegmentsCompleted = new Array(params.courseData.courseSegments.length); // [1,2,3]
+  for (let index = 0; index < numberOfSegmentsCompleted.length; ++index) {
+    numberOfSegmentsCompleted[index] = [];
+  }
+  const segmentTitle = params.courseData.courseSegments.map((element) => element.title); // ["test","adsfa","fasdfsa"]; 
+
+  const questionIdsSet = (params.reportData ?? []).map((userData) => {
+    return new Set(userData.questionIds);
+  });
+
+  params.courseData.courseSegments.forEach((segments, index) => {
+    questionIdsSet.forEach((element, userDataIndex) => {
+      let areAllQuestionPresent = true;
+      for (let index = 0; index < segments.questionIds.length; ++index) {
+        const questionId = segments.questionIds[index];
+        if(!element.has(questionId)) {
+          areAllQuestionPresent = false;
+          break;
+        }
+      }
+      if(areAllQuestionPresent) {
+        numberOfSegmentsCompleted[index].push({
+          _id: params.reportData[userDataIndex]._id,
+          displayname: params.reportData[userDataIndex].name,
+          email: params.reportData[userDataIndex].email,
+          enrollmentId: params.reportData[userDataIndex].enrollmentId,
+        })
+      }
+    })
+  });
+
+  return numberOfSegmentsCompleted[value - 1];
+}
+
+async function getReportUserList(params, value) {
+  const {sectionId } = params;
+  const points = [ "0", "0.1-10", "10-20", "20-30", "30-40", "40-50", "50-60", "60-70", "70-80", "80-90", "90-100" ];
+  const data = new Array(points.length);
+  for (let index = 0; index < data.length; ++index) {
+    data[index] = [];
+  }
+  if(sectionId !== undefined) {
+    const url = new URL(`/api/course/getQuestionIds/${ params.courseId }`, window.location.origin);
+    url.searchParams.set('sectionId', params.sectionId);
+    url.searchParams.set('contentType', '3');
+    if(params.segmentIndex !== undefined) {
+      url.searchParams.set('segmentIndex', params.segmentIndex);
+    }
+    const rowResponse = await fetch(url);
+    // const responsef = await caches.match(url) ?? await fetch(url);
+    const response = await rowResponse.json();
+    const { questionIds } = response;
+    (params?.reportData ?? []).forEach((userCourseData) => {
+      let completedQustions = 0;
+      let keyToAppend = 0;
+      const completedQuestionSet = new Set(userCourseData.questionIds);
+      questionIds.forEach((id) => {
+        if(completedQuestionSet.has(id)) {
+          completedQustions++
+        }
+      });
+      let percentageCompletion = 0;
+      percentageCompletion = ((completedQustions) / (questionIds.length)) * 100;
+      if(!questionIds.length) {
+        percentageCompletion = 100;
+      }
+      if(percentageCompletion === 100) {
+        keyToAppend = 10;
+      } else {
+        keyToAppend = Math.floor(percentageCompletion/10);
+      }
+      if (completedQustions == 0 ) {
+        keyToAppend = 0;
+      } else {
+        keyToAppend++;
+      }
+       data[keyToAppend].push({
+        _id: userCourseData._id,
+        email: userCourseData.email,
+        displayname: userCourseData.name,
+      })
+    })
+  } else {
+    (params?.reportData ?? []).forEach((singleUserData) => {
+      const completionPrecentage = parseFloat(singleUserData.percentageCompletion);
+      let keyToAppend = 0;
+      if(completionPrecentage === 0) {
+        keyToAppend = 0;
+      } else if(parseInt(completionPrecentage) === 100) {
+        keyToAppend = 10;
+      } else {
+          keyToAppend = Math.floor(completionPrecentage/10);
+          keyToAppend++;
+      }
+      data[keyToAppend].push({
+        _id: singleUserData._id,
+        email: singleUserData.email,
+        displayname: singleUserData.name,
+      })
+    });
+  }
+  return data[points.indexOf(value)];
+}

@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tests | Chitkara</title>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Mulish:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="../logo.jpg">
+    <script src="../js/theme-engine.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+
+    <style>
+        :root {
+            --primary: #df5a22;
+            --primary-dark: #c54814;
+            --bg: #f5f5f5;
+            --white: #ffffff;
+            --text-main: #333333;
+            --text-light: #777777;
+            --border: #eeeeee;
+            --accent-yellow: #c0a000;
+            --accent-green: #7cb342;
+            --shadow-premium: 0 10px 40px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+        }
+
+        html {
+            font-size: 17px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body,
+        button,
+        input,
+        select,
+        textarea {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: #f2f4f7;
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-size: 17px;
+        }
+
+        /* --- HEADER (Identical to Student Dashboard) --- */
+        .site-header {
+            height: 84px;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .logo-box:hover {
+            opacity: 0.8;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: transparent;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            color: #555;
+            font-size: 1.2rem;
+        }
+
+        .nav-icons i {
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .nav-icons i:hover {
+            color: var(--primary);
+            background: #fff5f0;
+        }
+
+        .icon-btn-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: all 0.2s;
+            position: relative;
+            border-bottom: none !important;
+        }
+
+        .icon-btn-box.active {
+            border-bottom: none !important;
+            border-radius: 8px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .plus-btn {
+            width: 44px;
+            height: 84px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff5f0;
+            color: var(--primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-left: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+
+        .plus-btn:hover {
+            background: #ffece5;
+        }
+
+        .profile-container {
+            position: relative;
+        }
+
+        .profile-stack {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 30px;
+            transition: background 0.2s;
+        }
+
+        .profile-stack:hover {
+            background: #f8f8f8;
+        }
+
+        .profile-text {
+            text-align: right;
+            line-height: 1.2;
+        }
+
+        .profile-name {
+            display: block;
+            font-weight: 600;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            color: #444;
+        }
+
+        .profile-role {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .avatar-circle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dropdown menus */
+        .profile-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 200px;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-premium);
+            margin-top: 10px;
+            padding: 10px;
+            display: none;
+            z-index: 2000;
+            border: 1px solid #eee;
+            animation: fadeInDown 0.2s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-item {
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            color: #444;
+            transition: background 0.2s;
+        }
+
+        .menu-item:hover {
+            background: #fdf5f2;
+            color: var(--primary);
+        }
+
+        .menu-item i {
+            margin-right: 10px;
+            color: #777;
+            font-size: 1.05rem;
+        }
+
+        .menu-item:hover i {
+            color: var(--primary);
+        }
+
+        .menu-item.logout {
+            color: #d32f2f;
+        }
+
+        .menu-item.logout:hover {
+            background: #fff5f5;
+        }
+
+        /* --- MAIN TESTVIEW CONTAINER --- */
+        .testview-main-wrapper {
+            width: 100%;
+            min-height: calc(100vh - 84px);
+            background: #f2f4f7;
+            padding: 0;
+        }
+
+        .top-accent-bar {
+            display: none;
+        }
+
+        .table-viewport-card {
+            background: #ffffff;
+            width: 100%;
+            min-height: calc(100vh - 84px);
+            box-shadow: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Testpad Table Styling with Roboto font */
+        .testpad-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .testpad-table thead {
+            background: #ffffff;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .testpad-table th {
+            padding: 22px 36px 18px 36px;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #111111;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .th-content {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sort-caret {
+            display: inline-flex;
+            flex-direction: column;
+            gap: 2px;
+            color: #bfbfbf;
+            font-size: 13px;
+        }
+
+        .sort-caret i {
+            line-height: 8px;
+        }
+
+        .sort-caret.active-asc .fa-caret-up {
+            color: #df5a22;
+        }
+
+        .sort-caret.active-desc .fa-caret-down {
+            color: #df5a22;
+        }
+
+        .testpad-table tbody tr {
+            border-bottom: 1px solid #f3f3f3;
+            transition: background-color 0.15s ease;
+        }
+
+        .testpad-table tbody tr:hover {
+            background-color: #fafafa;
+        }
+
+        .testpad-table td {
+            padding: 22px 36px;
+            font-size: 1.12rem;
+            font-weight: 500;
+            color: #222222;
+            vertical-align: middle;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .test-title-link {
+            color: #de5b2b;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 1.12rem;
+            letter-spacing: -0.1px;
+            display: inline-block;
+            transition: all 0.15s ease;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .test-title-link:hover {
+            text-decoration: underline;
+            color: #c54814;
+        }
+
+        .test-score-val {
+            color: #222222;
+            font-weight: 500;
+            font-size: 1.12rem;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .test-time-val {
+            color: #333333;
+            font-weight: 500;
+            font-size: 1.12rem;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .test-submitted-val {
+            color: #333333;
+            font-weight: 500;
+            font-size: 1.12rem;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* --- PAGINATION FOOTER --- */
+        .testpad-pagination-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            padding: 30px 36px 50px 36px;
+            background: #ffffff;
+            user-select: none;
+        }
+
+        .page-arrow-btn {
+            background: transparent;
+            border: none;
+            color: #999999;
+            font-size: 1.05rem;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-arrow-btn:hover:not(:disabled) {
+            color: #df5a22;
+            background: #fff5f0;
+        }
+
+        .page-arrow-btn:disabled {
+            color: #dddddd;
+            cursor: not-allowed;
+        }
+
+        .page-num-badge {
+            border: 1px solid #df5a22;
+            color: #df5a22;
+            border-radius: 4px;
+            padding: 3px 10px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            min-width: 28px;
+            text-align: center;
+            background: #ffffff;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Custom Page Size Dropdown matching screenshot */
+        .custom-page-size-dropdown {
+            position: relative;
+            display: inline-block;
+            user-select: none;
+            margin-left: 10px;
+        }
+
+        .custom-page-size-btn {
+            border: 1px solid #df5a22;
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: 1.02rem;
+            font-weight: 500;
+            color: #8c8c8c;
+            background: #ffffff;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Roboto', sans-serif;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .custom-page-size-btn:hover {
+            border-color: #c54814;
+        }
+
+        .custom-page-size-btn .page-size-icon {
+            font-size: 14px;
+            color: #999999;
+            font-weight: 400;
+        }
+
+        .custom-page-size-menu {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            min-width: 150px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+            padding: 6px;
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+            animation: fadeInDown 0.15s ease-out;
+        }
+
+        .custom-page-size-menu.show {
+            display: flex;
+        }
+
+        .custom-page-size-option {
+            padding: 10px 18px;
+            font-size: 1.08rem;
+            color: #222222;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.15s ease;
+            text-align: left;
+        }
+
+        .custom-page-size-option:hover {
+            background: #fff8f5;
+            color: #111111;
+        }
+
+        .custom-page-size-option.active {
+            background: #fff4ed;
+            font-weight: 700;
+            color: #111111;
+        }
+
+        /* Toast & Modals */
+        #toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 9999;
+        }
+
+        .toast {
+            min-width: 280px;
+            max-width: 400px;
+            background: #333;
+            color: #fff;
+            padding: 16px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-premium);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        .toast.success {
+            border-left: 4px solid #4caf50;
+        }
+
+        .toast.error {
+            border-left: 4px solid #f44336;
+        }
+
+        .toast.info {
+            border-left: 4px solid var(--primary);
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+
+        .modal-box {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #111;
+        }
+
+        .modal-body {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn-modal {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-modal.cancel {
+            background: #f0f0f0;
+            color: #555;
+        }
+
+        .btn-modal.confirm {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-modal.danger {
+            background: #d32f2f;
+            color: white;
+        }
+
+        ::selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+
+        ::-moz-selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header (Identical to Student Dashboard) -->
+    <header class="site-header" style="position: relative;">
+        <div class="header-left" style="gap: 120px;">
+            <!-- Top-Left Logo refreshes the page on click -->
+            <div class="logo-box" onclick="window.location.reload();" style="cursor: pointer;" title="Refresh Page">
+                <img src="../Tests _ Chitkara_files/chitkara.a1beb7f0.png" onerror="this.src='../chitkara_icon.png'"
+                    style="height: 44px; border-radius: 6px;">
+            </div>
+            <nav class="nav-icons" style="display: flex; align-items: center; gap: 70px;">
+                <!-- Dashboard Icon (Redirects to student-dashboard.html) -->
+                <div class="icon-btn-box" data-tooltip="Dashboard" onclick="window.location.href='./student-dashboard.html';"
+                    style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <img src="../TESTPAD_WEBSITE__files/menu-1.svg" alt="Dashboard"
+                        style="width: 32px; height: 32px;" />
+                </div>
+                <!-- Courses -->
+                <div class="icon-btn-box" data-tooltip="Courses"
+                    onclick="window.location.href='./COURSETRAY.html';"
+                    style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <img src="../TESTPAD_WEBSITE__files/folder-2.svg" alt="Courses"
+                        style="width: 32px; height: 32px;" />
+                </div>
+                <!-- Performance -->
+                <div class="icon-btn-box" data-tooltip="Performance Analytics"
+                    onclick="location.href='./studentreports.html'"
+                    style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <img src="../TESTPAD_WEBSITE__files/statistics.svg" alt="Performance"
+                        style="width: 32px; height: 32px;" />
+                </div>
+            </nav>
+        </div>
+
+        <div class="header-right" style="position: relative;">
+            <div class="plus-btn" id="plusBtn" title="Create New" onclick="togglePlusMenu(event)"><i
+                    class="fas fa-plus"></i></div>
+
+            <!-- Plus Popover -->
+            <div class="popover plus-popover" id="plusMenu"
+                style="display: none; position: absolute; top: 84px; right: 60px; background: #fff; border-radius: 8px; border: 1px solid #EAECF0; box-shadow: 0 10px 30px rgba(0,0,0,0.12); z-index: 2000; width: 210px; padding: 6px 0;">
+                <div class="plus-item" onclick="window.location.href='./playground.html';"
+                    style="display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: background 0.2s;"
+                    onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
+                    <img src="../Testpad_pra_files_files/playground.svg" style="width: 26px; height: 26px;">
+                    <span
+                        style="font-size: 15px; color: #344054; font-weight: 500; font-family: 'Roboto', sans-serif;">Playground</span>
+                </div>
+                <div class="plus-item" onclick="window.location.href='./playground.html';"
+                    style="display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: background 0.2s;"
+                    onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
+                    <img src="../Testpad_pra_files_files/playground.svg" style="width: 26px; height: 26px;">
+                    <span
+                        style="font-size: 15px; color: #344054; font-weight: 500; font-family: 'Roboto', sans-serif;">Python
+                        Notebook</span>
+                </div>
+            </div>
+
+            <div class="grid-menu-container" style="position: relative;">
+                <button class="grid-btn" id="gridMenuBtn" onclick="toggleGridMenu(event)"
+                    style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: none; background: transparent; border-radius: 8px; cursor: pointer; transition: background 0.2s;"
+                    onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='transparent'"
+                    data-tooltip-bottom="Apps">
+                    <img src="../Testpad_pra_files_files/icons8-squared-menu-90.png"
+                        style="width: 24px; height: 24px; opacity: 0.75; transition: all 0.2s;"
+                        onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'">
+                </button>
+                <div id="gridMenuDropdown" class="grid-menu-dropdown"
+                    style="display: none; position: absolute; top: calc(100% + 15px); right: 0; background: #ffffff; border: 1px solid #f0f0f0; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 16px; width: 320px; z-index: 2000; flex-direction: row; justify-content: space-between;">
+                    <div class="grid-item" onclick="window.location.reload(); toggleGridMenu();"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../TESTPAD_WEBSITE__files/quiz.svg" style="width: 36px; height: 36px;">
+                        <span style="font-family: 'Roboto', sans-serif; font-size: 1rem; font-weight: 500;">Test</span>
+                    </div>
+                    <div class="grid-item"
+                        onclick="window.location.href='./COURSETRAY.html'; toggleGridMenu();"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../TESTPAD_WEBSITE__files/folder-2.svg" style="width: 36px; height: 36px;">
+                        <span
+                            style="font-family: 'Roboto', sans-serif; font-size: 1rem; font-weight: 500;">Courses</span>
+                    </div>
+                    <div class="grid-item" onclick="location.href='./mybookmarks.html'"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../Testpad_pra_files_files/iconmonstr-star-3.svg" style="width: 36px; height: 36px;">
+                        <span
+                            style="font-family: 'Roboto', sans-serif; font-size: 1rem; font-weight: 500;">Bookmarks</span>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-container">
+                <div class="profile-stack" id="profileToggle" onclick="toggleMenu()">
+                    <div class="profile-text text-sm">
+                        <span class="profile-name" id="userName">Student</span>
+                        <span class="profile-role" id="userRole">Student</span>
+                    </div>
+                    <div class="avatar-circle" id="userInitial"
+                        style="background: transparent; color: inherit; font-size: inherit; font-weight: normal; border: none; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;">
+                        <img src="../LINUX_TEST_CHITKARA_files/user-icon.3d6e2547.svg"
+                            style="width: 100%; height: 100%; border-radius: 50%;">
+                    </div>
+                </div>
+                <!-- Profile Dropdown -->
+                <div class="profile-menu" id="profileMenu">
+                    <div class="menu-item" onclick="location.href='./profile.html'">
+                        <img src="../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png"
+                            style="width: 16px; height: 16px; margin-right: 8px;">
+                        <span>My Profile</span>
+                    </div>
+                    <div class="menu-item" onclick="location.href='./preferences.html'">
+                        <img src="../TESTPAD_WEBSITE__files/password.svg"
+                            style="width: 16px; height: 16px; margin-right: 8px;">
+                        <span>Preferences</span>
+                    </div>
+                    <div style="border-top: 1px solid #eee; margin: 5px 0;"></div>
+                    <div class="menu-item logout" onclick="handleLogout()">
+                        <img src="../TESTPAD_WEBSITE__files/logout.svg"
+                            style="width: 16px; height: 16px; margin-right: 8px;">
+                        <span>Logout</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN TESTVIEW BODY -->
+    <div class="testview-main-wrapper">
+        <div class="table-viewport-card">
+            <table class="testpad-table" id="testpadTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable('title')" style="width: 45%;">
+                            <div class="th-content">
+                                <span>Tests</span>
+                                <span class="sort-caret" id="sort-title">
+                                    <i class="fas fa-caret-up"></i>
+                                    <i class="fas fa-caret-down"></i>
+                                </span>
+                            </div>
+                        </th>
+                        <th onclick="sortTable('score')" style="width: 15%;">
+                            <div class="th-content">
+                                <span>Scores</span>
+                                <span class="sort-caret" id="sort-score">
+                                    <i class="fas fa-caret-up"></i>
+                                    <i class="fas fa-caret-down"></i>
+                                </span>
+                            </div>
+                        </th>
+                        <th onclick="sortTable('time')" style="width: 20%;">
+                            <div class="th-content">
+                                <span>Time taken</span>
+                                <span class="sort-caret" id="sort-time">
+                                    <i class="fas fa-caret-up"></i>
+                                    <i class="fas fa-caret-down"></i>
+                                </span>
+                            </div>
+                        </th>
+                        <th onclick="sortTable('submitted')" style="width: 20%;">
+                            <div class="th-content">
+                                <span>Submitted</span>
+                                <span class="sort-caret" id="sort-submitted">
+                                    <i class="fas fa-caret-up"></i>
+                                    <i class="fas fa-caret-down"></i>
+                                </span>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="testTableBody">
+                    <!-- Dynamic Rows Injected Here -->
+                </tbody>
+            </table>
+
+            <!-- Pagination Bar -->
+            <div class="testpad-pagination-bar">
+                <button class="page-arrow-btn" id="prevPageBtn" onclick="changePage(-1)" title="Previous Page">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="page-num-badge" id="currentPageBadge">1</div>
+                <button class="page-arrow-btn" id="nextPageBtn" onclick="changePage(1)" title="Next Page">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+
+                <div class="custom-page-size-dropdown" id="pageSizeDropdownWrapper">
+                    <button class="custom-page-size-btn" id="pageSizeBtn" onclick="togglePageSizeMenu(event)"
+                        type="button">
+                        <span id="pageSizeLabel">10 / page</span>
+                        <i class="fas fa-search page-size-icon"></i>
+                    </button>
+                    <div class="custom-page-size-menu" id="pageSizeMenu">
+                        <div class="custom-page-size-option active" data-val="10" onclick="selectPageSize(10)">10 / page
+                        </div>
+                        <div class="custom-page-size-option" data-val="20" onclick="selectPageSize(20)">20 / page</div>
+                        <div class="custom-page-size-option" data-val="50" onclick="selectPageSize(50)">50 / page</div>
+                        <div class="custom-page-size-option" data-val="100" onclick="selectPageSize(100)">100 / page
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box">
+            <div class="modal-title" id="modalTitle">Confirmation Required</div>
+            <div class="modal-body" id="modalBody">Are you sure you want to proceed?</div>
+            <div class="modal-footer">
+                <button class="btn-modal cancel" id="modalCancel">Cancel</button>
+                <button class="btn-modal confirm" id="modalConfirm">Proceed</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check Authentication & Role dynamically
+        let currentUser = (typeof auth !== 'undefined' && auth.getCurrentUser) ? auth.getCurrentUser() : null;
+        if (!currentUser) {
+            const activeSession = db.getActiveSession ? db.getActiveSession() : null;
+            if (activeSession) currentUser = db.getUserById(activeSession.userId);
+        }
+        if (!currentUser) {
+            const saved = localStorage.getItem('TESTPAD_currentUser');
+            if (saved) {
+                try { currentUser = JSON.parse(saved); } catch (e) { }
+            }
+        }
+        if (!currentUser) {
+            currentUser = {
+                id: 'user_student',
+                name: 'Student',
+                role: 'student',
+                rollNo: '',
+                email: ''
+            };
+        }
+
+        // State
+        let allCompletedTests = [];
+        let currentPage = 1;
+        let pageSize = 10;
+        let sortColumn = null;
+        let sortDirection = 'asc'; // 'asc' or 'desc'
+
+        function initPage() {
+            // Update User Profile in Header dynamically as entered
+            const userNameEl = document.getElementById('userName');
+            if (userNameEl) userNameEl.textContent = currentUser.name || (currentUser.rollNo ? currentUser.rollNo : 'Student');
+            const userRoleEl = document.getElementById('userRole');
+            if (userRoleEl) userRoleEl.textContent = (currentUser.role || 'Student').toUpperCase();
+
+            loadCompletedTests();
+            renderTable();
+        }
+
+        function loadCompletedTests() {
+            // 1. Gather all attempts from DB and localStorage
+            const userAttempts = db.getStudentAttempts ? db.getStudentAttempts(currentUser.id) : [];
+            const rawAttempts = JSON.parse(localStorage.getItem('TESTPAD_attempts')) || [];
+            const rawExams = JSON.parse(localStorage.getItem('TESTPAD_exams')) || [];
+            const practiceSessions = JSON.parse(localStorage.getItem('TESTPAD_practice_sessions')) || {};
+
+            const map = new Map();
+
+            // Combine user completed attempts (excluding any legacy mock data)
+            const combinedAttempts = [...userAttempts, ...rawAttempts, ...Object.values(practiceSessions)];
+            combinedAttempts.forEach(att => {
+                if (!att || !att.examId) return;
+                // Exclude the mock benchmark tests
+                if (att.id === 'mock_attempt_st2' || att.id === 'mock_attempt_st1' || att.examId === 'exam_st2_dsoops_beta' || att.examId === 'exam_st1_dsoops_a') return;
+
+                const isSubmitted = att.status === 'submitted' || att.status === 'reviewed' || att.status === 'completed' || att.endTime;
+                if (!isSubmitted) return;
+
+                const exam = rawExams.find(e => e.id === att.examId) || (db.getExamById ? db.getExamById(att.examId) : null);
+                const title = exam?.title || att.examTitle || 'Test Assessment';
+
+                // Calculate Score - strictly numeric, avoiding [object Object]
+                let score = 0;
+                if (att.score !== undefined && att.score !== null) {
+                    if (typeof att.score === 'object') {
+                        score = att.score.score !== undefined ? att.score.score : (att.score.obtainedMarks !== undefined ? att.score.obtainedMarks : 0);
+                    } else {
+                        score = parseFloat(att.score);
+                    }
+                } else if (db.calculateScore) {
+                    try {
+                        const scoreObj = db.calculateScore(att);
+                        if (scoreObj && typeof scoreObj === 'object') {
+                            score = scoreObj.score !== undefined ? scoreObj.score : (scoreObj.obtainedMarks !== undefined ? scoreObj.obtainedMarks : 0);
+                        } else if (scoreObj !== undefined && scoreObj !== null) {
+                            score = parseFloat(scoreObj);
+                        }
+                    } catch (e) {
+                        score = 0;
+                    }
+                }
+
+                if (typeof score === 'object') {
+                    score = score?.score !== undefined ? score.score : 0;
+                }
+                if (isNaN(score) || score === undefined || score === null) {
+                    score = 0;
+                }
+
+                // Calculate Time Taken
+                let timeTakenStr = '0 min 0 sec';
+                let timeSeconds = 0;
+                if (att.startTime && att.endTime) {
+                    const diffMs = Math.max(0, new Date(att.endTime).getTime() - new Date(att.startTime).getTime());
+                    const totalSecs = Math.floor(diffMs / 1000);
+                    timeSeconds = totalSecs;
+                    const mins = Math.floor(totalSecs / 60);
+                    const secs = totalSecs % 60;
+                    timeTakenStr = `${mins} min ${secs} sec`;
+                } else if (att.duration) {
+                    timeTakenStr = `${att.duration} min 0 sec`;
+                    timeSeconds = att.duration * 60;
+                }
+
+                // Calculate Submitted Date
+                let submittedStr = '01-01-2026, 12:00:00';
+                let submittedTimestamp = Date.now();
+                const dateObj = att.endTime ? new Date(att.endTime) : (att.startTime ? new Date(att.startTime) : new Date());
+                submittedTimestamp = dateObj.getTime();
+
+                const dd = String(dateObj.getDate()).padStart(2, '0');
+                const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+                const yyyy = dateObj.getFullYear();
+                const hh = String(dateObj.getHours()).padStart(2, '0');
+                const min = String(dateObj.getMinutes()).padStart(2, '0');
+                const ss = String(dateObj.getSeconds()).padStart(2, '0');
+                submittedStr = `${dd}-${mm}-${yyyy}, ${hh}:${min}:${ss}`;
+
+                map.set(title, {
+                    id: att.id,
+                    examId: att.examId,
+                    title: title,
+                    score: score,
+                    totalScore: exam?.totalMarks || 10,
+                    timeTakenStr: timeTakenStr,
+                    submittedStr: submittedStr,
+                    submittedTimestamp: submittedTimestamp,
+                    timeSeconds: timeSeconds,
+                    attemptId: att.id
+                });
+            });
+
+            allCompletedTests = Array.from(map.values());
+        }
+
+
+
+        function sortTable(columnKey) {
+            if (sortColumn === columnKey) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortColumn = columnKey;
+                sortDirection = 'asc';
+            }
+
+            // Update Caret classes
+            ['title', 'score', 'time', 'submitted'].forEach(k => {
+                const caret = document.getElementById(`sort-${k}`);
+                if (!caret) return;
+                caret.className = 'sort-caret';
+                if (k === sortColumn) {
+                    caret.classList.add(sortDirection === 'asc' ? 'active-asc' : 'active-desc');
+                }
+            });
+
+            // Sort data
+            allCompletedTests.sort((a, b) => {
+                let valA, valB;
+                if (columnKey === 'title') {
+                    valA = a.title.toLowerCase();
+                    valB = b.title.toLowerCase();
+                    return sortDirection === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                } else if (columnKey === 'score') {
+                    valA = Number(a.score) || 0;
+                    valB = Number(b.score) || 0;
+                    return sortDirection === 'asc' ? valA - valB : valB - valA;
+                } else if (columnKey === 'time') {
+                    valA = a.timeSeconds || 0;
+                    valB = b.timeSeconds || 0;
+                    return sortDirection === 'asc' ? valA - valB : valB - valA;
+                } else if (columnKey === 'submitted') {
+                    valA = a.submittedTimestamp || 0;
+                    valB = b.submittedTimestamp || 0;
+                    return sortDirection === 'asc' ? valA - valB : valB - valA;
+                }
+                return 0;
+            });
+
+            currentPage = 1;
+            renderTable();
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('testTableBody');
+            tbody.innerHTML = '';
+
+            const total = allCompletedTests.length;
+            const totalPages = Math.max(1, Math.ceil(total / pageSize));
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const startIdx = (currentPage - 1) * pageSize;
+            const pageItems = allCompletedTests.slice(startIdx, startIdx + pageSize);
+
+            if (pageItems.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align:center; padding: 60px; color: #888888;">
+                            <i class="fas fa-clipboard-check" style="font-size: 2.5rem; color: #dddddd; margin-bottom: 15px; display: block;"></i>
+                            No completed tests available yet.
+                        </td>
+                    </tr>
+                `;
+            } else {
+                pageItems.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>
+                            <a class="test-title-link" onclick="openStudentResults('${item.attemptId}', '${item.examId}')">
+                                ${item.title}
+                            </a>
+                        </td>
+                        <td>
+                            <span class="test-score-val">${item.score}</span>
+                        </td>
+                        <td>
+                            <span class="test-time-val">${item.timeTakenStr}</span>
+                        </td>
+                        <td>
+                            <span class="test-submitted-val">${item.submittedStr}</span>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            // Update Pagination state
+            document.getElementById('currentPageBadge').textContent = currentPage;
+            document.getElementById('prevPageBtn').disabled = (currentPage <= 1);
+            document.getElementById('nextPageBtn').disabled = (currentPage >= totalPages);
+        }
+
+        function changePage(delta) {
+            currentPage += delta;
+            renderTable();
+        }
+
+        function togglePageSizeMenu(e) {
+            if (e) e.stopPropagation();
+            const menu = document.getElementById('pageSizeMenu');
+            if (menu) {
+                menu.classList.toggle('show');
+            }
+        }
+
+        function selectPageSize(val) {
+            pageSize = parseInt(val) || 10;
+            currentPage = 1;
+
+            const label = document.getElementById('pageSizeLabel');
+            if (label) label.textContent = `${pageSize} / page`;
+
+            document.querySelectorAll('.custom-page-size-option').forEach(opt => {
+                if (opt.getAttribute('data-val') === String(pageSize)) {
+                    opt.classList.add('active');
+                } else {
+                    opt.classList.remove('active');
+                }
+            });
+
+            const menu = document.getElementById('pageSizeMenu');
+            if (menu) menu.classList.remove('show');
+
+            renderTable();
+        }
+
+        function changePageSize(val) {
+            selectPageSize(val);
+        }
+
+        // Close page size menu on outside click
+        document.addEventListener('click', (e) => {
+            const wrapper = document.getElementById('pageSizeDropdownWrapper');
+            if (wrapper && !wrapper.contains(e.target)) {
+                const menu = document.getElementById('pageSizeMenu');
+                if (menu) menu.classList.remove('show');
+            }
+        });
+
+        window.openStudentResults = function(attemptId, examId) {
+            // Navigate to student-results.html for that test
+            if (attemptId && attemptId !== 'undefined') {
+                window.location.href = `./student-results.html?attemptId=${encodeURIComponent(attemptId)}&examId=${encodeURIComponent(examId || '')}`;
+            } else if (examId && examId !== 'undefined') {
+                window.location.href = `./student-results.html?examId=${encodeURIComponent(examId)}`;
+            } else {
+                window.location.href = `./student-results.html`;
+            }
+        };
+        function openStudentResults(attemptId, examId) {
+            window.openStudentResults(attemptId, examId);
+        }
+
+        // --- HEADER CONTROLS ---
+        function togglePlusMenu(e) {
+            if (e) e.stopPropagation();
+            const menu = document.getElementById('plusMenu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function toggleGridMenu(e) {
+            if (e) e.stopPropagation();
+            const grid = document.getElementById('gridMenuDropdown');
+            grid.style.display = grid.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('profileMenu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function toggleTopJoinPopup(e) {
+            if (e) e.stopPropagation();
+            const popup = document.getElementById('topJoinPopup');
+            const icon = document.getElementById('headerToggleIcon');
+            if (!popup) return;
+            if (popup.style.display === 'block') {
+                popup.style.display = 'none';
+                if (icon) icon.className = 'fas fa-chevron-down';
+            } else {
+                popup.style.display = 'block';
+                if (icon) icon.className = 'fas fa-chevron-up';
+                const input = document.getElementById('testIdInput');
+                if (input) input.focus();
+            }
+        }
+
+        function togglePasscodeVisibility() {
+            const input = document.getElementById('passcodeInput');
+            const eye = document.getElementById('passcodeEyeIcon');
+            if (!input || !eye) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                eye.className = 'far fa-eye-slash';
+            } else {
+                input.type = 'password';
+                eye.className = 'far fa-eye';
+            }
+        }
+
+        function handleJoin(e) {
+            if (e) e.preventDefault();
+            const rawInput = document.getElementById('testIdInput').value.trim();
+            const pass = document.getElementById('passcodeInput').value.trim();
+
+            if (!rawInput) return showToast('Please enter a Test ID or Joining Key', 'error');
+
+            let exam = db.getExamByJoiningKey(rawInput);
+            if (!exam) {
+                exam = db.getAllExams().find(e => e.joiningKey && String(e.joiningKey).toLowerCase() === rawInput.toLowerCase());
+            }
+            if (!exam) {
+                let id = rawInput;
+                if (rawInput.includes('?')) {
+                    const params = new URLSearchParams(rawInput.split('?')[1]);
+                    id = params.get('testId') || params.get('id') || params.get('invite') || rawInput;
+                } else if (rawInput.includes('/')) {
+                    id = rawInput.split('/').pop();
+                }
+                exam = db.getExamByTestId(id) || db.getExamById(id);
+            }
+
+            if (!exam) return showToast('Assessment not found. Check your ID/Key.', 'error');
+
+            if (exam.security?.passcode && exam.security.passcode !== pass) {
+                return showToast('❌ Incorrect security passcode', 'error');
+            }
+
+            let res = db.startAttempt(exam.id, currentUser.id);
+            if (!res.success && res.existingAttempt) {
+                if (res.existingAttempt.status === 'submitted' || res.existingAttempt.status === 'reviewed') {
+                    res = db.startAttempt(exam.id, currentUser.id, true);
+                } else {
+                    res.success = true;
+                    res.attempt = res.existingAttempt;
+                }
+            }
+
+            if (res.success) {
+                showToast('Access Granted. Launching Session...', 'success');
+                setTimeout(() => {
+                    const dest = exam.isCompetitive ? './comexam-attempt.html' : './exam-attempt.html';
+                    window.location.href = `${dest}?attemptId=${res.attempt.id}&vialink=true`;
+                }, 800);
+            } else {
+                showToast(res.message, 'error');
+            }
+        }
+
+        function showToast(msg, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+
+            let icon = 'info-circle';
+            if (type === 'success') icon = 'check-circle';
+            if (type === 'error') icon = 'exclamation-circle';
+
+            toast.innerHTML = `<i class="fas fa-${icon}"></i><span>${msg}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease-out reverse forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function showConfirm(title, body, confirmBtnText, isDanger = false) {
+            return new Promise((resolve) => {
+                const overlay = document.getElementById('modalOverlay');
+                const titleEl = document.getElementById('modalTitle');
+                const bodyEl = document.getElementById('modalBody');
+                const cancelBtn = document.getElementById('modalCancel');
+                const confirmBtn = document.getElementById('modalConfirm');
+
+                titleEl.textContent = title;
+                bodyEl.textContent = body;
+                confirmBtn.textContent = confirmBtnText;
+                confirmBtn.className = isDanger ? 'btn-modal danger' : 'btn-modal confirm';
+
+                overlay.style.display = 'flex';
+
+                const close = (res) => {
+                    overlay.style.display = 'none';
+                    resolve(res);
+                };
+
+                cancelBtn.onclick = () => close(false);
+                confirmBtn.onclick = () => close(true);
+            });
+        }
+
+        async function handleLogout() {
+            const confirmed = await showConfirm(
+                'Terminate Portal Session?',
+                'Are you sure you want to logout? Any unsaved environment data might be lost.',
+                'Log Out',
+                true
+            );
+
+            if (confirmed) {
+                if (typeof auth !== 'undefined' && auth.logout) auth.logout();
+                location.href = '../index.html';
+            }
+        }
+
+        // Global click listener to close popups
+        document.addEventListener('click', function (e) {
+            const popup = document.getElementById('topJoinPopup');
+            const btn = document.getElementById('headerToggleBtn');
+            if (popup && popup.style.display === 'block' && !popup.contains(e.target) && btn && !btn.contains(e.target)) {
+                popup.style.display = 'none';
+                const icon = document.getElementById('headerToggleIcon');
+                if (icon) icon.className = 'fas fa-chevron-down';
+            }
+
+            const pMenu = document.getElementById('plusMenu');
+            const pBtn = document.getElementById('plusBtn');
+            if (pMenu && pMenu.style.display === 'block' && !pMenu.contains(e.target) && pBtn && !pBtn.contains(e.target)) {
+                pMenu.style.display = 'none';
+            }
+
+            const gDropdown = document.getElementById('gridMenuDropdown');
+            const gBtn = document.getElementById('gridMenuBtn');
+            if (gDropdown && gDropdown.style.display === 'flex' && !gDropdown.contains(e.target) && gBtn && !gBtn.contains(e.target)) {
+                gDropdown.style.display = 'none';
+            }
+
+            const profMenu = document.getElementById('profileMenu');
+            const profToggle = document.getElementById('profileToggle');
+            if (profMenu && profToggle && !profToggle.contains(e.target) && !profMenu.contains(e.target)) {
+                profMenu.style.display = 'none';
+            }
+        });
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+
+</html>

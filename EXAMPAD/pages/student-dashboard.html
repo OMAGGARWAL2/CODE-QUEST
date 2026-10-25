@@ -1,0 +1,2042 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="../logo.jpg">
+    <script src="../js/theme-engine.js"></script>
+    <style>
+        :root {
+            --primary: #df5a22;
+            --primary-dark: #c54814;
+            --bg: #f5f5f5;
+            --white: #ffffff;
+            --text-main: #333333;
+            --text-light: #777777;
+            --border: #eeeeee;
+            --accent-yellow: #c0a000;
+            --accent-green: #7cb342;
+            --shadow-premium: 0 10px 40px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+        }
+
+        html {
+            font-size: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Mulish', sans-serif;
+        }
+
+        body,
+        button,
+        input,
+        select,
+        textarea {
+            font-family: 'Mulish', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-size: 15px;
+        }
+
+        /* --- HEADER --- */
+        .site-header {
+            height: 84px;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .logo-box:hover {
+            opacity: 0.8;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: transparent;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            color: #555;
+            font-size: 1.1rem;
+        }
+
+        .nav-icons i {
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .nav-icons i:hover {
+            color: var(--primary);
+            background: #fff5f0;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .plus-btn {
+            width: 44px;
+            height: 84px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff5f0;
+            color: var(--primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-left: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+
+        .plus-btn:hover {
+            background: #ffece5;
+        }
+
+        .grid-icon {
+            color: #555;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .grid-icon:hover {
+            background: #f0f0f0;
+        }
+
+        .profile-container {
+            position: relative;
+        }
+
+        .profile-stack {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 30px;
+            transition: background 0.2s;
+        }
+
+        .profile-stack:hover {
+            background: #f8f8f8;
+        }
+
+        .profile-text {
+            text-align: right;
+            line-height: 1.2;
+        }
+
+        .profile-name {
+            display: block;
+            font-weight: 600;
+            font-size: 1.15rem;
+            text-transform: uppercase;
+            color: #444;
+        }
+
+        .profile-role {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .avatar-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- DROPDOWN MENU --- */
+        .profile-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 200px;
+            background: white;
+            border-radius: 2px;
+            box-shadow: var(--shadow-premium);
+            margin-top: 10px;
+            padding: 10px;
+            display: none;
+            z-index: 2000;
+            border: 1px solid #eee;
+            animation: fadeInDown 0.2s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 2px;
+            color: #555;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .menu-item:hover {
+            background: #f8f8f8;
+            color: var(--primary);
+        }
+
+        .menu-item.logout {
+            color: #d32f2f;
+        }
+
+        .menu-item.logout:hover {
+            background: #fff5f5;
+        }
+
+        /* --- DASHBOARD WRAPPER --- */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 1fr 560px;
+            height: calc(100vh - 84px);
+            overflow: hidden;
+            background: #ffffff !important;
+        }
+
+        .main-panel {
+            padding: 40px;
+            background: #ffffff;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .panel-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        .panel-title span {
+            color: #999;
+            font-size: 1.2rem;
+            margin-left: 5px;
+        }
+
+        /* --- JOIN BAR --- */
+        .join-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .join-input-wrapper {
+            position: relative;
+            flex: 1;
+        }
+
+        .join-input-wrapper i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+
+        .join-bar input {
+            width: 100%;
+            padding: 10px 14px 10px 38px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #fdfdfd;
+        }
+
+        .join-bar input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(242, 107, 58, 0.1);
+        }
+
+        .btn-direct-join {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s, transform 0.1s;
+            white-space: nowrap;
+        }
+
+        .btn-direct-join:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-direct-join:active {
+            transform: scale(0.98);
+        }
+
+        /* --- EXAM CARDS --- */
+        .exam-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .exam-card {
+            background: #fff;
+            border: 1px solid #f0f0f0;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exam-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary-dark);
+        }
+
+        .exam-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--primary);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .exam-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon-area {
+            width: 56px;
+            height: 56px;
+            background: #fff5f0;
+            color: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .card-left {
+            flex: 1;
+        }
+
+        .card-code-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            color: #777;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 16px;
+        }
+
+        .card-subtitle span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .progress-container {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .progress-bar-bg {
+            height: 7px;
+            background: #f5c6b6;
+            border-radius: 0 !important;
+            width: 100%;
+            margin-bottom: 6px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: #df5a22 !important;
+            border-radius: 0 !important;
+            width: 0%;
+            transition: width 1s ease-out;
+            box-shadow: none !important;
+        }
+
+        .progress-text {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        /* --- CUSTOM PRECISE TOOLTIPS & HOVER EFFECTS --- */
+        [data-tooltip] {
+            position: relative;
+        }
+
+        [data-tooltip]:hover::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000000;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 500;
+            font-family: 'Roboto', sans-serif;
+            white-space: nowrap;
+            z-index: 10000;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+            pointer-events: none;
+            line-height: 1.25;
+        }
+
+        [data-tooltip]:hover::after {
+            content: '';
+            position: absolute;
+            bottom: calc(100% + 2px);
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px 8px 0 8px;
+            border-style: solid;
+            border-color: #000000 transparent transparent transparent;
+            z-index: 10000;
+            pointer-events: none;
+        }
+
+        .icon-btn-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            transition: background 0.15s ease-in-out;
+            cursor: pointer;
+        }
+
+        .icon-btn-box:hover {
+            background-color: #f2f2f2;
+        }
+
+        .btn-card-action {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #eee;
+            background: #fff;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-card-action.primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        .btn-card-action:hover {
+            transform: translateY(-2px);
+            background: #f8f8f8;
+        }
+
+        .btn-card-action.primary:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 4px 12px rgba(242, 107, 58, 0.25);
+            color: white;
+        }
+
+        /* --- SIDEBAR --- */
+        .side-panel {
+            padding: 40px 25px;
+            background: #ffffff !important;
+            overflow-y: auto;
+            overflow-x: hidden !important;
+        }
+
+        .side-section-title {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        .side-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .quick-link-card {
+            border-radius: 8px;
+            padding: 24px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 180px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quick-link-card:hover {
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .quick-link-card.yellow {
+            background-color: var(--accent-yellow);
+        }
+
+        .quick-link-card.green {
+            background-color: var(--accent-green);
+        }
+
+        .ql-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .ql-desc {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+
+        .ql-icon {
+            font-size: 2rem;
+            opacity: 0.3;
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+        }
+
+
+        #toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 9999;
+        }
+
+        .toast {
+            min-width: 280px;
+            max-width: 400px;
+            background: #333;
+            color: #fff;
+            padding: 16px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-premium);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        .toast.success {
+            border-left: 4px solid #4caf50;
+        }
+
+        .toast.error {
+            border-left: 4px solid #f44336;
+        }
+
+        .toast.info {
+            border-left: 4px solid var(--primary);
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+
+        .modal-box {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            animation: modalScale 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalScale {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #111;
+        }
+
+        .modal-body {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn-modal {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-modal.cancel {
+            background: #f0f0f0;
+            color: #555;
+        }
+
+        .btn-modal.confirm {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-modal.danger {
+            background: #d32f2f;
+            color: white;
+        }
+
+        .btn-modal:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .copy-widget {
+            margin-left: 12px;
+            padding: 4px 10px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #6c757d;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            vertical-align: middle;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .copy-widget:hover {
+            background: #fff5f0;
+            color: var(--primary);
+            border-color: #ffd8c7;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(242, 107, 58, 0.1);
+        }
+
+        .copy-widget:active {
+            transform: translateY(0);
+        }
+
+        .copy-widget i {
+            font-size: 0.85rem;
+        }
+
+        /* --- CUSTOM GREY SCROLLBAR FOR MAIN PANEL --- */
+        .main-panel::-webkit-scrollbar {
+            width: 8px;
+            display: block !important;
+        }
+
+        .main-panel::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .main-panel::-webkit-scrollbar-thumb {
+            background: #a0a0a0;
+            border-radius: 10px;
+        }
+
+        .main-panel::-webkit-scrollbar-thumb:hover {
+            background: #757575;
+        }
+
+        .main-panel {
+            scrollbar-width: thin;
+            scrollbar-color: #a0a0a0 transparent;
+        }
+
+        /* Hide other unnecessary scrollbars */
+        .side-panel::-webkit-scrollbar,
+        .custom-horiz-scroll::-webkit-scrollbar,
+        #quickLinksGrid::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+            background: transparent !important;
+        }
+
+        .side-panel,
+        .custom-horiz-scroll,
+        #quickLinksGrid {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+
+        ::selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+
+        ::-moz-selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="site-header" style="position: relative;">
+        <div class="header-left" style="gap: 120px;">
+            <div class="logo-box" onclick="window.location.reload();" style="cursor: pointer;"
+                title="Refresh Dashboard">
+                <img src="../Tests _ Chitkara_files/chitkara.a1beb7f0.png" style="height: 44px; border-radius: 6px;">
+            </div>
+            <nav class="nav-icons" style="display: flex; align-items: center; gap: 70px;">
+                <div class="icon-btn-box active" data-tooltip="Assessment List"
+                    onclick="location.href='./TESTVIEW.html'"
+                    style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <img src="../TESTPAD_WEBSITE__files/menu-1.svg" alt="Assessment List"
+                        style="width: 32px; height: 32px;" />
+                </div>
+                <div class="icon-btn-box" data-tooltip="Courses" onclick="location.href='./COURSETRAY.html'"
+                    style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <img src="../TESTPAD_WEBSITE__files/folder-2.svg" alt="Courses"
+                        style="width: 32px; height: 32px;" />
+                </div>
+                <div class="icon-btn-box" data-tooltip="Performance Analytics"
+                    onclick="location.href='./studentreports.html'"
+                    style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <img src="../TESTPAD_WEBSITE__files/statistics.svg" alt="Performance"
+                        style="width: 32px; height: 32px;" />
+                </div>
+            </nav>
+        </div>
+
+        <div class="header-center" style="position: absolute; left: 50%; transform: translateX(-50%); z-index: 1001;">
+            <button id="headerToggleBtn" onclick="toggleTopJoinPopup(event)"
+                style="background: #fff5f0; color: #df5a22; border: 1px solid #fce8e0; border-radius: 20px; padding: 6px 18px; font-weight: 700; font-family: 'Mulish', sans-serif; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;"
+                onmouseover="this.style.background='#ffece5'" onmouseout="this.style.background='#fff5f0'">
+                <span>Join Assessment</span>
+                <i class="fas fa-chevron-down" id="headerToggleIcon" style="font-size: 0.8rem;"></i>
+            </button>
+        </div>
+
+        <div class="header-right" style="position: relative;">
+            <div class="plus-btn" id="plusBtn" title="Create New" onclick="togglePlusMenu(event)"><i
+                    class="fas fa-plus"></i></div>
+
+            <!-- Plus Popover -->
+            <div class="popover plus-popover" id="plusMenu"
+                style="display: none; position: absolute; top: 84px; right: 60px; background: #fff; border-radius: 8px; border: 1px solid #EAECF0; box-shadow: 0 10px 30px rgba(0,0,0,0.12); z-index: 2000; width: 210px; padding: 6px 0;">
+                <div class="plus-item" onclick="window.location.href='./playground.html';"
+                    style="display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: background 0.2s;"
+                    onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
+                    <img src="../Testpad_pra_files_files/playground.svg" style="width: 26px; height: 26px;">
+                    <span
+                        style="font-size: 15px; color: #344054; font-weight: 500; font-family: 'Hind', sans-serif;">Playground</span>
+                </div>
+                <div class="plus-item" onclick="window.location.href='./playground.html';"
+                    style="display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: background 0.2s;"
+                    onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
+                    <img src="../Testpad_pra_files_files/playground.svg" style="width: 26px; height: 26px;">
+                    <span
+                        style="font-size: 15px; color: #344054; font-weight: 500; font-family: 'Hind', sans-serif;">Python
+                        Notebook</span>
+                </div>
+            </div>
+
+            <div class="grid-menu-container" style="position: relative;">
+                <button class="grid-btn" id="gridMenuBtn" onclick="toggleGridMenu(event)"
+                    style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: none; background: transparent; border-radius: 8px; cursor: pointer; transition: background 0.2s;"
+                    onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='transparent'"
+                    data-tooltip-bottom="Apps">
+                    <img src="../Testpad_pra_files_files/icons8-squared-menu-90.png"
+                        style="width: 24px; height: 24px; opacity: 0.75; transition: all 0.2s;"
+                        onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'">
+                </button>
+                <div id="gridMenuDropdown" class="grid-menu-dropdown"
+                    style="display: none; position: absolute; top: calc(100% + 15px); right: 0; background: #ffffff; border: 1px solid #f0f0f0; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 16px; width: 320px; z-index: 2000; flex-direction: row; justify-content: space-between;">
+                    <div class="grid-item" onclick="location.href='./TESTVIEW.html'; toggleGridMenu();"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../TESTPAD_WEBSITE__files/quiz.svg" style="width: 36px; height: 36px;">
+                        <span style="font-family: 'Mulish', sans-serif; font-size: 1rem; font-weight: 500;">Test</span>
+                    </div>
+                    <div class="grid-item" onclick="location.href='./COURSETRAY.html'; toggleGridMenu();"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../TESTPAD_WEBSITE__files/folder-2.svg" style="width: 36px; height: 36px;">
+                        <span
+                            style="font-family: 'Mulish', sans-serif; font-size: 1rem; font-weight: 500;">Courses</span>
+                    </div>
+                    <div class="grid-item" onclick="location.href='./mybookmarks.html'"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../Testpad_pra_files_files/iconmonstr-star-3.svg" style="width: 36px; height: 36px;">
+                        <span
+                            style="font-family: 'Mulish', sans-serif; font-size: 1rem; font-weight: 500;">Bookmarks</span>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-container">
+                <div class="profile-stack" id="profileToggle" onclick="toggleMenu()">
+                    <div class="profile-text text-sm">
+                        <span class="profile-name" id="userName">Om Aggarwal</span>
+                        <span class="profile-role">Student</span>
+                    </div>
+                    <div class="avatar-circle" id="userInitial"
+                        style="background: transparent; color: inherit; font-size: inherit; font-weight: normal; border: none; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;">
+                        <img src="../LINUX_TEST_CHITKARA_files/user-icon.3d6e2547.svg"
+                            style="width: 100%; height: 100%; border-radius: 50%;">
+                    </div>
+                </div>
+                <!-- Profile Dropdown -->
+                <div class="profile-menu" id="profileMenu">
+                    <div class="menu-item" onclick="location.href='./profile.html'">
+                        <img src="../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png"
+                            style="width: 16px; height: 16px; margin-right: 8px;">
+                        <span>My Profile</span>
+                    </div>
+                    <div class="menu-item" onclick="location.href='./preferences.html'">
+                        <img src="../TESTPAD_WEBSITE__files/password.svg"
+                            style="width: 16px; height: 16px; margin-right: 8px;">
+                        <span>Preferences</span>
+                    </div>
+                    <div style="border-top: 1px solid #eee; margin: 5px 0;"></div>
+                    <div class="menu-item logout" onclick="handleLogout()">
+                        <img src="../TESTPAD_WEBSITE__files/logout.svg"
+                            style="width: 16px; height: 16px; margin-right: 8px;">
+                        <span>Logout</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Top Center Join Assessment Popup (Exact Reference Sign-In Card Style) -->
+    <div id="topJoinPopup"
+        style="display: none; position: fixed; top: 88px; left: 50%; transform: translateX(-50%); background: #ffffff; padding: 40px 36px 32px 36px; border-radius: 28px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12); z-index: 9999; border: 1px solid #f0f0f0; width: 400px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px;">
+            <h2
+                style="margin: 0; font-family: 'Mulish', sans-serif; font-size: 2.2rem; font-weight: 500; color: #1a1a1a; letter-spacing: -0.5px;">
+                sign in</h2>
+            <span onclick="toggleTopJoinPopup()"
+                style="cursor: pointer; color: #aaaaaa; font-size: 1.2rem; padding: 4px;"
+                onmouseover="this.style.color='#111111'" onmouseout="this.style.color='#aaaaaa'"><i
+                    class="fas fa-times"></i></span>
+        </div>
+        <form onsubmit="handleJoin(event)" style="display: flex; flex-direction: column; margin: 0;">
+            <!-- Field 1: test link -->
+            <div style="margin-bottom: 26px;">
+                <label
+                    style="display: block; font-size: 0.95rem; color: #666666; font-family: 'Mulish', sans-serif; margin-bottom: 4px; font-weight: 400;">test
+                    link *</label>
+                <input type="text" id="testIdInput" required
+                    style="width: 100%; border: none; border-bottom: 1px solid #e0e0e0; padding: 8px 0 10px 0; font-size: 1.05rem; font-family: 'Mulish', sans-serif; outline: none; background: transparent; color: #222222;"
+                    onfocus="this.style.borderColor='#df5a22'" onblur="this.style.borderColor='#e0e0e0'">
+            </div>
+            <!-- Field 2: passcode -->
+            <div style="margin-bottom: 34px; position: relative;">
+                <label
+                    style="display: block; font-size: 0.95rem; color: #666666; font-family: 'Mulish', sans-serif; margin-bottom: 4px; font-weight: 400;">passcode
+                    *</label>
+                <input type="password" id="passcodeInput"
+                    style="width: 100%; border: none; border-bottom: 1px solid #e0e0e0; padding: 8px 30px 10px 0; font-size: 1.05rem; font-family: 'Mulish', sans-serif; outline: none; background: transparent; color: #222222;"
+                    onfocus="this.style.borderColor='#df5a22'" onblur="this.style.borderColor='#e0e0e0'">
+                <i class="far fa-eye" id="passcodeEyeIcon"
+                    style="position: absolute; right: 0; bottom: 12px; color: #aaaaaa; cursor: pointer; font-size: 1.0rem;"
+                    onclick="togglePasscodeVisibility()"></i>
+            </div>
+            <!-- Submit Button -->
+            <button type="submit"
+                style="width: 100%; height: 52px; background: #df5a22; color: #ffffff; border: none; border-radius: 12px; font-weight: 600; font-family: 'Mulish', sans-serif; font-size: 1.15rem; cursor: pointer; transition: background 0.2s; box-shadow: 0 4px 12px rgba(223, 90, 34, 0.2);"
+                onmouseover="this.style.background='#c84d1a'" onmouseout="this.style.background='#df5a22'">sign
+                in</button>
+            <!-- Footer Link -->
+            <div style="text-align: center; margin-top: 18px;">
+                <a href="joinvialink.html"
+                    style="color: #888888; font-family: 'Mulish', sans-serif; font-size: 0.92rem; text-decoration: none;"
+                    onmouseover="this.style.color='#df5a22'" onmouseout="this.style.color='#888888'">forgot
+                    password?</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Main Area: Active Exams -->
+        <div class="main-panel">
+            <div class="panel-header" id="assignedSection"
+                style="display: flex; justify-content: space-between; align-items: center;">
+                <h2 class="panel-title"
+                    style="font-family: 'Mulish', sans-serif; font-size: 1.25rem; font-weight: 700; color: #222222; margin: 0;">
+                    Assigned Exams <span id="examCount" style="color: #888888; font-weight: 400;">(0)</span></h2>
+                <div style="position: relative; display: flex; align-items: center;">
+                    <i class="fas fa-search"
+                        style="position: absolute; left: 12px; color: #ccc; font-size: 0.9rem;"></i>
+                    <input type="text" id="examSearchInput" onkeyup="filterAssignedExams()"
+                        placeholder="Search assigned exams"
+                        style="border: none; border-bottom: 1px solid #e0e0e0; padding: 6px 12px 6px 36px; font-size: 0.95rem; font-family: 'Mulish', sans-serif; color: #666; outline: none; background: transparent; width: 250px;">
+                </div>
+            </div>
+
+            <!-- Optional Search Bar (Toggled) -->
+            <div id="inlineSearch"
+                style="display:none; margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:10px;">
+                <input type="text" id="searchInput" placeholder="Search assigned exams..." onkeyup="filterExams()"
+                    style="width:100%; border:none; outline:none; font-size:1rem; background:transparent;">
+            </div>
+
+            <div class="exam-grid" id="examGrid">
+                <!-- Cards will be injected here -->
+                <div style="text-align:center; color:#999; padding:60px;">
+                    <i class="fas fa-spinner fa-spin" style="font-size:2rem; margin-bottom:15px;"></i>
+                    <p>Fetching your assessments...</p>
+                </div>
+            </div>
+
+            <div class="panel-header" id="coursesSection"
+                style="margin-top: 60px; display: flex; justify-content: space-between; align-items: center;">
+                <h2 class="panel-title"
+                    style="font-family: 'Mulish', sans-serif; font-size: 1.25rem; font-weight: 700; color: #222222; margin: 0;">
+                    Learning Modules <span id="courseCount" style="color: #888888; font-weight: 400;">(0)</span></h2>
+                <div style="position: relative; display: flex; align-items: center;">
+                    <i class="fas fa-search"
+                        style="position: absolute; left: 12px; color: #ccc; font-size: 0.9rem;"></i>
+                    <input type="text" id="courseSearchInput" onkeyup="filterCourses()"
+                        placeholder="Search learning modules"
+                        style="border: none; border-bottom: 1px solid #e0e0e0; padding: 6px 12px 6px 36px; font-size: 0.95rem; font-family: 'Mulish', sans-serif; color: #666; outline: none; background: transparent; width: 250px;">
+                </div>
+            </div>
+
+            <div class="exam-grid" id="courseGrid">
+                <!-- Course cards will be injected here -->
+                <div style="text-align:center; color:#999; padding:60px;">
+                    <i class="fas fa-spinner fa-spin" style="font-size:2rem; margin-bottom:15px;"></i>
+                    <p>Fetching your courses...</p>
+                </div>
+            </div>
+
+            <div class="panel-header" id="assignedCompetitiveSection"
+                style="margin-top: 60px; display: flex; justify-content: space-between; align-items: center;">
+                <h2 class="panel-title"
+                    style="font-family: 'Mulish', sans-serif; font-size: 1.25rem; font-weight: 700; color: #222222; margin: 0;">
+                    Assigned Competitive Exams <span id="competitiveExamCount"
+                        style="color: #888888; font-weight: 400;">(0)</span></h2>
+                <div style="position: relative; display: flex; align-items: center;">
+                    <i class="fas fa-search"
+                        style="position: absolute; left: 12px; color: #ccc; font-size: 0.9rem;"></i>
+                    <input type="text" id="competitiveSearchInput" onkeyup="filterCompetitiveExams()"
+                        placeholder="Search competitive exams"
+                        style="border: none; border-bottom: 1px solid #e0e0e0; padding: 6px 12px 6px 36px; font-size: 0.95rem; font-family: 'Mulish', sans-serif; color: #666; outline: none; background: transparent; width: 250px;">
+                </div>
+            </div>
+
+            <div class="exam-grid" id="competitiveExamGrid">
+                <div style="text-align:center; color:#999; padding:60px;">
+                    <i class="fas fa-spinner fa-spin" style="font-size:2rem; margin-bottom:15px;"></i>
+                    <p>Fetching your competitive assessments...</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Sidebar: Quick Links -->
+        <div class="side-panel" style="background: #ffffff !important;"
+            oncontextmenu="handleRightBarContextMenu(event)">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
+                <h3 class="side-section-title" style="margin: 0; font-family: 'Mulish', sans-serif;">Quick Links</h3>
+                <button id="quickLinksToggleBtn" onclick="toggleQuickLinksGrid(event)"
+                    data-tooltip="Toggle All Quick Links"
+                    style="background: #fff5f0; color: #df5a22; border: 1px solid #fce8e0; border-radius: 20px; padding: 4px 14px; font-weight: 700; font-family: 'Mulish', sans-serif; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;"
+                    onmouseover="this.style.background='#ffece5'" onmouseout="this.style.background='#fff5f0'">
+                    <i class="fas fa-chevron-down" id="quickLinksChevron"></i>
+                </button>
+            </div>
+
+            <div style="overflow-x: auto; padding-bottom: 12px; margin-right: -25px; padding-right: 25px;"
+                class="custom-horiz-scroll">
+                <div class="side-cards-grid" id="quickLinksGrid" style="display: flex; gap: 16px; width: 100%;">
+                    <!-- Default Card 1: Playground (Mustard Yellow #c09a00) -->
+                    <div class="quick-link-card ql-card-item" onclick="location.href='./playground.html'"
+                        style="background-color: #c09a00; border-radius: 6px; padding: 32px 24px; color: white; display: flex; flex-direction: column; justify-content: space-between; width: 270px; min-width: 270px; min-height: 220px; flex-shrink: 0; cursor: pointer;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <span
+                                style="font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: 0.2px; line-height: 1.2;">Playground</span>
+                            <i class="far fa-bookmark" style="font-size: 2.0rem;"></i>
+                        </div>
+                        <p
+                            style="font-family: 'Mulish', sans-serif; font-size: 1.0rem; margin: 16px 0 0 0; opacity: 0.92; line-height: 1.4;">
+                            Visit playground for coding</p>
+                    </div>
+
+                    <!-- Default Card 2: Digital Library (Olive Green #70a01b) -->
+                    <div class="quick-link-card ql-card-item" onclick="location.href='./digitallib.html'"
+                        style="background-color: #70a01b; border-radius: 6px; padding: 32px 24px; color: white; display: flex; flex-direction: column; justify-content: space-between; width: 270px; min-width: 270px; min-height: 220px; flex-shrink: 0; cursor: pointer;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <span
+                                style="font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: 0.2px; line-height: 1.2;">Digital<br>Library</span>
+                            <i class="fas fa-book-open" style="font-size: 2.0rem;"></i>
+                        </div>
+                        <p
+                            style="font-family: 'Mulish', sans-serif; font-size: 1.0rem; margin: 16px 0 0 0; opacity: 0.92; line-height: 1.4;">
+                            Go to digital library.</p>
+                    </div>
+
+                    <!-- Extra Hidden Cards (Opened in 4x2 grid when ^ toggle pressed) -->
+                    <div class="extra-quick-card ql-card-item" onclick="location.href='index.html'"
+                        style="display: none; background-color: #3b5998; border-radius: 6px; padding: 32px 24px; color: white; flex-direction: column; justify-content: space-between; width: 270px; min-width: 270px; min-height: 220px; flex-shrink: 0; cursor: pointer;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <span
+                                style="font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: 0.2px; line-height: 1.2;">Chalkpad<br>ERP</span>
+                            <i class="fas fa-university" style="font-size: 2.0rem;"></i>
+                        </div>
+                        <p
+                            style="font-family: 'Mulish', sans-serif; font-size: 1.0rem; margin: 16px 0 0 0; opacity: 0.92; line-height: 1.4;">
+                            Attendance & records.</p>
+                    </div>
+
+                    <div class="extra-quick-card ql-card-item" onclick="location.href='./downloadadmitcards.html'"
+                        style="display: none; background-color: #f59e0b; border-radius: 6px; padding: 32px 24px; color: white; flex-direction: column; justify-content: space-between; width: 270px; min-width: 270px; min-height: 220px; flex-shrink: 0; cursor: pointer;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <span
+                                style="font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: 0.2px; line-height: 1.2;">Admit<br>Card</span>
+                            <i class="fas fa-id-card" style="font-size: 2.0rem;"></i>
+                        </div>
+                        <p
+                            style="font-family: 'Mulish', sans-serif; font-size: 1.0rem; margin: 16px 0 0 0; opacity: 0.92; line-height: 1.4;">
+                            Download exam admit card.</p>
+                    </div>
+
+                    <div class="extra-quick-card ql-card-item" onclick="location.href='./EXAMCIRCULARS.html'"
+                        style="display: none; background-color: #dc2626; border-radius: 6px; padding: 32px 24px; color: white; flex-direction: column; justify-content: space-between; width: 270px; min-width: 270px; min-height: 220px; flex-shrink: 0; cursor: pointer;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <span
+                                style="font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: 0.2px; line-height: 1.2;">Exam<br>Circulars</span>
+                            <i class="fas fa-bullhorn" style="font-size: 2.0rem;"></i>
+                        </div>
+                        <p
+                            style="font-family: 'Mulish', sans-serif; font-size: 1.0rem; margin: 16px 0 0 0; opacity: 0.92; line-height: 1.4;">
+                            Notices & datesheets.</p>
+                    </div>
+
+                    <div class="extra-quick-card ql-card-item" onclick="location.href='./resultsfinal.html'"
+                        style="display: none; background-color: #0284c7; border-radius: 6px; padding: 32px 24px; color: white; flex-direction: column; justify-content: space-between; width: 270px; min-width: 270px; min-height: 220px; flex-shrink: 0; cursor: pointer;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <span
+                                style="font-family: 'Mulish', sans-serif; font-size: 1.3rem; font-weight: 800; letter-spacing: 0.2px; line-height: 1.2;">Performance</span>
+                            <i class="fas fa-poll-h" style="font-size: 2.0rem;"></i>
+                        </div>
+                        <p
+                            style="font-family: 'Mulish', sans-serif; font-size: 1.0rem; margin: 16px 0 0 0; opacity: 0.92; line-height: 1.4;">
+                            Graded assessments.</p>
+                    </div>
+
+                    <div class="extra-quick-card ql-card-item" onclick="location.href='./playground.html'"
+                        style="display: none; background-color: #df5a22; border-radius: 6px; padding: 32px 24px; color: white; flex-direction: column; justify-content: space-between; width: 270px; min-width: 270px; min-height: 220px; flex-shrink: 0; cursor: pointer;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <span
+                                style="font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: 0.2px; line-height: 1.2;">Playground</span>
+                            <i class="fas fa-terminal" style="font-size: 2.0rem;"></i>
+                        </div>
+                        <p
+                            style="font-family: 'Mulish', sans-serif; font-size: 1.0rem; margin: 16px 0 0 0; opacity: 0.92; line-height: 1.4;">
+                            Code in Python, C++.</p>
+                    </div>
+
+                    <div class="extra-quick-card ql-card-item" onclick="location.href='./offline-results.html'"
+                        style="display: none; background-color: #6366f1; border-radius: 6px; padding: 32px 24px; color: white; flex-direction: column; justify-content: space-between; width: 270px; min-width: 270px; min-height: 220px; flex-shrink: 0; cursor: pointer;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <span
+                                style="font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: 0.2px; line-height: 1.2;">Offline<br>Results</span>
+                            <i class="fas fa-file-invoice" style="font-size: 2.0rem;"></i>
+                        </div>
+                        <p
+                            style="font-family: 'Mulish', sans-serif; font-size: 1.0rem; margin: 16px 0 0 0; opacity: 0.92; line-height: 1.4;">
+                            Scanned answer sheets.</p>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- Right-Click Context Menu Popup for Right Sidebar (Primary Orange Theme - Clean Soft Edges) -->
+    <div id="rightBarContextMenu"
+        style="display: none; position: fixed; z-index: 10000; background: #ffffff; border-radius: 2px; box-shadow: 0 12px 36px rgba(0,0,0,0.18); border: 1px solid #fce8e0; padding: 14px; width: auto; transition: opacity 0.15s ease;">
+        <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #fff5f0;">
+            <span
+                style="font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 0.85rem; color: #df5a22; letter-spacing: 0.3px;">Quick
+                Actions</span>
+            <span onclick="closeRightBarContextMenu()"
+                style="cursor: pointer; color: #9ca3af; font-size: 0.85rem; padding: 2px 6px;"
+                onmouseover="this.style.color='#df5a22'" onmouseout="this.style.color='#9ca3af'"><i
+                    class="fas fa-times"></i></span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+            <div onclick="location.href='./playground.html'" data-tooltip="Playground"
+                style="width: 58px; height: 58px; background: #fff5f0; border: 1px solid #fce8e0; border-radius: 2px; color: #df5a22; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
+                onmouseover="this.style.background='#df5a22'; this.style.color='#ffffff';"
+                onmouseout="this.style.background='#fff5f0'; this.style.color='#df5a22';">
+                <i class="far fa-bookmark" style="font-size: 1.6rem;"></i>
+            </div>
+            <div onclick="location.href='./digitallib.html'" data-tooltip="Digital Library"
+                style="width: 58px; height: 58px; background: #fff5f0; border: 1px solid #fce8e0; border-radius: 2px; color: #df5a22; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
+                onmouseover="this.style.background='#df5a22'; this.style.color='#ffffff';"
+                onmouseout="this.style.background='#fff5f0'; this.style.color='#df5a22';">
+                <i class="fas fa-book-open" style="font-size: 1.6rem;"></i>
+            </div>
+            <div onclick="location.href='index.html'" data-tooltip="Chalkpad ERP"
+                style="width: 58px; height: 58px; background: #fff5f0; border: 1px solid #fce8e0; border-radius: 2px; color: #df5a22; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
+                onmouseover="this.style.background='#df5a22'; this.style.color='#ffffff';"
+                onmouseout="this.style.background='#fff5f0'; this.style.color='#df5a22';">
+                <i class="fas fa-university" style="font-size: 1.6rem;"></i>
+            </div>
+            <div onclick="location.href='./downloadadmitcards.html'" data-tooltip="Admit Card"
+                style="width: 58px; height: 58px; background: #fff5f0; border: 1px solid #fce8e0; border-radius: 2px; color: #df5a22; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
+                onmouseover="this.style.background='#df5a22'; this.style.color='#ffffff';"
+                onmouseout="this.style.background='#fff5f0'; this.style.color='#df5a22';">
+                <i class="fas fa-id-card" style="font-size: 1.6rem;"></i>
+            </div>
+            <div onclick="location.href='./EXAMCIRCULARS.html'" data-tooltip="Exam Circulars"
+                style="width: 58px; height: 58px; background: #fff5f0; border: 1px solid #fce8e0; border-radius: 2px; color: #df5a22; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
+                onmouseover="this.style.background='#df5a22'; this.style.color='#ffffff';"
+                onmouseout="this.style.background='#fff5f0'; this.style.color='#df5a22';">
+                <i class="fas fa-bullhorn" style="font-size: 1.6rem;"></i>
+            </div>
+            <div onclick="location.href='./resultsfinal.html'" data-tooltip="Performance Analytics"
+                style="width: 58px; height: 58px; background: #fff5f0; border: 1px solid #fce8e0; border-radius: 2px; color: #df5a22; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
+                onmouseover="this.style.background='#df5a22'; this.style.color='#ffffff';"
+                onmouseout="this.style.background='#fff5f0'; this.style.color='#df5a22';">
+                <i class="fas fa-poll-h" style="font-size: 1.6rem;"></i>
+            </div>
+            <div onclick="location.href='./playground.html'" data-tooltip="Code Editor"
+                style="width: 58px; height: 58px; background: #fff5f0; border: 1px solid #fce8e0; border-radius: 2px; color: #df5a22; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
+                onmouseover="this.style.background='#df5a22'; this.style.color='#ffffff';"
+                onmouseout="this.style.background='#fff5f0'; this.style.color='#df5a22';">
+                <i class="fas fa-terminal" style="font-size: 1.6rem;"></i>
+            </div>
+            <div onclick="location.href='./offline-results.html'" data-tooltip="Offline Results"
+                style="width: 58px; height: 58px; background: #fff5f0; border: 1px solid #fce8e0; border-radius: 2px; color: #df5a22; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;"
+                onmouseover="this.style.background='#df5a22'; this.style.color='#ffffff';"
+                onmouseout="this.style.background='#fff5f0'; this.style.color='#df5a22';">
+                <i class="fas fa-file-invoice" style="font-size: 1.6rem;"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Systems -->
+    <div id="toast-container"></div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box">
+            <div class="modal-title" id="modalTitle">Confirmation Required</div>
+            <div class="modal-body" id="modalBody">Are you sure you want to proceed?</div>
+            <div class="modal-footer">
+                <button class="btn-modal cancel" id="modalCancel">Cancel</button>
+                <button class="btn-modal confirm" id="modalConfirm">Proceed</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+
+    <script>
+        // Check Authentication
+        if (!auth.isLoggedIn() || !auth.isStudent()) {
+            window.location.replace('./login.html?role=student');
+        }
+
+        const user = auth.getCurrentUser();
+        let allExams = [];
+
+        function init() {
+            // Update UI with user info
+            document.getElementById('userName').textContent = user.name;
+            // document.getElementById('userInitial').textContent = user.name.charAt(0).toUpperCase();
+
+            // Direct Invite Handling
+            const params = new URLSearchParams(window.location.search);
+            const inviteId = params.get('invite') || params.get('testId') || params.get('id');
+            const passcode = params.get('passcode');
+
+            if (inviteId) {
+                document.getElementById('testIdInput').value = inviteId;
+                if (passcode) document.getElementById('passcodeInput').value = passcode;
+                showToast('Invite details pre-filled. Checking credentials...', 'info');
+                // Clear pending session data
+                sessionStorage.removeItem('pending_test_id');
+                sessionStorage.removeItem('pending_passcode');
+
+                // Auto-join if both present or if no passcode required
+                const exam = db.getExamByTestId(inviteId) || db.getExamByJoiningKey(inviteId);
+                const passRequired = exam?.security?.passcode;
+                if (exam && (!passRequired || (passRequired && passcode))) {
+                    setTimeout(() => handleJoin(), 1200);
+                } else if (exam && passRequired && !passcode) {
+                    showToast('This assessment requires a security passcode.', 'info');
+                    document.getElementById('passcodeInput').focus();
+                }
+            }
+
+            loadDashboard();
+        }
+
+        // --- DASHBOARD ACTIONS ---
+        function toggleQuickLinksGrid(e) {
+            if (e) e.stopPropagation();
+            const grid = document.getElementById('quickLinksGrid');
+            const extraCards = document.querySelectorAll('.extra-quick-card');
+            const allCardItems = document.querySelectorAll('.ql-card-item');
+            const chevron = document.getElementById('quickLinksChevron');
+            if (!extraCards.length) return;
+
+            let isExpanding = extraCards[0].style.display === 'none' || extraCards[0].style.display === '';
+
+            extraCards.forEach(card => {
+                card.style.display = isExpanding ? 'flex' : 'none';
+            });
+
+            if (grid) {
+                if (isExpanding) {
+                    grid.style.display = 'grid';
+                    grid.style.gridTemplateColumns = '1fr 1fr';
+                    allCardItems.forEach(card => {
+                        card.style.width = '100%';
+                        card.style.minWidth = '0';
+                    });
+                } else {
+                    grid.style.display = 'flex';
+                    grid.style.overflowX = 'auto';
+                    allCardItems.forEach(card => {
+                        card.style.width = '270px';
+                        card.style.minWidth = '270px';
+                    });
+                }
+            }
+
+            if (chevron) {
+                chevron.className = isExpanding ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
+            }
+        }
+        function togglePasscodeVisibility() {
+            const input = document.getElementById('passcodeInput');
+            const eye = document.getElementById('passcodeEyeIcon');
+            if (!input || !eye) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                eye.className = 'far fa-eye-slash';
+            } else {
+                input.type = 'password';
+                eye.className = 'far fa-eye';
+            }
+        }
+
+        function toggleTopJoinPopup(e) {
+            if (e) e.stopPropagation();
+            const popup = document.getElementById('topJoinPopup');
+            const icon = document.getElementById('headerToggleIcon');
+            if (!popup) return;
+            if (popup.style.display === 'block') {
+                popup.style.display = 'none';
+                if (icon) icon.className = 'fas fa-chevron-down';
+            } else {
+                popup.style.display = 'block';
+                if (icon) icon.className = 'fas fa-chevron-up';
+                const input = document.getElementById('testIdInput');
+                if (input) input.focus();
+            }
+        }
+
+        function focusJoinField() {
+            const popup = document.getElementById('topJoinPopup');
+            if (popup) popup.style.display = 'block';
+            const icon = document.getElementById('headerToggleIcon');
+            if (icon) icon.className = 'fas fa-chevron-up';
+            const input = document.getElementById('testIdInput');
+            if (input) input.focus();
+            showToast('Enter your Test ID or Link above', 'info');
+        }
+
+        document.addEventListener('click', function (e) {
+            const popup = document.getElementById('topJoinPopup');
+            const btn = document.getElementById('headerToggleBtn');
+            if (popup && popup.style.display === 'block' && !popup.contains(e.target) && btn && !btn.contains(e.target)) {
+                popup.style.display = 'none';
+                const icon = document.getElementById('headerToggleIcon');
+                if (icon) icon.className = 'fas fa-chevron-down';
+            }
+
+            const contextMenu = document.getElementById('rightBarContextMenu');
+            if (contextMenu && contextMenu.style.display === 'block' && !contextMenu.contains(e.target)) {
+                closeRightBarContextMenu();
+            }
+        });
+
+        function handleRightBarContextMenu(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const menu = document.getElementById('rightBarContextMenu');
+            if (!menu) return;
+
+            let mouseX = e.clientX;
+            let mouseY = e.clientY;
+
+            const winWidth = window.innerWidth;
+            const winHeight = window.innerHeight;
+            const menuWidth = 280;
+            const menuHeight = 240;
+
+            if (mouseX + menuWidth > winWidth) mouseX = winWidth - menuWidth - 15;
+            if (mouseY + menuHeight > winHeight) mouseY = winHeight - menuHeight - 15;
+
+            menu.style.left = mouseX + 'px';
+            menu.style.top = mouseY + 'px';
+            menu.style.display = 'block';
+        }
+
+        function closeRightBarContextMenu() {
+            const menu = document.getElementById('rightBarContextMenu');
+            if (menu) menu.style.display = 'none';
+        }
+
+        function scrollToExams() {
+            document.getElementById('assignedSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('profileMenu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        window.onclick = function (event) {
+            const menu = document.getElementById('profileMenu');
+            const toggle = document.getElementById('profileToggle');
+            if (menu && toggle && !toggle.contains(event.target) && !menu.contains(event.target)) {
+                menu.style.display = 'none';
+            }
+        }
+
+        function handleJoin(e) {
+            if (e) e.preventDefault();
+            const rawInput = document.getElementById('testIdInput').value.trim();
+            const pass = document.getElementById('passcodeInput').value.trim();
+
+            if (!rawInput) return showToast('Please enter a Test ID or Joining Key', 'error');
+
+            let exam = null;
+
+            // 1. Try direct Joining Key match (Primary) - Supports custom keys of any format (case-sensitive)
+            exam = db.getExamByJoiningKey(rawInput);
+
+            if (!exam) {
+                // Try case-insensitive fallback for convenience
+                exam = db.getAllExams().find(e => e.joiningKey && String(e.joiningKey).toLowerCase() === rawInput.toLowerCase());
+            }
+
+            if (!exam) {
+                // 2. Try extraction if it's a link or Test ID
+                let id = rawInput;
+                if (rawInput.includes('?')) {
+                    const params = new URLSearchParams(rawInput.split('?')[1]);
+                    id = params.get('testId') || params.get('id') || params.get('invite') || rawInput;
+                } else if (rawInput.includes('/')) {
+                    id = rawInput.split('/').pop();
+                }
+                exam = db.getExamByTestId(id) || db.getExamById(id);
+            }
+
+            if (!exam) return showToast('Assessment not found. Check your ID/Key.', 'error');
+
+            // Check security passcode
+            if (exam.security?.passcode && exam.security.passcode !== pass) {
+                return showToast('❌ Incorrect security passcode', 'error');
+            }
+
+            let res = db.startAttempt(exam.id, user.id);
+
+            // Allow resuming or re-attempting if an attempt already exists
+            if (!res.success && res.existingAttempt) {
+                if (res.existingAttempt.status === 'submitted' || res.existingAttempt.status === 'reviewed') {
+                    // Start a fresh re-attempt
+                    res = db.startAttempt(exam.id, user.id, true);
+                } else {
+                    // Resume in-progress attempt
+                    res.success = true;
+                    res.attempt = res.existingAttempt;
+                }
+            }
+
+            if (res.success || res.attempt) {
+                const att = res.attempt || res.existingAttempt;
+                sessionStorage.removeItem(`exam_started_${att.id}`);
+                sessionStorage.setItem('joined_via_link', 'true');
+                if (pass) sessionStorage.setItem('pending_passcode', pass);
+                showToast('Access Granted. Opening Assessment...', 'success');
+                setTimeout(() => {
+                    const dest = exam.isCompetitive ? './comexam-attempt.html' : './exam-attempt.html';
+                    window.location.href = `${dest}?attemptId=${att.id}&vialink=true`;
+                }, 300);
+            } else {
+                showToast(res.message, 'error');
+            }
+        }
+
+        function toggleSearch() {
+            const s = document.getElementById('inlineSearch');
+            s.style.display = s.style.display === 'none' ? 'block' : 'none';
+            if (s.style.display === 'block') document.getElementById('searchInput').focus();
+        }
+
+        function loadDashboard() {
+            // Permanently purge legacy fake mock exams and attempts
+            const fakeMockIds = ['mock_attempt_st2', 'mock_attempt_st1', 'exam_st2_dsoops_beta', 'exam_st1_dsoops_a', 'mock_st1', 'mock_st2', 'exam_st2', 'exam_st1'];
+            const fakeMockTitles = [
+                'st2-24cse0208-b2024-sem3-dsoops-beta',
+                'st1-dsoops-24cse0208-b2024-sem3-a',
+                'st2-24cse0208-b2024-sem3-dsoops',
+                'st1-dsoops-24cse0208-b2024-sem3'
+            ];
+
+            try {
+                let storedExams = JSON.parse(localStorage.getItem('TESTPAD_exams')) || [];
+                storedExams = storedExams.filter(e => {
+                    if (!e) return false;
+                    const id = String(e.id || '').toLowerCase();
+                    const title = String(e.title || '').trim().toLowerCase();
+                    if (fakeMockIds.includes(id) || fakeMockIds.includes(e.id)) return false;
+                    if (fakeMockTitles.some(t => title.includes(t) || title === t)) return false;
+                    return true;
+                });
+                localStorage.setItem('TESTPAD_exams', JSON.stringify(storedExams));
+
+                let storedAttempts = JSON.parse(localStorage.getItem('TESTPAD_attempts')) || [];
+                storedAttempts = storedAttempts.filter(a => {
+                    if (!a) return false;
+                    const id = String(a.id || '').toLowerCase();
+                    const examId = String(a.examId || '').toLowerCase();
+                    const title = String(a.examTitle || '').trim().toLowerCase();
+                    if (fakeMockIds.includes(id) || fakeMockIds.includes(examId)) return false;
+                    if (fakeMockTitles.some(t => title.includes(t) || title === t)) return false;
+                    return true;
+                });
+                localStorage.setItem('TESTPAD_attempts', JSON.stringify(storedAttempts));
+            } catch (err) {
+                console.error("Error purging legacy mock data:", err);
+            }
+
+            // LOAD EXAMS
+            let exams = db.getAllExams().filter(e => e.status === 'published' || e.status === 'live' || e.status === 'ended');
+            exams = exams.filter(e => {
+                if (!e) return false;
+                const id = String(e.id || '').toLowerCase();
+                const title = String(e.title || '').trim().toLowerCase();
+                if (fakeMockIds.includes(id) || fakeMockIds.includes(e.id)) return false;
+                if (fakeMockTitles.some(t => title.includes(t) || title === t)) return false;
+                return true;
+            });
+            const attempts = db.getStudentAttempts(user.id);
+
+            const allAttemptsRaw = JSON.parse(localStorage.getItem('TESTPAD_attempts')) || [];
+
+            allExams = exams.map(exam => {
+                let attempt = [...attempts].reverse().find(a => a.examId === exam.id);
+
+                // Recover orphaned completed competitive attempts
+                if (exam.isCompetitive && (!attempt || attempt.status !== 'completed')) {
+                    const orphan = [...allAttemptsRaw].reverse().find(a => a.examId === exam.id && a.status === 'completed' && (a.studentId === user.id || a.rollNo === user.rollNo || a.studentName === user.name));
+                    if (orphan) attempt = orphan;
+                }
+
+                let progress = 0;
+                let status = 'pending';
+
+                if (attempt) {
+                    if (attempt.status === 'submitted' || attempt.status === 'reviewed' || attempt.status === 'completed') {
+                        progress = 100;
+                        status = 'completed';
+                    }
+                    else if (attempt.status === 'started' || attempt.status === 'ongoing' || attempt.status === 'in-progress') {
+                        progress = 0;
+                        status = 'in-progress';
+                    }
+                }
+                return { ...exam, examStatus: exam.status, progress, status, attemptId: attempt?.id || attempt?.attemptId, resultsPublished: exam.resultsPublished || false, isCompetitive: exam.isCompetitive || false };
+            });
+
+            baseRegularExams = allExams.filter(e => !e.isCompetitive);
+            baseCompetitiveExams = allExams.filter(e => e.isCompetitive);
+
+            renderExams(baseRegularExams, 'examGrid', 'examCount');
+            renderExams(baseCompetitiveExams, 'competitiveExamGrid', 'competitiveExamCount');
+
+            // LOAD COURSES
+            const courses = db.getAllCourses ? db.getAllCourses().filter(c => c.status !== 'draft' && c.status !== 'expired') : [];
+            const processedCourses = courses.map(c => {
+                const progressObj = db.getCourseProgress ? db.getCourseProgress(c.id, user.id) : null;
+                const total = c.modules ? c.modules.reduce((acc, m) => acc + (m.lessons ? m.lessons.length : 0), 0) : 0;
+                const count = progressObj ? (progressObj.completedItems ? progressObj.completedItems.length : 0) : 0;
+                const progressPerc = total > 0 ? Math.round((count / total) * 100) : 0;
+                return { ...c, progress: progressPerc };
+            });
+            renderCourses(processedCourses);
+        }
+
+        let baseRegularExams = [];
+        let baseCompetitiveExams = [];
+
+        function filterAssignedExams() {
+            const query = (document.getElementById('examSearchInput')?.value || '').toLowerCase();
+            const filtered = baseRegularExams.filter(e =>
+                (e.title && e.title.toLowerCase().includes(query)) ||
+                (e.testId && e.testId.toLowerCase().includes(query))
+            );
+            renderExams(filtered, 'examGrid', 'examCount');
+        }
+
+        function filterCompetitiveExams() {
+            const query = (document.getElementById('competitiveSearchInput')?.value || '').toLowerCase();
+            const filtered = baseCompetitiveExams.filter(e =>
+                (e.title && e.title.toLowerCase().includes(query)) ||
+                (e.testId && e.testId.toLowerCase().includes(query))
+            );
+            renderExams(filtered, 'competitiveExamGrid', 'competitiveExamCount');
+        }
+
+        const sampleCourses = [
+            {
+                id: 'c1',
+                title: '24CSE0101-Problem Solving Using Python Programming-1stSem-2024',
+                sectionsCount: 7,
+                progress: 100
+            },
+            {
+                id: 'c2',
+                title: '24CSE0102-Front End Engineering-I-1st Sem-2024',
+                sectionsCount: 13,
+                progress: 57
+            },
+            {
+                id: 'c3',
+                title: '24CSE0208-Data Structures using Object Oriented Programming-2024-CSE-3Sem',
+                sectionsCount: 10,
+                progress: 0
+            }
+        ];
+
+        let baseCoursesList = [];
+
+        function renderCourses(courses) {
+            const grid = document.getElementById('courseGrid');
+            const countSpan = document.getElementById('courseCount');
+
+            const displayCourses = (courses && courses.length > 0) ? courses : sampleCourses;
+            baseCoursesList = displayCourses;
+            countSpan.textContent = `(${displayCourses.length})`;
+
+            if (displayCourses.length === 0) {
+                grid.innerHTML = `<div style="text-align:center; padding:60px; color:#111111; font-family:'Mulish', sans-serif; font-size:1.2rem; font-weight:500;">No matching learning modules found</div>`;
+                return;
+            }
+
+            grid.innerHTML = displayCourses.map(c => {
+                const title = c.title || c.name || 'Learning Module';
+                const sectionsText = `${c.sectionsCount || c.modules?.length || (c.id === 'c2' ? 13 : (c.id === 'c3' ? 10 : 7))} Sections`;
+                const progressVal = c.progress !== undefined ? c.progress : 0;
+                const safeTitle = title.replace(/"/g, '&quot;');
+
+                return `
+                <div class="learning-module-card" onclick="location.href='./course-dashboard.html?courseId=${c.id || ''}'" style="background: #ffffff; border: 1px solid #f0f0f0; border-radius: 10px; padding: 22px 28px; margin-bottom: 16px; box-shadow: 0 1px 6px rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 8px; position: relative; transition: all 0.2s ease; cursor: pointer;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 18px;">
+                        <h3 data-tooltip="${safeTitle}" style="font-family: 'Mulish', sans-serif; font-size: 1.18rem; font-weight: 600; color: #111111; margin: 0; line-height: 1.35; flex: 1;">${title}</h3>
+                        <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0; margin-right: 28px;" onclick="event.stopPropagation();">
+                            <div class="icon-btn-box" data-tooltip="Analytics" onclick="openCourseStats(event, '${c.id || ''}')" style="width: 34px; height: 34px;">
+                                <img src="../TESTPAD_WEBSITE__files/statistics.svg" alt="Analytics" style="width: 22px; height: 22px;" />
+                            </div>
+                            <div class="icon-btn-box" data-tooltip="Learning Content" onclick="location.href='./course-dashboard.html?courseId=${c.id || ''}'" style="width: 34px; height: 34px;">
+                                <img src="../TESTPAD_WEBSITE__files/menu-1.svg" alt="Learning Content" style="width: 22px; height: 22px;" />
+                            </div>
+                        </div>
+                    </div>
+                    <div style="font-family: 'Mulish', sans-serif; font-size: 0.90rem; color: #888888; font-weight: 400;">
+                        ${sectionsText}
+                    </div>
+                    <div data-tooltip="${progressVal}% completed" style="display: flex; align-items: center; gap: 16px; margin-top: 4px; width: 100%;">
+                        <div style="width: 270px; max-width: 60%; height: 6px; min-height: 6px; max-height: 6px; background: #f5c6b6; border-radius: 0; overflow: hidden; position: relative;">
+                            <div style="width: ${progressVal}%; height: 100%; min-height: 6px; background: #df5a22; border-radius: 0; transition: width 0.6s ease;"></div>
+                        </div>
+                        <span style="font-family: 'Mulish', sans-serif; font-size: 0.86rem; color: #888888; font-weight: 400;">${progressVal}% done</span>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+
+        function filterCourses() {
+            const query = (document.getElementById('courseSearchInput')?.value || '').toLowerCase();
+            const filtered = baseCoursesList.filter(c =>
+                (c.title && c.title.toLowerCase().includes(query))
+            );
+            const grid = document.getElementById('courseGrid');
+            const countSpan = document.getElementById('courseCount');
+            if (countSpan) countSpan.textContent = `(${filtered.length})`;
+            if (!grid) return;
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="text-align:center; padding:60px; color:#111111; font-family:'Mulish', sans-serif; font-size:1.2rem; font-weight:500;">No matching learning modules found</div>`;
+                return;
+            }
+            grid.innerHTML = filtered.map(c => {
+                const title = c.title || c.name || 'Learning Module';
+                const sectionsText = `${c.sectionsCount || c.modules?.length || (c.id === 'c2' ? 13 : (c.id === 'c3' ? 10 : 7))} Sections`;
+                const progressVal = c.progress !== undefined ? c.progress : 0;
+                const safeTitle = title.replace(/"/g, '&quot;');
+
+                return `
+                <div class="learning-module-card" onclick="location.href='./course-dashboard.html?courseId=${c.id || ''}'" style="background: #ffffff; border: 1px solid #f0f0f0; border-radius: 10px; padding: 22px 28px; margin-bottom: 16px; box-shadow: 0 1px 6px rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 8px; position: relative; transition: all 0.2s ease; cursor: pointer;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 18px;">
+                        <h3 data-tooltip="${safeTitle}" style="font-family: 'Mulish', sans-serif; font-size: 1.18rem; font-weight: 600; color: #111111; margin: 0; line-height: 1.35; flex: 1;">${title}</h3>
+                        <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0; margin-right: 28px;" onclick="event.stopPropagation();">
+                            <div class="icon-btn-box" data-tooltip="Analytics" onclick="openCourseStats(event, '${c.id || ''}')" style="width: 34px; height: 34px;">
+                                <img src="../TESTPAD_WEBSITE__files/statistics.svg" alt="Analytics" style="width: 22px; height: 22px;" />
+                            </div>
+                            <div class="icon-btn-box" data-tooltip="Learning Content" onclick="location.href='./course-dashboard.html?courseId=${c.id || ''}'" style="width: 34px; height: 34px;">
+                                <img src="../TESTPAD_WEBSITE__files/menu-1.svg" alt="Learning Content" style="width: 22px; height: 22px;" />
+                            </div>
+                        </div>
+                    </div>
+                    <div style="font-family: 'Mulish', sans-serif; font-size: 0.90rem; color: #888888; font-weight: 400;">
+                        ${sectionsText}
+                    </div>
+                    <div data-tooltip="${progressVal}% completed" style="display: flex; align-items: center; gap: 16px; margin-top: 4px; width: 100%;">
+                        <div style="width: 270px; max-width: 60%; height: 6px; min-height: 6px; max-height: 6px; background: #f5c6b6; border-radius: 0; overflow: hidden; position: relative;">
+                            <div style="width: ${progressVal}%; height: 100%; min-height: 6px; background: #df5a22; border-radius: 0; transition: width 0.6s ease;"></div>
+                        </div>
+                        <span style="font-family: 'Mulish', sans-serif; font-size: 0.86rem; color: #888888; font-weight: 400;">${progressVal}% done</span>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+
+        function openCourseStats(event, courseId) {
+            if (event) event.stopPropagation();
+            location.href = `./course-dashboard.html?courseId=${courseId}&tab=stats`;
+        }
+
+        function renderExams(examsToRender, containerId = 'examGrid', countId = 'examCount') {
+            const grid = document.getElementById(containerId);
+            const countSpan = document.getElementById(countId);
+            countSpan.textContent = `(${examsToRender.length})`;
+
+            if (examsToRender.length === 0) {
+                if (containerId === 'competitiveExamGrid') {
+                    grid.innerHTML = `<div style="text-align:center; padding:60px; color:#111111; font-family:'Mulish', sans-serif; font-size:1.2rem; font-weight:500;">No matching competitive assessments found</div>`;
+                } else {
+                    grid.innerHTML = `<div style="text-align:center; padding:60px; color:#111111; font-family:'Mulish', sans-serif; font-size:1.2rem; font-weight:500;">No matching assessments found</div>`;
+                }
+                return;
+            }
+
+            grid.innerHTML = examsToRender.map(e => {
+                let isResultPublished = e.resultsPublished || e.security?.showResults || e.security?.autoPublishResults || e.isCompetitive;
+                const title = e.title || 'Assessment';
+                const sectionsText = `${e.sections?.length || 7} Sections`;
+                const progressVal = e.progress !== undefined ? e.progress : 0;
+                const safeTitle = title.replace(/"/g, '&quot;');
+
+                return `
+                <div class="learning-module-card" onclick="handleCardClick('${e.id}', '${e.attemptId}', '${e.status}', ${isResultPublished}, '${e.examStatus}', ${e.isCompetitive})" style="background: #ffffff; border: 1px solid #f0f0f0; border-radius: 10px; padding: 22px 28px; margin-bottom: 16px; box-shadow: 0 1px 6px rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 8px; position: relative; transition: all 0.2s ease; cursor: pointer;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 18px;">
+                        <h3 data-tooltip="${safeTitle}" style="font-family: 'Mulish', sans-serif; font-size: 1.18rem; font-weight: 600; color: #111111; margin: 0; line-height: 1.35; flex: 1;">${title}</h3>
+                        <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0; margin-right: 28px;" onclick="event.stopPropagation();">
+                            <div class="icon-btn-box" data-tooltip="Attempts" onclick="openAnalytics(event, '${e.attemptId}', '${e.status}', ${isResultPublished}, ${e.isCompetitive})" style="width: 34px; height: 34px;">
+                                <img src="../TESTPAD_WEBSITE__files/statistics.svg" alt="Attempts" style="width: 22px; height: 22px;" />
+                            </div>
+                            <div class="icon-btn-box" data-tooltip="Learning Content" onclick="handleCardClick('${e.id}', '${e.attemptId}', '${e.status}', ${isResultPublished}, '${e.examStatus}', ${e.isCompetitive})" style="width: 34px; height: 34px;">
+                                <img src="../TESTPAD_WEBSITE__files/menu-1.svg" alt="Learning Content" style="width: 22px; height: 22px;" />
+                            </div>
+                        </div>
+                    </div>
+                    <div style="font-family: 'Mulish', sans-serif; font-size: 0.90rem; color: #888888; font-weight: 400;">
+                        ${sectionsText}
+                    </div>
+                    <div data-tooltip="${progressVal}% completed" style="display: flex; align-items: center; gap: 16px; margin-top: 4px; width: 100%;">
+                        <div style="width: 270px; max-width: 60%; height: 6px; min-height: 6px; max-height: 6px; background: #f5c6b6; border-radius: 0; overflow: hidden; position: relative;">
+                            <div style="width: ${progressVal}%; height: 100%; min-height: 6px; background: #df5a22; border-radius: 0; transition: width 0.6s ease;"></div>
+                        </div>
+                        <span style="font-family: 'Mulish', sans-serif; font-size: 0.86rem; color: #888888; font-weight: 400;">${progressVal}% done</span>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+
+        function copyInviteLink(event, testId) {
+            event.stopPropagation();
+            if (!testId) return;
+
+            const link = `https://exam.testpad.chitpara.edu.in/test/${testId}`;
+            navigator.clipboard.writeText(link).then(() => {
+                showToast('Invite link copied to clipboard!', 'success');
+            }).catch(err => {
+                // Fallback for older browsers or non-secure contexts
+                const el = document.createElement('textarea');
+                el.value = link;
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+                showToast('Invite link copied to clipboard!', 'success');
+            });
+        }
+
+        function filterExams() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filteredRegular = allExams.filter(e => !e.isCompetitive && (e.title.toLowerCase().includes(query) || e.testId.toLowerCase().includes(query)));
+            const filteredCompetitive = allExams.filter(e => e.isCompetitive && (e.title.toLowerCase().includes(query) || e.testId.toLowerCase().includes(query)));
+
+            renderExams(filteredRegular, 'examGrid', 'examCount');
+            renderExams(filteredCompetitive, 'competitiveExamGrid', 'competitiveExamCount');
+        }
+
+        function handleCardClick(examId, attemptId, status, isPublished, examStatus, isCompetitive) {
+            if (status === 'completed') {
+                if (isPublished) {
+                    location.href = isCompetitive ? `./competetiveanalyzerstudents.html?attemptId=${attemptId}` : `./student-results.html?attemptId=${attemptId}`;
+                }
+                else showToast("The instructor hasn't published the result for this test yet.", "info");
+            }
+            else if (status === 'in-progress') {
+                if (examStatus === 'ended') showToast("This test has already ended.", "error");
+                else location.href = isCompetitive ? `./comexam-attempt.html?attemptId=${attemptId}` : `./exam-attempt.html?attemptId=${attemptId}`;
+            }
+            else {
+                if (examStatus === 'ended') return showToast("This test has already ended.", "error");
+                // Quick start new attempt
+                const res = db.startAttempt(examId, user.id, true);
+                if (res.success || res.attempt) {
+                    const att = res.attempt || res.existingAttempt;
+                    sessionStorage.removeItem(`exam_started_${att.id}`);
+                    location.href = isCompetitive ? `./comexam-attempt.html?attemptId=${att.id}` : `./exam-attempt.html?attemptId=${att.id}`;
+                }
+                else showToast(res.message, 'error');
+            }
+        }
+
+        function openAnalytics(event, attemptId, status, isPublished, isCompetitive) {
+            event.stopPropagation();
+            if (!isCompetitive) {
+                showToast("Detailed analytics are available for competitive exams only.", "info");
+                return;
+            }
+            if (status !== 'completed') {
+                showToast("You must complete the exam to view analytics.", "error");
+                return;
+            }
+            if (!isPublished) {
+                showToast("Analytics are not published yet.", "info");
+                return;
+            }
+            location.href = `./competetiveanalyzerstudents.html?attemptId=${attemptId}`;
+        }
+
+        // --- WEB MESSAGE SYSTEM ---
+        function showToast(msg, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+
+            let icon = 'info-circle';
+            if (type === 'success') icon = 'check-circle';
+            if (type === 'error') icon = 'exclamation-circle';
+
+            toast.innerHTML = `<i class="fas fa-${icon}"></i><span>${msg}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease-out reverse forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function showConfirm(title, body, confirmBtnText, isDanger = false) {
+            return new Promise((resolve) => {
+                const overlay = document.getElementById('modalOverlay');
+                const titleEl = document.getElementById('modalTitle');
+                const bodyEl = document.getElementById('modalBody');
+                const cancelBtn = document.getElementById('modalCancel');
+                const confirmBtn = document.getElementById('modalConfirm');
+
+                titleEl.textContent = title;
+                bodyEl.textContent = body;
+                confirmBtn.textContent = confirmBtnText;
+                confirmBtn.className = isDanger ? 'btn-modal danger' : 'btn-modal confirm';
+
+                overlay.style.display = 'flex';
+
+                const close = (res) => {
+                    overlay.style.display = 'none';
+                    resolve(res);
+                };
+
+                cancelBtn.onclick = () => close(false);
+                confirmBtn.onclick = () => close(true);
+            });
+        }
+
+        async function handleLogout() {
+            const confirmed = await showConfirm(
+                'Terminate Portal Session?',
+                'Are you sure you want to logout? Any unsaved environment data might be lost.',
+                'Log Out',
+                true
+            );
+
+            if (confirmed) {
+                auth.logout();
+                location.href = '../index.html';
+            }
+        }
+
+        document.addEventListener('keydown', function (event) {
+            if ((event.key === 'l' || event.key === 'L') && event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA') {
+                auth.logout();
+                location.href = '../index.html';
+            }
+        });
+
+        function toggleGridMenu(e) {
+            if (e) e.stopPropagation();
+            const dropdown = document.getElementById('gridMenuDropdown') || document.getElementById('gridMenu');
+            if (!dropdown) return;
+            if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+                dropdown.style.display = 'flex';
+            } else {
+                dropdown.style.display = 'none';
+            }
+        }
+
+        function scrollToCourses() {
+            const el = document.getElementById('coursesSection');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function togglePlusMenu(e) {
+            if (e) e.stopPropagation();
+            const p = document.getElementById('plusMenu');
+            if (p) p.style.display = p.style.display === 'block' ? 'none' : 'block';
+        }
+
+        document.addEventListener('click', function (e) {
+            const gridContainer = document.querySelector('.grid-menu-container');
+            const gridDropdown = document.getElementById('gridMenuDropdown');
+            if (gridDropdown && gridContainer && !gridContainer.contains(e.target)) {
+                gridDropdown.style.display = 'none';
+            }
+
+            if (!e.target.closest('#plusBtn') && !e.target.closest('#plusMenu')) {
+                const p = document.getElementById('plusMenu');
+                if (p) p.style.display = 'none';
+            }
+        });
+
+        init();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="../js/db.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #eff6ff;
+            --secondary: #64748b;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        /* Standardized scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #93c5fd; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #60a5fa; }
+
+        .header {
+            background: var(--card-bg);
+            padding: 20px 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-title i {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .header-title h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        
+        .header-subtitle {
+            font-size: 0.85rem;
+            color: var(--secondary);
+            margin-top: 4px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-outline {
+            background: white;
+            border-color: var(--border);
+            color: #475569;
+        }
+
+        .btn-outline:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .dashboard-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .export-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .results-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .erp-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .erp-table th {
+            background: #f8fafc;
+            padding: 16px 24px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--secondary);
+            border-bottom: 2px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .erp-table td {
+            padding: 16px 24px;
+            font-size: 0.9rem;
+            color: #334155;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        .erp-table tbody tr:hover {
+            background-color: var(--primary-light);
+        }
+
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        
+        .rank-1 { background: #fef08a; color: #854d0e; }
+        .rank-2 { background: #e2e8f0; color: #475569; }
+        .rank-3 { background: #fed7aa; color: #9a3412; }
+        .rank-other { background: #f1f5f9; color: var(--secondary); }
+        
+        .score-pill {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #cbd5e1;
+            margin-bottom: 16px;
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); display: none;
+            align-items: center; justify-content: center; z-index: 100;
+        }
+        .modal-content {
+            background: white; padding: 24px; border-radius: 8px;
+            width: 400px; max-width: 90%; text-align: center;
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-title">
+            <i class="fas fa-chart-bar"></i>
+            <div>
+                <h1 id="examTitle">Competitive Exam Results</h1>
+                <div class="header-subtitle" id="examSub">Loading...</div>
+            </div>
+        </div>
+        <button class="btn btn-outline" onclick="window.location.href='teacher-dashboard.html'">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </button>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-controls">
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <div style="font-size: 1.1rem; font-weight: 700; color: #1e293b;">
+                    Rankings & Performance
+                </div>
+                <select id="examSelector" onchange="switchExam(this.value)" style="padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border); font-size: 0.9rem; min-width: 250px; background: white; color: #334155; font-weight: 500; cursor: pointer; outline: none;">
+                    <option value="">-- Select an Exam --</option>
+                </select>
+            </div>
+            <div class="export-actions">
+                <button class="btn btn-outline" onclick="exportToPDF()">
+                    <i class="fas fa-file-pdf" style="color: #ef4444;"></i> Export PDF
+                </button>
+                <button class="btn btn-outline" onclick="exportToExcel()">
+                    <i class="fas fa-file-excel" style="color: #10b981;"></i> Export Excel
+                </button>
+                <button class="btn btn-primary" onclick="openEmailModal()">
+                    <i class="fas fa-paper-plane"></i> Email Results
+                </button>
+            </div>
+        </div>
+
+        <div class="results-card" id="printArea">
+            <div class="table-responsive">
+                <table class="erp-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px; text-align: center;">Rank</th>
+                            <th>Enrollment ID</th>
+                            <th>Student Name</th>
+                            <th>Attempt ID</th>
+                            <th>Start Time</th>
+                            <th>Submission Time</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Total Score</th>
+                            <th style="text-align: center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody">
+                        <!-- Rows injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div class="modal-overlay" id="emailModal">
+        <div class="modal-content">
+            <i class="fas fa-envelope-open-text" style="font-size: 2.5rem; color: #2563eb; margin-bottom: 16px;"></i>
+            <h3 style="margin-bottom: 8px;">Direct Email Dispatch</h3>
+            <p style="color: var(--secondary); margin-bottom: 20px; font-size: 0.9rem;">
+                Enter the email address where you want to directly send the complete result summary for this exam.
+            </p>
+            
+            <div style="text-align: left; margin-bottom: 20px;">
+                <label style="display:block; font-size:0.85rem; font-weight:bold; margin-bottom:5px; color:#333;">Recipient Email Address:</label>
+                <input type="email" id="targetEmailInput" placeholder="e.g. admin@school.edu.in" style="width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:4px; font-size:0.9rem; outline:none;">
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button class="btn btn-outline" onclick="document.getElementById('emailModal').style.display='none'">Cancel</button>
+                <button class="btn btn-primary" onclick="dispatchDirectEmail()">
+                    <i class="fas fa-paper-plane"></i> Send Results
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div class="modal-overlay" id="detailsModal" style="z-index: 1000;">
+        <div class="modal-content" style="width: 800px; max-width: 95%; max-height: 90vh; display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
+                <h3 style="margin: 0; color: #1e293b;">Attempt Analysis</h3>
+                <button class="btn btn-outline" style="padding: 4px 8px;" onclick="document.getElementById('detailsModal').style.display='none'">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; background: #f8fafc; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 0.9rem;">
+                <div><strong>Student:</strong> <span id="detStudent"></span></div>
+                <div><strong>Score:</strong> <span id="detScore"></span></div>
+            </div>
+
+            <div style="flex: 1; overflow-y: auto; text-align: left;">
+                <table class="erp-table" style="font-size: 0.85rem;">
+                    <thead>
+                        <tr>
+                            <th style="padding: 10px;">Q.No</th>
+                            <th style="padding: 10px;">Question</th>
+                            <th style="padding: 10px;">Your Answer</th>
+                            <th style="padding: 10px;">Correct Answer</th>
+                            <th style="padding: 10px;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detailsBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentAttempts = [];
+        let examDetails = null;
+
+        let examsList = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const exams = JSON.parse(localStorage.getItem('TESTPAD_exams')) || [];
+            examsList = exams;
+            
+            const selector = document.getElementById('examSelector');
+            if (selector) {
+                let opts = '<option value="">-- Select an Exam --</option>';
+                examsList.forEach(e => {
+                    opts += `<option value="${e.id}">${e.title} (ID: ${e.testId || 'N/A'})</option>`;
+                });
+                selector.innerHTML = opts;
+            }
+
+            const params = new URLSearchParams(window.location.search);
+            const examId = params.get('examId');
+            const testId = params.get('testId');
+
+            let initialExamId = null;
+            if (examId) {
+                initialExamId = examId;
+            } else if (testId) {
+                const e = exams.find(e => String(e.testId) === String(testId));
+                if (e) initialExamId = e.id;
+            }
+
+            if (initialExamId) {
+                if (selector) selector.value = initialExamId;
+                loadExamData(initialExamId);
+            } else if (examsList.length > 0) {
+                showEmpty("Please select an exam from the dropdown to view results.");
+                document.getElementById('examSub').textContent = "Select an exam to load";
+            } else {
+                showEmpty("No exams found in database.");
+                document.getElementById('examSub').textContent = "Database missing";
+            }
+        });
+
+        function switchExam(id) {
+            if (!id) {
+                showEmpty("Please select an exam from the dropdown to view results.");
+                document.getElementById('examTitle').textContent = "Competitive Exam Results";
+                document.getElementById('examSub').textContent = "Select an exam to load";
+                return;
+            }
+            
+            const url = new URL(window.location);
+            url.searchParams.set('examId', id);
+            url.searchParams.delete('testId');
+            window.history.pushState({}, '', url);
+
+            loadExamData(id);
+        }
+
+        function loadExamData(id) {
+            examDetails = examsList.find(e => e.id === id);
+
+            if (!examDetails) {
+                showEmpty("Exam not found.");
+                return;
+            }
+
+            document.getElementById('examTitle').textContent = examDetails.title + " - Results";
+            document.getElementById('examSub').textContent = `Paper ID: ${examDetails.testId || 'N/A'} | Max Marks: ${examDetails.totalMarks || '--'}`;
+
+            const allAttempts = JSON.parse(localStorage.getItem('TESTPAD_attempts')) || [];
+            const attempts = allAttempts.filter(a => a.examId === examDetails.id) || [];
+            
+            const bestAttempts = {};
+            attempts.forEach(att => {
+                if(att.status !== 'completed' && att.status !== 'submitted') return;
+                const roll = att.studentId;
+                if(!bestAttempts[roll] || bestAttempts[roll].score < att.score) {
+                    bestAttempts[roll] = att;
+                }
+            });
+
+            currentAttempts = Object.values(bestAttempts);
+            currentAttempts.sort((a, b) => b.score - a.score);
+
+            renderTable(currentAttempts);
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('resultsBody');
+            if(data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5">
+                    <div class="empty-state">
+                        <i class="fas fa-clipboard-list"></i>
+                        <p>No results available for this exam yet.</p>
+                    </div>
+                </td></tr>`;
+                return;
+            }
+
+            let html = '';
+            data.forEach((att, index) => {
+                const rank = index + 1;
+                let rankClass = 'rank-other';
+                if(rank === 1) rankClass = 'rank-1';
+                else if(rank === 2) rankClass = 'rank-2';
+                else if(rank === 3) rankClass = 'rank-3';
+
+                html += `
+                    <tr>
+                        <td style="text-align: center;">
+                            <span class="rank-badge ${rankClass}">${rank}</span>
+                        </td>
+                        <td style="font-weight: 600; color: var(--primary-dark);">${att.studentId || 'N/A'}</td>
+                        <td style="font-weight: 500;">${att.studentName || 'Unknown Candidate'}</td>
+                        <td style="font-size: 0.8rem; color: var(--secondary);">${att.attemptId || 'N/A'}</td>
+                        <td style="font-size: 0.85rem; color: #475569;">${att.startTime ? new Date(att.startTime).toLocaleString() : 'N/A'}</td>
+                        <td style="font-size: 0.85rem; color: #475569;">${att.endTime ? new Date(att.endTime).toLocaleString() : 'N/A'}</td>
+                        <td>
+                            <span style="background: #ecfdf5; color: #059669; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">
+                                <i class="fas fa-check-circle" style="margin-right:4px;"></i> ${att.status || 'Completed'}
+                            </span>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="score-pill">${parseFloat(att.score || 0).toFixed(2)} / ${att.totalMarks || examDetails.totalMarks || 100}</span>
+                        </td>
+                        <td style="text-align: center;">
+                            <button class="btn btn-outline" style="padding: 4px 8px; font-size: 0.8rem;" onclick="viewAttemptDetails('${att.attemptId}')">
+                                <i class="fas fa-search-plus"></i> Analyze
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function viewAttemptDetails(attemptId) {
+            const att = currentAttempts.find(a => a.attemptId === attemptId);
+            if(!att) return;
+
+            document.getElementById('detStudent').textContent = `${att.studentName || 'Student'} (${att.studentId})`;
+            document.getElementById('detScore').textContent = `${parseFloat(att.score || 0).toFixed(2)} / ${att.totalMarks || examDetails.totalMarks || 100}`;
+
+            let html = '';
+            const questions = examDetails.questions || [];
+            
+            if(att.responses && att.responses.length > 0) {
+                att.responses.forEach((res, idx) => {
+                    const q = questions.find(q => q.id === res.questionId) || questions[idx];
+                    let qText = q ? (q.title || q.heading || 'Unknown Question') : 'Unknown Question';
+                    // Strip HTML tags for clean display
+                    let div = document.createElement('div');
+                    div.innerHTML = qText;
+                    qText = div.textContent || div.innerText || "";
+                    if(qText.length > 50) qText = qText.substring(0, 50) + '...';
+
+                    let statusBadge = '';
+                    if(res.status === 'not-visited' || res.status === 'not-answered') {
+                        statusBadge = `<span style="color: #64748b;"><i class="fas fa-minus-circle"></i> Skipped</span>`;
+                    } else if(res.isCorrect) {
+                        statusBadge = `<span style="color: #10b981;"><i class="fas fa-check-circle"></i> Correct</span>`;
+                    } else {
+                        statusBadge = `<span style="color: #ef4444;"><i class="fas fa-times-circle"></i> Wrong</span>`;
+                    }
+
+                    html += `
+                        <tr>
+                            <td style="padding: 10px; font-weight: bold;">${idx + 1}</td>
+                            <td style="padding: 10px;">${qText}</td>
+                            <td style="padding: 10px; color: ${res.isCorrect ? '#10b981' : (res.selectedOption ? '#ef4444' : '#64748b')};">${res.selectedOption || '--'}</td>
+                            <td style="padding: 10px; color: #10b981;">${q ? (q.correctAnswer || '--') : '--'}</td>
+                            <td style="padding: 10px;">${statusBadge}</td>
+                        </tr>
+                    `;
+                });
+            } else {
+                html = `<tr><td colspan="5" style="text-align: center; padding: 20px; color: #64748b;">No detailed response logs available for this attempt.</td></tr>`;
+            }
+
+            document.getElementById('detailsBody').innerHTML = html;
+            document.getElementById('detailsModal').style.display = 'flex';
+        }
+
+        function showEmpty(msg) {
+            document.getElementById('resultsBody').innerHTML = `<tr><td colspan="5">
+                <div class="empty-state">
+                    <i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i>
+                    <p>${msg}</p>
+                </div>
+            </td></tr>`;
+        }
+
+        function exportToPDF() {
+            const element = document.getElementById('printArea');
+            if (!element) return;
+            const opt = {
+                margin: 10,
+                filename: (examDetails ? examDetails.title.replace(/\s+/g, '_') : 'Exam') + '_Results.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+
+        function exportToExcel() {
+            if(currentAttempts.length === 0) return alert("No data to export.");
+            
+            const wsData = [
+                ["Rank", "Roll Number", "Student Name", "Status", "Total Score"]
+            ];
+            
+            currentAttempts.forEach((att, idx) => {
+                wsData.push([
+                    idx + 1,
+                    att.studentId,
+                    att.studentName || 'Unknown Candidate',
+                    "Completed",
+                    att.score
+                ]);
+            });
+
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Results");
+            XLSX.writeFile(wb, (examDetails ? examDetails.title.replace(/\s+/g, '_') : 'Exam') + '_Results.xlsx');
+        }
+
+        function openEmailModal() {
+            if(currentAttempts.length === 0) return alert("No results to send.");
+            document.getElementById('emailModal').style.display = 'flex';
+        }
+
+        function dispatchDirectEmail() {
+            const targetEmail = document.getElementById('targetEmailInput').value.trim();
+            if(!targetEmail) {
+                alert("Please enter a valid email address.");
+                return;
+            }
+
+            if(currentAttempts.length === 0) {
+                alert("No results to send.");
+                return;
+            }
+
+            const subject = encodeURIComponent(`Official Results: ${examDetails.title}`);
+            let bodyText = `Here is the official result summary for ${examDetails.title}:\n\n`;
+            
+            bodyText += `Total Students Participated: ${currentAttempts.length}\n`;
+            bodyText += `Maximum Marks: ${examDetails.totalMarks || 100}\n`;
+            bodyText += `-------------------------------------------------\n\n`;
+
+            currentAttempts.forEach((att, idx) => {
+                bodyText += `Rank #${idx+1} | ${att.studentName || 'Student'} (${att.studentId}) | Score: ${parseFloat(att.score || 0).toFixed(2)}\n`;
+            });
+
+            bodyText += `\n-------------------------------------------------\n`;
+            bodyText += `Generated automatically by TESTPAD System.\n`;
+
+            document.getElementById('emailModal').style.display = 'none';
+            window.location.href = `mailto:${targetEmail}?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
+        }
+    </script>
+</body>
+</html>

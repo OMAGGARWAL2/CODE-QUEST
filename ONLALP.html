@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - ONLALP Approval Desk</title>
+    <!-- Google Fonts: Hind, Mulish, JetBrains Mono matching questionpool.html -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Mulish:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+
+    <style>
+        :root {
+            --primary: #df5a22;
+            --bg: #ffffff;
+            --white: #ffffff;
+            --text-main: #000000;
+            --text-secondary: #475467;
+            --text-tertiary: #667085;
+            --border: #eaecf0;
+            --border-dark: #d0d5dd;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Mulish', 'Hind', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            font-size: 15px;
+        }
+
+        /* ===== SITE HEADER ===== */
+        .site-header {
+            height: 84px;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid #eeeeee;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
+
+        .brand-text-block {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.15;
+        }
+
+        .brand-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #000000;
+            text-transform: uppercase;
+        }
+
+        .brand-subtitle {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .icon-btn-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .icon-btn-box:hover { background-color: #f7f7f7; }
+        .icon-btn-box.active { background-color: #fff5f0; }
+        .icon-btn-box img { width: 28px; height: 28px; }
+
+        .header-right {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-stack {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 30px;
+        }
+
+        .profile-stack:hover { background: #f8f8f8; }
+
+        .profile-text {
+            text-align: right;
+            line-height: 1.25;
+        }
+
+        .profile-name {
+            display: block;
+            font-weight: 700;
+            font-size: 1.05rem;
+            text-transform: uppercase;
+            color: #000000;
+        }
+
+        .profile-role {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 2px solid #fff;
+            overflow: hidden;
+        }
+
+        .avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 200px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            margin-top: 8px;
+            padding: 8px;
+            display: none;
+            z-index: 2000;
+            border: 1px solid #eee;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: 4px;
+            color: #000000;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .menu-item:hover { background: #f5f5f5; }
+        .menu-item.logout { color: #d32f2f; }
+
+        /* ===== MAIN CONTAINER ===== */
+        .main-container {
+            width: 100%;
+            max-width: 1360px;
+            margin: 0 auto;
+            padding: 36px 30px 80px 30px;
+            background: #ffffff;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            gap: 20px;
+        }
+
+        .section-title {
+            font-family: 'Mulish', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #000000;
+        }
+
+        .section-count {
+            color: #666666;
+            font-weight: 500;
+            font-size: 1.15rem;
+        }
+
+        .search-wrapper { position: relative; display: flex; align-items: center; }
+
+        .search-wrapper i {
+            position: absolute;
+            left: 0;
+            color: #999;
+            font-size: 0.95rem;
+        }
+
+        .search-input-underline {
+            border: none;
+            border-bottom: 1px solid #eaecf0;
+            border-radius: 0;
+            font-size: 1.15rem;
+            font-weight: 400;
+            font-family: 'Mulish', sans-serif;
+            color: #344054;
+            outline: none;
+            padding: 8px 8px 8px 26px;
+            width: 300px;
+            background: transparent;
+        }
+
+        .search-input-underline:focus { border-bottom-color: var(--primary); width: 340px; }
+
+        /* ===== TABLE (EXACT questionpool.html FONT & SPECS) ===== */
+        .pool-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .table-scroll-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Clean standard horizontal scrollbar */
+        .table-scroll-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+        .table-scroll-wrapper::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .table-scroll-wrapper::-webkit-scrollbar-thumb {
+            background: #bbb;
+            border-radius: 4px;
+        }
+        .table-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #888;
+        }
+
+        .pool-table {
+            width: 100%;
+            min-width: 1100px;
+            border-collapse: collapse;
+        }
+
+        /* EXACT questionpool.html th */
+        .pool-table th {
+            background: #ffffff;
+            padding: 16px 24px;
+            text-align: left;
+            font-size: 1.05rem;
+            text-transform: uppercase;
+            font-family: 'Mulish', sans-serif;
+            font-weight: 500;
+            color: #344054;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        /* EXACT questionpool.html td */
+        .pool-table td {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+            font-size: 1.25rem;
+            font-family: 'Mulish', sans-serif;
+            font-weight: 400;
+            color: #000000;
+        }
+
+        .pool-table tr:last-child td { border-bottom: none; }
+        .pool-table tbody tr:hover td { background: #fafafa; }
+
+        .cell-empty {
+            text-align: center;
+            padding: 60px 24px;
+            color: var(--text-tertiary);
+            font-weight: 400;
+            font-size: 1.15rem;
+            font-family: 'Mulish', sans-serif;
+        }
+
+        .applicant-name {
+            font-weight: 700;
+            color: #000000;
+            font-size: 1.25rem;
+            font-family: 'Mulish', sans-serif;
+        }
+
+        .sub {
+            font-size: 0.95rem;
+            color: var(--text-tertiary);
+            margin-top: 3px;
+            font-family: 'Mulish', sans-serif;
+            font-weight: 400;
+        }
+
+        .role-line {
+            font-size: 0.92rem;
+            color: var(--text-tertiary);
+            margin-top: 3px;
+            font-family: 'Mulish', sans-serif;
+            font-weight: 400;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            color: #344054;
+        }
+
+        .status-text {
+            font-size: 1.25rem;
+            font-family: 'Mulish', sans-serif;
+            font-weight: 400;
+            color: #000000;
+        }
+
+        .not-uploaded {
+            font-size: 1.15rem;
+            color: var(--text-tertiary);
+            font-family: 'Mulish', sans-serif;
+            font-weight: 400;
+        }
+
+        /* DOCUMENT PREVIEW THUMBNAILS */
+        .doc-thumb {
+            width: 44px;
+            height: 44px;
+            border-radius: 4px;
+            border: 1px solid #d0d5dd;
+            object-fit: cover;
+            cursor: pointer;
+            background: #f8fafc;
+            display: block;
+        }
+
+        .doc-cell { display: flex; align-items: center; gap: 14px; }
+        .doc-item { text-align: center; }
+        .doc-cell-label { font-size: 0.75rem; color: var(--text-tertiary); margin-top: 4px; font-family: 'Mulish', sans-serif; }
+
+        /* ACTION BUTTONS */
+        .actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        .btn-act {
+            border: 1px solid #d0d5dd;
+            background: #ffffff;
+            color: #344054;
+            padding: 7px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            font-family: 'Mulish', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .btn-act:hover {
+            background: #f9fafb;
+            border-color: #98a2b3;
+            color: #101828;
+        }
+
+        .btn-act.icon-only {
+            padding: 7px 11px;
+            color: #667085;
+        }
+        .btn-act.icon-only:hover {
+            color: #000000;
+            background: #f2f4f7;
+        }
+
+        /* Modal */
+        .img-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 50000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .img-modal-card {
+            background: #fff;
+            border-radius: 8px;
+            max-width: 640px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .img-modal-header {
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .img-modal-header h3 { font-size: 1.05rem; font-weight: 600; color: #000000; font-family: 'Mulish', sans-serif; }
+        .img-modal-body { padding: 20px; background: #fafafa; text-align: center; }
+        .img-modal-body img { max-width: 100%; max-height: 65vh; border-radius: 4px; }
+
+        .close-x { background: none; border: none; font-size: 1.3rem; cursor: pointer; color: #666; }
+
+        /* Toast */
+        .toast-box {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #000000;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            display: none;
+            z-index: 100000;
+            font-weight: 500;
+            font-size: 0.95rem;
+            font-family: 'Mulish', sans-serif;
+        }
+
+        @media (max-width: 900px) {
+            .nav-icons { display: none; }
+            .main-container { padding: 20px 14px 60px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="header-left">
+        <a href="ONLALP.html" class="logo-box" title="CodeQuest ONLALP">
+            <div class="logo-icon"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest Logo"></div>
+            <div class="brand-text-block">
+                <span class="brand-title">CodeQuest</span>
+                <span class="brand-subtitle">Admin Portal</span>
+            </div>
+        </a>
+
+        <nav class="nav-icons">
+            <div class="icon-btn-box active" title="Applications">
+                <img src="EXAMPAD/TESTPAD_WEBSITE__files/menu-1.svg" alt="Applications">
+            </div>
+            <div class="icon-btn-box" onclick="window.location.href='teacherindex.html'" title="Teacher Portal">
+                <img src="EXAMPAD/TESTPAD_WEBSITE__files/folder-2.svg" alt="Teacher Portal">
+            </div>
+            <div class="icon-btn-box" onclick="window.location.href='APBOUT.html'" title="App Usage &amp; Stats">
+                <img src="EXAMPAD/TESTPAD_WEBSITE__files/statistics.svg" alt="App Usage & Stats">
+            </div>
+        </nav>
+    </div>
+
+    <div class="header-right">
+        <div class="profile-stack" onclick="toggleProfileMenu(event)">
+            <div class="profile-text">
+                <span class="profile-name">ALPHAWINNERS</span>
+                <span class="profile-role">Administrator</span>
+            </div>
+            <div class="avatar-circle"><img src="EXAMPAD/LINUX_TEST_CHITKARA_files/user-icon.3d6e2547.svg" alt="Profile"></div>
+        </div>
+
+        <div class="profile-menu" id="profileMenu">
+            <div class="menu-item" onclick="location.href='firstpage.html'">
+                <i class="fas fa-user-circle" style="color: var(--primary);"></i>
+                <span>Switch Account</span>
+            </div>
+            <div class="menu-item logout" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="main-container">
+    <div class="section-header">
+        <h2 class="section-title">Official Account Applications <span class="section-count" id="countLabel"></span></h2>
+        <div class="search-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" class="search-input-underline"
+                placeholder="Search applications..." onkeyup="render()">
+        </div>
+    </div>
+
+    <div class="pool-card">
+        <!-- Horizontal Scrollable Table Wrapper -->
+        <div class="table-scroll-wrapper">
+            <table class="pool-table">
+                <thead>
+                    <tr>
+                        <th style="min-width: 220px; width: 22%;">Applicant</th>
+                        <th style="min-width: 190px; width: 18%;">Institution / Company</th>
+                        <th style="min-width: 160px; width: 14%;">Location &amp; ID</th>
+                        <th style="min-width: 180px; width: 16%;">Verification</th>
+                        <th style="min-width: 130px; width: 12%;">Status</th>
+                        <th style="min-width: 200px; width: 18%; text-align: right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody"></tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<!-- Document viewer modal -->
+<div class="img-modal-overlay" id="imgModal" onclick="closeImgModal(event)">
+    <div class="img-modal-card">
+        <div class="img-modal-header">
+            <h3 id="imgModalTitle">Document</h3>
+            <button class="close-x" onclick="document.getElementById('imgModal').style.display='none'">✕</button>
+        </div>
+        <div class="img-modal-body">
+            <img id="imgModalSource" src="" alt="Document">
+        </div>
+    </div>
+</div>
+
+<div class="toast-box" id="adminToast"></div>
+
+<script>
+    const APPS_KEY = 'CodeQuest_official_applications';
+
+    // Auth gate: reachable after login or direct key shortcut (Ctrl+Q)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('auth') === 'direct') {
+        sessionStorage.setItem('ONLALP_admin_auth', 'true');
+    }
+    if (sessionStorage.getItem('ONLALP_admin_auth') !== 'true') {
+        window.location.replace('loginforcomp.html');
+    }
+
+    function getApps() {
+        try { return JSON.parse(localStorage.getItem(APPS_KEY)) || []; }
+        catch (e) { return []; }
+    }
+    function saveApps(a) { localStorage.setItem(APPS_KEY, JSON.stringify(a)); }
+
+    function isValidImg(src) {
+        return src && typeof src === 'string' && src.trim() !== '' && !src.startsWith('data:image/svg+xml;utf8,<svg');
+    }
+
+    function render() {
+        const apps = getApps();
+        const search = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+
+        const filtered = apps.filter(a => {
+            const hay = [a.fullName, a.college, a.company, a.location, a.officialId, a.username, a.role]
+                .filter(Boolean).join(' ').toLowerCase();
+            return !search || hay.includes(search);
+        });
+
+        document.getElementById('countLabel').textContent = apps.length ? `(${apps.length})` : '';
+
+        const tbody = document.getElementById('tbody');
+        tbody.innerHTML = '';
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" class="cell-empty">No applications yet. When officials or companies submit the form on <em>loginforcomp.html</em>, they will show up here.</td></tr>`;
+            return;
+        }
+
+        filtered.forEach(app => {
+            const idx = apps.findIndex(x => x.id === app.id);
+            const statusText = app.status || 'Pending';
+
+            // Check if valid images were uploaded; if not, show 'Not uploaded'
+            const hasIdImg = isValidImg(app.idCardImage);
+            const hasGovImg = isValidImg(app.govDocImage);
+
+            let docCellHtml = '';
+            if (!hasIdImg && !hasGovImg) {
+                docCellHtml = '<span class="not-uploaded">Not uploaded</span>';
+            } else {
+                const idPart = hasIdImg
+                    ? `<div class="doc-item">
+                        <img src="${app.idCardImage}" class="doc-thumb" onclick="openDocById('${esc(app.id)}', 'idCard')">
+                        <div class="doc-cell-label">ID Card</div>
+                       </div>`
+                    : `<div class="doc-item"><span class="not-uploaded">Not uploaded</span><div class="doc-cell-label">ID Card</div></div>`;
+
+                const govPart = hasGovImg
+                    ? `<div class="doc-item">
+                        <img src="${app.govDocImage}" class="doc-thumb" onclick="openDocById('${esc(app.id)}', 'govDoc')">
+                        <div class="doc-cell-label">${esc(app.docType || 'Gov. ID')}</div>
+                       </div>`
+                    : `<div class="doc-item"><span class="not-uploaded">Not uploaded</span><div class="doc-cell-label">${esc(app.docType || 'Gov. ID')}</div></div>`;
+
+                docCellHtml = `<div class="doc-cell">${idPart}${govPart}</div>`;
+            }
+
+            // SIMPLE APPROVE AND REJECT BUTTONS - NO EMOJIS, EXACT QUESTIONPOOL STYLE
+            const actionBtns = `
+                <button class="btn-act" onclick="approve(${idx})">Approve</button>
+                <button class="btn-act" onclick="reject(${idx})">Reject</button>
+                <button class="btn-act icon-only" onclick="del(${idx})" title="Delete"><i class="fas fa-trash"></i></button>
+            `;
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>
+                    <div class="applicant-name">${esc(app.fullName)}</div>
+                    <div class="sub">${esc(app.username)}</div>
+                    <div class="role-line">${esc(app.role || 'Official')}</div>
+                </td>
+                <td>
+                    <div>${esc(app.college || '—')}</div>
+                    <div class="sub">${esc(app.company || '—')}</div>
+                </td>
+                <td>
+                    <div>${esc(app.location || '—')}</div>
+                    <div class="mono">${esc(app.officialId || '')}</div>
+                </td>
+                <td>
+                    ${docCellHtml}
+                </td>
+                <td>
+                    <div class="status-text">${esc(statusText)}</div>
+                    <div class="sub">${esc(app.submittedAt || '')}</div>
+                </td>
+                <td style="text-align:right;">
+                    <div class="actions">
+                        ${actionBtns}
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // Document viewer by app id
+    function openDocById(appId, docType) {
+        const apps = getApps();
+        const app = apps.find(x => x.id === appId);
+        if (!app) return;
+        const title = docType === 'idCard' 
+            ? `${app.fullName} - ID Card` 
+            : `${app.fullName} - ${app.docType || 'Document'}`;
+        const src = docType === 'idCard' 
+            ? app.idCardImage 
+            : app.govDocImage;
+        
+        if (!src) return;
+        document.getElementById('imgModalTitle').textContent = title;
+        document.getElementById('imgModalSource').src = src;
+        document.getElementById('imgModal').style.display = 'flex';
+    }
+
+    function approve(idx) {
+        const apps = getApps();
+        const t = apps[idx];
+        if (!t) return;
+        t.status = 'Approved';
+        t.approvedAt = new Date().toLocaleString('en-US');
+        saveApps(apps);
+
+        try {
+            const users = JSON.parse(localStorage.getItem('TESTPAD_users')) || [];
+            const exists = users.some(u =>
+                (u.email && u.email.toLowerCase() === (t.username || '').toLowerCase()) ||
+                (u.rollNo && u.rollNo.toLowerCase() === (t.officialId || '').toLowerCase()));
+            if (!exists) {
+                users.push({
+                    id: 'cq_off_' + Date.now(),
+                    name: t.fullName,
+                    email: t.username,
+                    rollNo: t.officialId,
+                    role: /recruiter|\bhr\b|employer/i.test(t.role || '') ? 'recruiter' : 'teacher',
+                    designation: t.role || '',
+                    password: t.password
+                });
+                localStorage.setItem('TESTPAD_users', JSON.stringify(users));
+            }
+        } catch (e) {}
+
+        render();
+        showToast(`${t.fullName} approved.`);
+    }
+
+    function reject(idx) {
+        const apps = getApps();
+        const t = apps[idx];
+        if (!t) return;
+        if (!confirm(`Reject the application for ${t.fullName}?`)) return;
+        t.status = 'Rejected';
+        t.rejectedAt = new Date().toLocaleString('en-US');
+        saveApps(apps);
+        render();
+        showToast(`${t.fullName} rejected.`);
+    }
+
+    function del(idx) {
+        const apps = getApps();
+        const t = apps[idx];
+        if (!t) return;
+        if (!confirm(`Delete the record for ${t.fullName}? This cannot be undone.`)) return;
+        apps.splice(idx, 1);
+        saveApps(apps);
+        render();
+        showToast('Record deleted.');
+    }
+
+    function toggleProfileMenu(e) {
+        e.stopPropagation();
+        const m = document.getElementById('profileMenu');
+        m.style.display = m.style.display === 'block' ? 'none' : 'block';
+    }
+
+    document.addEventListener('click', () => {
+        document.getElementById('profileMenu').style.display = 'none';
+    });
+
+    function handleLogout() {
+        sessionStorage.removeItem('ONLALP_admin_auth');
+        window.location.href = 'firstpage.html';
+    }
+
+    function closeImgModal(e) {
+        if (e.target === document.getElementById('imgModal')) {
+            document.getElementById('imgModal').style.display = 'none';
+        }
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('adminToast');
+        t.textContent = msg;
+        t.style.display = 'block';
+        clearTimeout(showToast._h);
+        showToast._h = setTimeout(() => { t.style.display = 'none'; }, 3000);
+    }
+
+    function esc(s) {
+        return (s === undefined || s === null ? '' : String(s))
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    window.addEventListener('DOMContentLoaded', render);
+</script>
+</body>
+</html>

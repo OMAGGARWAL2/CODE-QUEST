@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Post Notification</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&family=Hind:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+    <style>
+        :root {
+            --primary: #D92D20;
+            --primary-hover: #B42318;
+            --primary-soft: #FEF3F2;
+            --text-main: #101828;
+            --text-tertiary: #667085;
+            --bg-body: #FFFFFF;
+            --border: #EAECF0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind', sans-serif; }
+        body { background: var(--bg-body); color: var(--text-main); min-height: 100vh; }
+
+        .site-header { height: 72px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; position: sticky; top: 0; z-index: 1000; }
+        .header-left { display: flex; align-items: center; gap: 24px; }
+        .logo-container { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; }
+        .logo-square { width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .logo-square img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text { font-size: 1.35rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; text-transform: uppercase; line-height: 1; font-family: 'Mulish', sans-serif; }
+        .logo-text small { display: block; font-size: 0.7rem; font-weight: 700; color: var(--primary); letter-spacing: 0.8px; margin-top: 3px; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--text-tertiary); text-decoration: none; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 1rem; padding: 8px 14px; border-radius: 8px; }
+        .back-link:hover { background: var(--primary-soft); color: var(--primary); }
+        .avatar { width: 40px; height: 40px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .wrap { max-width: 900px; margin: 0 auto; padding: 48px 28px 90px; }
+        .page-title { font-family: 'Mulish', sans-serif; font-size: 2.4rem; font-weight: 800; color: #101828; margin-bottom: 6px; }
+        .page-sub { font-size: 1.25rem; color: var(--text-tertiary); margin-bottom: 38px; }
+
+        .form-group { margin-bottom: 28px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        label { display: block; font-family: 'Mulish', sans-serif; font-size: 1.1rem; font-weight: 700; color: #344054; margin-bottom: 10px; }
+        input[type=text], input[type=number], select, textarea {
+            width: 100%; padding: 15px 16px; border: 1.5px solid #d0d5dd; border-radius: 10px;
+            font-size: 1.15rem; font-family: 'Hind', sans-serif; color: #101828; outline: none; background: #fff;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-soft); }
+        textarea { min-height: 180px; resize: vertical; line-height: 1.6; }
+
+        .att-preview { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
+        .att-pill { display: inline-flex; align-items: center; gap: 10px; background: #f2f4f7; border-radius: 10px; padding: 9px 14px; font-size: 1rem; font-family: 'Mulish', sans-serif; color: #344054; }
+        .att-pill button { border: none; background: transparent; color: #d32f2f; cursor: pointer; font-size: 1rem; }
+
+        .actions { display: flex; justify-content: flex-end; gap: 16px; margin-top: 40px; }
+        .btn { border: none; border-radius: 10px; padding: 15px 30px; font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; }
+        .btn.ghost { background: #fff; color: #475467; border: 1.5px solid #d0d5dd; }
+        .btn.ghost:hover { border-color: var(--primary); color: var(--primary); }
+        .btn.primary { background: var(--primary); color: #fff; }
+        .btn.primary:hover { background: var(--primary-hover); }
+        input[type=file] { display: none; }
+        @media (max-width: 720px) { .form-row { grid-template-columns: 1fr; } .page-title { font-size: 1.9rem; } }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="header-left">
+        <a href="recruiterindex.html" class="logo-container">
+            <div class="logo-square"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest"></div>
+            <div class="logo-text">CodeQuest<small>Recruiter Portal</small></div>
+        </a>
+        <a href="recruiterindex.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+    </div>
+    <div class="header-right"><div class="avatar"><img src="EXAMPAD/LINUX_TEST_CHITKARA_files/user-icon.3d6e2547.svg" alt="Profile"></div></div>
+</header>
+
+<div class="wrap">
+    <h1 class="page-title" id="pageTitle">Post a Notification</h1>
+    <p class="page-sub">Publish circulars, jobs and announcements to your students and teachers.</p>
+
+    <form onsubmit="handleSavePost(event)">
+        <input type="hidden" id="postId">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="pCompany">Company / Organisation</label>
+                <input type="text" id="pCompany" placeholder="e.g. Google">
+            </div>
+            <div class="form-group">
+                <label for="pCategory">Category</label>
+                <select id="pCategory">
+                    <option value="Circular">📄 Circular</option>
+                    <option value="Job">💼 Job</option>
+                    <option value="Notice">📢 Notice</option>
+                    <option value="Result">📊 Result</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="pTitle">Title</label>
+            <input type="text" id="pTitle" placeholder="e.g. Hiring for SDE-1 (Batch 2024)" required>
+        </div>
+
+        <div class="form-group">
+            <label for="pDesc">Description</label>
+            <textarea id="pDesc" placeholder="Write the full details students and teachers will see…" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="pAudience">Audience</label>
+            <select id="pAudience">
+                <option value="all">Everyone (students &amp; teachers)</option>
+                <option value="students">Students only</option>
+                <option value="teachers">Teachers only</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Attachments (PDF / docs / images)</label>
+            <button type="button" class="btn ghost" onclick="document.getElementById('pFiles').click()"><i class="fas fa-paperclip"></i> Add files</button>
+            <input type="file" id="pFiles" multiple onchange="handleFiles(this.files)">
+            <div class="att-preview" id="pAttPreview"></div>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="btn ghost" onclick="location.href='recruiterindex.html'">Cancel</button>
+            <button type="submit" class="btn primary"><i class="fas fa-paper-plane"></i> Publish</button>
+        </div>
+    </form>
+</div>
+
+<div class="toast-box" id="recToast" style="position:fixed;bottom:24px;right:24px;background:#101828;color:#fff;padding:14px 24px;border-radius:8px;display:none;z-index:100000;font-weight:600;font-family:'Mulish',sans-serif;">Done</div>
+
+<script>
+    const POSTS_KEY = 'CodeQuest_recruiter_posts';
+    const MAX_FILE = 4 * 1024 * 1024;
+    let pendingAtt = [];
+
+    function readJSON(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
+    function getPosts() { return readJSON(POSTS_KEY, []); }
+    function savePosts(v) { try { localStorage.setItem(POSTS_KEY, JSON.stringify(v)); return true; } catch (e) { toast('Storage full — attachment too large.'); return false; } }
+    function esc(s) { return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function session() { return readJSON('CodeQuest_active_session', null) || readJSON('TESTPAD_current_user', {}); }
+
+    function handleFiles(files) {
+        Array.from(files).forEach(f => {
+            if (f.size > MAX_FILE) { toast(`"${f.name}" too large (max 4 MB).`); return; }
+            const r = new FileReader();
+            r.onload = () => { pendingAtt.push({ name: f.name, mime: f.type || '', size: f.size, url: r.result }); renderAttPreview(); };
+            r.readAsDataURL(f);
+        });
+        document.getElementById('pFiles').value = '';
+    }
+    function renderAttPreview() { document.getElementById('pAttPreview').innerHTML = pendingAtt.map((a, i) => `<span class="att-pill">📎 ${esc(a.name)}<button type="button" onclick="pendingAtt.splice(${i},1);renderAttPreview()"><i class="fas fa-times"></i></button></span>`).join(''); }
+
+    function handleSavePost(e) {
+        e.preventDefault();
+        const posts = getPosts();
+        const id = document.getElementById('postId').value;
+        const s = session();
+        const data = {
+            id: id || ('POST' + Date.now()),
+            company: document.getElementById('pCompany').value.trim(),
+            title: document.getElementById('pTitle').value.trim(),
+            description: document.getElementById('pDesc').value.trim(),
+            category: document.getElementById('pCategory').value,
+            audience: document.getElementById('pAudience').value,
+            attachments: pendingAtt.slice(),
+            postedBy: s.email || s.name || 'recruiter',
+            postedByName: s.name || 'Recruiter',
+            createdAt: id ? (posts.find(p => p.id === id) || {}).createdAt || Date.now() : Date.now()
+        };
+        if (id) { const idx = posts.findIndex(p => p.id === id); if (idx >= 0) posts[idx] = data; else posts.push(data); }
+        else posts.push(data);
+        if (!savePosts(posts)) return;
+        toast(id ? 'Notification updated.' : 'Notification published.');
+        setTimeout(() => { location.href = 'recruiterindex.html'; }, 700);
+    }
+
+    function loadForEdit(id) {
+        const p = getPosts().find(x => x.id === id); if (!p) return;
+        document.getElementById('pageTitle').textContent = 'Edit Notification';
+        document.getElementById('postId').value = p.id;
+        document.getElementById('pCompany').value = p.company || '';
+        document.getElementById('pTitle').value = p.title || '';
+        document.getElementById('pDesc').value = p.description || '';
+        document.getElementById('pCategory').value = p.category || 'Circular';
+        document.getElementById('pAudience').value = p.audience || 'all';
+        pendingAtt = (p.attachments || []).slice(); renderAttPreview();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const id = new URLSearchParams(location.search).get('id');
+        if (id) loadForEdit(id);
+    });
+    function toast(msg) { const t = document.getElementById('recToast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(toast._h); toast._h = setTimeout(() => t.style.display = 'none', 2500); }
+</script>
+</body>
+
+</html>

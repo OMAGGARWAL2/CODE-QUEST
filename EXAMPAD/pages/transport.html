@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <style>
+        :root {
+            --erp-blue: #3b5998;
+            --erp-dark-blue: #2d4373;
+            --erp-light-blue: #eef2f7;
+            --erp-border: #d0d7e5;
+            --erp-red: #d92d20;
+            --erp-text: #333;
+            --erp-bg: #e8ecf3;
+        }
+
+        body {
+            margin: 0;
+            font-family: Tahoma, Arial, sans-serif;
+            background-color: var(--erp-bg);
+            color: var(--erp-text);
+            font-size: 12px;
+        }
+
+        .erp-topbar {
+            background-color: var(--erp-blue);
+            color: white;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 5px 20px;
+            font-size: 11px;
+            height: 35px;
+            gap: 15px;
+        }
+
+        .erp-container {
+            max-width: 1100px;
+            margin: 15px auto;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            min-height: 80vh;
+        }
+
+        .breadcrumb {
+            font-size: 11px;
+            margin-bottom: 10px;
+            color: var(--erp-blue);
+        }
+
+        .erp-section-title {
+            background: var(--erp-light-blue);
+            padding: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--erp-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid var(--erp-border);
+        }
+
+        .access-denied {
+            background: #fff5f5;
+            border: 1px solid #feb2b2;
+            padding: 40px;
+            text-align: center;
+            border-radius: 4px;
+            margin-top: 50px;
+        }
+
+        .access-denied i {
+            font-size: 48px;
+            color: #f56565;
+            margin-bottom: 15px;
+        }
+
+        .access-denied h2 {
+            margin: 0 0 10px 0;
+            color: #c53030;
+        }
+
+        .btn-opt {
+            background: var(--erp-blue);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 3px;
+            margin-top: 15px;
+        }
+
+        .transport-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            display: none;
+        }
+
+        .card {
+            border: 1px solid #eee;
+            padding: 15px;
+            background: white;
+        }
+
+        .card-header {
+            font-weight: bold;
+            border-bottom: 2px solid var(--erp-blue);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            color: var(--erp-blue);
+        }
+
+        .btn-action {
+            padding: 8px 15px;
+            background: var(--erp-blue);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .bus-details {
+            font-size: 13px;
+            line-height: 1.8;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="../logo.jpg">
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+    <div class="erp-topbar">
+        <span>Session Jan-Jun 2026</span>
+        <i class="fas fa-home" onclick="location.href='erp.html'" style="cursor:pointer;"></i>
+        <i class="fas fa-sign-out-alt" onclick="location.href='erp-login.html'" style="cursor:pointer;"></i>
+    </div>
+
+    <div class="erp-container">
+        <div class="breadcrumb">Home » Transport Details</div>
+        <div class="erp-section-title"><i class="fas fa-bus"></i> Transport Details</div>
+
+        <div id="deniedSection" class="access-denied">
+            <i class="fas fa-bus"></i>
+            <h2>NO TRANSPORT OPTED</h2>
+            <p>Our records indicate that you have not opted for university transport services for Academic Session
+                2025-26.</p>
+            <button class="btn-opt" onclick="simulateOptIn()">Simulate Opted Student (Demo)</button>
+        </div>
+
+        <div id="activeSection" class="transport-grid">
+            <div class="card">
+                <div class="card-header"><i class="fas fa-route"></i> Route & Bus Info</div>
+                <div class="bus-details">
+                    <strong>Route ID:</strong> R-12 (Chandigarh-Panchkula)<br>
+                    <strong>Bus Number:</strong> CH-01-AX-9988<br>
+                    <strong>Pickup Point:</strong> Sec-17 Bus Stand (Gate 2)<br>
+                    <strong>Pickup Time:</strong> 07:45 AM<br>
+                    <strong>Driver:</strong> Mr. Joginder (+91-8877665544)
+                </div>
+                <button class="btn-action" style="margin-top: 15px; width: 100%;"
+                    onclick="window.open('https://maps.google.com')">Live Bus Tracking</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><i class="fas fa-money-check-alt"></i> Transport Fees</div>
+                <div style="font-size: 12px; line-height: 1.6;">
+                    <strong>Total Fee (Semester):</strong> ₹ 15,000<br>
+                    <strong>Amount Paid:</strong> ₹ 15,000<br>
+                    <strong>Balance:</strong> ₹ 0 (Paid)<br>
+                    <strong>Validity:</strong> Up to 30-Jun-2026
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><i class="fas fa-id-card"></i> Virtual Boarding Pass</div>
+                <div style="text-align: center; border: 2px dashed #ccc; padding: 20px;">
+                    <i class="fas fa-qrcode" style="font-size: 80px; color: #333;"></i>
+                    <p style="margin-top: 10px; font-weight: bold;">OM AGGARWAL (R-12)</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><i class="fas fa-exclamation-triangle"></i> Transport SOS / Feedback</div>
+                <p>Register delay or behavior issues</p>
+                <textarea style="width:100%; height: 60px; margin-bottom: 10px;"></textarea>
+                <button class="btn-action">Submit Alert</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function simulateOptIn() {
+            document.getElementById('deniedSection').style.display = 'none';
+            document.getElementById('activeSection').style.display = 'grid';
+        }
+    </script>
+</body>
+
+</html>

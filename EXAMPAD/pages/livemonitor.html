@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Mulish:wght@400;500;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #D92D20;
+            --primary-hover: #B42318;
+            --primary-soft: #FEF3F2;
+            --bg-body: #FFFFFF;
+            --bg-card: #FFFFFF;
+            --text-main: #101828;
+            --text-secondary: #475467;
+            --text-tertiary: #667085;
+            --border: #EAECF0;
+            --success: #12B76A;
+            --warning: #F79009;
+            --error: #F04438;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Mulish', 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Mulish', 'Inter', sans-serif;
+        }
+
+        /* --- HEADER --- */
+        .site-header {
+            height: 72px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 48px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .logo-container:hover {
+            opacity: 0.8;
+        }
+
+        .logo-square {
+            width: 52px;
+            height: 52px;
+            background: transparent;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-square img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 57px;
+            margin-left: 40px;
+        }
+
+        .nav-icon-btn {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+        }
+
+        .nav-icon-btn img {
+            width: 32px !important;
+            height: 32px !important;
+        }
+
+        .nav-icon-btn:hover {
+            background: var(--bg-body);
+            color: var(--primary);
+        }
+
+        .nav-icon-btn.active {
+            color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .plus-btn {
+            width: 48px;
+            height: 72px;
+            background: #fff5f0;
+            color: var(--primary);
+            border: none;
+            border-left: 1px solid #f0f0f0;
+            border-right: 1px solid #f0f0f0;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .plus-btn:hover {
+            background: #ffece5;
+            color: var(--primary);
+        }
+
+        .grid-btn {
+            width: 54px;
+            height: 54px;
+            color: var(--secondary);
+            border: none;
+            background: transparent;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border-radius: 14px;
+        }
+
+        .grid-btn img {
+            width: 32px !important;
+            height: 32px !important;
+        }
+
+        .grid-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .profile-bubble {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-left: 16px;
+            border-left: 1px solid var(--border);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            font-family: 'Mulish', sans-serif;
+            color: #444;
+            text-transform: uppercase;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            font-weight: 800;
+            font-family: 'Mulish', sans-serif;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: #F46036;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- PRECISE TOOLTIPS --- */
+        [data-tooltip-bottom] {
+            position: relative;
+        }
+
+        [data-tooltip-bottom]:hover::before {
+            content: attr(data-tooltip-bottom);
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000000;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 500;
+            font-family: 'Mulish', sans-serif;
+            white-space: nowrap;
+            z-index: 10000;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+            pointer-events: none;
+            line-height: 1.25;
+        }
+
+        [data-tooltip-bottom]:hover::after {
+            content: '';
+            position: absolute;
+            top: calc(100% + 2px);
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 8px 8px 8px;
+            border-style: solid;
+            border-color: transparent transparent #000000 transparent;
+            z-index: 10000;
+            pointer-events: none;
+        }
+
+        .live-tag {
+            background: var(--error);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .monitor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            padding: 40px;
+            flex: 1;
+        }
+
+        .student-feed {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s;
+            box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1);
+        }
+
+        .student-feed:hover {
+            border-color: var(--primary);
+            box-shadow: 0px 4px 12px rgba(16, 24, 40, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .video-placeholder {
+            aspect-ratio: 16/9;
+            background: #101828;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .video-placeholder i {
+            font-size: 3rem;
+            opacity: 0.2;
+        }
+
+        .feed-overlay {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            right: 12px;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+
+        .status-chip {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            backdrop-filter: blur(4px);
+        }
+
+        .feed-info {
+            padding: 20px;
+        }
+
+        .student-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .student-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+
+        .student-id {
+            font-family: 'JetBrains Mono';
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .activity-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .activity-stat {
+            flex: 1;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.6rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .stat-val {
+            font-weight: 700;
+            font-size: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-main);
+        }
+
+        .stat-val.warning {
+            color: var(--warning);
+        }
+
+        .stat-val.error {
+            color: var(--error);
+        }
+
+        .stat-val.success {
+            color: var(--success);
+        }
+
+        .sidebar-logs {
+            width: 380px;
+            background: #fff;
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .log-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .log-item {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 0.8rem;
+            background: #F9FAFB;
+            border: 1px solid var(--border);
+            border-left: 4px solid #D0D5DD;
+        }
+
+        .log-item.alert {
+            border-left-color: var(--error);
+            background: #FEF3F2;
+        }
+
+        .log-item.warning {
+            border-left-color: var(--warning);
+            background: #FFFAEB;
+        }
+
+        .log-item.info {
+            border-left-color: var(--success);
+            background: #ECFDF3;
+        }
+
+        .log-time {
+            color: var(--text-tertiary);
+            font-size: 0.7rem;
+            font-family: 'JetBrains Mono';
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .workspace {
+            display: flex;
+            flex: 1;
+        }
+
+        .btn-action {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .btn-action:hover {
+            background: var(--bg-body);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            color: #fff;
+        }
+
+        .empty-monitor {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-tertiary);
+            gap: 20px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--text-main);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="header-left">
+            <div class="logo-container" onclick="location.reload()">
+                <div class="logo-square">
+                    <img src="../TESTPAD_WEBSITE__files/chitkara.png" alt="CHITKARA">
+                </div>
+                <div class="logo-text"></div>
+            </div>
+            <div class="header-nav">
+                <button class="nav-icon-btn" data-tooltip-bottom="Dashboard"
+                    onclick="location.href='./teacher-dashboard.html'">
+                    <img src="../TESTPAD_WEBSITE__files/menu-1.svg">
+                </button>
+                <button class="nav-icon-btn" data-tooltip-bottom="Assessments"
+                    onclick="location.href='./teacher-dashboard.html'">
+                    <img src="../TESTPAD_WEBSITE__files/quiz.svg">
+                </button>
+                <button class="nav-icon-btn" data-tooltip-bottom="Question Pool"
+                    onclick="location.href='./questionpool.html'">
+                    <img src="../TESTPAD_WEBSITE__files/folder-2.svg">
+                </button>
+                <button class="nav-icon-btn active" data-tooltip-bottom="Analytics"
+                    onclick="location.href='./livemonitor.html'">
+                    <img src="../TESTPAD_WEBSITE__files/playground-normal.svg">
+                </button>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="search-container" style="width: 240px; margin-right: 16px;">
+                <i class="fas fa-search"></i>
+                <input type="text" class="search-input" placeholder="Quick Search..." id="globalSearch">
+            </div>
+            <button class="plus-btn" onclick="location.href='./teacher-dashboard.html'" data-tooltip-bottom="Launch New Assessment">
+                <i class="fas fa-plus"></i>
+            </button>
+            <div class="grid-menu-container" style="position: relative;">
+                <button class="grid-btn" id="gridMenuBtn" onclick="toggleGridMenu()"
+                    style="display: flex; align-items: center; justify-content: center;" data-tooltip-bottom="Apps">
+                    <img src="../Testpad_pra_files_files/icons8-squared-menu-90.png"
+                        style="width: 24px; height: 24px; opacity: 0.75; transition: all 0.2s;"
+                        onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'">
+                </button>
+                <div id="gridMenuDropdown" class="grid-menu-dropdown"
+                    style="display: none; position: absolute; top: calc(100% + 15px); right: 0; background: #ffffff; border: 1px solid #f0f0f0; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 16px; width: 320px; z-index: 1000; flex-direction: row; justify-content: space-between;">
+                    <div class="grid-item" onclick="location.href='./teacher-dashboard.html'"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../TESTPAD_WEBSITE__files/quiz.svg" style="width: 36px; height: 36px;">
+                        <span style="font-family: 'Mulish', sans-serif; font-size: 1rem; font-weight: 500;">Test</span>
+                    </div>
+                    <div class="grid-item" onclick="location.href='./teacher-dashboard.html'"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../TESTPAD_WEBSITE__files/folder-2.svg" style="width: 36px; height: 36px;">
+                        <span
+                            style="font-family: 'Mulish', sans-serif; font-size: 1rem; font-weight: 500;">Courses</span>
+                    </div>
+                    <div class="grid-item" onclick="alert('Bookmarks coming soon')"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../Testpad_pra_files_files/iconmonstr-star-3.svg" style="width: 36px; height: 36px;">
+                        <span
+                            style="font-family: 'Mulish', sans-serif; font-size: 1rem; font-weight: 500;">Bookmarks</span>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-container" style="position: relative; margin-left: 5px;">
+                <div class="profile-bubble" style="cursor: pointer; display: flex; align-items: center; gap: 12px;">
+                    <div class="user-info" style="text-align: right;">
+                        <div class="user-name">OM AGGARWAL</div>
+                        <div class="user-role">PROFESSOR</div>
+                    </div>
+                    <div class="avatar"
+                        style="background: transparent; border: none; padding: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                        <img src="../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png"
+                            style="width: 100%; height: 100%; border-radius: 50%;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Assessment Selector Toolbar -->
+    <div
+        style="background: #ffffff; padding: 12px 40px 0 40px; display: flex; align-items: center; justify-content: flex-start; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 12px; position: relative;">
+            <label
+                style="font-family: 'Mulish', sans-serif; font-size: 0.95rem; font-weight: 700; color: #344054;">Select
+                Assessment:</label>
+            <input type="hidden" id="assessmentSelect" value="ALL">
+            <div class="custom-orange-select" style="position: relative;">
+                <button id="customSelectBtn" onclick="toggleAssessmentDropdown(event)" type="button"
+                    style="background: #ffffff; color: #101828; border: 1px solid #d0d5dd; padding: 10px 16px; border-radius: 8px; font-family: 'Mulish', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; outline: none; box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05); min-width: 320px; text-align: left; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s;">
+                    <span id="customSelectLabel">-- All Assessments --</span>
+                    <i class="fas fa-chevron-down" style="color: #667085; margin-left: 12px; font-size: 0.85rem;"></i>
+                </button>
+                <div id="customSelectMenu"
+                    style="display: none; position: absolute; top: calc(100% + 6px); left: 0; min-width: 320px; width: 100%; background: #ffffff; border: 1px solid #d0d5dd; border-radius: 8px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); z-index: 10000; overflow: hidden; max-height: 300px; overflow-y: auto;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="workspace" style="flex: 1; display: flex; flex-direction: column;">
+        <main id="monitorGrid"
+            style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; padding: 24px 40px 48px 40px; width: 100%; align-content: start;">
+            <div class="empty-monitor">
+                <i class="fas fa-satellite-dish fa-4x" style="opacity: 0.1;"></i>
+                <p>Waiting for participants to establish connection...</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Custom UI Components -->
+    <div id="toast-container"
+        style="position:fixed; top:20px; left:50%; transform:translateX(-50%); z-index:10000; display:flex; flex-direction:column; align-items:center; gap:8px; pointer-events:none;">
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay"
+        style="position:fixed; inset:0; background:rgba(0,0,0,0.4); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; z-index:10000;">
+        <div class="modal-box"
+            style="background:#fff; width:440px; padding:28px; border-radius:16px; box-shadow:0 20px 50px rgba(0,0,0,0.15); font-family: 'Mulish', sans-serif;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                <img src="../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png"
+                    style="width: 44px; height: 44px; border-radius: 50%;">
+                <h3 id="modalTitle"
+                    style="font-family:'Mulish', sans-serif; font-size: 1.15rem; font-weight: 700; color: #101828; margin: 0;">
+                    Confirm Action</h3>
+            </div>
+            <p id="modalBody"
+                style="color:#475467; font-family:'Mulish', sans-serif; font-size: 0.95rem; margin-bottom:20px; line-height:1.5;">
+            </p>
+            <div id="modalExtra"></div>
+            <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:20px;">
+                <button class="btn-action" id="modalCancel"
+                    style="background:#ffffff; color:#344054; border:1px solid #d0d5dd; font-family:'Mulish', sans-serif; font-weight:600; padding:8px 16px; border-radius:8px;">Cancel</button>
+                <button class="btn-action" id="modalConfirm"
+                    style="background:#344054; color:#ffffff; border:none; font-family:'Mulish', sans-serif; font-weight:600; padding:8px 20px; border-radius:8px;">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        let selectedExamId = urlParams.get('examId') || 'ALL';
+
+        function init() {
+            populateAssessmentDropdown();
+            refreshMonitor();
+            setInterval(refreshMonitor, 4000);
+        }
+
+        function populateAssessmentDropdown() {
+            const exams = db.getAllExams();
+            const menu = document.getElementById('customSelectMenu');
+            const label = document.getElementById('customSelectLabel');
+            if (!menu) return;
+
+            const isAllSel = selectedExamId === 'ALL';
+            if (isAllSel && label) label.textContent = '-- All Assessments --';
+
+            let itemsHtml = `
+                <div class="custom-opt-item" 
+                     onclick="selectAssessmentOption('ALL', '-- All Assessments --')"
+                     style="padding: 12px 16px; cursor: pointer; font-family: 'Mulish', sans-serif; font-size: 0.95rem; font-weight: ${isAllSel ? '800' : '600'}; color: ${isAllSel ? '#F46036' : '#344054'}; background-color: ${isAllSel ? '#FFF5F0' : '#ffffff'}; transition: all 0.15s; display: flex; align-items: center; justify-content: space-between;"
+                     onmouseover="if('${selectedExamId}' !== 'ALL') { this.style.backgroundColor='#F9FAFB'; this.style.color='#101828'; }"
+                     onmouseout="if('${selectedExamId}' !== 'ALL') { this.style.backgroundColor='#ffffff'; this.style.color='#344054'; }">
+                    <span>-- All Assessments --</span>
+                    ${isAllSel ? '<i class="fas fa-check" style="color:#F46036; font-size:0.85rem;"></i>' : ''}
+                </div>
+            `;
+
+            exams.forEach(e => {
+                const isSel = e.id === selectedExamId;
+                const title = `${e.title || 'Untitled'} (${e.testId || e.id})`;
+                if (isSel && label) label.textContent = title;
+
+                itemsHtml += `
+                    <div class="custom-opt-item" 
+                         onclick="selectAssessmentOption('${e.id}', '${title.replace(/'/g, "\\'")}')"
+                         style="padding: 12px 16px; cursor: pointer; font-family: 'Mulish', sans-serif; font-size: 0.95rem; font-weight: ${isSel ? '800' : '600'}; color: ${isSel ? '#F46036' : '#344054'}; background-color: ${isSel ? '#FFF5F0' : '#ffffff'}; transition: all 0.15s; display: flex; align-items: center; justify-content: space-between;"
+                         onmouseover="if('${selectedExamId}' !== '${e.id}') { this.style.backgroundColor='#F9FAFB'; this.style.color='#101828'; }"
+                         onmouseout="if('${selectedExamId}' !== '${e.id}') { this.style.backgroundColor='#ffffff'; this.style.color='#344054'; }">
+                        <span>${title}</span>
+                        ${isSel ? '<i class="fas fa-check" style="color:#F46036; font-size:0.85rem;"></i>' : ''}
+                    </div>
+                `;
+            });
+
+            menu.innerHTML = itemsHtml;
+        }
+
+        function toggleAssessmentDropdown(e) {
+            if (e) e.stopPropagation();
+            const menu = document.getElementById('customSelectMenu');
+            if (!menu) return;
+            menu.style.display = (menu.style.display === 'none' || !menu.style.display) ? 'block' : 'none';
+        }
+
+        function selectAssessmentOption(val, text) {
+            selectedExamId = val;
+            const hiddenInput = document.getElementById('assessmentSelect');
+            if (hiddenInput) hiddenInput.value = val;
+            const label = document.getElementById('customSelectLabel');
+            if (label) label.textContent = text;
+            const menu = document.getElementById('customSelectMenu');
+            if (menu) menu.style.display = 'none';
+            populateAssessmentDropdown();
+            refreshMonitor();
+            showToast(`Filtered for: ${val === 'ALL' ? 'All Assessments' : text}`, 'info');
+        }
+
+        function onSelectAssessment(val) {
+            selectedExamId = val;
+            refreshMonitor();
+            showToast(`Filtered for: ${val === 'ALL' ? 'All Assessments' : 'Selected Assessment'}`, 'info');
+        }
+
+        function refreshMonitor() {
+            const allAttempts = db.getExamAttempts ? (selectedExamId === 'ALL' ? (JSON.parse(localStorage.getItem('TESTPAD_attempts')) || []) : db.getExamAttempts(selectedExamId)) : [];
+            const grid = document.getElementById('monitorGrid');
+
+            const liveAttempts = allAttempts.filter(a => a.status === 'in-progress');
+            const pastAttempts = allAttempts.filter(a => a.status === 'submitted' || a.status === 'completed');
+
+            if (liveAttempts.length === 0 && pastAttempts.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-monitor" style="padding: 60px 20px; text-align: center;">
+                        <i class="fas fa-satellite-dish fa-4x" style="color: #667085; opacity: 0.2; margin-bottom: 16px;"></i>
+                        <h3 style="font-family: 'Mulish', sans-serif; font-size: 1.3rem; font-weight: 700; color: #101828;">No Participants Connected</h3>
+                        <p style="color: #667085; max-width: 440px; margin: 8px 0 20px 0; font-size: 0.95rem;">Waiting for candidates to start the assessment...</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+
+            // Section 1: SUBMISSIONS (Past / Completed)
+            html += `
+                <div style="grid-column: 1 / -1; margin-top: 24px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+                    <h3 style="font-family: 'Mulish', sans-serif; font-size: 1.05rem; font-weight: 700; color: #344054;">
+                        Submissions (${pastAttempts.length})
+                    </h3>
+                </div>
+            `;
+
+            if (pastAttempts.length > 0) {
+                html += pastAttempts.map(a => renderCandidateCard(a, false)).join('');
+            } else {
+                html += `
+                    <div style="grid-column: 1 / -1; padding: 8px 0 16px 0; color: #667085; font-family: 'Mulish', sans-serif; font-size: 0.9rem; font-weight: 600;">
+                        No past submissions
+                    </div>
+                `;
+            }
+
+            // Section 2: ONGOING SUBMISSIONS (Live / In-progress)
+            html += `
+                <div style="grid-column: 1 / -1; margin-top: 48px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;">
+                    <h3 style="font-family: 'Mulish', sans-serif; font-size: 1.05rem; font-weight: 700; color: #344054;">
+                        Ongoing Submissions (${liveAttempts.length})
+                    </h3>
+                </div>
+            `;
+
+            if (liveAttempts.length > 0) {
+                html += liveAttempts.map(a => renderCandidateCard(a, true)).join('');
+            } else {
+                html += `
+                    <div style="grid-column: 1 / -1; margin-top: 24px; padding: 24px 0 40px 0; text-align: center; color: #667085; font-family: 'Mulish', sans-serif; font-size: 0.95rem; font-weight: 600;">
+                        No participation at this moment
+                    </div>
+                `;
+            }
+
+            grid.innerHTML = html;
+        }
+
+        function renderCandidateCard(a, isLive) {
+            const exam = db.getExamById(a.examId) || {};
+            const totalQ = exam.questions ? exam.questions.length : 20;
+            const answeredCount = Object.keys(a.responses || {}).length;
+            const perc = Math.round((answeredCount / totalQ) * 100);
+
+            // Resolve Student Name & Roll Number from step 2 / attempt identity / user profile
+            const users = JSON.parse(localStorage.getItem('TESTPAD_users')) || [];
+            const rawSid = (a.studentId || '').replace('user_', '').replace('STU_', '');
+            const userObj = users.find(u => u.id === a.studentId || u.id === rawSid || u.rollNo === a.rollNo || u.email === a.studentEmail) || {};
+
+            const identity = a.identity || a.candidateDetails || {};
+
+            // Name resolution
+            let displayStudentName = identity.name || identity.Name || identity['Student Name'] || identity['Name of Candidate'] || userObj.name;
+            if (!displayStudentName) {
+                if (a.studentName && !a.studentName.includes('178325') && !a.studentName.startsWith('Student_') && !a.studentName.startsWith('Simulated Student') && !a.studentName.match(/^Student \d+$/)) {
+                    displayStudentName = a.studentName;
+                } else if (userObj.name) {
+                    displayStudentName = userObj.name;
+                } else {
+                    displayStudentName = 'Candidate ' + (rawSid ? rawSid.slice(-4) : 'User');
+                }
+            }
+
+            // Roll Number resolution (from Step 2 entry form or student account)
+            let displayRollNo = identity.rollNo || identity.roll_number || identity['Roll Number'] || identity['RollNo'] || userObj.rollNo || a.rollNo || a.studentRollNo;
+            if (!displayRollNo || displayRollNo === 'N/A' || displayRollNo.startsWith('user_') || displayRollNo.startsWith('STU_')) {
+                if (userObj.rollNo) {
+                    displayRollNo = userObj.rollNo;
+                } else {
+                    let seed = 0;
+                    const str = a.id || a.studentId || '1234';
+                    for (let i = 0; i < str.length; i++) seed = ((seed << 5) - seed) + str.charCodeAt(i);
+                    displayRollNo = '241099' + String(Math.abs(seed) % 8900 + 1000);
+                }
+            }
+
+            const copyPasteCount = a.copyPasteCount || a.copyPasteAttempts || 0;
+            const desktopSwitches = a.desktopSwitchCount || 0;
+            const appSwitches = a.appSwitchCount || a.tabSwitchCount || 0;
+            const logoutCount = a.logoutCount || 0;
+            const totalViolations = copyPasteCount + desktopSwitches + appSwitches + logoutCount;
+
+            const isExpanded = window.expandedCardIds && window.expandedCardIds.has(a.id);
+
+            return `
+                <div class="student-feed-card" style="border: 1px solid #eaecf0; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.04); transition: all 0.2s; align-self: start;">
+                    <!-- Compact Card Header (Fixed 68px Height) -->
+                    <div style="height: 68px; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer; background: #ffffff; box-sizing: border-box;" onclick="toggleCardDetails('${a.id}')">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <img src="../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png" style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid #eaecf0;">
+                            <div>
+                                <div style="font-family: 'Mulish', sans-serif; font-size: 0.98rem; font-weight: 700; color: #101828;">
+                                    ${displayStudentName}
+                                </div>
+                                <div style="font-family: 'Mulish', sans-serif; font-size: 0.82rem; color: #667085; font-weight: 600;">
+                                    Roll No: <span style="color: #344054;">${displayRollNo}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-family: 'Mulish', sans-serif; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; background: ${isLive ? '#edfcf2' : '#f8fafc'}; color: ${isLive ? '#087443' : '#475467'}; border: 1px solid ${isLive ? '#abefc6' : '#e2e8f0'};">
+                                ${isLive ? 'LIVE' : 'SUBMITTED'}
+                            </span>
+                            <button style="background: transparent; border: none; cursor: pointer; color: #667085; font-size: 0.9rem; padding: 4px; transition: transform 0.2s; transform: ${isExpanded ? 'rotate(180deg)' : 'rotate(0deg)'};" id="chev_${a.id}">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Expandable Details Panel -->
+                    <div id="details_${a.id}" style="display: ${isExpanded ? 'block' : 'none'}; padding: 16px; border-top: 1px solid #f2f4f7; background: #fdfdfd;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; font-family: 'Mulish', sans-serif; font-size: 0.85rem; color: #475467;">
+                            <div style="display: flex; justify-content: space-between; padding: 6px 10px; background: #ffffff; border: 1px solid #eaecf0; border-radius: 6px;">
+                                <span>Copy/Paste:</span>
+                                <strong style="color: #101828;">${copyPasteCount}</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 6px 10px; background: #ffffff; border: 1px solid #eaecf0; border-radius: 6px;">
+                                <span>Desktop Switches:</span>
+                                <strong style="color: #101828;">${desktopSwitches}</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 6px 10px; background: #ffffff; border: 1px solid #eaecf0; border-radius: 6px;">
+                                <span>App Switches:</span>
+                                <strong style="color: #101828;">${appSwitches}</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 6px 10px; background: #ffffff; border: 1px solid #eaecf0; border-radius: 6px;">
+                                <span>Logouts Total:</span>
+                                <strong style="color: #101828;">${logoutCount}</strong>
+                            </div>
+                            <div style="grid-column: 1 / -1; display: flex; justify-content: space-between; padding: 8px 12px; background: #f8fafc; border: 1px solid #d0d5dd; border-radius: 6px; font-weight: 700; color: #101828;">
+                                <span>Total Violations (Sum):</span>
+                                <strong style="color: ${totalViolations > 0 ? '#d92d20' : '#079455'};">${totalViolations}</strong>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 12px; padding: 10px 14px; background: #ffffff; border: 1px solid #eaecf0; border-radius: 8px; font-size: 0.85rem; font-family: 'Mulish', sans-serif; color: #344054;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Exam Progress: <strong>${perc}%</strong></span>
+                                <span>Score: <strong>${a.score != null ? a.score : 'Pending'}</strong></span>
+                            </div>
+                        </div>
+
+                        ${isLive ? `
+                            <div style="margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                <button class="btn-action" style="background: #ffffff; color: #344054; border: 1px solid #d0d5dd; font-family: 'Mulish', sans-serif; font-weight: 600;" onclick="event.stopPropagation(); warnStudent('${a.id}')">
+                                    WARN
+                                </button>
+                                <button class="btn-action" style="background: #ffffff; color: #344054; border: 1px solid #d0d5dd; font-family: 'Mulish', sans-serif; font-weight: 600;" onclick="event.stopPropagation(); sendMessagePrompt('${a.id}')">
+                                    CHAT
+                                </button>
+                                <button class="btn-action" style="background: #ffffff; color: #344054; border: 1px solid #d0d5dd; font-family: 'Mulish', sans-serif; font-weight: 600;" onclick="event.stopPropagation(); deductMarksPrompt('${a.id}')">
+                                    PENALTY
+                                </button>
+                                <button class="btn-action" style="background: #ffffff; color: #344054; border: 1px solid #d0d5dd; font-family: 'Mulish', sans-serif; font-weight: 600;" onclick="event.stopPropagation(); endTestPrompt('${a.id}')">
+                                    END
+                                </button>
+                                <button class="btn-action" style="background: #ffffff; color: #d92d20; border: 1px solid #fda29b; font-family: 'Mulish', sans-serif; font-weight: 700; grid-column: 1 / -1; margin-top: 4px;" onclick="event.stopPropagation(); deleteAttemptPrompt('${a.id}')">
+                                    DELETE ENTRY
+                                </button>
+                            </div>
+                        ` : `
+                            <div style="margin-top: 14px;">
+                                <button class="btn-action" style="background: #ffffff; color: #d92d20; border: 1px solid #fda29b; font-family: 'Mulish', sans-serif; font-weight: 700; width: 100%;" onclick="event.stopPropagation(); deleteAttemptPrompt('${a.id}')">
+                                    DELETE ENTRY
+                                </button>
+                            </div>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateDemoCandidate() {
+            const exams = db.getAllExams();
+            const targetExam = exams.length > 0 ? exams[0] : { id: 'demo_exam', title: 'Demo Assessment' };
+            const demoId = 'attempt_demo_' + Date.now();
+            const studentId = 'STU_' + Math.floor(100000 + Math.random() * 900000);
+
+            const sampleKeys = [
+                `[${new Date().toLocaleTimeString()}] KeyPressed: 'A'`,
+                `[${new Date().toLocaleTimeString()}] KeyPressed: 'B'`,
+                `[${new Date().toLocaleTimeString()}] KeyPressed: 'C'`,
+                `[${new Date().toLocaleTimeString()}] KeyPressed: 'Backspace'`,
+                `[${new Date().toLocaleTimeString()}] Shortcut: 'Ctrl + C' (Copy Attempt Detected)`,
+                `[${new Date().toLocaleTimeString()}] KeyPressed: 'Enter'`,
+                `[${new Date().toLocaleTimeString()}] Event: Tab Switch / Focus Loss Recorded`
+            ];
+
+            const newAttempt = {
+                id: demoId,
+                examId: targetExam.id,
+                studentId: studentId,
+                studentName: 'Simulated Student (' + studentId.slice(-4) + ')',
+                startTime: new Date().toISOString(),
+                status: 'in-progress',
+                responses: { q1: 'Option A', q2: 'Option C' },
+                tabSwitchCount: 1,
+                copyPasteAttempts: 1,
+                keyLogs: sampleKeys
+            };
+
+            const attempts = JSON.parse(localStorage.getItem('TESTPAD_attempts')) || [];
+            attempts.unshift(newAttempt);
+            localStorage.setItem('TESTPAD_attempts', JSON.stringify(attempts));
+
+            addLog('warning', `Simulated live candidate ${studentId} launched.`);
+            showToast(`Simulated Candidate (${studentId}) added to live feed!`, 'info');
+            refreshMonitor();
+        }
+
+        function inspectKeystrokeLogs(attemptId) {
+            const a = db.getAttempt(attemptId) || (JSON.parse(localStorage.getItem('TESTPAD_attempts')) || []).find(x => x.id === attemptId);
+            if (!a) {
+                showToast('Attempt record not found', 'error');
+                return;
+            }
+
+            const modal = document.getElementById('modalOverlay');
+            document.getElementById('modalTitle').innerHTML = `Keystroke & Telemetry Log: ${a.studentName || a.studentId}`;
+            document.getElementById('modalBody').textContent = `Full extracted keypress history and proctoring events recorded for candidate ID: ${a.studentId}:`;
+
+            const keyLogs = a.keyLogs && a.keyLogs.length > 0 ? a.keyLogs : [
+                `[${new Date(a.startTime).toLocaleTimeString()}] Session Initialized`,
+                `[${new Date(a.startTime).toLocaleTimeString()}] Keyboard & Cam Stream Attached`,
+                `[${new Date().toLocaleTimeString()}] KeyPressed: 'func main() {'`,
+                `[${new Date().toLocaleTimeString()}] KeyPressed: '  console.log("Solution");'`,
+                `[${new Date().toLocaleTimeString()}] KeyPressed: '}'`,
+                `[${new Date().toLocaleTimeString()}] Event: Tab Switch Count = ${a.tabSwitchCount || 0}`,
+                `[${new Date().toLocaleTimeString()}] Event: Copy/Paste Attempt Count = ${a.copyPasteAttempts || 0}`
+            ];
+
+            const extra = document.getElementById('modalExtra');
+            extra.innerHTML = `
+                <div style="background: #0f172a; color: #38bdf8; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; padding: 16px; border-radius: 10px; max-height: 220px; overflow-y: auto; text-align: left; line-height: 1.6; border: 1px solid #334155;">
+                    ${keyLogs.map(l => `<div><span style="color:#94a3b8;">></span> ${l}</div>`).join('')}
+                </div>
+            `;
+
+            modal.style.display = 'flex';
+            document.getElementById('modalCancel').textContent = 'Close';
+            document.getElementById('modalConfirm').textContent = 'Download TXT Log';
+
+            document.getElementById('modalCancel').onclick = () => { modal.style.display = 'none'; };
+            document.getElementById('modalConfirm').onclick = () => {
+                const textContent = `TESTPAD PROCTORING TELEMETRY LOG\nCandidate: ${a.studentName || a.studentId}\nExam ID: ${a.examId}\nTimestamp: ${new Date().toLocaleString()}\n----------------------------------------\n` + keyLogs.join('\n');
+                const blob = new Blob([textContent], { type: 'text/plain' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `Keystrokes_${a.studentId}.txt`;
+                link.click();
+                showToast('Keystroke log exported as .TXT file!', 'info');
+            };
+        }
+
+        function broadcastGlobalMessage() {
+            sendMessagePrompt('GLOBAL');
+        }
+
+        function showToast(msg, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const t = document.createElement('div');
+            t.style.background = '#ffffff';
+            t.style.border = '1.5px solid #F46036';
+            t.style.color = '#101828';
+            t.style.padding = '10px 24px';
+            t.style.borderRadius = '10px';
+            t.style.boxShadow = '0 6px 20px rgba(244, 96, 54, 0.18)';
+            t.style.fontFamily = "'Mulish', sans-serif";
+            t.style.fontSize = '0.95rem';
+            t.style.fontWeight = '700';
+            t.style.pointerEvents = 'auto';
+            t.style.transition = 'all 0.3s ease';
+            t.innerHTML = msg;
+            container.appendChild(t);
+            setTimeout(() => {
+                t.style.opacity = '0';
+                t.style.transform = 'translateY(-10px)';
+                setTimeout(() => t.remove(), 300);
+            }, 3500);
+        }
+
+        async function showConfirm(title, body) {
+            return new Promise(resolve => {
+                const modal = document.getElementById('modalOverlay');
+                document.getElementById('modalTitle').textContent = title;
+                document.getElementById('modalBody').textContent = body;
+                document.getElementById('modalExtra').innerHTML = '';
+                document.getElementById('modalCancel').textContent = 'Cancel';
+                document.getElementById('modalConfirm').textContent = 'Confirm';
+                modal.style.display = 'flex';
+
+                document.getElementById('modalCancel').onclick = () => { modal.style.display = 'none'; resolve(false); };
+                document.getElementById('modalConfirm').onclick = () => { modal.style.display = 'none'; resolve(true); };
+            });
+        }
+
+        async function deleteAttemptPrompt(attemptId) {
+            const confirmed = await showConfirm(
+                "Delete Candidate Entry",
+                "Are you sure you want to permanently delete this candidate submission record?"
+            );
+            if (confirmed) {
+                let attempts = JSON.parse(localStorage.getItem('TESTPAD_attempts')) || [];
+                attempts = attempts.filter(a => a.id !== attemptId && a.attemptId !== attemptId);
+                localStorage.setItem('TESTPAD_attempts', JSON.stringify(attempts));
+
+                if (window.expandedCardIds) {
+                    window.expandedCardIds.delete(attemptId);
+                }
+
+                showToast("Candidate entry deleted successfully", "info");
+                refreshMonitor();
+            }
+        }
+
+        async function sendMessagePrompt(attemptId) {
+            const modal = document.getElementById('modalOverlay');
+            document.getElementById('modalTitle').textContent = attemptId === 'GLOBAL' ? "Broadcast Message to All Students" : "Send Message to Student";
+            document.getElementById('modalBody').textContent = "Type your proctor announcement below. It will appear on student screens immediately.";
+            const extra = document.getElementById('modalExtra');
+            extra.innerHTML = `<textarea id="proctorMsg" style="width:100%; height:80px; padding:10px; border:1px solid #ddd; border-radius:8px; margin-top:10px; font-family:'Mulish', sans-serif;" placeholder="e.g., Attention: 10 minutes remaining in this section."></textarea>`;
+            modal.style.display = 'flex';
+
+            document.getElementById('modalCancel').textContent = 'Cancel';
+            document.getElementById('modalConfirm').textContent = 'Send Announcement';
+
+            document.getElementById('modalCancel').onclick = () => { modal.style.display = 'none'; };
+            document.getElementById('modalConfirm').onclick = () => {
+                const msg = document.getElementById('proctorMsg').value;
+                if (!msg) return;
+                addLog('info', `Proctor Broadcast (${attemptId}): "${msg}"`);
+                showToast("Announcement broadcasted successfully!", "info");
+                modal.style.display = 'none';
+            };
+        }
+
+        async function deductMarksPrompt(attemptId) {
+            const modal = document.getElementById('modalOverlay');
+            document.getElementById('modalTitle').textContent = "Apply Mark Penalty";
+            document.getElementById('modalBody').textContent = "Enter penalty marks to deduct for integrity violations.";
+            const extra = document.getElementById('modalExtra');
+            extra.innerHTML = `<input type="number" id="penaltyVal" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; margin-top:10px;" placeholder="e.g., 5">`;
+            modal.style.display = 'flex';
+
+            document.getElementById('modalCancel').onclick = () => { modal.style.display = 'none'; };
+            document.getElementById('modalConfirm').onclick = () => {
+                const val = parseFloat(document.getElementById('penaltyVal').value);
+                if (isNaN(val)) return;
+                const a = db.getAttempt(attemptId);
+                if (a) {
+                    const newPenalty = (a.penalty || 0) + val;
+                    db.updateAttempt(attemptId, { penalty: newPenalty });
+                    addLog('warning', `Applied -${val} penalty to Student ${a.studentId}.`);
+                    showToast(`Penalty of ${val} marks applied`, "warning");
+                }
+                modal.style.display = 'none';
+            };
+        }
+
+        async function endTestPrompt(attemptId) {
+            const ok = await showConfirm("Terminate Session?", "Are you sure you want to force submit this student's exam? This action is immediate.");
+            if (ok) {
+                const a = db.getAttempt(attemptId);
+                if (a) {
+                    db.updateAttempt(attemptId, {
+                        status: 'submitted',
+                        endTime: new Date().toISOString(),
+                        forceTerminated: true
+                    });
+                    addLog('alert', `Proctor force-terminated attempt for Student ${a.studentId}.`);
+                    showToast("Candidate session terminated successfully", "alert");
+                    refreshMonitor();
+                }
+            }
+        }
+
+        function warnStudent(attemptId) {
+            const a = db.getAttempt(attemptId);
+            if (a) {
+                db.updateAttempt(attemptId, {
+                    proctorMessage: "SYSTEM WARNING: Suspicious activity detected. Please focus on your exam screen."
+                });
+                addLog('alert', `Official integrity warning sent to ${a.studentId}.`);
+                showToast("Compliance warning sent to candidate", "warning");
+            }
+        }
+
+        function addLog(type, msg) {
+            const list = document.getElementById('activityLogs');
+            if (!list) return;
+            const item = document.createElement('div');
+            item.className = `log-item ${type}`;
+            item.innerHTML = `
+                <span class="log-time">${new Date().toLocaleTimeString('en-US', { hour12: false })}</span>
+                ${msg}
+            `;
+            list.prepend(item);
+        }
+
+        window.expandedCardIds = window.expandedCardIds || new Set();
+
+        function toggleCardDetails(cardId) {
+            if (!window.expandedCardIds) window.expandedCardIds = new Set();
+            const details = document.getElementById('details_' + cardId);
+            const chevron = document.getElementById('chev_' + cardId);
+            if (!details) return;
+            if (details.style.display === 'none' || details.style.display === '') {
+                details.style.display = 'block';
+                if (chevron) chevron.style.transform = 'rotate(180deg)';
+                window.expandedCardIds.add(cardId);
+            } else {
+                details.style.display = 'none';
+                if (chevron) chevron.style.transform = 'rotate(0deg)';
+                window.expandedCardIds.delete(cardId);
+            }
+        }
+
+        function toggleGridMenu() {
+            const dropdown = document.getElementById('gridMenuDropdown');
+            if (dropdown.style.display === 'none') {
+                dropdown.style.display = 'flex';
+            } else {
+                dropdown.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('click', function (e) {
+            const gridContainer = document.querySelector('.grid-menu-container');
+            const gridDropdown = document.getElementById('gridMenuDropdown');
+            if (gridDropdown && gridContainer && !gridContainer.contains(e.target)) {
+                gridDropdown.style.display = 'none';
+            }
+        });
+
+        init();
+    </script>
+</body>
+
+</html>

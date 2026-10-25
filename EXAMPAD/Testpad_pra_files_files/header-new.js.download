@@ -1,0 +1,145 @@
+$(document).ready(function () {
+  $(".profile-dropdown .nav-link").click(function () {
+    //other dropdowns-hide
+    $(".plus-nav-dropdown-menu").removeClass("plus-nav-dropdown-menu-open");
+    $(".square-dropdown-menu").removeClass("square-dropdown-menu-open");
+    $(".square-dropdown .square-dropdown-img").removeClass("square-dropdown-active");
+    $(".notification-img").removeClass("active");
+    $(".notification-dropdown-menu").removeClass("notification-dropdown-menu-open");
+    $(".profile-dropdown-menu").toggleClass("profile-dropdown-menu-open");
+  });
+  $(window).blur(() => {
+    $(".profile-dropdown-menu").removeClass("profile-dropdown-menu-open");
+    $(".square-dropdown-menu").removeClass("square-dropdown-menu-open");
+    $(".square-dropdown .square-dropdown-img").removeClass("square-dropdown-active");
+    $(".notification-img").removeClass("active");
+    $(".notification-dropdown-menu").removeClass("notification-dropdown-menu-open");
+    $(".plus-nav-dropdown-menu").removeClass("plus-nav-dropdown-menu-open");
+  })
+  $(".plus-nav-section").click(function () {
+    //other dropdowns-hide
+    $(".profile-dropdown-menu").removeClass("profile-dropdown-menu-open");
+    $(".square-dropdown-menu").removeClass("square-dropdown-menu-open");
+    $(".square-dropdown .square-dropdown-img").removeClass("square-dropdown-active");
+    $(".notification-img").removeClass("active");
+    $(".notification-dropdown-menu").removeClass("notification-dropdown-menu-open");
+    $(".plus-nav-dropdown-menu").toggleClass("plus-nav-dropdown-menu-open");
+  });
+
+  $(".square-dropdown").click(function () {
+    //other dropdowns-hide
+    $(".plus-nav-dropdown-menu").removeClass("plus-nav-dropdown-menu-open");
+    $(".profile-dropdown-menu").removeClass("profile-dropdown-menu-open");
+    $(".notification-img").removeClass("active");
+    $(".notification-dropdown-menu").removeClass("notification-dropdown-menu-open");
+    $(".square-dropdown-menu").toggleClass("square-dropdown-menu-open");
+    $(".square-dropdown .square-dropdown-img").toggleClass("square-dropdown-active");
+  });
+
+  $(".notification-img").click(function () { 
+    $(".plus-nav-dropdown-menu").removeClass("plus-nav-dropdown-menu-open");
+    $(".profile-dropdown-menu").removeClass("profile-dropdown-menu-open");
+    $(".square-dropdown-menu").removeClass("square-dropdown-menu-open");
+    $(".square-dropdown .square-dropdown-img").removeClass("square-dropdown-active");
+    $(".notification-img").toggleClass("active");
+    $(".notification-dropdown-menu").toggleClass("notification-dropdown-menu-open");
+   })
+});
+
+$(document).mouseup((e) => {
+  const profiledropdown = $(".profile-dropdown");
+  const plusnavdropdown = $(".plus-nav-dropdown");
+  const squaredropdown = $(".square-dropdown");
+  const notificationdropdown = $(".notification-dropdown");
+  if (
+    !profiledropdown.is(e.target) &&
+    profiledropdown.has(e.target).length === 0 &&
+    !plusnavdropdown.is(e.target) &&
+    plusnavdropdown.has(e.target).length === 0 &&
+    !squaredropdown.is(e.target) &&
+    squaredropdown.has(e.target).length === 0 &&
+    !notificationdropdown.is(e.target) &&
+    notificationdropdown.has(e.target).length=== 0
+  ) {
+    $(".profile-dropdown-menu").removeClass("profile-dropdown-menu-open");
+    $(".plus-nav-dropdown-menu").removeClass("plus-nav-dropdown-menu-open");
+    $(".square-dropdown-menu").removeClass("square-dropdown-menu-open");
+    $(".square-dropdown .square-dropdown-img").removeClass("square-dropdown-active");
+    $(".notification-img").removeClass("active");
+    $(".notification-dropdown-menu").removeClass("notification-dropdown-menu-open");
+  }
+});
+
+
+// tab active 
+$(document).ready(function(){
+  $(".left-navbar .nav-item").removeClass('active')
+  let pathName = window.location.pathname;
+  if(sessionRole!='2' && pathName=='/user-dashboard')
+  pathName = "/"
+  $(`.nav-link[href='${pathName}']`).parent().addClass('active');
+})
+
+// maximum charter limit in input filed
+function maxCharLimit(e, maxLength = 50, minLength) {
+  $(e).val(e.value.replace(/^\s+/,''));
+  $(e).prev().css('width', '100%');
+  $(e).prev().find('.char-limit').remove();
+  $(e).prev().append(`<small class='float-right char-limit' style='display: none; color: black;'><span class='limit'>0</span>/${maxLength}</small>`);
+  $(e).prev().find('.char-limit').show().removeClass('text-danger');
+  $(e).prev().find('.limit').text(e.value.length);
+  if (minLength && e.value.length < minLength) {
+    $(e).prev().find('.char-limit').addClass('text-danger')
+  }
+  if(e.value.length == maxLength) $(e).prev().find('.char-limit').addClass('text-danger')
+}
+
+function completelyStopSpecialCharacterFromTheElement({jqueryElement, event, value}) {
+  const regex = /[^0-9a-zA-Z]/g;
+  if (jqueryElement) {
+    const value = jqueryElement.val().replace(regex,'').trimStart();
+    jqueryElement.val(value);
+    return value;
+  } if (event) {
+    $(event).val($(event).val().replace(regex,''));
+    return $(event).val();
+  }
+  if (value) {
+    value = value.replace(regex, '');
+    return value;
+  }
+}
+
+/**
+ * 
+ * @param {{jqueryElement: JQuery, event: Event, value: string}} param0 
+ * @returns 
+ */
+function clearSpecialCharacterFromTheElement({jqueryElement, event, value}) {
+  const regex = /[^\w\s@&.,:></()+\-]/g;
+  if (jqueryElement) {
+    const value = jqueryElement.val().replace(regex,'').trimStart();
+    jqueryElement.val(value);
+    return value;
+  } if (event) {
+    $(event).val($(event).val().replace(regex,''));
+    return $(event).val();
+  }
+  if (value) {
+    value = value.replace(regex, '');
+    return value ?? '';
+  }
+  return '';
+}
+
+// stop space at the starting of the inputs
+$(document).on('keydown', 'input', function (e) {
+  if(!this.value && e.which === 32) return false;
+})
+
+//on session expired 
+$( document ).ajaxError(function( event, jqxhr, settings, exception ) {
+  if ( jqxhr.status== 400 ) {
+      window.location.reload();
+  }
+});

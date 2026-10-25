@@ -1,0 +1,1126 @@
+function destroyCarousel() {
+  $(".carousel3").waltzer("destroy");
+}
+
+function initCarousel() {
+  $(".carousel3").waltzer({
+    scroll: 1,
+    circular: true
+  });
+}
+
+const requestedSegmentArray = {};
+const urlVals = window.location.pathname.split("/");
+let isAdminView = false;
+let currentStudentId = currentUserId;
+if(urlVals[2] === "view") {
+  isAdminView = true;
+  currentStudentId = urlVals[3];
+}
+
+function openDiscussionUrl() {
+  if ($('#discussion-url').css('display') == 'none') {
+    toggleAlertMsgModal('discussion is disabled for this course.',2);
+    if (!$('#course-content-container').children().hasClass('course-container')) {
+      toggleAlertMsgModal('course is disabled.',2);
+      $('#ok-btn-modal').click(() => {
+        window.location.replace('/user-dashboard');
+      });
+      $('#close-btn-alert-msg').click(() => {
+        window.location.replace('/user-dashboard');
+      });
+      window.addEventListener('click', (e) => {
+        if (!document.getElementById('myModal-alert-only-2').contains(e.target)) {
+          window.location.replace('/user-dashboard');
+        }
+      });
+    }
+    return;
+  }
+  $('#course-content-container').addClass('hide');
+  $('#leaderBoadContainer').addClass('hide');
+  $('#discussion-container').removeClass('hide');
+  $('#discussion-url').addClass('active');
+  $('#content-course').removeClass('active');
+  $('#leaderBoard-btn').removeClass('active');
+  // document.getElementById('page-desc-text').innerText = 'discussions';
+  const dIframe = document.getElementById('discussion-iframe');
+  // if (postId) {
+  //   // dIframe.src = `${dIframe.src}?postId=${postId}`
+  //   dIframe.src = `${discussionUrl}/discussion/embed-screen/${courseId}?postId=${postId}&timestamp=${Date.now()}`;
+  // } else {
+  //   // dIframe.src = dIframe.src;
+  //   dIframe.src = `${discussionUrl}/discussion/embed-screen/${courseId}?timestamp=${Date.now()}`;
+  // }
+
+  dIframe.src = `${WORKSPACES_APP_HOST}/course/${courseId}?isEmbed`;
+	// dIframe.src = `${WORKSPACES_APP_HOST}/course/${courseId}?isEmbed`;
+
+
+  document.title = `Discussions - ${courseName} | CodeQuotient`;
+  window.history.pushState( {} , null, `?discussion=true` );
+}
+
+/** @typedef {"section" | "assignment"} CarouselItemType */
+
+const carouselItems = {
+  /** @type {{ [K in CarouselItemType]: HTMLElement[] }} */
+  elements: {
+    section: [],
+    assignment: []
+  },
+  /** @param {CarouselItemType} type */
+  clear(type) {
+    console.log("clear: ", type)
+    const elements = this.elements[type];
+    return elements.splice(0, elements.length);
+  },
+  /**
+   * @param {CarouselItemType} type
+   * @param {HTMLElement[]} items
+   */
+  add(type, items) {
+    console.log("add: ", type)
+    for(const item of items) {
+      this.elements[type].push(item);
+      item.remove();
+    }
+  }
+};
+
+const items = document.querySelectorAll(".item.segment-type-assignment");
+carouselItems.add("assignment", items);
+
+initCarousel();
+
+function openContent(type = 0) {
+  $('#course-content-container').removeClass('hide');
+  $('#discussion-container').addClass('hide');
+  $('#leaderBoadContainer').addClass('hide');
+  $('#discussion-url').removeClass('active');
+  $('#leaderBoard-btn').removeClass('active');
+  $('#matrics-btn').removeClass('active');
+  $("#metricsContainer").addClass('hide');
+
+  if(type === 0) {
+    if($("#content-course").hasClass("active")) {
+      return;
+    }
+    $(".full-course-right-header").css("visibility", "visible");
+    $(".course-topics.clicked").click();
+    destroyCarousel();
+    carouselItems.add("assignment", $(".segment-type-assignment"));
+    $('#content-assignments').removeClass('active');
+    $('#content-course').addClass('active');
+  } else if(type === 1) {
+    if($("#content-assignments").hasClass("active")) {
+      return;
+    }
+    $(".full-course-right-header").css("visibility", "hidden");
+    $(".course-topics.clicked").click();
+    destroyCarousel();
+    carouselItems.add("section", $(".segment-type-section"));
+    $(".segment-type-section").addClass("hide");
+    $('#content-course').removeClass('active');
+    $('#content-assignments').addClass('active');
+  }
+  $(".carousel3").append(carouselItems.clear(type === 1 ? "assignment" : "section"));
+  initCarousel();
+  const segmentType = $(`.segment-type-${ type === 1 ? "assignment" : "section" }`);
+  const noContentText = $(".no-content-text");
+  const courseTopicsContainer = $(".course-topics-container");
+  if (activeSegment) {
+    return;
+  }
+  if(segmentType.length > 0) {
+    noContentText.hide();
+    courseTopicsContainer.show();
+    segmentType[0].click();
+  } else {
+    courseTopicsContainer.hide();
+    noContentText.text(`No ${ type === 1 ? "Assignment" : "Content" } Available`);
+    noContentText.show();
+  }
+  // document.getElementById('page-desc-text').innerText = 'content';
+  document.title = `${ type === 0 ? "Learning Content" : "Assignments" } - ${courseName} | CodeQuotient`;
+  window.history.pushState( {} , null, `?${ type === 0 ? "" : "type=assignment&" }discussion=false` );
+}
+
+let leaderboardDataTable = null;
+
+function openLeaderboard() {
+  $(".full-course-right-header").css("visibility", "hidden");
+  $('#content-course').removeClass('active');
+  $('#content-assignments').removeClass('active');
+  $('#discussion-container').addClass('hide');
+  $('#matrics-btn').removeClass('active');
+  $('#course-content-container').addClass('hide');
+  $('#metricsContainer').addClass('hide');
+  $('#leaderBoadContainer').removeClass('hide');
+  $('#discussion-url').removeClass('active');
+  $('#content-course').removeClass('active');
+  $('#matrics-btn').removeClass('active');
+  $('#leaderBoard-btn').addClass('active');
+  $("#leaderboardTabTop").prepend($("#leaderboardTabSelectHolder"));
+
+  // document.getElementById('page-desc-text').innerText = 'leaderboard';
+  document.title = `Leaderboard - ${courseName} | CodeQuotient`;
+  window.history.pushState({} , null, `?type=leaderboard&discussion=false`);
+  if(document.readyState === "complete") {
+    loadLeaderboardData(courseId, currentStudentId);
+    return;
+  }
+  window.addEventListener("load", () => loadLeaderboardData(courseId, currentStudentId), { once: true });
+}
+
+async function openMatrics() {
+  const matricsButton = document.getElementById('matrics-btn');
+  if(matricsButton) {
+    matricsButton.style.display = "inline-block";
+  }
+  $(".full-course-right-header").css("visibility", "hidden");
+  $('#content-course').removeClass('active');
+  $('#content-assignments').removeClass('active');
+  $('#discussion-container').addClass('hide');
+  $('#course-content-container').addClass('hide');
+  $('#leaderBoadContainer').addClass('hide');
+  $('#metricsContainer').removeClass('hide');
+  $('#discussion-url').removeClass('active');
+  $('#content-course').removeClass('active');
+  $('#leaderBoard-btn').removeClass('active');
+  $('#matrics-btn').addClass('active');
+  // document.getElementById('page-desc-text').innerText = 'leaderboard';
+  if(courseName) {
+    document.title = `Matrics - ${courseName} | CodeQuotient`;
+    window.history.pushState({} , null, `?type=matrics&discussion=false`);
+  }
+  $("#metricsTabTop").prepend($("#leaderboardTabSelectHolder"));
+
+  if(document.readyState === "complete") {
+    loadMetricsData(courseId, currentStudentId);
+    return;
+  }
+  window.addEventListener("load", () => {
+    loadMetricsData(courseId, currentStudentId);
+  }, { once: true });
+}
+
+initLeaderboard(courseId, currentStudentId);
+initMetrics(courseId, currentStudentId);
+
+let currentSortScore = 'asc';
+let currentSortName = 'asc';
+let currentUserDetail = {};
+
+function sortScore() {
+  if (currentSortScore == 'asc') {
+    leaderBoardData.data.sort((a, b) => a.completed - b.completed);
+    currentSortScore = 'desc';
+  } else {
+    leaderBoardData.data.sort((a, b) => b.completed - a.completed);
+    currentSortScore = 'asc';
+  }
+  $('#leaderBoard-list').empty();
+  let count = 1;
+  leaderBoardData.data.map((val, ind) => {
+    const score = val.completed == null ? '0' : val.completed;
+    if (currentUserDetail.id != val.user_id) {
+      $('#leaderBoard-list').append(`
+        <div class="leaderboard-list">
+            <p class="user-name">${count}. ${val.displayname}</p>
+            <p class="user-score">${score}</p>
+          </div>
+      `);
+    }
+    count++;
+    if (leaderBoardData.data[ind + 1] && ((val.completed == null ? '0' : val.completed) == (leaderBoardData.data[ind + 1].completed == null ? '0' : leaderBoardData.data[ind + 1].completed))) {
+      count--;
+    }
+  });
+  $('#leaderBoard-list').prepend(`
+    <div class="leaderboard-list selected">
+      <p class="user-name">${currentUserDetail.rank}. ${currentUserDetail.name}</p>
+      <p class="user-score">${currentUserDetail.score}</p>
+    </div>
+  `);
+}
+
+function sortName() {
+  if (currentSortName == 'asc') {
+    leaderBoardData.data.sort((a, b) => {
+      if (a.displayname < b.displayname) {
+        return -1;
+      }
+      if (a.displayname > b.displayname) {
+        return 1;
+      }
+      return 0;
+    });
+    currentSortName = 'desc';
+  } else {
+    leaderBoardData.data.sort((a, b) => {
+      if (a.displayname < b.displayname) {
+        return 1;
+      }
+      if (a.displayname > b.displayname) {
+        return -1;
+      }
+      return 0;
+    });
+    currentSortName = 'asc';
+  }
+  $('#leaderBoard-list').empty();
+  let count = 1;
+  leaderBoardData.data.map((val, ind) => {
+    const score = val.completed == null ? '0' : val.completed;
+    if (currentUserDetail.id != val.user_id) {
+      $('#leaderBoard-list').append(`
+        <div class="leaderboard-list">
+            <p class="user-name">${count}. ${val.displayname}</p>
+            <p class="user-score">${score}</p>
+          </div>
+      `);
+    }
+    count++;
+    if (leaderBoardData.data[ind + 1] && ((val.completed == null ? '0' : val.completed) == (leaderBoardData.data[ind + 1].completed == null ? '0' : leaderBoardData.data[ind + 1].completed))) {
+      count--;
+    }
+  });
+  $('#leaderBoard-list').prepend(`
+    <div class="leaderboard-list selected">
+      <p class="user-name">${currentUserDetail.rank}. ${currentUserDetail.name}</p>
+      <p class="user-score">${currentUserDetail.score}</p>
+    </div>
+  `);
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+const myParam = urlParams.get('discussion');
+const postId = urlParams.get('postId');
+const leaderBoardParam = urlParams.get('leaderboard');
+const type_param = urlParams.get("type");
+
+if(type_param) {
+  if(type_param === "leaderboard") {
+    openLeaderboard();
+  } else if (type_param === "matrics") {
+    openMatrics();
+  } else {
+    openContent(type_param === "assignment" ? 1 : 0);
+  }
+} else if (myParam == 'true') {
+  openDiscussionUrl();
+} else if (leaderBoardParam == 'true') {
+  openLeaderboard();
+}
+
+async function getCourseDiscussionCount() {
+  toggleLoader(true);
+  try {
+    const courseMsgCount = await fetch(`${discussionUrl}/api/discussion/user-count?discussions=${courseId}`, {
+      credentials: 'include',
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if(courseMsgCount.redirected) {
+      if(courseMsgCount.url && courseMsgCount.url.indexOf('login') > -1) location.reload();
+      else window.location = `${courseMsgCount.url}`;
+    }
+    const finalCourseMsgCount = await courseMsgCount.json();
+    if (finalCourseMsgCount.counts[0].count > 0) {
+      document.getElementById('course-discussion-count').innerText = finalCourseMsgCount.counts[0].count;
+    }
+  } catch (err) {
+    console.error(err);
+  } finally {
+    toggleLoader(false);
+  }
+}
+
+function scrollToCurrentOpendSegment() {
+  // let clickedelement = $(".clicked").offset().top;
+  // if(clickedelement < 0 || clickedelement > 700){
+  // 	$('.full-course-list-container').animate({
+  // 			scrollTop: clickedelement},
+  // 	'fast');
+  // }
+}
+
+
+// Get index of segment / course
+function getIndexFormId(str, baseString) {
+  if (!str && !baseString) return null;
+  if (str.indexOf(baseString) === -1) {
+    toggleAlertMsgModal(` str and basestring are invalid ${baseString}str - `, str);
+    return null;
+  }
+  str = str.replace(baseString, '');
+  const index = parseInt(str, 10);
+
+  if (Number.isNaN(index)) {
+    toggleAlertMsgModal('index invalid for id ', $(target).attr('id'));
+    return null;
+  }
+  return index;
+}
+
+// add class show/hide toggle of segment content
+function showContentOfSegment(courseId, segmentIndex) {
+  const el = `#segment_${courseId}_${segmentIndex}`;
+  if (!$(el).hasClass('clicked')) {
+    $('.course-topics').removeClass('clicked');
+    $(el).addClass('clicked');
+    $('.course-questions-container').addClass('hide');
+    $(`#question_segment_${courseId}_${segmentIndex}`).removeClass('hide');
+  } else {
+    $('.course-topics').removeClass('clicked');
+    $('.course-questions-container').addClass('hide');
+  }
+  toggleLoader(false);
+}
+// Add Question title and type in course's segment : segments_question_container_courseId.append ==>  question_segment_courseId_segIndex
+async function addQuestionToSegment(segmentIndex, courseId, response, segmentShare, segmentShareMsg, isAssignment) {
+  let divString = `<div id="question_segment_${courseId}_${segmentIndex}" class="course-questions-container hide ">`;
+  if (!response) {
+    divString += '</div>';
+    $(`#segments_question_container_${courseId}`).append(divString);
+    return;
+  }
+  let data = response.titles;
+  let contentType;
+  if (response.skipFirst) { data = data.slice(1); }
+  if (response.desc && response.desc.length) {
+    response.desc = response.desc.replace(/>/g, '&gt;');
+    response.desc = response.desc.replace(/</g, '&lt;');
+    divString += `<div class="descriptionSegment">
+          <p class="title">Description</p>
+          <p>${response.desc}</p></div>`;
+  }
+  for ( let i = 0; i < data.length; i += 1) {
+      let isFile = false;
+      let contentObj = data[i];
+      let idIndex = courseId + '_' + segmentIndex; // For add Questions Status in upcoming AJAX
+      let title = contentObj.title || contentObj.name ;
+          title = title.replace(/>/g, "&gt;");
+          title = title.replace(/</g, "&lt;");
+      if (contentObj.type == contentTypeString.contentTypeTutorial) contentType = 'Tutorial'
+      else if (contentObj.type === contentTypeString.contentTypeMCQ) contentType = 'MCQ'
+      else if (contentObj.type ===  contentTypeString.contentTypeSubjective) {
+        if (contentObj.isFileQuestion) {
+          isFile = true;
+          contentType = 'File'
+        } else {
+          contentType = 'Subjective'
+        }
+      }
+      else if (contentObj.type === contentTypeString.contentTypeCoding) contentType = 'Coding'
+      else if (contentObj.type === contentTypeString.contentTypeStepwise) contentType = 'MQ'
+      else if (contentObj.type === contentTypeString.contentTypeClass) {
+          contentType = 'Class'
+          contentObj._id = contentObj.id ? contentObj.id : contentObj._id
+      }else if(contentObj.type === contentTypeString.contentTypeWeb){
+          contentType = 'WEB'
+      }else if(contentObj.type === contentTypeString.contentTypeQuiz){
+        contentType='Test'
+      }
+else if(contentObj.type === contentTypeString.contentTypeProject){
+          contentType = 'Project'
+      }
+      const isQuestionSubjectiveOrWeb = contentObj.type === contentTypeString.contentTypeSubjective || contentObj.type === contentTypeString.contentTypeWeb;
+      divString += `<div id="course-question${contentObj._id}" class="course-question code">
+          <div id="${contentObj._id}" class="row">
+              <div class="col-1 course-question-number-container-mv">
+                  <p style="${contentType == 'Class' ? 'color:#DE6834' : ''}" class="course-question-number">${i + 1}</p>
+              </div>
+              <div class="col-6">
+                  <p style="${contentType == 'Class' ? 'color:#DE6834' : ''}" class="course-question-type">
+                    ${isFile?
+                      `<a style="cursor: pointer;" quesId="${contentObj._id}" onClick="handleOpenFile('${courseId}','${contentObj._id}', '${title}', '${contentObj.url}')">${contentType}</a>`
+                      :
+                      `<a class="isQuestionModal" quesId="${contentObj._id}" id="ancAttemptType${idIndex}_${i}" target="_blank">${contentType}</a>`
+                    }
+            
+                  </p>
+                  <p class="course-question-name">
+                      ${isFile?
+                        `<a style="cursor: pointer;" quesId="${contentObj._id}" onClick="handleOpenFile('${courseId}','${contentObj._id}', '${title}', '${contentObj.url}')">${title}</a>`
+                        :
+                        `<a class="isQuestionModal" style="${contentType == 'Class' ? 'color:#DE6834' : ''}" target="_blank" quesId="${contentObj._id}" id="ancAttempt${idIndex}_${i}">${title}</a>`
+                      }
+          
+                  </p>
+              </div>
+              <div class="download-button-container" id="questionDownloadContainer${idIndex}_${i}" style="margin-left: auto; width: 4%"></div>
+              ${
+                (isAssignment && window.isEditAllowed) ? `<form action="#" class="score-column col-2 d-none" style="max-width: 165px" id="questionScoreForm${ idIndex }_${ i }">
+                  <input type="number" value="0" min="0" max="${ contentObj.score }" name="questionScoreInput" id="questionScoreInput${ idIndex }_${ i }" readonly="readonly"/>
+                  <span>/${ contentObj.score }</span>
+                  ${
+                    (isQuestionSubjectiveOrWeb) ? `<button type="button" class="edit-button ml-2 tooltip-up" data-customTooltip="Edit score" onclick="editAssignmentQuestionScore('${ contentObj._id }', this)">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                      <button type="submit" name="saveButton" class="save-button large-icon tooltip-up ml-1" data-customTooltip="Save">
+                        <i class="bi bi-check"></i>
+                      </button>
+                      <button type="reset" name="cancelButton" class="cancel-button large-icon tooltip-up" data-customTooltip="Cancel">
+                        <i class="bi bi-x"></i>
+                      </button>
+                      ${
+                        showEditLogs ? `<button type="button" class="large-button tooltip-up ml-1" data-customTooltip="Score edit history" onclick="openScoreEditHistoryModal('${ contentObj._id }', '${ contentObj.title }')">
+                          <i class="bi bi-eye"></i>
+                        </button>` : ""
+                      }` : ""
+                  }
+                </form>` : ""
+              }
+              <div class="question-complete-tick-mark-mv" id="questionCompleted${idIndex}_${i}" style="width: 4%"></div>
+              ${isFile?
+                `<div class="dropdown-icon-container" style="width: 4%"></div>`
+                :
+                `<div class="dropdown-icon-container" id="questionStatus${idIndex}_${i}" style="width: 4%"></div>`
+              }
+          </div>
+          <div class="detail-segment hide"></div>
+  </div>
+  <div style="border-bottom: 1px solid #dedede; margin: 5px 0;"></div>`;
+  }
+  if (segmentShare) {
+    divString += `<div onclick="toggleShareModal('${segmentShareMsg}')" class="share-box-segment-container">
+          <div><p>100% <br/>complete</p></div>
+          <div><p>Share this with your friends?</p></div>
+          <div><img src='/icons/share-option.svg' /></div>
+          </div> </div>`;
+  } else {
+    divString += ' </div> ';
+  }
+  $(`#segments_question_container_${courseId}`).append(divString);
+}
+
+// Add status of the content is locked or attempted
+function addContentStatus(courseId, segmentIndex, resultArray,isEmptySection = false, errorMessage) {
+  if (errorMessage) {
+    $(`#question_segment_${courseId}_${segmentIndex}`).append(`
+      <p 
+        class="text-center" 
+        style="color:#de6834;margin-top: 60px;font-family: 'Mulish', sans-serif;font-size: 17px;font-weight: 700;"
+      >${errorMessage}.</p>
+    `)
+
+    showContentOfSegment(courseId, segmentIndex);
+
+    return;
+  }
+  if((!resultArray && isEmptySection) || errorMessage){
+    
+    $(`#question_segment_${courseId}_${segmentIndex}`).append(`
+      <p 
+        class="text-center" 
+        style="color:#de6834;margin-top: 60px;font-family: 'Mulish', sans-serif;font-size: 17px;font-weight: 700;"
+      >No Data available.</p>
+    `)
+
+    showContentOfSegment(courseId, segmentIndex);
+
+    return;
+  }
+  const indexId = `${courseId}_${segmentIndex}`;
+  let counter = 0;
+  // console.log("--------", resultArray)
+  resultArray.result.forEach((contentObj) => {
+    const divInnerHtml = '';
+    if (contentObj._id) {
+      // Set link for question attempt
+      if (!resultArray.isArchived) {
+        if (contentObj.type == contentTypeString.contentTypeTutorial) { // tutorial
+          $(`#ancAttempt${indexId}_${counter}`).attr('href', `/attempt/attempttutorial/${courseId}/${contentObj._id}`);
+          $(`#ancAttemptType${indexId}_${counter}`).attr('href', `/attempt/attempttutorial/${courseId}/${contentObj._id}`);
+        } else if (contentObj.type == contentTypeString.contentTypeQuiz) { // quiz
+          if (!contentObj.userAnswer) {
+            $(`#ancAttempt${indexId}_${counter}`).attr('href', `/attempt/attemptquiz/${courseId}/${contentObj.id}`);
+            $(`#ancAttemptType${indexId}_${counter}`).attr('href', `/attempt/attemptquiz/${courseId}/${contentObj.id}`);
+          } else if(contentObj.userAnswer && contentObj.userAnswer.completed) {
+            $(`#ancAttempt${indexId}_${counter}`).attr('href', `/attempt/attemptquiz/${courseId}/${contentObj.id}?reAttempt=true`);
+            $(`#ancAttemptType${indexId}_${counter}`).attr('href', `/attempt/attemptquiz/${courseId}/${contentObj.id}?reAttempt=true`);
+          }
+        } else if (0 && contentObj.type == contentTypeString.contentTypeProject) {
+          $(`#ancAttempt${indexId}_${counter}`).attr('href', `/attempt/attemptproject/${courseId}/${contentObj._id}`);
+          $(`#ancAttemptType${indexId}_${counter}`).attr('href', `/attempt/attemptproject/${courseId}/${contentObj._id}`);
+        } else if (contentObj.type == contentTypeString.contentTypeClass || contentObj.link) {
+          if (contentObj.link) {
+            $(`#ancAttempt${indexId}_${counter}`).attr('href', `${contentObj.link}?courseId=${courseId}&contentId=${contentObj._id}`); // ?courseId=${courseId}&contentId=${contentObj._id}
+            $(`#ancAttemptType${indexId}_${counter}`).attr('href', `${contentObj.link}?courseId=${courseId}&contentId=${contentObj._id}`); // ?courseId=${courseId}&contentId=${contentObj._id}
+          } else if(!contentObj.link && contentObj.isOffline) {
+            $(`#ancAttempt${indexId}_${counter}`).removeAttr('href');
+            $(`#ancAttemptType${indexId}_${counter}`).removeAttr('href');
+            $(`#ancAttempt${indexId}_${counter}`).attr('onclick', "toggleAlertMsgModal('Offline class, The content will be visible after class ends.', 2)").css('cursor', 'pointer');
+            $(`#ancAttemptType${indexId}_${counter}`).attr('onclick', "toggleAlertMsgModal('Offline class, The content will be visible after class ends.',2)").css('cursor', 'pointer'); 
+          } else {
+            $(`#ancAttempt${indexId}_${counter}`).removeAttr('href');
+            $(`#ancAttemptType${indexId}_${counter}`).removeAttr('href');
+            $(`#ancAttempt${indexId}_${counter}`).attr('onclick', "toggleAlertMsgModal('Link not present', 2)").css('cursor', 'pointer');
+            $(`#ancAttemptType${indexId}_${counter}`).attr('onclick', "toggleAlertMsgModal('Link not present',2)").css('cursor', 'pointer');
+          }
+        } else {
+          $(`#ancAttempt${indexId}_${counter}`).attr('href', `/attempt/attemptquestion/${courseId}/${contentObj._id}`);
+          $(`#ancAttemptType${indexId}_${counter}`).attr('href', `/attempt/attemptquestion/${courseId}/${contentObj._id}`);
+        }
+      }
+      // Set Status and attempts link
+      if (contentObj.userAnswer) {
+        if (contentObj.userAnswer.completed) {
+          let isReportView = false;
+          if(urlVals[2] == 'view'){
+            isReportView = true;
+          }
+          if(isReportView) {
+            $(`#questionScoreInput${ indexId }_${ counter }`).attr("value", contentObj.userAnswer.score);
+          }
+          if(isReportView && contentObj.userAnswer.isSuspicious && !isChitkara){
+            $(`#questionCompleted${indexId}_${counter}`).append('<span class="tooltip-up hideOnChitkara" data-customTooltip="Suspicious" style="top: 14px;cursor: default;"><img style="width:20px;height:20px;cursor: default;" src="/icons/suspiciousCode.svg"/></span>');
+          }else{
+            $(`#questionCompleted${indexId}_${counter}`).append('<img style="width:15px;height:15px;cursor: default;" src="/icons/foursquare-check-in.png"/>');
+            $(`#questionScoreForm${indexId}_${counter}`).removeClass("d-none");
+            if(contentObj.type === "3") {
+              const downloadQuestionAsPDFButton = document.createElement("a");
+              downloadQuestionAsPDFButton.className = "attempts-icon";
+              downloadQuestionAsPDFButton.setAttribute("title", "Download as PDF");
+              downloadQuestionAsPDFButton.innerHTML = `<i class="bi bi-filetype-pdf"></i>`;
+              downloadQuestionAsPDFButton.addEventListener("click", async function() {
+                  const courseUserReport = new CourseUserReport(courseId, currentStudentId, { questionId: contentObj._id });
+                  await courseUserReport.download();
+              });
+              $(`#questionDownloadContainer${indexId}_${counter}`).append(downloadQuestionAsPDFButton);
+            }
+          }
+          
+          if (contentObj.type == contentTypeString.contentTypeClass) {
+            $(`#ancAttempt${indexId}_${counter}`).attr('href', `/attempt/attemptclass/${courseId}/${contentObj._id}`);
+            $(`#ancAttemptType${indexId}_${counter}`).attr('href', `/attempt/attemptclass/${courseId}/${contentObj._id}`);
+            $(`#ancAttemptType${indexId}_${counter}`).removeAttr('onclick');
+            $(`#ancAttempt${indexId}_${counter}`).removeAttr('onclick');
+          }
+        }
+
+        if ((contentObj.type != contentTypeString.contentTypeTutorial &&
+              contentObj.type != contentTypeString.contentTypeQuiz &&
+              contentObj.type != contentTypeString.contentTypeClass &&
+               contentObj.type != contentTypeString.contentTypeProject)) {
+          let link = `${resultArray.userId}/${courseId}/${contentObj._id}/all`;
+          link += resultArray.isArchived ? '?isArchived=true' : '';
+          //  console.log(link)
+
+          $(`#questionStatus${indexId}_${counter}`).append(`
+                      <a onclick="getAttempts(this,false,${contentObj.userAnswer.completed})" id="${contentObj._id}attempts" class = "/api/attempts/attemptedQuestion/${link}" ><i class="material-icons">arrow_drop_up</i></a>`);
+        }
+      }
+      if (contentObj.type == contentTypeString.contentTypeClass && contentObj.userAnswer && contentObj.userAnswer.completed && contentObj.link) {
+        // for class completed : Download content
+        let link = contentObj.link.split('/');
+        link = link.length ? link[link.length - 1] : '';
+        if (contentObj.link && ( contentObj.link.indexOf( liveClassUrl ) >= 0 ||  contentObj.link.indexOf( zoomHost ) >= 0 ) && link ) {
+          $(`#questionStatus${indexId}_${counter}`).append(`
+                      <a onclick="getAttempts(this,true,${contentObj.userAnswer.completed})" id="${contentObj._id}attempts" class = "api/class/detail?name=${link}" ><i class="material-icons">arrow_drop_up</i></a>`);
+        }
+      }
+    } else {
+      $(`#questionStatus${indexId}_${counter}`).append('<img style="margin-top: 17px;width:15px;height:15px"src="/icons/lock.png"/>');
+    }
+    counter += 1;
+  });
+  showContentOfSegment(courseId, segmentIndex);
+
+  if(isAdminView){
+    $('.isQuestionModal').removeAttr('href');
+    $('.isQuestionModal').css({'cursor':'pointer'});
+  }
+}
+
+// Get the content of a segment
+async function getContentOfCurrentSegment(segment, courseId, segmentShare, segmentShareMsg, isAssignment) {
+  if(urlVals[2] == 'view'){
+    $("#discussion-url").hide()
+    $(".attempts-tab").hide()
+    $(".resume-btn").hide()
+    $('.progress-bar-container-mobile-view').css('margin-top','22px');
+  }
+  segmentIndex = getIndexFormId(segment, `segment_${courseId}_`);
+  // toggleAlertMsgModal(segmentIndex+courseId)
+  if (!requestedSegmentArray[courseId]) requestedSegmentArray[courseId] = {};
+  if (!requestedSegmentArray[courseId][segment]) {
+    requestedSegmentArray[courseId][segment] = true;
+    // Get the contents if not present
+    toggleLoader(true); // start the loader
+    // AJAX to fetch the record
+    try {
+      const url = `/api/user-dashboard/segmentTitle/${courseId}/${segmentIndex}${isAdminView?`?isAdminView=true&viewUserId=${currentStudentId}`:''}`;
+      const rowResponse = await fetch(url);
+      const data = await rowResponse.json();
+      if (data.frontendMessage) {
+        await addQuestionToSegment(segmentIndex, courseId, null, segmentShare, segmentShareMsg, false);
+        addContentStatus(courseId, segmentIndex, undefined,true, data.frontendMessage)
+        return;
+      }
+      if (Object.prototype.hasOwnProperty.call(data, 'error')) {
+        toggleLoader(false);
+        toggleAlertMsgModal(data.error,2);
+        return;
+      }
+      // console.log( segmentIndex, courseId, data);
+      await addQuestionToSegment(segmentIndex, courseId, data, segmentShare, segmentShareMsg, isAssignment);
+      // open suspiciousSegmentQuesId
+      if(isSuspiciousView){
+        let suspiciousIntervalId;
+        function suspiciousQuestionOpen() {
+          if (document.readyState === "complete") {
+            clearInterval(suspiciousIntervalId);
+            if (suspiciousSegmentQuesId && suspiciousSegmentQuesId != undefined) {
+              $(`#${suspiciousSegmentQuesId}attempts`).trigger('click');
+            }
+          }
+        }
+        suspiciousIntervalId = setInterval(suspiciousQuestionOpen, 100);
+      }
+
+      $.ajax({
+        url: `/api/user-dashboard/${courseId}/${segmentIndex}${isAdminView?`?isAdminView=true&viewUserId=${currentStudentId}`:''}`,
+        dataType: 'json',
+        success(data) {
+          if (Object.prototype.hasOwnProperty.call(data, 'error')) {
+            toggleLoader(false);
+            toggleAlertMsgModal(data.error,2);
+            return;
+          }
+          if(data.result && data.result.length){
+            addContentStatus(courseId, segmentIndex, data);
+            toggleLoader(false);
+          }
+          else{
+            toggleLoader(false);
+            addContentStatus(courseId, segmentIndex, undefined,true)
+            // toggleAlertMsgModal('Section is empty.',2);
+          }
+        },
+        error(jqXHR, textStatus, err) {
+          // -- show error message
+          // alert('text status ' + textStatus + ', err ' + err);
+          toggleLoader(false);
+          // toggleAlertMsgModal('Section is empty.',2);
+          addContentStatus(courseId, segmentIndex, undefined,true)
+        },
+      });
+    } catch (error) {
+      window.location.reload();
+    }
+  } else showContentOfSegment(courseId, segmentIndex);
+}
+// Click on the segment : Fetch and show/hide the question of current segment
+function addClick(el, segmentShare, segmentShareMsg) {
+  segment = $(el).attr('id');
+  courseId = $(el).attr('courseId');
+  const isAssignment = el.classList.contains("segment-type-assignment");
+  getContentOfCurrentSegment(segment, courseId, segmentShare, segmentShareMsg, isAssignment);
+  scrollToCurrentOpendSegment();
+}
+function showAttempts(el) {
+  $(el).children('.course-question-attempts-container').slideToggle();
+
+  if ($(el).find('.fa').hasClass('fa-caret-up')) {
+    $(el).find('.fa').removeClass('fa-caret-up');
+    $(el).find('.fa').addClass('fa-caret-down');
+  } else {
+    $(el).find('.fa').removeClass('fa-caret-down');
+    $(el).find('.fa').addClass('fa-caret-up');
+  }
+}
+
+/** @type {(questionId: string, editButton: HTMLButtonElement) => void} */
+function editAssignmentQuestionScore(questionId, editButton) {
+  const { questionScoreInput } = editButton.form.elements;
+  editButton.form.classList.add("edit-state");
+  questionScoreInput.readOnly = false;
+  questionScoreInput.focus();
+  editButton.form.onreset = () => {
+    questionScoreInput.readOnly = true;
+    editButton.form.classList.remove("edit-state");
+    editButton.form.onreset = null;
+    editButton.form.onsubmit = null;
+  };
+  editButton.form.onsubmit = async event => {
+    event.preventDefault();
+    questionScoreInput.readOnly = true;
+    try {
+      const response = await fetch("/api/useranswer/changeUserScore", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          courseId,
+          questionId,
+          userId: currentStudentId,
+          score: questionScoreInput.valueAsNumber
+        })
+      });
+      const data = await response.json();
+      if("error" in data) {
+        throw data.error;
+      }
+      editButton.form.classList.remove("edit-state");
+      editButton.form.onsubmit = null;
+      editButton.form.onreset = null;
+      questionScoreInput.setAttribute("value", questionScoreInput.value);
+      toggleAlertMsgModal("Score has been updated", 1);
+    } catch(ex) {
+      console.log(ex);
+      toggleAlertMsgModal("Failed to update score", 2);
+    }
+  };
+}
+
+$(() => {
+  $('.course-header').hover(
+    function () {
+      if ($(this).find('.resume-header').children().length > 0) {
+        $(this).find('.resume-header').removeClass('hide');
+        $(this).find('div')[0].style.opacity = '0.55';
+        $(this).find('div')[1].style.opacity = '0.55';
+        $(this).css({ 'background-color': 'rgba(242, 242, 242, 0.5)' });
+      }
+    },
+    function () {
+      $('.resume-header').addClass('hide');
+      $(this).find('div')[0].style.opacity = '1';
+      $(this).find('div')[1].style.opacity = '1';
+      $(this).css({ 'background-color': '#FFEEE5' });
+    },
+  );
+});
+
+//
+const secondsToTime = (s) => {
+  s = parseInt(s);
+  if(isNaN(s)) return "-";
+
+  let minutes = ~~(s / 60);
+  let seconds = ~~(s % 60);
+
+  if(minutes)  return `${minutes} min ${seconds} sec`;
+  else return `${seconds} sec`;
+}
+
+async function getAttempts(el, isClass,isQuestionCompleted=false) {
+  let id = $(el).attr('id');
+  id = id.slice(0, -8);
+  var url = $(el).attr('class');
+  if (!$(el).children().hasClass('opened')) {
+    toggleLoader(true);
+    let isReportView = false;
+    if(urlVals[2] == 'view'){
+      url+=`?isAdminView=true`;
+      isReportView = true;
+    }
+    let response;
+    if (isClass) {
+      response = await fetch(`/${url}`);
+    } else {
+      response = await fetch(url);
+    }
+    if(response.redirected) {
+      if(response.url && response.url.indexOf('login') > -1) location.reload();
+      else window.location = `${response.url}`;
+    } 
+    const responseAJAX = await response.json();
+    toggleLoader(false);
+    if (responseAJAX.userAttempts) {
+      // Show attempt
+      const data = responseAJAX.userAttempts;
+      const metaDataObj = responseAJAX.attemptMetaData || {};
+      const data2 = responseAJAX.columns;
+      if (!data.attemptData) {
+        toggleAlertMsgModal('no attempts found.',2);
+        return;
+      }
+
+      let questionAdvanceDetails = '';
+      if(isQuestionCompleted && isReportView && data.type == '4') {
+        let timeTaken = parseInt(metaDataObj.timeTakenInSec) || 0;
+        let compileError = parseInt(metaDataObj.compileError) || 0;
+        let wrongAns = parseInt(metaDataObj.wrongAttempts) || 0;
+        let avgTimeTaken = parseInt(metaDataObj.avgTimeTaken) || 0;
+        let minTimeTaken = parseInt(metaDataObj.minTimeTakenInSec)|| 0;
+        let visitCount = parseInt(metaDataObj.visitCount) || 0;
+
+         questionAdvanceDetails += `<div class='questionAdvanceDetails-container'>
+           ${ timeTaken     ? `<div class='advanceItem'>Time Taken: <span>${secondsToTime(timeTaken)}</span></div>`         : ""}
+           ${ `<div class='advanceItem'>Compile Errors: <span>${compileError}</span></div>`}
+           ${ `<div class='advanceItem'>Wrong Answers: <span>${wrongAns}</span></div> `}
+           ${ `<div class='advanceItem'>Question View Count: <span>${visitCount}</span></div> `}
+           ${ ( !minTimeTaken && avgTimeTaken && !isChitkara)  ? `<div class='hideOnChitkara advanceItem'>Average Required Time: <span>${secondsToTime(avgTimeTaken)}</span></div>` : ""}
+           ${ (minTimeTaken && !isChitkara) ? `<div class='hideOnChitkara advanceItem'>Minimal Required Time: <span>${secondsToTime(minTimeTaken)}</span></div>` : ""} 
+         </div>`;
+      }
+
+      $(`#course-question${id} .detail-segment`).html(`
+        ${questionAdvanceDetails}
+        <div class="attempts-head">
+          <p>Attempts</p>
+          <p>Test cases</p>
+          <p>Status</p>
+        </div>
+        <div class="attempts-body"></div>`
+      );
+      data.attemptData.forEach((attemptObj) => {
+        const createdAt = new Date(attemptObj.created_at);
+        const createdDate = createdAt.toLocaleDateString();
+        const createdTime = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        let testcase = 'N/A',
+          result;
+        if (data.type == '1') {
+          result = attemptObj.isMCQCorrect ? 'correct' : 'incorrect';
+        } else if (data.type == '3' || data.type == '4' || data.type == '5' || data.type == '9') {
+          if (attemptObj[data2.userCompilationError]) {
+            result = 'error';
+          } else result = attemptObj[data2.totalTestCases] == attemptObj[data2.testCasePassed] ? 'success' : 'failed';
+
+          if (attemptObj[data2.totalTestCases]) {
+            testcase = `${attemptObj[data2.testCasePassed] || 0} / ${attemptObj[data2.totalTestCases]}`;
+          }
+        } else if (data.type == '2') {
+          result = 'attempted';
+        }
+
+        if(result == 'error') {
+          testcase = 'N/A';
+        }
+
+        $(`#course-question${id} .detail-segment .attempts-body`).append(`<div class="attempt-row"><p>${createdDate} | ${createdTime}</p><p class="text-midde-mobile">${testcase}</p><p><a target="_blank" href="/quest/preview/userattempt/${attemptObj._id}" class="res text-midde-mobile">${result}</a></p></div>`);
+      });
+
+      $(`#course-question${id} .detail-segment`).append(`<div class='text-center'><button class='btn mt-3' id="showmorebtn${id}" style='color:#de6834'>show more</button> <button class='btn mt-3' id="showlessbtn${id}" style='color:#de6834;display:none;'>show less</button></div>`)
+      const listLength = $(`#course-question${id} .detail-segment .attempts-body .attempt-row`).length;
+      let x = 5;
+      $(`#course-question${id} .detail-segment .attempts-body .attempt-row`).hide();
+      $(`#course-question${id} .detail-segment .attempts-body .attempt-row:lt(${x})`).show();
+       if(listLength<=5){
+        $(`#showmorebtn${id}`).hide();
+       }
+      $(`#showmorebtn${id}`).click(function(){
+        x= (x+5 <= listLength) ? x+5 : listLength;
+        $(`#course-question${id} .detail-segment .attempts-body .attempt-row`).hide();
+        $(`#course-question${id} .detail-segment .attempts-body .attempt-row:lt(${x})`).show();
+        if(x>=listLength){
+          $(`#showmorebtn${id}`).hide();
+          $(`#showlessbtn${id}`).show();
+        }
+      })
+
+      $(`#showlessbtn${id}`).click(function(){
+          x = 5; 
+          $(`#course-question${id} .detail-segment .attempts-body .attempt-row`).hide();
+          $(`#course-question${id} .detail-segment .attempts-body .attempt-row:lt(${x})`).show();
+          if(x<=5){
+            $(`#showmorebtn${id}`).show();
+            $(`#showlessbtn${id}`).hide();
+          }
+      });
+
+
+    } else if (responseAJAX.data.files || responseAJAX.data.showRecordingLink || responseAJAX.data.showWhiteBoardLink) {
+      // Show Files
+      // ${liveClassUrl} prepend in href = /api/room
+      $(`#course-question${id} .detail-segment`).html(`
+          <div class="attempts-head">
+              <p style="width:49%;">Class content</p>
+              <p style="width:49%;">Action</p>
+          </div>
+          <div class="attempts-body">
+
+          </div>`);
+      responseAJAX.data.files.forEach((file) => {
+        $(`#course-question${id} .detail-segment .attempts-body`).append(`<p class="class-content-title">${file}</p>`);
+        $(`#course-question${id} .detail-segment .attempts-body`).append(`<p class="class-content-link"><a href="/api/class/doc/getFile?classId=${responseAJAX.data._id}&docId=${file}" style="color:#DE6834">Download</a></p>`);
+      });
+      if (responseAJAX.data.showRecordingLink && responseAJAX.data.recordingLink) {
+        $(`#course-question${id} .detail-segment .attempts-body`).append('<p class="class-content-title">Recording</p>');
+        $(`#course-question${id} .detail-segment .attempts-body`).append(`<p class="class-content-link"><a target="_blank" href="${responseAJAX.data.recordingLink}" style="color:#DE6834">Open</a></p>`);
+      }
+
+      if (responseAJAX.data.projectLinks.length > 0) {
+        const arr = responseAJAX.data.projectLinks.split(',');
+        arr.forEach((links, ind) => {
+          $(`#course-question${id} .detail-segment .attempts-body`).append(`<p class="class-content-title">project link ${ind + 1}</p>`);
+          $(`#course-question${id} .detail-segment .attempts-body`).append(`<p class="class-content-link"><a target="_blank" href="${links}" style="color:#DE6834">Open</a></p>`);
+        });
+      }
+      if (responseAJAX.data.showWhiteBoardLink) {
+        $(`#course-question${id} .detail-segment .attempts-body`).append('<p class="class-content-title">White Boards</p>');
+        $(`#course-question${id} .detail-segment .attempts-body`).append(`<p class="class-content-link"><a href="javascript:void(0)" onclick="loadWhiteBoardContents('${responseAJAX.data._id}')" style="color:#DE6834">Open</a></p>`);
+      }
+    }
+  }
+  if ($(el).children().hasClass('opened')) {
+    $(el).children().removeClass('opened');
+  } else {
+    $(el).children().addClass('opened');
+  }
+  $(`#course-question${id} .detail-segment`).slideToggle('fast');
+  
+}
+
+async function loadWhiteBoardContents(roomId) {
+  const response = await fetch(`${liveClassUrl}/api/room/${roomId}/check-whiteboards`, {
+    credentials: 'include',
+  });
+
+  if(response.redirected) {
+    if(response.url && response.url.indexOf('login') > -1) location.reload();
+    else window.location = `${response.url}`;
+  } 
+
+  const data = await response.json();
+
+  if (data.exists) {
+    const anchor = document.createElement('a');
+    anchor.target = '_blank';
+    anchor.href = `${liveClassUrl}/api/room/${roomId}/whiteboards`;
+    anchor.click();
+  } else {
+    toggleAlertMsgModal('Whiteboard(s) not available.',2);
+  }
+}
+
+// $('.isQuestionModal').click(function(e){
+//     console.log('modal open soon');
+// })
+
+
+$(document).ready(() => {
+  $('.mask .innerWrapper').each(function (val, ind) {
+    const totalSegments = $(ind).children().length;
+    if (totalSegments <= 4 && window.innerWidth >= 1070) {
+      $(this).parent().parent().find('.left-nav-btn')
+        .attr('disabled', 'disabled')
+        .off('click')
+        .css({ cursor: 'not-allowed' });
+      $(this).parent().parent().find('.right-nav-btn')
+        .attr('disabled', 'disabled')
+        .off('click')
+        .css({ cursor: 'not-allowed' });
+    }
+
+      const downloadCourseReportButton = document.getElementById("downloadCourseReportButton");
+      downloadCourseReportButton.addEventListener("click", async function() {
+        const courseUserReport = new CourseUserReport(courseId, currentStudentId);
+	      await courseUserReport.download({ isChitkara });
+      });
+  });
+  // getCourseMsgCount();
+
+  // open last segment
+  try {
+    if (activeSegment == undefined && resumeSId != undefined && type_param !== "assignment") {
+      $(`.segment-type-section.deaultOpen_${resumeSId}`).trigger('click');
+    }
+    if (activeSegment != undefined) {
+      $(`#segment_${courseId}_${activeSegment}`).click();
+    } else if(resumeSId !== undefined) {
+      $(".segment-type-section")[0].trigger?.('click');
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+  let urlVals = window.location.pathname.split('/');
+  let currentStudentId = currentUserId;
+  if(urlVals[2] == 'view'){
+    currentStudentId = urlVals[3];
+    $("#discussion-url").hide()
+    $(".attempts-tab").hide()
+    $(".resume-btn").hide()
+    $('.progress-bar-container-mobile-view').css('margin-top','22px');
+    $('.isQuestionModal').removeAttr('href');
+
+    $(document).on("click", ".isQuestionModal", function (e) {
+      // return;
+      e.preventDefault();
+      var id = $(this).attr("quesid").trim();
+      var href = "/quest/viewques/id:"+id;
+      var typeOfQuestion = $(this).closest('td').next('td').text();
+      //-- Ajax call
+      $.ajax({
+          url: href,
+          dataType: 'json',
+          success: function (html) {
+              var updatedon = new Date(html.questiondata.updatedAt);
+              updatedon = updatedon.getFullYear()+'/'+(updatedon.getMonth()+1)+'/'+updatedon.getDate();
+              var headerofmpdalbox = html.questiondata.title+'<div style="font-size:10pt">';
+              if(!(html.questiondata.type === '1' ||  html.questiondata.type === '2' ||  html.questiondata.type === '9')) {
+                  headerofmpdalbox += '<span>Test Cases : '+html.questiondata.questionTypeCoding.testCase.length+'</span>&nbsp&nbsp&nbsp';
+              }
+ 
+              headerofmpdalbox += '<span>Updated On : '+updatedon+'</span></div>';
+              var testCases="" ;
+              if(html.questiondata.type === '5'){
+ 
+                  html.questiondata.questionTypeCoding.testCase.forEach((tc,index)=>{
+                      testCases += (index + 1) + ".) " + tc.codeproginputparams+" = &nbsp;<input style='height:20px ;resize:none' readonly></input><br/></br>" ;
+                  })
+              }
+              $('.modal-body').html(html.html + testCases);
+              $('.modal-title').html(headerofmpdalbox);
+              //--
+              $('#divDetailsModal').modal("show");
+          },
+          error: function (jqXHR, textStatus, err) {
+              //-- show error message
+              //alert('text status ' + textStatus + ', err ' + err);
+              // toggleAlertMsgModal("Error fetching the question details.", 2);
+          }
+      });
+  });
+  }
+});
+
+async function getCourseTestsCount(courseId) {
+  try {
+    const url = new URL(`/api/user-dashboard/tests/${ courseId }`, location.origin);
+    url.searchParams.append("activeTestOnly", 1);
+    const rowResponse = await fetch(url);
+    const response = await rowResponse.json();
+    return response.quiz.reduce((previousValue, currentValue) => {
+      return previousValue + Number("userAttempt" in currentValue === false || currentValue.userAttempt.attempted === false )
+    }, 0);
+  } catch(ex) {
+    console.log(ex);
+    return 0;
+  }
+}
+
+async function getCourseTests(courseId) {
+  try {
+    const rowResponse = await fetch(`/api/user-dashboard/tests/${courseId}`);
+    const response = await rowResponse.json();
+    return response.quiz;
+  } catch(ex) {
+    console.log(ex);
+    return [];
+  }
+}
+
+/**
+ * @param {MouseEvent} event
+ * @param {boolean} isAssignment
+ * @param {number} sectionIndex
+ */
+async function downloadCourseSectionPDF(event, isAssignment, sectionIndex) {
+  event.stopPropagation();
+  const urlVals = window.location.pathname.split("/");
+  const currentStudentId = urlVals[2] === "view" ? urlVals[3] : currentUserId;
+  const courseUserReport = new CourseUserReport(courseId, currentStudentId, { sectionIndex });
+  await courseUserReport.download({ isChitkara });
+}
+
+async function handleOpenFile(courseId, questionId, fileName, downloadURL) {
+  const url = `/attempt/attemptFileQuestion/${courseId}/${questionId}`;
+  openFilePreviewDialog(url, fileName, downloadURL);
+}

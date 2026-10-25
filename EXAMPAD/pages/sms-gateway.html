@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts: Inter & Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="../logo.jpg">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --primary-dark: #1e40af;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --border: #e2e8f0;
+            --sidebar-w: 260px;
+            --header-h: 70px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--bg-body);
+            color: var(--text-main);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+        }
+
+        h1, h2, h3, .logo-text, .stat-value {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: #ffffff;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            height: var(--header-h);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo-box {
+            width: 40px;
+            height: 40px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 6px;
+        }
+
+        .logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-weight: 800;
+            font-size: 1.25rem;
+            letter-spacing: -0.5px;
+            color: var(--primary);
+        }
+
+        .nav-list {
+            padding: 24px 12px;
+            list-style: none;
+            flex: 1;
+        }
+
+        .nav-item {
+            margin-bottom: 4px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .nav-link.active {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .nav-link i {
+            width: 20px;
+            font-size: 1.1rem;
+        }
+
+        .nav-section-title {
+            padding: 16px 16px 8px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #94a3b8;
+            font-weight: 700;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            height: var(--header-h);
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+        }
+
+        .header-left h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 6px 6px 6px 16px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            cursor: pointer;
+        }
+
+        .user-pill span {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-pill img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* --- DASHBOARD GRID --- */
+        .view-port {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        /* --- TOP STATS --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .stat-card {
+            background: #fff;
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary);
+            opacity: 0.1;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .stat-trend {
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .trend-up { color: var(--success); }
+        .trend-down { color: var(--danger); }
+
+        /* --- ACTION GRID --- */
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 32px;
+            align-items: start;
+        }
+
+        /* --- COMPOSER --- */
+        .composer-card {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-body {
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* --- FORM STYLES --- */
+        .form-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            padding-left: 44px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            background: #f8fafc;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px var(--primary-light);
+        }
+
+        .form-select {
+            padding-left: 16px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 16px;
+        }
+
+        textarea.form-control {
+            min-height: 140px;
+            resize: none;
+            padding-left: 16px;
+        }
+
+        /* --- CHANNEL TOGGLE --- */
+        .channel-toggle {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            background: #f1f5f9;
+            padding: 6px;
+            border-radius: 12px;
+        }
+
+        .channel-btn {
+            padding: 12px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .channel-btn.active {
+            background: #fff;
+            color: var(--text-main);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .channel-btn.whatsapp.active {
+            color: #25d366;
+        }
+
+        .channel-btn.sms.active {
+            color: #0284c7;
+        }
+
+        /* --- BUTTONS --- */
+        .btn {
+            padding: 16px 32px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* --- PREVIEW PANEL --- */
+        .preview-pane {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .phone-frame {
+            width: 100%;
+            aspect-ratio: 9/18;
+            background: #1e293b;
+            border-radius: 40px;
+            padding: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            position: relative;
+        }
+
+        .phone-inner {
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            border-radius: 30px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .phone-screen {
+            flex: 1;
+            background: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .phone-nav {
+            background: #008069;
+            color: #fff;
+            padding: 40px 16px 12px; 
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar-circle {
+            width: 36px;
+            height: 36px;
+            background: #cbd5e1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 16px;
+            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+            background-size: contain;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .msg-bubble {
+            background: #fff;
+            padding: 10px 14px;
+            border-radius: 0 12px 12px 12px;
+            max-width: 85%;
+            font-size: 0.85rem;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .msg-bubble.outbound {
+            background: #dcf8c6;
+            align-self: flex-end;
+            border-radius: 12px 0 12px 12px;
+        }
+
+        .msg-time {
+            font-size: 0.7rem;
+            color: #64748b;
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        /* --- LOGS TABLE --- */
+        .logs-card {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .logs-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logs-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .logs-table th {
+            text-align: left;
+            padding: 16px 32px;
+            background: #f8fafc;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logs-table td {
+            padding: 16px 32px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-success { background: #d1fae5; color: #065f46; }
+        .status-pending { background: #fef3c7; color: #92400e; }
+
+        /* --- LOADER --- */
+        .gateway-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.9);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            color: #fff;
+        }
+
+        .loader-viz {
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .loader-viz i {
+            font-size: 3rem;
+            z-index: 2;
+            animation: pulse 1.5s infinite;
+        }
+
+        .loader-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 4px solid var(--primary);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* --- TOAST --- */
+        #toast-box {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 2000;
+        }
+
+        .toast {
+            background: #fff;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            border-left: 6px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse { 0% { opacity: 0.5; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1.1); } }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-box">
+                <img src="../logo.jpg" alt="TESTPAD">
+            </div>
+            <div class="logo-text">TESTPAD</div>
+        </div>
+        <ul class="nav-list">
+            <li class="nav-section-title">Main Menu</li>
+            <li class="nav-item">
+                <a href="./teacher-dashboard.html" class="nav-link">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link active">
+                    <i class="fas fa-comment-alt"></i> Messaging Hub
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-address-book"></i> Contacts
+                </a>
+            </li>
+            
+            <li class="nav-section-title">Analytics</li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-chart-pie"></i> Delivery Reports
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-history"></i> Logs Library
+                </a>
+            </li>
+
+            <li class="nav-section-title">Systems</li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-cog"></i> Server Config
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./erp-login.html" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Exit ERP
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="header">
+            <div class="header-left">
+                <h1>Professional Notification ERP</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-pill">
+                    <span>ADMINSTRATOR</span>
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=2563eb&color=fff" alt="User">
+                </div>
+            </div>
+        </header>
+
+        <div class="view-port">
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Messages Today</span>
+                    <span class="stat-value">1,284</span>
+                    <span class="stat-trend trend-up"><i class="fas fa-arrow-up"></i> 12.5%</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Success Rate</span>
+                    <span class="stat-value">99.8%</span>
+                    <span class="stat-trend trend-up"><i class="fas fa-check"></i> High Performance</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Gateway Status</span>
+                    <span class="stat-value" style="color: var(--success); font-size: 1.2rem;">
+                        <i class="fas fa-circle" style="font-size: 0.8rem;"></i> TWILIO-META-READY
+                    </span>
+                    <span class="stat-trend" style="color: var(--text-muted);">Ping: 42ms</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Available Credits</span>
+                    <span class="stat-value">42,500</span>
+                    <button style="border:none; background:none; color: var(--primary); font-size: 0.75rem; font-weight: 800; text-align: left; cursor: pointer;">TOP UP NOW</button>
+                </div>
+            </div>
+
+            <!-- Workspace -->
+            <div class="workspace-grid">
+                <!-- Composer -->
+                <div class="composer-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-paper-plane" style="color: var(--primary);"></i>
+                            Dispatch Engine
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-section">
+                            <div class="form-group">
+                                <label class="form-label">DELIVERY MODALITY</label>
+                                <div class="channel-toggle">
+                                    <button class="channel-btn whatsapp active" id="btnWa" onclick="toggleChannel('whatsapp')">
+                                        <i class="fab fa-whatsapp"></i> WhatsApp
+                                    </button>
+                                    <button class="channel-btn sms active" id="btnSms" onclick="toggleChannel('sms')">
+                                        <i class="fas fa-comment-sms"></i> Cloud SMS
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">RECIPIENT COHORT</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-users"></i>
+                                    <select class="form-control form-select" id="targetSelect">
+                                        <option value="all">All Registered Students (1,284)</option>
+                                        <option value="cs">Faculty of Engineering</option>
+                                        <option value="exam">End-Term Candidates</option>
+                                        <option value="test">Single Test Number</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="testPhoneGroup" style="display: none;">
+                                <label class="form-label">TARGET PHONE</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-phone"></i>
+                                    <input type="text" id="testPhoneInput" class="form-control" placeholder="e.g. 919876543210">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">TEMPLATE SELECTION</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-file-alt"></i>
+                                    <select class="form-control form-select" id="templateSelect" onchange="loadTemplate()">
+                                        <option value="admit_card">ERP-ADMIT-CARD-RELEASE</option>
+                                        <option value="fee">ERP-FEE-REMINDER-GENERAL</option>
+                                        <option value="notice">ERP-URGENT-CIRCULAR</option>
+                                        <option value="custom">ERP-CUSTOM-BROADCAST</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">MESSAGE PAYLOAD</label>
+                                <textarea id="messageInput" class="form-control" oninput="updatePreview()"></textarea>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; font-weight: 600;">
+                                    <span>Chars: <span id="charCount">0</span></span>
+                                    <span>Segment: 1/5</span>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary" onclick="pushNotification()">
+                                <i class="fas fa-bolt"></i> EXECUTE DISPATCH
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview -->
+                <div class="preview-pane">
+                    <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-muted);">LIVE REAL-TIME PREVIEW</h3>
+                    <div class="phone-frame">
+                        <div class="phone-inner">
+                            <div class="phone-screen">
+                                <div class="phone-nav" id="previewHeader">
+                                    <div class="avatar-circle">
+                                        <i class="fas fa-university"></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 700; font-size: 0.9rem;" id="previewTitle">Chitkara University</div>
+                                        <div style="font-size: 0.7rem; opacity: 0.8;">Official Notification Bot</div>
+                                    </div>
+                                </div>
+                                <div class="chat-body" id="chatWall">
+                                    <div class="msg-bubble outbound" id="previewBubble">
+                                        Welcome to TESTPAD Messaging Gateway...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Logs -->
+            <div class="logs-card">
+                <div class="logs-header">
+                    <h3 style="font-weight: 800;">RECENT DISPATCH LOGS</h3>
+                    <button class="btn" style="padding: 8px 16px; font-size: 0.8rem; background: #f1f5f9; color: var(--text-main);">
+                        <i class="fas fa-download"></i> EXPORT CSV
+                    </button>
+                </div>
+                <table class="logs-table">
+                    <thead>
+                        <tr>
+                            <th>Recipient ID</th>
+                            <th>Timestamp</th>
+                            <th>Channel</th>
+                            <th>Status</th>
+                            <th>Latency</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#241099120</td>
+                            <td>Today, 10:42 AM</td>
+                            <td><i class="fab fa-whatsapp" style="color:#25d366"></i> WhatsApp</td>
+                            <td><span class="status-badge status-success">Delivered</span></td>
+                            <td>1.2s</td>
+                        </tr>
+                        <tr>
+                            <td>#241099451</td>
+                            <td>Today, 10:41 AM</td>
+                            <td><i class="fas fa-comment-sms" style="color:#0284c7"></i> SMS</td>
+                            <td><span class="status-badge status-success">Delivered</span></td>
+                            <td>0.5s</td>
+                        </tr>
+                        <tr>
+                            <td>Broadcast Group (240)</td>
+                            <td>Today, 09:15 AM</td>
+                            <td><i class="fab fa-whatsapp" style="color:#25d366"></i> WhatsApp</td>
+                            <td><span class="status-badge status-pending">In Queue</span></td>
+                            <td>--</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Overlay Loader -->
+    <div class="gateway-overlay" id="gatewayLoader">
+        <div class="loader-viz">
+            <div class="loader-ring"></div>
+            <i class="fas fa-satellite-dish"></i>
+        </div>
+        <h2 style="margin-top: 24px; font-size: 1.5rem;">TRANSMITTING...</h2>
+        <p style="color: var(--text-muted); margin-top: 8px;" id="progressText">Connecting to Twilio Global Gateway...</p>
+    </div>
+
+    <div id="toast-box"></div>
+
+    <script>
+        const templates = {
+            admit_card: "📢 *ADMIT CARD RELEASED*\n\nDear Student,\nYour Admit Card for the *FALL 2025* End-Term Exams is now available in the portal.\n\nLink: portal.TESTPAD.com/admit-card\n\n_Note: Please carry a hard copy._",
+            fee: "💰 *FEE REMINDER*\n\nYour Semester III fees are due by *September 15th, 2025*.\n\nPlease clear the balance to avoid service interruption.\n\nRegard,\nAccounts Dept.",
+            notice: "🚨 *URGENT NOTICE*\n\nThe practical exam for *CS101* scheduled for tomorrow has been rescheduled to *Wednesday*.\n\nCheck official bulletin for details.",
+            custom: "Type your message here..."
+        };
+
+        let activeChannels = { whatsapp: true, sms: true };
+
+        window.onload = () => {
+            loadTemplate();
+            
+            // Toggle visibility for phone input based on cohort
+            document.getElementById('targetSelect').addEventListener('change', function() {
+                const group = document.getElementById('testPhoneGroup');
+                group.style.display = (this.value === 'test') ? 'flex' : 'none';
+            });
+        };
+
+        function toggleChannel(channel) {
+            activeChannels[channel] = !activeChannels[channel];
+            const btn = document.getElementById(channel === 'whatsapp' ? 'btnWa' : 'btnSms');
+            btn.classList.toggle('active');
+            
+            // Switch preview style
+            const header = document.getElementById('previewHeader');
+            if(channel === 'whatsapp' && activeChannels.whatsapp) {
+                header.style.background = '#008069';
+                document.getElementById('previewTitle').textContent = 'Chitkara University';
+            } else if (!activeChannels.whatsapp) {
+                header.style.background = '#0284c7';
+                document.getElementById('previewTitle').textContent = 'SMS Gateway';
+            }
+        }
+
+        function loadTemplate() {
+            const val = document.getElementById('templateSelect').value;
+            document.getElementById('messageInput').value = templates[val];
+            updatePreview();
+        }
+
+        function updatePreview() {
+            const val = document.getElementById('messageInput').value;
+            const bubble = document.getElementById('previewBubble');
+            document.getElementById('charCount').textContent = val.length;
+
+            // Simple formatting for preview
+            let formatted = val.replace(/\*(.*?)\*/g, '<strong>$1</strong>');
+            formatted = formatted.replace(/\_(.*?)\_/g, '<em>$1</em>');
+            formatted = formatted.replace(/\n/g, '<br>');
+
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            bubble.innerHTML = `${formatted} <div class="msg-time">${time} <i class="fas fa-check-double" style="color: #53bdeb; margin-left: 4px;"></i></div>`;
+        }
+
+        function showToast(message, type = 'success') {
+            const box = document.getElementById('toast-box');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            if(type === 'error') toast.style.borderColor = 'var(--danger)';
+            
+            toast.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle'}" style="color: ${type === 'success' ? 'var(--success)' : 'var(--danger)'}"></i>
+                <div>
+                   <div style="font-weight:700">${type.toUpperCase()}</div>
+                   <div style="font-size:0.8rem; color: var(--text-muted)">${message}</div>
+                </div>
+            `;
+            box.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        function pushNotification() {
+            if (!activeChannels.whatsapp && !activeChannels.sms) {
+                showToast("Select at least one delivery Modal.", "error");
+                return;
+            }
+
+            const loader = document.getElementById('gatewayLoader');
+            const pt = document.getElementById('progressText');
+            loader.style.display = 'flex';
+
+            const targets = {
+                'all': 1284,
+                'cs': 420,
+                'exam': 150,
+                'test': 1
+            };
+            const count = targets[document.getElementById('targetSelect').value];
+
+            setTimeout(() => { pt.textContent = "Authenticating with Meta Business Cloud API..."; }, 1200);
+            setTimeout(() => { pt.textContent = `Batch Dispatching to ${count} Recipients...`; }, 2500);
+            setTimeout(() => { pt.textContent = "Finalizing Handshake with SMS Gateway..."; }, 3800);
+
+            setTimeout(() => {
+                loader.style.display = 'none';
+                pt.textContent = "Connecting to Twilio Global Gateway...";
+                
+                const testPhone = document.getElementById('testPhoneInput').value.trim();
+                if (testPhone && document.getElementById('targetSelect').value === 'test') {
+                    showToast(`Payload pushed to ${testPhone} successfully.`, 'success');
+                    if(activeChannels.whatsapp) {
+                        const clean = testPhone.replace(/\D/g,'');
+                        const msg = document.getElementById('messageInput').value;
+                        window.open(`https://wa.me/${clean}?text=${encodeURIComponent(msg)}`, '_blank');
+                    }
+                } else {
+                    showToast(`Broadcast completed for ${count} users. Check logs for delivery receipts.`, 'success');
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+
+</html>

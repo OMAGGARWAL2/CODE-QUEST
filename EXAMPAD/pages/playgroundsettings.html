@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+    <style>
+        :root {
+            --primary: #ce866a;
+            --primary-dark: #b56b4f;
+            --primary-glow: rgba(206, 134, 106, 0.15);
+            --bg-dark: #0F172A;
+            --bg-card: #FFFFFF;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-subtle: #F1F5F9;
+            --glass: rgba(255, 255, 255, 0.8);
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #F8FAFC;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Lateral Workspace Sidebar */
+        .settings-nav {
+            width: 300px;
+            background: #FFFFFF;
+            border-right: 1px solid #E2E8F0;
+            padding: 2.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            position: fixed;
+            height: 100vh;
+        }
+
+        .header-section h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--primary);
+        }
+
+        .nav-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.12em;
+            margin-bottom: 8px;
+            padding-left: 12px;
+        }
+
+        .nav-item {
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-item:hover {
+            background: #F1F5F9;
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background: var(--primary-glow);
+            color: var(--primary);
+        }
+
+        /* Main Config Area */
+        .workspace {
+            flex: 1;
+            margin-left: 300px;
+            padding: 4rem;
+            max-width: 1200px;
+        }
+
+        .config-card {
+            background: #FFFFFF;
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+            border: 1px solid #E2E8F0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Control Components */
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .control-item {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            align-items: center;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .control-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .info h3 {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+        }
+
+        .info p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            max-width: 400px;
+        }
+
+        /* Custom Inputs */
+        select,
+        input[type="number"],
+        input[type="text"],
+        input[type="password"],
+        .custom-input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid #E2E8F0;
+            background: #FAFBFC;
+            font-family: 'Outfit';
+            font-weight: 600;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        select:focus,
+        input:focus {
+            border-color: var(--primary);
+            background: #FFFFFF;
+            box-shadow: 0 0 0 4px var(--primary-glow);
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .theme-pill {
+            padding: 12px;
+            border-radius: 12px;
+            border: 2px solid #F1F5F9;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .theme-pill:hover {
+            border-color: #E2E8F0;
+        }
+
+        .theme-pill.active {
+            border-color: var(--primary);
+            background: var(--primary-glow);
+            color: var(--primary);
+        }
+
+        .btn-update {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1.25rem 2rem;
+            border-radius: 16px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 3rem;
+            width: 100%;
+            box-shadow: 0 10px 20px -5px rgba(206, 134, 106, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn-update:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -10px rgba(206, 134, 106, 0.4);
+        }
+
+        .btn-update:disabled {
+            background: var(--text-muted);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+        }
+
+        /* Deployment Overlay */
+        #deployOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 2rem;
+        }
+
+        .deploy-content {
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: var(--primary);
+            box-shadow: 0 0 20px var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .log-window {
+            background: #000;
+            border-radius: 12px;
+            padding: 1.5rem;
+            height: 250px;
+            overflow-y: auto;
+            text-align: left;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .log-entry {
+            margin-bottom: 4px;
+            opacity: 0.8;
+            animation: fadeIn 0.2s ease-out forwards;
+        }
+
+        .log-entry.success { color: var(--success); }
+        .log-entry.warning { color: var(--warning); }
+        .log-entry.info { color: #38BDF8; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 0.8; transform: translateX(0); }
+        }
+
+        /* Profile Styles */
+        .profile-preview {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: #F8FAFC;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            border: 1px solid #E2E8F0;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 24px;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            box-shadow: 0 10px 20px -5px rgba(206, 134, 106, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-details h4 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .profile-details p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .btn-logout {
+            color: var(--error);
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: auto;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: opacity 0.2s;
+        }
+
+        .btn-logout:hover {
+            opacity: 0.7;
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+    <div class="settings-nav">
+        <div class="header-section">
+            <h1>Workspace v2.4</h1>
+        </div>
+
+        <div class="nav-group">
+            <span class="nav-label">Core Config</span>
+            <div class="nav-item active" onclick="showSection('appearance')">
+                <i class="fas fa-palette"></i> Visuals
+            </div>
+            <div class="nav-item" onclick="showSection('behavior')">
+                <i class="fas fa-bolt"></i> Intel & Behavior
+            </div>
+            <div class="nav-item" onclick="showSection('profile')">
+                <i class="fas fa-user-circle"></i> Profile & Identity
+            </div>
+            <div class="nav-item" onclick="resetDefaults()" style="color: var(--text-muted); opacity: 0.6; margin-top: 10px;">
+                <i class="fas fa-undo"></i> Reset Defaults
+            </div>
+        </div>
+
+        <div class="nav-group">
+            <span class="nav-label">Advanced</span>
+            <div class="nav-item" onclick="showSection('compiler')">
+                <i class="fas fa-microchip"></i> Compiler Keys
+            </div>
+            <div class="nav-item" onclick="showSection('keyboard')">
+                <i class="fas fa-keyboard"></i> Key Bindings
+            </div>
+        </div>
+
+        <div class="btn-logout" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i> Logout Session
+        </div>
+    </div>
+
+    <div class="workspace">
+        <a href="playground.html" class="back-link"><i class="fas fa-arrow-left"></i> Return to IDE</a>
+
+        <div class="config-card">
+            <!-- Visuals Section -->
+            <div id="appearance" class="settings-section">
+                <div class="section-header">
+                    <h2>Visuals</h2>
+                    <p>Calibrate your interface for peak productivity and focus.</p>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-item">
+                        <div class="info">
+                            <h3>Editor Theme</h3>
+                            <p>Global syntax highlighting engine. Updates IDE immediately after deployment.</p>
+                        </div>
+                        <div class="theme-grid" id="themeGrid">
+                            <div class="theme-pill" data-theme="chrome" onclick="selectTheme('chrome')">Chrome</div>
+                            <div class="theme-pill" data-theme="monokai" onclick="selectTheme('monokai')">Monokai</div>
+                            <div class="theme-pill" data-theme="dracula" onclick="selectTheme('dracula')">Dracula</div>
+                            <div class="theme-pill" data-theme="github" onclick="selectTheme('github')">GitHub</div>
+                            <div class="theme-pill" data-theme="nord_dark" onclick="selectTheme('nord_dark')">Nord Dark</div>
+                            <div class="theme-pill" data-theme="terminal" onclick="selectTheme('terminal')">Terminal</div>
+                        </div>
+                    </div>
+
+                    <div class="control-item">
+                        <div class="info">
+                            <h3>Font Size</h3>
+                            <p>Adjust the scaling of code characters (px).</p>
+                        </div>
+                        <input type="number" value="18" min="12" max="32" id="fontSize">
+                    </div>
+
+                    <div class="control-item">
+                        <div class="info">
+                            <h3>Line Height</h3>
+                            <p>Vertical density of the text buffer.</p>
+                        </div>
+                        <select id="lineHeight">
+                            <option value="1.2">Compact (1.2)</option>
+                            <option value="1.4">Tight (1.4)</option>
+                            <option value="1.6" selected>Standard (1.6)</option>
+                            <option value="1.8">Relaxed (1.8)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Intel Section -->
+            <div id="behavior" class="settings-section" style="display: none;">
+                <div class="section-header">
+                    <h2>Intel & Behavior</h2>
+                    <p>Configure automated intelligence and editor interactions.</p>
+                </div>
+                <div class="control-group">
+                    <div class="control-item">
+                        <div class="info">
+                            <h3>Live Autocomplete</h3>
+                            <p>Enable IntelliSense-like suggestions as you type.</p>
+                        </div>
+                        <select id="autoComplete">
+                            <option value="true">Enabled (Production)</option>
+                            <option value="false">Disabled (Native)</option>
+                        </select>
+                    </div>
+                    <div class="control-item">
+                        <div class="info">
+                            <h3>Tab Indentation</h3>
+                            <p>Define the character width of a single tab.</p>
+                        </div>
+                        <select id="tabSize">
+                            <option value="2">2 Spaces</option>
+                            <option value="4" selected>4 Spaces</option>
+                            <option value="8">8 Spaces</option>
+                        </select>
+                    </div>
+                    <div class="control-item">
+                        <div class="info">
+                            <h3>Soft Tabs</h3>
+                            <p>Replace tab characters with spaces automatically.</p>
+                        </div>
+                        <select id="softTabs">
+                            <option value="true">Use Spaces</option>
+                            <option value="false">Use Tabs</option>
+                        </select>
+                    </div>
+                    <div class="control-item">
+                        <div class="info">
+                            <h3>Background Autosave</h3>
+                            <p>Persistence frequency for the active buffer.</p>
+                        </div>
+                        <select id="autoSave">
+                            <option value="true">Every 10 seconds</option>
+                            <option value="false">Manual Only</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Section -->
+            <div id="profile" class="settings-section" style="display: none;">
+                <div class="section-header">
+                    <h2>Profile & Identity</h2>
+                    <p>Manage your developer identity and global credentials.</p>
+                </div>
+                
+                <div class="profile-preview">
+                    <div class="profile-avatar" id="profileAvatar">OM</div>
+                    <div class="profile-details">
+                        <h4 id="userNameDisplay">Ojas Maggu</h4>
+                        <p id="userEmailDisplay">ojas.maggu@student.chitkara.edu.in</p>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-item">
+                        <div class="info">
+                            <h3>Display Name</h3>
+                            <p>Visible in shared sessions and commits.</p>
+                        </div>
+                        <input type="text" id="displayName" placeholder="Enter full name" class="custom-input">
+                    </div>
+                    <div class="control-item">
+                        <div class="info">
+                            <h3>Developer ID</h3>
+                            <p>Internal student identifier (Read-only).</p>
+                        </div>
+                        <input type="text" id="devID" value="STUDENT_2026_OM" disabled style="background: #F1F5F9; color: var(--text-muted);">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Compiler Section -->
+            <div id="compiler" class="settings-section" style="display: none;">
+                <div class="section-header">
+                    <h2>Compiler Keys</h2>
+                    <p>Bridge to remote execution environments and cloud compilers.</p>
+                </div>
+                <div class="control-group">
+                    <div class="control-item">
+                        <div class="info">
+                            <h3>Execution Engine</h3>
+                            <p>Choose the preferred remote executor for production code.</p>
+                        </div>
+                        <select id="executionEngine">
+                            <option value="piston">Piston (High Availability)</option>
+                            <option value="judge0">Judge0 (Strict Mode)</option>
+                            <option value="local">Pyodide (Local WebAssembly)</option>
+                        </select>
+                    </div>
+                    <div class="control-item">
+                        <div class="info">
+                            <h3>Judge0 API Key</h3>
+                            <p>Custom token for RapidAPI integration.</p>
+                        </div>
+                        <input type="password" placeholder="••••••••••••••••" id="judge0Key" class="custom-input">
+                    </div>
+                    <div class="control-item">
+                        <div class="info">
+                            <h3>Custom Endpoint</h3>
+                            <p>Point to a private compiler microservice.</p>
+                        </div>
+                        <input type="text" value="https://emkc.org/api/v2/piston" id="pistonEndpoint" class="custom-input">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Keyboard Section -->
+            <div id="keyboard" class="settings-section" style="display: none;">
+                <div class="section-header">
+                    <h2>Key Bindings</h2>
+                    <p>Map your muscle memory to the web environment.</p>
+                </div>
+                <div class="control-group">
+                    <div class="control-item">
+                        <div class="info">
+                            <h3>Keyboard Profile</h3>
+                            <p>Enable native keymap emulations.</p>
+                        </div>
+                        <select id="keybindings">
+                            <option value="ace">Default Ace</option>
+                            <option value="vim">Vim / Neovim</option>
+                            <option value="emacs">GNU Emacs</option>
+                            <option value="sublime">Sublime Text / VS Code</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-update" id="saveBtn" onclick="runDeployment()">
+                <i class="fas fa-rocket"></i> Push Changes to Production
+            </button>
+        </div>
+    </div>
+
+    <!-- Deployment Experience -->
+    <div id="deployOverlay">
+        <div class="deploy-content">
+            <h2 id="deployStatus">Initializing Build...</h2>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="log-window" id="logWindow">
+                <div class="log-entry info">Starting deployment sequence...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedTheme = localStorage.getItem('editorTheme') || 'chrome';
+        let currentUser = null;
+
+        function showSection(id) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                if(item.getAttribute('onclick').includes(id)) item.classList.add('active');
+            });
+
+            document.querySelectorAll('.settings-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function selectTheme(theme) {
+            selectedTheme = theme;
+            document.querySelectorAll('.theme-pill').forEach(pill => {
+                pill.classList.remove('active');
+                if (pill.dataset.theme === theme) pill.classList.add('active');
+            });
+        }
+
+        function addLog(message, type = '') {
+            const logWindow = document.getElementById('logWindow');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            entry.innerHTML = `<span style="color: #475569;">[${time}]</span> ${message}`;
+            logWindow.appendChild(entry);
+            logWindow.scrollTop = logWindow.scrollHeight;
+        }
+
+        async function runDeployment() {
+            const overlay = document.getElementById('deployOverlay');
+            const progress = document.getElementById('progressBar');
+            const status = document.getElementById('deployStatus');
+            const saveBtn = document.getElementById('saveBtn');
+
+            saveBtn.disabled = true;
+            overlay.style.display = 'flex';
+
+            // Collect Data
+            const settings = {
+                fontSize: document.getElementById('fontSize').value,
+                theme: selectedTheme,
+                lineHeight: document.getElementById('lineHeight').value,
+                autoComplete: document.getElementById('autoComplete').value,
+                tabSize: document.getElementById('tabSize').value,
+                softTabs: document.getElementById('softTabs').value,
+                autoSave: document.getElementById('autoSave').value,
+                keybindings: document.getElementById('keybindings').value,
+                executionEngine: document.getElementById('executionEngine').value,
+                judge0Key: document.getElementById('judge0Key').value,
+                pistonEndpoint: document.getElementById('pistonEndpoint').value,
+                displayName: document.getElementById('displayName').value
+            };
+
+            const steps = [
+                { p: 10, m: "Authenticating session tokens...", t: "info" },
+                { p: 25, m: "Syncing local preferences with cloud buffer...", t: "" },
+                { p: 40, m: "Validating compiler endpoint: " + settings.pistonEndpoint, t: "info" },
+                { p: 55, m: "Parsing UI schema (Theme: " + settings.theme + ")...", t: "" },
+                { p: 70, m: "Compiling identity changes...", t: "info" },
+                { p: 85, m: "Applying global state transformations...", t: "warning" },
+                { p: 100, m: "Deployment successful. Environment ready.", t: "success" }
+            ];
+
+            for (const step of steps) {
+                status.innerText = step.m;
+                progress.style.width = step.p + "%";
+                addLog(step.m, step.t);
+                await new Promise(r => setTimeout(r, 400 + Math.random() * 600));
+            }
+
+            // Persist
+            localStorage.setItem('editorFontSize', settings.fontSize);
+            localStorage.setItem('editorTheme', settings.theme);
+            localStorage.setItem('editorLineHeight', settings.lineHeight);
+            localStorage.setItem('editorAutoComplete', settings.autoComplete);
+            localStorage.setItem('editorTabSize', settings.tabSize);
+            localStorage.setItem('editorSoftTabs', settings.softTabs);
+            localStorage.setItem('editorAutoSave', settings.autoSave);
+            localStorage.setItem('editorKeybindings', settings.keybindings);
+            localStorage.setItem('executionEngine', settings.executionEngine);
+            localStorage.setItem('judge0Key', settings.judge0Key);
+            localStorage.setItem('pistonEndpoint', settings.pistonEndpoint);
+
+            // Update Auth User if name changed
+            if (currentUser && settings.displayName && settings.displayName !== currentUser.name) {
+                currentUser.name = settings.displayName;
+                localStorage.setItem('TESTPAD_remembered_user', JSON.stringify(currentUser));
+                localStorage.setItem('auth_user', JSON.stringify(currentUser));
+                addLog("Identity updated in distributed database.", "success");
+            }
+
+            setTimeout(() => {
+                window.location.href = 'playground.html';
+            }, 1000);
+        }
+
+        function handleLogout() {
+            if(confirm("Confirm session termination? Your local environment will be persisted.")) {
+                auth.logout();
+                window.location.href = 'login.html';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!auth.isLoggedIn()) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            currentUser = JSON.parse(localStorage.getItem('TESTPAD_remembered_user') || localStorage.getItem('auth_user') || '{}');
+            
+            // Populate UI
+            if (currentUser.name) {
+                document.getElementById('userNameDisplay').textContent = currentUser.name;
+                document.getElementById('userEmailDisplay').textContent = currentUser.email || (currentUser.username + "@student.chitkara.edu.in");
+                document.getElementById('displayName').value = currentUser.name;
+                document.getElementById('profileAvatar').textContent = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                
+                const savedPic = localStorage.getItem('userPic_' + currentUser.id);
+                if (savedPic) {
+                    document.getElementById('profileAvatar').innerHTML = `<img src="${savedPic}" style="width:100%; height:100%; border-radius:inherit; object-fit:cover;">`;
+                }
+            }
+
+            // Load saved settings
+            document.getElementById('fontSize').value = localStorage.getItem('editorFontSize') || 18;
+            document.getElementById('lineHeight').value = localStorage.getItem('editorLineHeight') || '1.6';
+            document.getElementById('autoComplete').value = localStorage.getItem('editorAutoComplete') || 'true';
+            document.getElementById('tabSize').value = localStorage.getItem('editorTabSize') || '4';
+            document.getElementById('softTabs').value = localStorage.getItem('editorSoftTabs') || 'true';
+            document.getElementById('autoSave').value = localStorage.getItem('editorAutoSave') || 'true';
+            document.getElementById('keybindings').value = localStorage.getItem('editorKeybindings') || 'ace';
+            document.getElementById('executionEngine').value = localStorage.getItem('executionEngine') || 'piston';
+            document.getElementById('judge0Key').value = localStorage.getItem('judge0Key') || '';
+            document.getElementById('pistonEndpoint').value = localStorage.getItem('pistonEndpoint') || 'https://emkc.org/api/v2/piston';
+
+            selectTheme(selectedTheme);
+        });
+        async function resetDefaults() {
+            if (!confirm('Are you sure you want to reset all IDE settings to defaults? Your saved code will not be affected.')) return;
+            
+            localStorage.removeItem('editorTheme');
+            localStorage.removeItem('editorFontSize');
+            localStorage.removeItem('editorLineHeight');
+            localStorage.removeItem('editorKeybindings');
+            localStorage.removeItem('editorAutoComplete');
+            localStorage.removeItem('editorTabSize');
+            localStorage.removeItem('editorSoftTabs');
+            localStorage.removeItem('executionEngine');
+            localStorage.removeItem('pistonEndpoint');
+            localStorage.removeItem('judge0Key');
+
+            const logId = addLog('Resetting system configuration...', 'info');
+            await new Promise(r => setTimeout(r, 800));
+            updateLog(logId, 'Configuration reset complete.', 'success');
+            
+            setTimeout(() => location.reload(), 1000);
+        }
+    </script>
+</body>
+
+</html>

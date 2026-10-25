@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Hind:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Lato:wght@400;700&family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #df7b4f;
+            --primary-hover: #d9815b;
+            --bg-color: #ffffff;
+            --text-color: #333;
+            --accent-soft: rgba(222, 104, 52, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 2vh;
+            /* Top edge */
+            overflow: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        body::after {
+            content: "";
+            background-image: url(../BGNEW01.png);
+            background-size: 100%;
+            background-repeat: no-repeat;
+            background-position: top;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: -5;
+        }
+
+        .bg-wave {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bg-wave svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .main-container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1000px;
+            text-align: center;
+            padding: 5px 20px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 70px;
+            width: 100%;
+            margin-top: -15px;
+        }
+
+        .official-logo {
+            width: 100%;
+            max-width: 240px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .input-wrapper {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 10px;
+        }
+
+        .input-label {
+            display: block;
+            text-align: left;
+            font-size: 1.15rem;
+            color: #000000;
+            margin-bottom: 10px;
+            padding-left: 2px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .test-input {
+            width: 100%;
+            padding: 5px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            background: #ffffff;
+            color: #333;
+            outline: none;
+            box-shadow: none;
+            font-family: 'Hind', sans-serif;
+            text-align: left;
+        }
+
+        .test-input:focus {
+            outline: none !important;
+            border: 1px solid #e76525 !important;
+            box-shadow: none !important;
+        }
+
+        .go-btn {
+            background-color: #e7550c;
+            border: none;
+            color: #faeedc;
+            padding: 5px 38px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 400;
+            font-family: 'Hind', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+            margin-bottom: 30px;
+        }
+
+        .go-btn:hover {
+            background-color: #a24314;
+            box-shadow: 0 4px 12px rgba(184, 79, 27, 0.2);
+        }
+
+        .notice-box {
+            background-color: #ffecd6;
+            border: none;
+            border-radius: 14px;
+            padding: 10px 30px;
+            font-size: 1.55rem;
+            color: #ec9e29;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            line-height: 1.4;
+            margin-top: 15px;
+            font-weight: 500;
+            font-family: 'Hind', sans-serif;
+        }
+
+        .notice-box * {
+            font-family: 'Hind', sans-serif !important;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 45px;
+            left: 0;
+            width: 100%;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #de6834;
+            font-size: 1.65rem;
+            font-family: 'Hind', sans-serif;
+            z-index: 100;
+        }
+
+        .footer * {
+            font-family: 'Hind', sans-serif !important;
+        }
+
+        .footer-left {
+            font-weight: 600;
+            margin-left: 80px;
+        }
+
+        .footer-right {
+            font-weight: 600;
+            margin-right: 190px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-container {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .error-banner {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #FEF3F2;
+            color: #B42318;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            font-weight: 400;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            transition: all 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #FECDCA;
+            font-family: 'Arial', 'Roboto', sans-serif;
+            white-space: nowrap;
+        }
+
+        .error-banner.show {
+            top: 30px;
+        }
+    </style>
+
+    <style>
+        ::selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+
+        ::-moz-selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="errorBanner" class="error-banner">
+        <span>Link added successfully!</span>
+    </div>
+    
+    <div class="bg-wave">
+        <svg viewBox="0 0 1440 900" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M0,900 L0,520 C150,420 250,680 400,640 C600,580 680,150 800,50 C1000,-20 1200,30 1440,60 L1440,900 Z"
+                fill="#fde6d8" opacity="0.15"></path>
+            <path d="M0,900 L0,680 C250,860 450,650 520,500 C600,320 800,180 1440,250 L1440,900 Z" fill="#ffe3c6"
+                opacity="0.30"></path>
+        </svg>
+    </div>
+
+    <div class="main-container">
+        <div class="logo-section" style="justify-content: center;">
+            <img src="https://www.chitkara.edu.in/chitkara-university-logo.png" alt="Chitkara University"
+                class="official-logo">
+        </div>
+
+        <div class="input-wrapper">
+            <label class="input-label">Enter test/invite link</label>
+            <input type="text" id="testLink" class="test-input" autocomplete="off">
+        </div>
+
+        <button class="go-btn" id="goBtn">Add</button>
+
+        <div class="notice-box">
+            To exit please press Alt+F4, <span style="cursor: pointer;" onclick="window.location.href='./joinvialink.html'">only
+            when test</span> has not been <span style="cursor: pointer;" onclick="window.location.href='./joinvialink.html'">started</span>.
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-left" style="display: flex; align-items: center; gap: 8px;">
+            <span style="user-select: none;">Powered by Chitkara</span>
+        </div>
+        <div class="footer-right">Version: 1.2.106</div>
+    </div>
+
+    <script src="../js/db.js"></script>
+    <script>
+        const testInput = document.getElementById('testLink');
+        const goBtn = document.getElementById('goBtn');
+        const errorBanner = document.getElementById('errorBanner');
+        const inputLabel = document.querySelector('.input-label');
+        let errorTimeout;
+        let pendingTestId = null;
+
+        function showError(message) {
+            errorBanner.querySelector('span').textContent = message;
+            errorBanner.classList.add('show');
+
+            clearTimeout(errorTimeout);
+            errorTimeout = setTimeout(() => {
+                errorBanner.classList.remove('show');
+            }, 3000);
+        }
+
+        function handleGo() {
+            let val = testInput.value.trim();
+
+            if (pendingTestId === null) {
+                // Step 1: Entering the test/invite link
+                if (!val) {
+                    showError('Please enter a valid link.');
+                    return;
+                }
+
+                let testId = val.toLowerCase();
+                if (val.includes('/test/')) {
+                    const parts = val.split(/\/test\//i);
+                    if (parts.length > 1) {
+                        testId = parts[1].split('?')[0].split('/')[0].toLowerCase();
+                    }
+                }
+
+                pendingTestId = testId;
+                testInput.value = '';
+                if (inputLabel) inputLabel.textContent = 'Enter test title';
+                testInput.placeholder = 'Enter test title...';
+                showError('Now enter test title');
+                testInput.focus();
+            } else {
+                // Step 2: Entering the test title
+                if (!val) {
+                    showError('Please enter test title.');
+                    return;
+                }
+
+                const voidLinks = JSON.parse(localStorage.getItem('void_links')) || {};
+                voidLinks[pendingTestId] = val;
+                localStorage.setItem('void_links', JSON.stringify(voidLinks));
+
+                pendingTestId = null;
+                testInput.value = '';
+                testInput.placeholder = '';
+                if (inputLabel) inputLabel.textContent = 'Enter test/invite link';
+                showError('Void link added successfully!');
+            }
+        }
+
+        goBtn.addEventListener('click', handleGo);
+
+        testInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleGo();
+            }
+        });
+    </script>
+</body>
+</html>

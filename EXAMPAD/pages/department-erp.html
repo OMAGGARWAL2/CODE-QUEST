@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Tahoma, Arial, sans-serif;
+            background-color: #e8ecf3;
+            color: #333;
+            font-size: 12px;
+        }
+
+        .erp-topbar {
+            background-color: #3b5998;
+            color: white;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 5px 20px;
+            font-size: 11px;
+            height: 35px;
+            gap: 15px;
+        }
+
+        .erp-container {
+            max-width: 1000px;
+            margin: 15px auto;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            min-height: 80vh;
+        }
+
+        .erp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #3b5998;
+            padding-bottom: 10px;
+        }
+
+        .erp-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #3b5998;
+            margin: 0;
+        }
+
+        .sub-nav {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 0px;
+        }
+
+        .sub-nav-btn {
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            padding: 8px 15px;
+            font-size: 11px;
+            color: #333;
+            cursor: pointer;
+            border-radius: 3px 3px 0 0;
+        }
+
+        .sub-nav-btn.active {
+            background: white;
+            font-weight: bold;
+            padding-bottom: 9px;
+            margin-bottom: -1px;
+        }
+
+        .erp-section-title {
+            background: #eef2f7;
+            padding: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #3b5998;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid #d0d7e5;
+        }
+
+        .erp-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .erp-table th,
+        .erp-table td {
+            border: 1px solid #eee;
+            padding: 8px;
+            text-align: left;
+            font-size: 11px;
+            color: #444;
+        }
+
+        .erp-table th {
+            background-color: #f7f7f7;
+            font-weight: bold;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .erp-table tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .form-group label {
+            width: 150px;
+            font-weight: bold;
+        }
+
+        .form-input {
+            padding: 4px;
+            border: 1px solid #a0a0a0;
+            font-size: 11px;
+            width: 300px;
+        }
+
+        .btn {
+            border: 1px solid #888;
+            padding: 5px 15px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to bottom, #d2322d, #ac2925);
+            color: white;
+            border-color: #90221f;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(to bottom, #7495b9, #4a6c93);
+            color: white;
+            border-color: #3c5e85;
+        }
+
+        .btn-warning {
+            background: linear-gradient(to bottom, #f0ad4e, #ec971f);
+            color: white;
+            border-color: #d58512;
+        }
+
+        /* Toast Notifications */
+        #toastContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+        }
+
+        .toast {
+            background: #333;
+            color: white;
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 250px;
+            animation: slideIn 0.3s ease-out;
+            border-left: 4px solid #3b5998;
+        }
+
+        .toast.success {
+            border-left-color: #4caf50;
+        }
+
+        .toast.error {
+            border-left-color: #f44336;
+        }
+
+        .toast.warning {
+            border-left-color: #ff9800;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Certificate Printing Styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #certificatePrintArea,
+            #certificatePrintArea * {
+                visibility: visible;
+            }
+
+            #certificatePrintArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                display: flex !important;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        #certificatePrintArea {
+            display: none;
+            width: 800px;
+            height: 600px;
+            border: 20px solid #3b5998;
+            padding: 50px;
+            background: white;
+            position: relative;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .cert-header {
+            font-size: 34px;
+            font-weight: bold;
+            color: #3b5998;
+            margin-bottom: 20px;
+        }
+
+        .cert-body {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .cert-name {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 20px 0;
+            border-bottom: 2px solid #333;
+            display: inline-block;
+            padding: 0 40px;
+        }
+
+        .cert-photo {
+            width: 120px;
+            height: 140px;
+            border: 2px solid #333;
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            background: #eee;
+            object-fit: cover;
+        }
+    </style>
+    <link rel="icon" type="image/x-icon" href="../logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+    <div id="toastContainer"></div>
+
+    <!-- Hidden Printable Certificate Template -->
+    <div id="certificatePrintArea">
+        <img src="../logo.jpg" style="width: 80px; position: absolute; top: 40px; left: 50px;">
+        <div class="cert-header">CHITKARA UNIVERSITY</div>
+        <div style="font-size: 12px; margin-bottom: 40px;">CERTIFICATE OF ACHIEVEMENT</div>
+        <div class="cert-body">
+            This is to certify that <br>
+            <div class="cert-name" id="pCertName">STUDENT NAME</div> <br>
+            has successfully fulfilled the requirements for <br>
+            <strong id="pCertTitle" style="font-size: 22px;">AWARD TITLE</strong> <br>
+            <span id="pCertSub">Award Details</span>
+        </div>
+        <img id="pCertPhoto" src="" class="cert-photo"
+            onerror="this.src='https://via.placeholder.com/120x140?text=Photo'">
+        <div style="margin-top: 60px; display: flex; justify-content: space-between; padding: 0 50px;">
+            <div style="border-top: 1px solid #333; width: 150px; padding-top: 5px;">Registrar</div>
+            <div style="font-weight: bold;" id="pCertDate">00/00/0000</div>
+            <div style="border-top: 1px solid #333; width: 150px; padding-top: 5px;">Dean Academics</div>
+        </div>
+    </div>
+
+    <div class="erp-topbar">
+        <span><i class="fas fa-user-shield"></i> Department Administrator</span>
+        <a href="./teacher-dashboard.html" style="color: white; text-decoration: none;"><i
+                class="fas fa-arrow-left"></i> Back to Dashboard</a>
+    </div>
+
+    <div class="erp-container">
+        <div class="erp-header">
+            <h1 class="erp-title">DEPARTMENT CHALKPAD CONFIGURATION</h1>
+        </div>
+
+        <div class="sub-nav">
+            <button class="sub-nav-btn active" onclick="switchTab('classes')" id="btnClasses">Class & Subjects
+                Setup</button>
+            <button class="sub-nav-btn" onclick="switchTab('students')" id="btnStudents">Student Education IDs</button>
+            <button class="sub-nav-btn" onclick="switchTab('attendance')" id="btnAttendance">Daily Attendance
+                Registry</button>
+            <button class="sub-nav-btn" onclick="switchTab('timetable')" id="btnTimetable">Academic Timetables</button>
+            <button class="sub-nav-btn" onclick="switchTab('certificates')" id="btnCertificates">Issue
+                Certificates</button>
+            <button class="sub-nav-btn" onclick="switchTab('results')" id="btnResults">Results & Grading</button>
+            <button class="sub-nav-btn" onclick="switchTab('fees')" id="btnFees">Fee & Financial Control</button>
+        </div>
+
+        <!-- RESULTS & GRADING SETUP -->
+        <div id="tabResults" style="display: none;">
+            <div class="erp-section-title"><i class="fas fa-poll-h"></i> Student Grade Entry (Grade Card)</div>
+            <div style="border: 1px solid #ccc; padding: 15px; background: #fafafa; margin-bottom: 20px;">
+                <div class="form-group">
+                    <label>Select Student</label>
+                    <select id="resStudent" class="form-input stu-select"></select>
+                </div>
+                <div class="form-group">
+                    <label>Subject</label>
+                    <select id="resSubject" class="form-input res-sub-select"></select>
+                </div>
+                <div class="form-group">
+                    <label>Awarded Grade</label>
+                    <select id="resGrade" class="form-input">
+                        <option>O</option>
+                        <option>A+</option>
+                        <option>A</option>
+                        <option>B+</option>
+                        <option>B</option>
+                        <option>C</option>
+                        <option>P</option>
+                        <option>F</option>
+                    </select>
+                </div>
+                <button class="btn btn-secondary" onclick="enterGrade()">Finalize & Feed Grade</button>
+            </div>
+
+            <div class="erp-section-title"><i class="fas fa-file-signature"></i> Internal Assessment / Daily Test Marks
+            </div>
+            <div style="border: 1px solid #ccc; padding: 15px; background: #fafafa; margin-bottom: 20px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div class="form-group"><label>Student</label><select id="markStudent"
+                            class="form-input stu-select"></select></div>
+                    <div class="form-group"><label>Subject</label><select id="markSubject"
+                            class="form-input res-sub-select"></select></div>
+                    <div class="form-group"><label>Group</label><input type="text" id="markGroup" class="form-input"
+                            placeholder="e.g. U24CS-G09"></div>
+                    <div class="form-group"><label>Test Type</label><input type="text" id="markTestType"
+                            class="form-input" placeholder="e.g. Component2_UN"></div>
+                    <div class="form-group"><label>Test Date</label><input type="date" id="markDate" class="form-input">
+                    </div>
+                    <div class="form-group"><label>Study Period</label><input type="text" id="markPeriod"
+                            class="form-input" placeholder="e.g. 3 SEM"></div>
+                    <div class="form-group"><label>Teacher Name</label><input type="text" id="markTeacher"
+                            class="form-input"></div>
+                    <div class="form-group"><label>Test Code</label><select id="markTestCode" class="form-input">
+                            <option>FA</option>
+                            <option>ST</option>
+                            <option>MT</option>
+                        </select></div>
+                    <div class="form-group"><label>Max Marks (M.M)</label><input type="number" id="markMM"
+                            class="form-input"></div>
+                    <div class="form-group"><label>Scored (M.S)</label><input type="number" id="markMS"
+                            class="form-input"></div>
+                </div>
+                <button class="btn btn-primary" onclick="enterMarks()" style="margin-top:10px;">Feed Individual
+                    Marks</button>
+                <button class="btn btn-secondary" onclick="loadBatchMarksEntry()"
+                    style="margin-top:10px; margin-left: 10px;">Open Batch Entry Table</button>
+            </div>
+
+            <!-- BATCH MARKS ENTRY TABLE -->
+            <div id="batchMarksSection" style="display: none; margin-bottom: 20px;">
+                <div class="erp-section-title" style="background: #fff8e1; color: #f57f17; border-color: #ffe082;">
+                    <i class="fas fa-users-cog"></i> Batch Marks Entry Tool (Auto Grade Calculation)
+                </div>
+                <div style="overflow-x: auto; background: #fff; padding: 15px; border: 1px solid #ccc;">
+                    <table class="erp-table">
+                        <thead>
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Student Name</th>
+                                <th>Scored (M.S) / <span id="batchMMDisplay">40</span></th>
+                                <th>%age</th>
+                                <th>Auto-Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="batchMarksBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                    <div style="margin-top: 15px;">
+                        <button class="btn btn-primary" onclick="saveBatchMarks()">Save Entire Batch to ERP</button>
+                    </div>
+                </div>
+            </div>
+
+            <table class="erp-table">
+                <thead>
+                    <tr>
+                        <th>Roll No</th>
+                        <th>Subject</th>
+                        <th>Test</th>
+                        <th>M.S / M.M</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="combinedResultsBody"></tbody>
+            </table>
+        </div>
+
+        <!-- TIMETABLE SETUP -->
+        <div id="tabTimetable" style="display: none;">
+            <div class="erp-section-title"><i class="fas fa-calendar-alt"></i> Day-by-Day / Hour-by-Hour Timetable
+                Registry</div>
+            <div style="overflow-x: auto;">
+                <table class="erp-table" style="min-width: 800px;">
+                    <thead>
+                        <tr>
+                            <th width="100">Day / Hour</th>
+                            <th>08:30-09:20</th>
+                            <th>09:25-10:15</th>
+                            <th>10:20-11:10</th>
+                            <th>11:15-12:05</th>
+                            <th>12:10-01:00</th>
+                            <th>01:50-02:40</th>
+                            <th>02:45-03:35</th>
+                            <th>03:40-04:30</th>
+                        </tr>
+                    </thead>
+                    <tbody id="timetableGridBody">
+                        <!-- Filled by JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
+                <input type="text" id="ttGroup" class="form-input" style="width: 200px;"
+                    placeholder="Batch/Group (e.g. G-09)">
+                <button class="btn btn-secondary" onclick="saveTimetable()">Finalize & Push to Batch Timeline</button>
+            </div>
+        </div>
+
+        <!-- CERTIFICATE PORTAL -->
+        <div id="tabCertificates" style="display: none;">
+            <div class="erp-section-title"><i class="fas fa-award"></i> Batch Certificate & Achievement Portal</div>
+            <div style="border: 1px solid #ccc; padding: 15px; background: #fafafa; margin-bottom: 20px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Select Student</label>
+                        <select id="certStudent" class="form-input stu-select"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Achievement Title</label>
+                        <input type="text" id="certTitle" class="form-input"
+                            placeholder="e.g. Master of Python Programming">
+                    </div>
+                    <div class="form-group">
+                        <label>Sub-details</label>
+                        <input type="text" id="certSub" class="form-input"
+                            placeholder="e.g. Secured 1st Position in Tech-Fest">
+                    </div>
+                    <div class="form-group">
+                        <label>Include Photo?</label>
+                        <input type="checkbox" id="certIncludePhoto" checked>
+                    </div>
+                </div>
+                <div style="margin-top: 10px;">
+                    <button class="btn btn-secondary" onclick="issueCertificate()">Feed Achievement</button>
+                    <button class="btn btn-primary" onclick="generateBatchPDF()">Print/Save as PDF</button>
+                </div>
+            </div>
+
+            <table class="erp-table">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Achievement</th>
+                        <th>Date Issued</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="certsBody"></tbody>
+            </table>
+        </div>
+
+        <!-- CLASSES SETUP -->
+        <div id="tabClasses">
+            <div class="erp-section-title"><i class="fas fa-book"></i> Create Educational Class / Subject</div>
+            <div style="border: 1px solid #ccc; padding: 15px; background: #fafafa; margin-bottom: 20px;">
+                <div class="form-group">
+                    <label>Subject Code</label>
+                    <input type="text" id="subCode" class="form-input" placeholder="e.g. 24CSE0213">
+                </div>
+                <div class="form-group">
+                    <label>Subject Name</label>
+                    <input type="text" id="subName" class="form-input" placeholder="e.g. Linux Administration">
+                </div>
+                <div class="form-group">
+                    <label>Teacher Name</label>
+                    <input type="text" id="subTeacher" class="form-input" placeholder="e.g. CHETNA">
+                </div>
+                <button class="btn btn-secondary" onclick="addSubject()">Add Subject to Curriculum</button>
+            </div>
+
+            <table class="erp-table">
+                <thead>
+                    <tr>
+                        <th>Subject Code</th>
+                        <th>Subject Name</th>
+                        <th>Assigned Teacher</th>
+                    </tr>
+                </thead>
+                <tbody id="subjectsBody"></tbody>
+            </table>
+        </div>
+
+        <!-- STUDENTS SETUP -->
+        <div id="tabStudents" style="display: none;">
+            <div class="erp-section-title"><i class="fas fa-user-graduate"></i> Register Student & Handout Credentials
+            </div>
+            <div style="border: 1px solid #ccc; padding: 15px; background: #fafafa; margin-bottom: 20px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="stuNameForm" class="form-input" placeholder="e.g. Om Aggarwal">
+                    </div>
+                    <div class="form-group">
+                        <label>Roll Number (ERP ID)</label>
+                        <input type="text" id="stuRollForm" class="form-input" placeholder="e.g. 2410990653">
+                    </div>
+                    <div class="form-group">
+                        <label>Father's Name</label>
+                        <input type="text" id="stuFatherForm" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Mother's Name</label>
+                        <input type="text" id="stuMotherForm" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" id="stuDobForm" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Class Name</label>
+                        <input type="text" id="stuClassForm" class="form-input" value="2024-BE-CSE-4 SEM-4 SEM">
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select id="stuGenderForm" class="form-input">
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Blood Group</label>
+                        <input type="text" id="stuBloodGroupForm" class="form-input" placeholder="e.g. O+">
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <input type="text" id="stuCategoryForm" class="form-input" placeholder="e.g. General">
+                    </div>
+                    <div class="form-group">
+                        <label>Nationality</label>
+                        <input type="text" id="stuNationalityForm" class="form-input" value="Indian">
+                    </div>
+                    <div class="form-group">
+                        <label>Religion</label>
+                        <input type="text" id="stuReligionForm" class="form-input" placeholder="e.g. Hindu">
+                    </div>
+                    <div class="form-group">
+                        <label>Permanent Address</label>
+                        <input type="text" id="stuAddressForm" class="form-input" style="width: 400px;">
+                    </div>
+                    <div class="form-group">
+                        <label>Father's Contact</label>
+                        <input type="text" id="stuFatherContactForm" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Occupation</label>
+                        <input type="text" id="stuOccupationForm" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="stuEmailForm" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Photo URL / Base64</label>
+                        <input type="text" id="stuPhotoForm" class="form-input"
+                            placeholder="Paste link or data:image...">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="text" id="stuPassForm" class="form-input" value="exam2026">
+                    </div>
+                </div>
+                <button class="btn btn-secondary" onclick="addStudent()">Generate Education ID</button>
+            </div>
+
+            <table class="erp-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Roll No / Education ID</th>
+                        <th>Student Name</th>
+                        <th>Login Password</th>
+                        <th>ERP Status</th>
+                    </tr>
+                </thead>
+                <tbody id="studentsBody"></tbody>
+            </table>
+        </div>
+
+        <!-- ATTENDANCE REGISTRY SETUP -->
+        <div id="tabAttendance" style="display: none;">
+            <div class="erp-section-title"><i class="fas fa-calendar-check"></i> Mark Daily Student Attendance</div>
+            <div style="border: 1px solid #ccc; padding: 15px; background: #fafafa; margin-bottom: 20px;">
+                <div class="form-group">
+                    <label>Select Subject</label>
+                    <select id="subjectAttendanceSelect" class="form-select" onchange="loadAttendanceRoster()"
+                        style="width: 400px;">
+                        <option value="">-- Choose Assigned Subject --</option>
+                    </select>
+                </div>
+                <div style="font-size: 10px; color: #777;">Note: Marking "Present" contributes to the 75% attendance
+                    threshold.</div>
+            </div>
+
+            <div id="attendanceRoster" style="display: none;">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: #f9f9f9; padding: 10px; border: 1px solid #ddd;">
+                    <span style="font-weight: bold;">Daily Attendance Matrix</span>
+                    <div>
+                        <button class="btn btn-secondary" style="padding: 2px 10px;" onclick="markRoster('present')">All
+                            Present</button>
+                        <button class="btn btn-secondary" style="padding: 2px 10px;" onclick="markRoster('absent')">All
+                            Absent</button>
+                    </div>
+                </div>
+                <table class="erp-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px;">S.No</th>
+                            <th style="width: 150px;">Roll No</th>
+                            <th>Student Name</th>
+                            <th style="width: 150px; text-align: center;">Marking</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceRosterBody"></tbody>
+                </table>
+                <div style="text-align: right;">
+                    <button class="btn btn-primary" onclick="submitDailyAttendance()">Submit Permanent Registry</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- FEES SETUP -->
+        <div id="tabFees" style="display: none;">
+            <div class="erp-section-title"><i class="fas fa-file-invoice-dollar"></i> Bi-Annual Semester Fee Circulars
+            </div>
+
+            <div style="border: 1px solid #ccc; padding: 15px; background: #fafafa; margin-bottom: 20px;">
+                <div class="form-group">
+                    <label>Circular Title</label>
+                    <input type="text" id="feeTitle" class="form-input"
+                        placeholder="e.g. Jun-Dec 2026 Semester Fee Update">
+                </div>
+                <div class="form-group">
+                    <label>Message Content</label>
+                    <input type="text" id="feeMessage" class="form-input"
+                        placeholder="Dear Students, please clear dues...">
+                </div>
+                <button class="btn btn-secondary" onclick="addFeeCircular()">Publish Circular to Timelines</button>
+            </div>
+
+            <div class="erp-section-title" style="background: #fdf3f2; color: #d92d20; border-color: #f5c6cb;"><i
+                    class="fas fa-exclamation-triangle"></i> Administrative Actions</div>
+            <div style="border: 1px solid #f5c6cb; padding: 15px; background: #fff;">
+                <p>Use this toggle to enforce strict penalty matching the 6-month cycle. Blocks students from accessing
+                    the live portal.</p>
+                <button class="btn btn-primary" onclick="toggleERPBlock(true)" id="btnBlock">Block ERP (Demand Fee
+                    Clearance)</button>
+                <button class="btn btn-warning" onclick="toggleERPBlock(false)" id="btnUnblock">Revoke Blocks (Allow
+                    Access)</button>
+            </div>
+
+            <table class="erp-table" style="margin-top: 20px;">
+                <thead>
+                    <tr>
+                        <th>Circular Notice Title</th>
+                        <th>Content Body</th>
+                        <th>Date Published</th>
+                    </tr>
+                </thead>
+                <tbody id="feesBody"></tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        // Init DB if required
+        if (!localStorage.getItem('erp_students')) localStorage.setItem('erp_students', JSON.stringify([]));
+        if (!localStorage.getItem('erp_subjects')) localStorage.setItem('erp_subjects', JSON.stringify([]));
+        if (!localStorage.getItem('erp_circulars')) localStorage.setItem('erp_circulars', JSON.stringify([]));
+
+        function showToast(msg, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icon = type === 'success' ? 'check-circle' : (type === 'error' ? 'exclamation-circle' : 'exclamation-triangle');
+            toast.innerHTML = `<i class="fas fa-${icon}"></i> <span>${msg}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        function switchTab(tab) {
+            ['classes', 'students', 'attendance', 'timetable', 'certificates', 'results', 'fees'].forEach(t => {
+                const pane = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
+                const btn = document.getElementById('btn' + t.charAt(0).toUpperCase() + t.slice(1));
+                if (pane) pane.style.display = 'none';
+                if (btn) btn.classList.remove('active');
+            });
+            document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).style.display = 'block';
+            document.getElementById('btn' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+
+            if (tab === 'attendance') populateSubjectSelect();
+            if (tab === 'timetable') initTimetableGrid();
+            if (tab === 'certificates') populateStudentSelects();
+            if (tab === 'results') {
+                populateStudentSelects();
+                populateResultSubjectSelect();
+            }
+            refreshTables();
+        }
+
+        function initTimetableGrid() {
+            const body = document.getElementById('timetableGridBody');
+            const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const subs = JSON.parse(localStorage.getItem('erp_subjects')) || [];
+            body.innerHTML = '';
+
+            days.forEach((day, dIdx) => {
+                let row = `<tr><td><strong>${day}</strong></td>`;
+                for (let h = 1; h <= 8; h++) {
+                    let options = `<option value="">-- Free --</option>`;
+                    subs.forEach(s => options += `<option value="${s.code}">${s.name}</option>`);
+                    row += `<td><select class="tt-cell form-input" style="width:100%; border:none; background:transparent;" data-day="${day}" data-hour="${h}">${options}</select></td>`;
+                }
+                row += `</tr>`;
+                body.innerHTML += row;
+            });
+
+            // Load existing if any
+            const existing = JSON.parse(localStorage.getItem('erp_timetable')) || {};
+            document.querySelectorAll('.tt-cell').forEach(sel => {
+                const day = sel.dataset.day;
+                const hour = sel.dataset.hour;
+                if (existing[day] && existing[day][hour]) sel.value = existing[day][hour];
+            });
+        }
+
+        function saveTimetable() {
+            const group = document.getElementById('ttGroup').value;
+            if (!group) return showToast("Please specify a Batch/Group", "warning");
+
+            const tt = {};
+            document.querySelectorAll('.tt-cell').forEach(sel => {
+                const day = sel.dataset.day;
+                const hour = sel.dataset.hour;
+                if (!tt[day]) tt[day] = {};
+                tt[day][hour] = sel.value;
+            });
+
+            localStorage.setItem('erp_timetable', JSON.stringify(tt));
+            localStorage.setItem('erp_timetable_group', group);
+            showToast("Timetable Synced & Pushed to Student Timeline");
+        }
+
+        function populateResultSubjectSelect() {
+            const subs = JSON.parse(localStorage.getItem('erp_subjects')) || [];
+            document.querySelectorAll('.res-sub-select').forEach(sel => {
+                sel.innerHTML = '<option value="">-- Choose Subject --</option>';
+                subs.forEach(s => sel.innerHTML += `<option value="${s.code}">${s.name}</option>`);
+            });
+        }
+
+        function enterGrade() {
+            const sid = document.getElementById('resStudent').value;
+            const scode = document.getElementById('resSubject').value;
+            const grade = document.getElementById('resGrade').value;
+            if (!sid || !scode) return showToast("Select student and subject", "error");
+
+            const results = JSON.parse(localStorage.getItem('erp_results')) || [];
+            results.push({ sid, scode, grade, date: new Date().toLocaleDateString(), type: 'grade' });
+            localStorage.setItem('erp_results', JSON.stringify(results));
+            showToast("Grade Fed Successfully.");
+            refreshTables();
+        }
+
+        function enterMarks() {
+            const sid = document.getElementById('markStudent').value;
+            const scode = document.getElementById('markSubject').value;
+            const group = document.getElementById('markGroup').value;
+            const testType = document.getElementById('markTestType').value;
+            const date = document.getElementById('markDate').value;
+            const period = document.getElementById('markPeriod').value;
+            const teacher = document.getElementById('markTeacher').value;
+            const testCode = document.getElementById('markTestCode').value;
+            const mm = document.getElementById('markMM').value;
+            const ms = document.getElementById('markMS').value;
+
+            if (!sid || !scode || !ms) return showToast("Student, Subject and Marks required", "error");
+
+            const marks = JSON.parse(localStorage.getItem('erp_marks')) || [];
+            marks.push({ sid, scode, group, testType, date, period, teacher, testCode, mm, ms });
+            localStorage.setItem('erp_marks', JSON.stringify(marks));
+
+            // Auto-feed grade to Grade Card as well
+            const percentage = (ms / mm) * 100;
+            let autoGrade = calculateGrade(percentage);
+            const results = JSON.parse(localStorage.getItem('erp_results')) || [];
+            results.push({ sid, scode, grade: autoGrade, date: new Date().toLocaleDateString(), type: 'grade' });
+            localStorage.setItem('erp_results', JSON.stringify(results));
+
+            showToast("Assessment Marks & Auto-Grade Fed Successfully.");
+            refreshTables();
+        }
+
+        function calculateGrade(p) {
+            if (p >= 90) return 'O';
+            if (p >= 80) return 'A+';
+            if (p >= 70) return 'A';
+            if (p >= 60) return 'B+';
+            if (p >= 50) return 'B';
+            if (p >= 40) return 'C';
+            return 'F';
+        }
+
+        function loadBatchMarksEntry() {
+            const scode = document.getElementById('markSubject').value;
+            const mm = document.getElementById('markMM').value;
+            if (!scode || !mm) return showToast("Select Subject and enter M.M first", "warning");
+
+            document.getElementById('batchMMDisplay').innerText = mm;
+            const students = JSON.parse(localStorage.getItem('erp_students')) || [];
+            const body = document.getElementById('batchMarksBody');
+            body.innerHTML = '';
+
+            students.forEach(st => {
+                body.innerHTML += `
+                <tr>
+                    <td>${st.rollNo}</td>
+                    <td><strong>${st.name}</strong></td>
+                    <td><input type="number" class="form-input batch-ms-input" data-sid="${st.id}" style="width:70px;" oninput="updateBatchGrade(this, ${mm})"></td>
+                    <td class="batch-perc">-</td>
+                    <td class="batch-grade" style="font-weight:bold; color:#3b5998;">-</td>
+                </tr>`;
+            });
+
+            document.getElementById('batchMarksSection').style.display = 'block';
+            showToast("Batch table loaded for " + students.length + " students");
+        }
+
+        function updateBatchGrade(input, mm) {
+            const ms = input.value;
+            const row = input.closest('tr');
+            const percCell = row.querySelector('.batch-perc');
+            const gradeCell = row.querySelector('.batch-grade');
+
+            if (ms && mm) {
+                const p = (ms / mm) * 100;
+                percCell.innerText = p.toFixed(0) + '%';
+                gradeCell.innerText = calculateGrade(p);
+            } else {
+                percCell.innerText = '-';
+                gradeCell.innerText = '-';
+            }
+        }
+
+        function saveBatchMarks() {
+            const scode = document.getElementById('markSubject').value;
+            const group = document.getElementById('markGroup').value;
+            const testType = document.getElementById('markTestType').value;
+            const date = document.getElementById('markDate').value;
+            const period = document.getElementById('markPeriod').value;
+            const teacher = document.getElementById('markTeacher').value;
+            const testCode = document.getElementById('markTestCode').value;
+            const mm = document.getElementById('markMM').value;
+
+            const marks = JSON.parse(localStorage.getItem('erp_marks')) || [];
+            const results = JSON.parse(localStorage.getItem('erp_results')) || [];
+            let count = 0;
+
+            document.querySelectorAll('.batch-ms-input').forEach(input => {
+                const ms = input.value;
+                if (ms) {
+                    const sid = input.dataset.sid;
+                    marks.push({ sid, scode, group, testType, date, period, teacher, testCode, mm, ms });
+
+                    const p = (ms / mm) * 100;
+                    results.push({ sid, scode, grade: calculateGrade(p), date: new Date().toLocaleDateString(), type: 'grade' });
+                    count++;
+                }
+            });
+
+            if (count === 0) return showToast("No marks entered to save", "warning");
+
+            localStorage.setItem('erp_marks', JSON.stringify(marks));
+            localStorage.setItem('erp_results', JSON.stringify(results));
+
+            showToast("Successfully saved marks & grades for " + count + " students");
+            document.getElementById('batchMarksSection').style.display = 'none';
+            refreshTables();
+        }
+
+        function deleteEntry(type, index) {
+            const key = type === 'grade' ? 'erp_results' : 'erp_marks';
+            const data = JSON.parse(localStorage.getItem(key)) || [];
+            data.splice(index, 1);
+            localStorage.setItem(key, JSON.stringify(data));
+            refreshTables();
+        }
+
+        function populateSubjectSelect() {
+            const subs = JSON.parse(localStorage.getItem('erp_subjects')) || [];
+            const sel = document.getElementById('subjectAttendanceSelect');
+            sel.innerHTML = '<option value="">-- Choose Assigned Subject --</option>';
+            subs.forEach(s => {
+                sel.innerHTML += `<option value="${s.code}">${s.code} - ${s.name} (${s.teacher})</option>`;
+            });
+        }
+
+        function populateTimetableSelects() {
+            const subs = JSON.parse(localStorage.getItem('erp_subjects')) || [];
+            document.querySelectorAll('.tt-sub-select').forEach(sel => {
+                sel.innerHTML = '<option value="">-- Free Period --</option>';
+                subs.forEach(s => sel.innerHTML += `<option value="${s.code}">${s.name}</option>`);
+            });
+        }
+
+        function populateStudentSelects() {
+            const students = JSON.parse(localStorage.getItem('erp_students')) || [];
+            document.querySelectorAll('.stu-select').forEach(sel => {
+                sel.innerHTML = '<option value="">-- Select Student --</option>';
+                students.forEach(st => sel.innerHTML += `<option value="${st.id}">${st.name} (${st.rollNo})</option>`);
+            });
+        }
+
+        function issueCertificate() {
+            const sid = document.getElementById('certStudent').value;
+            const title = document.getElementById('certTitle').value;
+            const sub = document.getElementById('certSub').value;
+            if (!sid || !title) return showToast("Select student and title", "error");
+
+            const certs = JSON.parse(localStorage.getItem('erp_certs')) || [];
+            certs.push({ sid, title, sub, date: new Date().toLocaleDateString() });
+            localStorage.setItem('erp_certs', JSON.stringify(certs));
+            showToast("Achievement Fed into Student Record.");
+            refreshTables();
+        }
+
+        function generateBatchPDF() {
+            const sid = document.getElementById('certStudent').value;
+            const title = document.getElementById('certTitle').value;
+            const sub = document.getElementById('certSub').value;
+            const includePhoto = document.getElementById('certIncludePhoto').checked;
+
+            if (!sid || !title) return showToast("Select student and title for print", "error");
+
+            const stus = JSON.parse(localStorage.getItem('erp_students')) || [];
+            const st = stus.find(s => s.id == sid);
+
+            if (!st) return showToast("Student not found", "error");
+
+            document.getElementById('pCertName').innerText = st.name.toUpperCase();
+            document.getElementById('pCertTitle').innerText = title.toUpperCase();
+            document.getElementById('pCertSub').innerText = sub;
+            document.getElementById('pCertDate').innerText = new Date().toLocaleDateString();
+
+            const photoEl = document.getElementById('pCertPhoto');
+            if (includePhoto && st.photo) {
+                photoEl.src = st.photo;
+                photoEl.style.display = 'block';
+            } else {
+                photoEl.style.display = 'none';
+            }
+
+            window.print();
+        }
+
+        function generateTimetable() {
+            const room = document.getElementById('ttRoom').value;
+            if (!room) return showToast("Enter Room No", "warning");
+            showToast("Timetable Synced & Globally Published.");
+        }
+
+        function loadAttendanceRoster() {
+            const code = document.getElementById('subjectAttendanceSelect').value;
+            if (!code) {
+                document.getElementById('attendanceRoster').style.display = 'none';
+                return;
+            }
+            document.getElementById('attendanceRoster').style.display = 'block';
+            const students = JSON.parse(localStorage.getItem('erp_students')) || [];
+            const body = document.getElementById('attendanceRosterBody');
+            body.innerHTML = '';
+
+            students.forEach((st, idx) => {
+                body.innerHTML += `
+                <tr>
+                    <td>${idx + 1}</td>
+                    <td><strong>${st.rollNo}</strong></td>
+                    <td>${st.name}</td>
+                    <td style="text-align: center;">
+                        <input type="radio" name="att_${st.id}" value="present" checked> P
+                        <input type="radio" name="att_${st.id}" value="absent" style="margin-left: 10px;"> A
+                    </td>
+                </tr>`;
+            });
+        }
+
+        function markRoster(state) {
+            const students = JSON.parse(localStorage.getItem('erp_students')) || [];
+            students.forEach(st => {
+                const radios = document.getElementsByName(`att_${st.id}`);
+                radios.forEach(r => { if (r.value === state) r.checked = true; });
+            });
+        }
+
+        function submitDailyAttendance() {
+            const code = document.getElementById('subjectAttendanceSelect').value;
+            const students = JSON.parse(localStorage.getItem('erp_students')) || [];
+            let att = JSON.parse(localStorage.getItem('erp_attendance')) || {};
+
+            if (!att[code]) att[code] = { delivered: 0, students: {} };
+            att[code].delivered += 1;
+
+            students.forEach(st => {
+                const radios = document.getElementsByName(`att_${st.id}`);
+                let isPresent = false;
+                radios.forEach(r => { if (r.value === 'present' && r.checked) isPresent = true; });
+
+                if (!att[code].students[st.id]) att[code].students[st.id] = 0;
+                if (isPresent) att[code].students[st.id] += 1;
+            });
+
+            localStorage.setItem('erp_attendance', JSON.stringify(att));
+            showToast("Daily Attendance Registry Updated.");
+            switchTab('classes');
+        }
+
+        function refreshTables() {
+            // Subjects
+            const subs = JSON.parse(localStorage.getItem('erp_subjects')) || [];
+            const sBody = document.getElementById('subjectsBody');
+            if (sBody) {
+                sBody.innerHTML = '';
+                subs.forEach(s => {
+                    sBody.innerHTML += `<tr><td><strong>${s.code}</strong></td><td>${s.name}</td><td>${s.teacher}</td></tr>`;
+                });
+            }
+
+            // Students
+            const stus = JSON.parse(localStorage.getItem('erp_students')) || [];
+            const stuBody = document.getElementById('studentsBody');
+            if (stuBody) {
+                stuBody.innerHTML = '';
+                stus.forEach(st => {
+                    let badge = st.feeBlocked ? '<span style="color:red; font-weight:bold;">BLOCKED</span>' : '<span style="color:green; font-weight:bold;">ACTIVE</span>';
+                    stuBody.innerHTML += `<tr><td>${st.id}</td><td><strong>${st.username}</strong></td><td>${st.name}</td><td><pre style="margin:0;">${st.password}</pre></td><td>${badge}</td></tr>`;
+                });
+            }
+
+            // Results/Marks Table in Department ERP
+            const combinedBody = document.getElementById('combinedResultsBody');
+            if (combinedBody) {
+                combinedBody.innerHTML = '';
+                const results = JSON.parse(localStorage.getItem('erp_results')) || [];
+                const marks = JSON.parse(localStorage.getItem('erp_marks')) || [];
+
+                results.forEach((r, idx) => {
+                    const st = stus.find(s => s.id == r.sid);
+                    const sub = subs.find(s => s.code == r.scode);
+                    combinedBody.innerHTML += `<tr><td>${st ? st.rollNo : '??'}</td><td>${sub ? sub.name : r.scode}</td><td>Grade: ${r.grade}</td><td>-</td><td><button onclick="deleteEntry('grade', ${idx})">Del</button></td></tr>`;
+                });
+
+                marks.forEach((m, idx) => {
+                    const st = stus.find(s => s.id == m.sid);
+                    const sub = subs.find(s => s.code == m.scode);
+                    combinedBody.innerHTML += `<tr><td>${st ? st.rollNo : '??'}</td><td>${sub ? sub.name : m.scode}</td><td>${m.testCode}</td><td>${m.ms}/${m.mm}</td><td><button onclick="deleteEntry('mark', ${idx})">Del</button></td></tr>`;
+                });
+            }
+
+            // Fees
+            const fees = JSON.parse(localStorage.getItem('erp_circulars')) || [];
+            const fBody = document.getElementById('feesBody');
+            if (fBody) {
+                fBody.innerHTML = '';
+                fees.forEach(f => {
+                    fBody.innerHTML += `<tr><td><strong>${f.title}</strong></td><td>${f.details}</td><td>${f.date}</td></tr>`;
+                });
+            }
+
+            // Certificates
+            const certs = JSON.parse(localStorage.getItem('erp_certs')) || [];
+            const cBody = document.getElementById('certsBody');
+            if (cBody) {
+                cBody.innerHTML = '';
+                certs.forEach(c => {
+                    const st = stus.find(s => s.id == c.sid);
+                    cBody.innerHTML += `<tr><td>${st ? st.name : 'Unknown'}</td><td><strong>${c.title}</strong><br><small>${c.sub}</small></td><td>${c.date}</td><td><button class="btn" style="padding:2px 5px">Print</button></td></tr>`;
+                });
+            }
+        }
+
+        function addSubject() {
+            const code = document.getElementById('subCode').value;
+            const name = document.getElementById('subName').value;
+            const teacher = document.getElementById('subTeacher').value;
+            if (!code || !name) return showToast("Required fields missing", "error");
+
+            const subs = JSON.parse(localStorage.getItem('erp_subjects'));
+            subs.push({ code, name, teacher });
+            localStorage.setItem('erp_subjects', JSON.stringify(subs));
+
+            // Register in attendance db as well natively
+            let att = JSON.parse(localStorage.getItem('erp_attendance')) || {};
+            if (!att[code]) att[code] = { delivered: 0, students: {} };
+            localStorage.setItem('erp_attendance', JSON.stringify(att));
+
+            showToast("Subject Added to Curriculum.");
+            document.getElementById('subCode').value = '';
+            refreshTables();
+        }
+
+        function addStudent() {
+            const name = document.getElementById('stuNameForm').value;
+            const roll = document.getElementById('stuRollForm').value;
+            const father = document.getElementById('stuFatherForm').value;
+            const mother = document.getElementById('stuMotherForm').value;
+            const dob = document.getElementById('stuDobForm').value;
+            const className = document.getElementById('stuClassForm').value;
+            const gender = document.getElementById('stuGenderForm').value;
+            const bloodGroup = document.getElementById('stuBloodGroupForm').value;
+            const category = document.getElementById('stuCategoryForm').value;
+            const nationality = document.getElementById('stuNationalityForm').value;
+            const religion = document.getElementById('stuReligionForm').value;
+            const address = document.getElementById('stuAddressForm').value;
+            const fatherContact = document.getElementById('stuFatherContactForm').value;
+            const occupation = document.getElementById('stuOccupationForm').value;
+            const email = document.getElementById('stuEmailForm').value;
+            const photo = document.getElementById('stuPhotoForm').value;
+            const pass = document.getElementById('stuPassForm').value;
+
+            if (!name || !roll) return showToast("Required fields missing", "error");
+
+            const stus = JSON.parse(localStorage.getItem('erp_students')) || [];
+            stus.push({
+                id: stus.length + 1,
+                name: name,
+                rollNo: roll,
+                username: roll,
+                password: pass,
+                photo: photo,
+                fatherName: father,
+                motherName: mother,
+                dob: dob,
+                className: className,
+                gender: gender,
+                bloodGroup: bloodGroup,
+                category: category,
+                nationality: nationality,
+                religion: religion,
+                address: address,
+                fatherContact: fatherContact,
+                occupation: occupation,
+                email: email,
+                feeBlocked: false
+            });
+            localStorage.setItem('erp_students', JSON.stringify(stus));
+            showToast("Student Registered Successfully.");
+            refreshTables();
+        }
+
+        function addFeeCircular() {
+            const title = document.getElementById('feeTitle').value;
+            const msg = document.getElementById('feeMessage').value;
+            if (!title) return;
+
+            const circ = JSON.parse(localStorage.getItem('erp_circulars')) || [];
+            circ.push({ title: title, details: msg, date: new Date().toISOString() });
+            localStorage.setItem('erp_circulars', JSON.stringify(circ));
+            showToast("Circular published to student timelines.");
+            refreshTables();
+        }
+
+        function toggleERPBlock(status) {
+            const stus = JSON.parse(localStorage.getItem('erp_students'));
+            stus.forEach(s => s.feeBlocked = status);
+            localStorage.setItem('erp_students', JSON.stringify(stus));
+            showToast(status ? "ALL PORTALS BLOCKED FOR PENDING FEE" : "RESTRICTION REVOKED NATIVELY", status ? "error" : "success");
+            refreshTables();
+        }
+
+        window.onload = () => {
+            refreshTables();
+            populateStudentSelects();
+            populateResultSubjectSelect();
+            populateSubjectSelect();
+        };
+    </script>
+</body>
+
+</html>

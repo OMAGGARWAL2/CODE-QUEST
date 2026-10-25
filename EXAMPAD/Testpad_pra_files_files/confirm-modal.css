@@ -1,0 +1,125 @@
+/* The Modal (background) */
+.modal-input-confirm {
+  position: fixed;
+  z-index: 13;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0);
+  transform: translateX(0%) translateY(-100%) scale(1);
+  transition: 0.3s ease-in-out;
+}
+.visible-modal-input-confirm {
+  opacity: 1;
+  transform: translateX(0%) translateY(0%) scale(1) !important;
+}
+/* Modal Content */
+.modal-content-input-confirm {
+  background-color: #fefefe;
+  margin: auto;
+  padding-top: 20px;
+  padding-bottom: 15px;
+  padding-right: 20px;
+  padding-left: 20px;
+  width: 30%;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 0px 10px #00000029;
+  border-radius: 5px;
+  margin-top: 45px;
+}
+@media only screen and (max-width: 500px){
+  .modal-content-input-confirm{
+    width: 75%;
+  }
+}
+
+/* The Close Button */
+#close-btn-confirm {
+  color: #aaaaaa;
+  font-size: 24px;
+  font-weight: 400;
+  cursor: pointer;
+  height: 30px;
+  margin-top: -10px;
+  margin-left: auto;
+  width: 15px;
+}
+
+#close-btn-confirm:hover,
+#close-btn-confirm:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.modal-content-header {
+  position: relative;
+}
+
+.modal-content-header span {
+  text-align: end;
+  display: inline;
+}
+
+.modal-content-header p {
+  font-family: 'Hind', sans-serif;
+  color: #313131;
+  margin: 0;
+  display: block;
+  text-align: center;
+  word-break: break-word;
+}
+.modal-content-input-confirm-tags {
+  display: block;
+  margin: auto;
+  text-align: center;
+}
+.modal-content-input-confirm-tags input {
+  border: none;
+  border-bottom: 1px solid #dedede;
+  display: block;
+  margin: auto;
+  margin-top: 20px;
+}
+.modal-content-input-confirm-tags input:focus {
+  outline: none;
+}
+.modal-content-input-confirm-tags input::placeholder {
+  font-family: 'Hind', sans-serif !important;
+  text-align: center;
+  color: #d0d0d0;
+}
+.btns-container {
+  display: flex;
+  justify-content: center;
+}
+.yes-btn {
+  font-family: 'Hind', sans-serif !important;
+  /* display: block;
+      margin: auto; */
+  border: none;
+  margin-top: 10px;
+  background: #de6834;
+  border-radius: 20px;
+  padding: 5px 15px;
+  color: white;
+  width: 100px;
+  display: inline-block;
+  margin-right: 10px;
+}
+.no-btn {
+  font-family: 'Hind', sans-serif !important;
+  /* display: block;
+      margin: auto; */
+  border: none;
+  margin-top: 10px;
+  background: #f5d7c8;
+  border-radius: 20px;
+  padding: 5px 15px;
+  color: white;
+  width: 100px;
+  display: inline-block;
+  color: black;
+}

@@ -1,0 +1,2669 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest</title>
+    <!-- Google Fonts: Hind, Roboto, Mulish (Identical to exam-attempt.html & course-player.html) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Mulish:wght@300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Ace Editor ONLY -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.7/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.7/ext-language_tools.js"></script>
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+
+    <style>
+        :root {
+            --primary: #DE6834;
+            --primary-hover: #C75829;
+            --primary-soft: #FFF4ED;
+            --text-main: #101828;
+            --text-secondary: #344054;
+            --border: #E5E7EB;
+            --border-light: #F2F4F7;
+            --editor-font-size: 18px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind', sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #101828;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            font-size: 16px;
+            font-family: 'Hind', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== TOP HEADER (Exact exam-attempt / course-player match) ===== */
+        header.top-header {
+            height: 72px;
+            background: #ffffff;
+            border-bottom: 1px solid #EAEAEA;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 1000;
+            flex-shrink: 0;
+        }
+
+        .header-left-group {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .logo-box img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+        }
+
+        .nav-icon-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.15s;
+            text-decoration: none;
+        }
+
+        .nav-icon-link:hover {
+            background: #f7f7f7;
+        }
+
+        .nav-icon-link img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .header-right-tools {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            height: 100%;
+        }
+
+        .plus-tool-box {
+            width: 58px;
+            height: 100%;
+            background: #FFF4ED;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 26px;
+            cursor: pointer;
+            font-family: 'Mulish', sans-serif;
+            font-weight: 400;
+            transition: background 0.2s;
+        }
+
+        .plus-tool-box:hover {
+            background: #ffe3d4;
+        }
+
+        .grid-menu-btn {
+            display: grid;
+            grid-template-columns: repeat(3, 4px);
+            gap: 3px;
+            cursor: pointer;
+            padding: 6px;
+        }
+
+        .grid-menu-btn span {
+            width: 4px;
+            height: 4px;
+            background-color: #4b5563;
+            border-radius: 50%;
+        }
+
+        .user-profile-stack {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .profile-text-block {
+            text-align: right;
+            line-height: 1.18;
+        }
+
+        .user-name-label {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #111111;
+            text-transform: uppercase;
+            font-family: 'Mulish', sans-serif;
+            letter-spacing: 0.3px;
+        }
+
+        .user-role-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-family: 'Mulish', sans-serif;
+        }
+
+        .user-avatar-circle {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 1.5rem;
+            overflow: hidden;
+        }
+
+        /* ===== WORKSPACE LAYOUT ===== */
+        .workspace-layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Left Rail (Orange 3-bar hamburger from exam-attempt) */
+        .left-nav-rail {
+            width: 48px;
+            background: #ffffff;
+            border-right: 1px solid #EAEAEA;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 14px;
+            flex-shrink: 0;
+            z-index: 50;
+        }
+
+        .rail-toggle-btn {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 6px;
+        }
+
+        .rail-toggle-btn span {
+            display: block;
+            width: 22px;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+
+        /* Split Panes */
+        .split-panes-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ===== LEFT PANE (EXAM-ATTEMPT CLONE: FULL HIND & BLACK) ===== */
+        .pane-question {
+            width: 48%;
+            min-width: 360px;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            border-right: 1px solid var(--border);
+        }
+
+        .q-tabs-bar {
+            height: 48px;
+            display: flex;
+            align-items: stretch;
+            background: #fafafa;
+            border-bottom: 1px solid var(--border);
+            padding: 0 0 0 16px;
+            flex-shrink: 0;
+        }
+
+        .q-tab-btn {
+            padding: 0 28px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: #667085;
+            cursor: pointer;
+            position: relative;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-family: 'Roboto', sans-serif;
+            transition: all 0.15s ease-in-out;
+        }
+
+        .q-tab-btn:hover {
+            color: #111827;
+        }
+
+        .q-tab-btn.active {
+            color: #101828;
+            background: #ffffff;
+            font-weight: 500;
+        }
+
+        .q-tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0px;
+            left: 18px;
+            right: 18px;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .q-content-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 40px 36px 40px;
+            background: #ffffff;
+        }
+
+        .q-title-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 4px;
+        }
+
+        /* Exact exam-attempt question title (Hind, 28px, weight 550, crisp black) */
+        .q-title-text {
+            font-family: 'Hind', sans-serif !important;
+            font-size: 28px !important;
+            font-weight: 550 !important;
+            color: #111111 !important;
+            letter-spacing: 0px !important;
+            line-height: 1.3 !important;
+            margin: 0 !important;
+        }
+
+        /* Tri Orange Accent Line (Sleek reduced height: 5px) */
+        .tri-orange-line {
+            display: flex;
+            height: 5px !important;
+            width: 290px !important;
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 8px 0 24px 0;
+        }
+
+        .tri-orange-line div:nth-child(1) {
+            flex: 1;
+            background: #DE6834;
+            opacity: 0.2;
+        }
+
+        .tri-orange-line div:nth-child(2) {
+            flex: 1;
+            background: #DE6834;
+            opacity: 0.5;
+        }
+
+        .tri-orange-line div:nth-child(3) {
+            flex: 1;
+            background: #DE6834;
+            opacity: 1.0;
+        }
+
+        /* Full Hind & Pure Black Typography for Question Body (Increased font size a lil) */
+        .question-description,
+        .question-description * {
+            font-family: 'Hind', sans-serif !important;
+        }
+
+        .question-description {
+            font-size: 22px !important;
+            line-height: 1.65 !important;
+            color: #101828 !important;
+            font-weight: 400 !important;
+        }
+
+        .question-description p {
+            margin-bottom: 16px;
+            color: #101828 !important;
+            font-size: 22px !important;
+            line-height: 1.65 !important;
+        }
+
+        .question-description strong,
+        .question-description b {
+            font-weight: 700 !important;
+            color: #000000 !important;
+        }
+
+        .question-description code {
+            font-family: Consolas, 'Courier New', monospace !important;
+            background: #f1f3f5 !important;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 0.95em !important;
+            color: #000000 !important;
+            font-weight: 500;
+        }
+
+        .question-description strong,
+        .question-description b {
+            font-weight: 700 !important;
+            color: #000000 !important;
+        }
+
+        .question-description em,
+        .question-description i {
+            font-style: italic !important;
+        }
+
+        .question-description u {
+            text-decoration: underline !important;
+        }
+
+        .question-description pre,
+        .question-description .code-box,
+        .question-description .ql-syntax {
+            background-color: #ebebeb !important;
+            border-radius: 4px !important;
+            padding: 14px 18px !important;
+            font-family: Consolas, 'Courier New', monospace !important;
+            font-size: 16px !important;
+            line-height: 1.55 !important;
+            color: #000000 !important;
+            margin: 14px 0 20px 0 !important;
+            white-space: pre-wrap !important;
+            word-wrap: break-word !important;
+            border: none !important;
+        }
+
+        /* Sample Box (Exact Consolas match from exam-attempt.html) */
+        .sample-box {
+            background-color: #ebebeb !important;
+            border-radius: 4px !important;
+            padding: 14px 18px !important;
+            font-family: Consolas, 'Courier New', monospace !important;
+            font-size: 19px !important;
+            line-height: 1.55 !important;
+            color: #000000 !important;
+            margin: 12px 0 22px 0 !important;
+            white-space: pre-wrap !important;
+            word-wrap: break-word !important;
+            border: none !important;
+        }
+
+        .sample-box strong {
+            font-family: Consolas, 'Courier New', monospace !important;
+            color: #000000 !important;
+            font-weight: 700 !important;
+        }
+
+        .constraints-title {
+            font-family: 'Hind', sans-serif !important;
+            font-size: 22px !important;
+            font-weight: 700 !important;
+            color: #000000 !important;
+            margin-top: 26px;
+            margin-bottom: 10px;
+        }
+
+        .constraints-list {
+            margin-left: 28px;
+            margin-bottom: 24px;
+        }
+
+        .constraints-list li {
+            margin-bottom: 7px;
+            font-size: 21px !important;
+            color: #101828 !important;
+            font-family: 'Hind', sans-serif !important;
+            line-height: 1.5;
+        }
+
+        /* Question Bottom Navigation Footer (exam-attempt style) */
+        .pane-footer {
+            height: 64px;
+            border-top: 1px solid #d1d5db;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            background: #ffffff;
+            flex-shrink: 0;
+        }
+
+        .pane-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #000000 !important;
+            font-weight: 600 !important;
+            font-size: 1.25rem !important;
+            font-family: 'Hind', sans-serif !important;
+            cursor: pointer;
+            text-transform: lowercase;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .pane-nav-link:hover {
+            color: var(--primary) !important;
+        }
+
+        .pane-nav-link i {
+            color: var(--primary) !important;
+            font-size: 1.35rem !important;
+        }
+
+        .report-problem-link {
+            color: var(--primary) !important;
+            font-weight: 500 !important;
+            font-size: 1.25rem !important;
+            font-family: 'Hind', sans-serif !important;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .report-problem-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Resizer Handle */
+        .pane-split-divider {
+            width: 8px;
+            background: #e2e2e2;
+            cursor: col-resize;
+            transition: background 0.15s;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pane-split-divider:hover {
+            background: #d4d4d4;
+        }
+
+        /* ===== RIGHT PANE (EXAM-ATTEMPT IDE WITH ACE JS ONLY) ===== */
+        .pane-editor {
+            flex: 1;
+            min-width: 400px;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Top IDE Toolbar */
+        .toolbar-top {
+            height: 58px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            position: relative;
+            z-index: 500;
+            flex-shrink: 0;
+        }
+
+        /* Language Selector: Clean White with Mulish font */
+        .custom-language-selector {
+            position: relative;
+            user-select: none;
+            min-width: 160px;
+            font-family: 'Mulish', sans-serif !important;
+            z-index: 1000;
+        }
+
+        .selector-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            background: #ffffff !important;
+            border: 1px solid #E5E7EB !important;
+            border-radius: 4px;
+            cursor: pointer;
+            height: 40px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+            font-family: 'Mulish', sans-serif !important;
+        }
+
+        .selector-box:hover {
+            border-color: #cbd5e1 !important;
+            background: #fafafa !important;
+        }
+
+        .selector-text {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #101828;
+            font-family: 'Mulish', sans-serif !important;
+        }
+
+        .selector-arrow {
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 6px solid #475467;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: rotate(180deg);
+        }
+
+        .custom-language-selector.open .selector-arrow {
+            transform: rotate(0deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            width: 200px;
+            background: #ffffff !important;
+            border: 1px solid #E5E7EB !important;
+            border-radius: 6px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+            display: none;
+            z-index: 20000;
+            overflow-y: auto;
+            max-height: 380px;
+            padding: 6px 0;
+            animation: dropdownFadeIn 0.2s ease-out;
+            font-family: 'Mulish', sans-serif !important;
+        }
+
+        @keyframes dropdownFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .custom-language-selector.open .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 9px 18px;
+            font-size: 1.05rem;
+            color: #101828;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: 'Mulish', sans-serif !important;
+            font-weight: 600;
+            background: #ffffff;
+        }
+
+        .dropdown-item:hover {
+            background: #f8fafc !important;
+            color: #DE5B2B !important;
+        }
+
+        .dropdown-item.active {
+            background: #FFF4ED !important;
+            color: #DE5B2B !important;
+            font-weight: 800 !important;
+        }
+
+        .ide-tools-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .ide-tool-icon {
+            cursor: pointer;
+            font-size: 18px;
+            color: #667085;
+            transition: color 0.15s;
+        }
+
+        .ide-tool-icon:hover {
+            color: var(--primary);
+        }
+
+        /* ===== ACE JS EDITOR CONTAINER & TC TRAY ===== */
+        .code-editor-container {
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+            flex: 1 !important;
+            overflow: hidden !important;
+            background: #ffffff !important;
+            position: relative !important;
+            min-height: 0;
+        }
+
+        #codeEditor {
+            width: 100% !important;
+            height: 100% !important;
+            flex: 1 !important;
+            min-height: 380px !important;
+            background: #ffffff !important;
+        }
+
+        .tc-sidebar {
+            width: 200px;
+            border-right: 1px solid #E5E7EB;
+            overflow-y: auto;
+            background: #FAFAFA;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .tc-detail-pane {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 32px;
+            background: #FFFFFF;
+        }
+
+        .tc-pill-button {
+            padding: 9px 16px;
+            border-radius: 6px;
+            background: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            color: #344054;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s;
+        }
+
+        .tc-pill-button:hover {
+            border-color: #DE6834;
+            color: #DE6834;
+            background: #FFF9F6;
+        }
+
+        .tc-pill-button.active {
+            background: #FFF4ED;
+            border-color: #DE6834;
+            color: #DE6834;
+            font-weight: 700;
+        }
+
+        body #editorHead,
+        body #editorHead .ace_content,
+        body #editorTail,
+        body #editorTail .ace_content {
+            background: #f9f9f9 !important;
+        }
+
+        body #editorHead .ace_scroller,
+        body #editorTail .ace_scroller,
+        body #editorHead .ace_gutter,
+        body #editorTail .ace_gutter {
+            background: transparent !important;
+        }
+
+        body #editorHead .ace_gutter-cell,
+        body #editorTail .ace_gutter-cell {
+            color: transparent !important;
+        }
+
+        .editor-head,
+        .editor-tail {
+            flex-shrink: 0;
+            width: 100%;
+            position: relative;
+        }
+
+        .editor-main {
+            flex-shrink: 0;
+            width: 100%;
+            position: relative;
+            background: #ffffff;
+        }
+
+        .editor-gap {
+            background: #ffffff !important;
+            flex-shrink: 0 !important;
+            position: relative !important;
+            min-height: 1px !important;
+            background: linear-gradient(to right, #f9f9f9 48px, #ffffff 48px) !important;
+        }
+
+        .editor-gap::after {
+            content: '' !important;
+            position: absolute !important;
+            left: 47px !important;
+            width: 1px !important;
+            height: 100% !important;
+            background: #e1e1e1 !important;
+            z-index: 10 !important;
+        }
+
+        body .ace_editor,
+        body .ace_editor * {
+            font-family: Consolas, 'Monaco', 'Courier New', monospace !important;
+        }
+
+        body .ace_editor {
+            font-size: var(--editor-font-size, 18px) !important;
+            line-height: 1.45 !important;
+        }
+
+        body .ace_gutter {
+            background: #f9f9f9 !important;
+            color: #444444 !important;
+            border-right: 1px solid #f0f0f0 !important;
+            width: 48px !important;
+        }
+
+        .ace_gutter-cell {
+            color: #000000 !important;
+            opacity: 1 !important;
+        }
+
+        .ace_active-line,
+        .ace_gutter-active-line {
+            background: transparent !important;
+        }
+
+        /* CUSTOM SYNTAX COLORS: BLUE KEYWORDS, GREEN COMMENTS, SHARP BLACK IDENTIFIERS */
+        .ace_keyword,
+        .ace_meta,
+        .ace_storage,
+        .ace_storage.ace_type,
+        .ace_support.ace_function,
+        .ace_support.ace_class,
+        .ace_support.ace_type {
+            color: #0000FF !important;
+        }
+
+        .ace_comment {
+            color: #008000 !important;
+            font-style: normal !important;
+        }
+
+        .ace_identifier,
+        .ace_punctuation,
+        .ace_operator,
+        .ace_constant.ace_numeric,
+        .ace_string {
+            color: #000000 !important;
+        }
+
+        /* Auto-complete popup */
+        .ace_autocomplete {
+            border: 1px solid #D1D5DB !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+            background: #ffffff !important;
+            border-radius: 4px !important;
+            font-family: Consolas, monospace !important;
+            font-size: 16px !important;
+            z-index: 99999 !important;
+        }
+
+        /* ===== VERTICAL RESIZER ===== */
+        .interaction-resizer {
+            height: 10px;
+            cursor: ns-resize;
+            background: #F2F4F7;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10001;
+            flex-shrink: 0;
+            border-top: 1px solid #E5E7EB;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .interaction-resizer-bar {
+            width: 36px;
+            height: 4px;
+            background: #D1D5DB;
+            border-radius: 2px;
+        }
+
+        /* ===== CONSOLE DRAWER (EXACT EXAM-ATTEMPT CLONE) ===== */
+        .console-drawer {
+            position: relative;
+            width: 100%;
+            height: 0;
+            overflow: hidden;
+            background: #ffffff;
+            border-top: 1px solid #ddd;
+            transition: height 0.3s ease;
+            z-index: 9998;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .console-drawer.open {
+            height: 250px;
+        }
+
+        .tray-tabs {
+            height: 52px;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            background: #FFF4ED;
+            padding-left: 12px;
+            padding-top: 10px;
+            flex-shrink: 0;
+        }
+
+        .tray-tab {
+            padding: 0 28px;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            font-size: 1.15rem;
+            color: #71717A;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            font-family: 'Hind', sans-serif;
+            transition: all 0.2s;
+            border-radius: 8px 8px 0 0;
+            margin-right: 4px;
+        }
+
+        .tray-tab:hover:not(.active) {
+            color: #111827;
+        }
+
+        .tray-tab.active {
+            background: #fff;
+            color: #111827;
+            font-weight: 600;
+            border: 1px solid #E5E7EB;
+            border-bottom: 2px solid #fff;
+            margin-bottom: -1px;
+            z-index: 100;
+        }
+
+        .tray-content {
+            flex: 1;
+            padding: 0;
+            font-family: 'JetBrains Mono', Consolas, monospace;
+            font-size: 0.95rem;
+            overflow: hidden;
+            display: flex;
+        }
+
+        #trayConsole {
+            background: #1e1e1e !important;
+            color: #e8e8e8 !important;
+            padding: 16px;
+            font-family: 'JetBrains Mono', Consolas, monospace !important;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.6;
+            width: 100%;
+        }
+
+        /* Test Case UI matching exam-attempt */
+        .tc-sidebar {
+            width: 260px;
+            background: #fff;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            flex-shrink: 0;
+        }
+
+        .tc-detail-pane {
+            flex: 1;
+            background: #fff;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .test-cases-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding: 4px;
+            gap: 4px;
+        }
+
+        .test-case-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: background 0.15s;
+        }
+
+        .test-case-item i {
+            width: 20px;
+            display: flex;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .test-case-item button {
+            background: transparent;
+            border: none;
+            padding: 6px 12px;
+            text-align: left;
+            font-weight: 500;
+            font-family: 'Hind', sans-serif;
+            font-size: 18px;
+            color: #DE5B2B;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+            flex: 1;
+        }
+
+        .test-case-item.active {
+            background: #FFF4ED;
+        }
+
+        .test-case-item.active button {
+            color: #DE5B2B;
+            font-weight: 700;
+        }
+
+        .test-case-details-container {
+            padding: 16px 20px;
+            font-family: 'Hind', sans-serif;
+        }
+
+        .test-case-details-container h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #101828;
+            margin-bottom: 8px;
+            font-family: 'Hind', sans-serif;
+        }
+
+        .test-case-details-container pre {
+            background: #ebebeb;
+            padding: 12px 14px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+            border: none;
+            margin-bottom: 22px;
+        }
+
+        .test-case-details-container pre.success {
+            color: #027A48;
+            background: #ECFDF3;
+            font-weight: 600;
+        }
+
+        .test-case-details-container pre.error {
+            color: #B42318;
+            background: #FEF3F2;
+            font-weight: 600;
+        }
+
+        /* ===== BOTTOM CONSOLE BAR (EXACT EXAM-ATTEMPT PINNED BAR) ===== */
+        .console-bar {
+            height: 68px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px 8px 24px;
+            background: #FFF;
+            border-top: 1px solid var(--border);
+            position: relative;
+            z-index: 9999;
+            box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.02);
+            font-family: 'Hind', sans-serif;
+            flex-shrink: 0;
+        }
+
+        .console-btn-wrap {
+            border: 1px solid #DE5B2B;
+            border-radius: 4px;
+            padding: 7px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            background: #FFF;
+            transition: all 0.15s;
+        }
+
+        .console-btn-wrap:hover {
+            background: #FFF4ED;
+        }
+
+        .console-btn-wrap span {
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: #DE5B2B;
+            font-family: 'Hind', sans-serif;
+        }
+
+        .console-btn-wrap i {
+            color: #DE5B2B;
+            font-size: 0.9rem;
+            transition: transform 0.2s;
+        }
+
+        .custom-spinner {
+            display: inline-block;
+            vertical-align: middle;
+            width: 18px;
+            height: 18px;
+            border: 3px solid #E5E7EB;
+            border-top: 3px solid #DE5B2B;
+            border-radius: 50%;
+            animation: customSpin 1s linear infinite;
+        }
+
+        @keyframes customSpin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+        }
+
+        .report-modal-box {
+            background: #ffffff;
+            width: 480px;
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            font-family: 'Hind', sans-serif;
+        }
+
+        .toast-banner {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #101828;
+            color: #ffffff;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 500;
+            font-family: 'Hind', sans-serif;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 100000;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== TOP HEADER ===== -->
+    <header class="top-header">
+        <div class="header-left-group">
+            <a href="studentindex.html" class="logo-box" title="Return to Dashboard">
+                <img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest">
+            </a>
+
+            <a href="studentindex.html" class="nav-icon-link" title="Dashboard">
+                <img src="EXAMPAD/TESTPAD_WEBSITE__files/menu-1.svg" alt="Menu"
+                    onerror="this.src='EXAMPAD/LINUX_TEST_CHITKARA_files/menu-1.svg'">
+            </a>
+            <a href="CodeQuestProgress.html" class="nav-icon-link" title="Attempts & Progress">
+                <img src="EXAMPAD/TESTPAD_WEBSITE__files/statistics.svg" alt="Attempts & Progress"
+                    onerror="this.src='EXAMPAD/LINUX_TEST_CHITKARA_files/statistics.svg'">
+            </a>
+        </div>
+
+        <div class="header-right-tools">
+            <div class="plus-tool-box" title="New" onclick="showToast('CodeQuest Quick Actions')">+</div>
+
+            <div class="grid-menu-btn" title="Apps" onclick="showToast('CodeQuest Apps')">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+            </div>
+
+            <div class="user-profile-stack" onclick="window.location.href='studentindex.html'">
+                <div class="profile-text-block">
+                    <div class="user-name-label" id="headerUserName">OM AGGARWAL</div>
+                    <div class="user-role-label" id="headerUserRole">STUDENT</div>
+                </div>
+                <div class="user-avatar-circle">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== WORKSPACE ===== -->
+    <div class="workspace-layout">
+        <!-- Left Nav Rail -->
+        <div class="left-nav-rail">
+            <div class="rail-toggle-btn" title="Question Index" onclick="showToast('Question Index')">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <div class="split-panes-container">
+            <!-- Left Pane: Problem Description (Hind & Pure Black) -->
+            <div class="pane-question" id="leftPane">
+                <!-- Question / Attempts Tabs -->
+                <div class="q-tabs-bar">
+                    <button class="q-tab-btn active" id="tabQuestionBtn"
+                        onclick="switchMainTab('question')">Question</button>
+                    <button class="q-tab-btn" id="tabAttemptsBtn" onclick="switchMainTab('attempts')">Attempts</button>
+                </div>
+
+                <!-- Scrollable Content -->
+                <div class="q-content-scroll" id="questionContentScroll">
+                    <div class="q-title-header">
+                        <h1 class="q-title-text" id="problemTitle">1. Two Sum</h1>
+                    </div>
+
+                    <!-- Tri-Orange Line (5px height, 290px width) -->
+                    <div class="tri-orange-line">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+
+                    <!-- Problem Description (Hind & Black) -->
+                    <div class="question-description" id="problemBody">
+                        <!-- Dynamically injected -->
+                    </div>
+                </div>
+
+                <!-- Attempts View -->
+                <div class="q-content-scroll" id="attemptsContentScroll" style="display: none;">
+                    <h2
+                        style="font-family: 'Hind', sans-serif; font-size: 1.4rem; font-weight: 600; margin-bottom: 16px; color: #101828;">
+                        Previous Submissions</h2>
+                    <div
+                        style="background: #fafafa; border: 1px dashed #d1d5db; padding: 36px; text-align: center; border-radius: 6px; color: #475467; font-family: 'Hind', sans-serif; font-size: 1.15rem;">
+                        <i class="fas fa-history"
+                            style="font-size: 2.2rem; margin-bottom: 10px; display: block; color: #9ca3af;"></i>
+                        No submissions recorded for this question yet.
+                    </div>
+                </div>
+
+                <!-- Pane Footer -->
+                <div class="pane-footer">
+                    <div class="pane-nav-link" onclick="navigateAdjacentQuestion(-1)">
+                        <i class="fas fa-caret-left"></i> previous
+                    </div>
+                    <div class="report-problem-link" onclick="openReportModal()">
+                        Report a problem
+                    </div>
+                    <div class="pane-nav-link" onclick="navigateAdjacentQuestion(1)">
+                        next <i class="fas fa-caret-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resizer Handle -->
+            <div class="pane-split-divider" id="splitResizer"></div>
+
+            <!-- Right Pane: Code IDE (Ace JS with Multi-editor Section) -->
+            <div class="pane-editor" id="rightPane">
+                <!-- Top IDE Toolbar -->
+                <div class="toolbar-top">
+                    <!-- Multi-language selector matching exam-attempt -->
+                    <div class="custom-language-selector" id="languageSelector">
+                        <div class="selector-box" onclick="toggleLanguageDropdown(event)">
+                            <span class="selector-text" id="selectedLangText">Java</span>
+                            <div class="selector-arrow"></div>
+                        </div>
+                        <div class="dropdown-menu" id="languageDropdownMenu">
+                            <div class="dropdown-item active" data-lang="java" onclick="selectLanguage('java')">Java
+                            </div>
+                            <div class="dropdown-item" data-lang="python" onclick="selectLanguage('python')">Python 3
+                            </div>
+                            <div class="dropdown-item" data-lang="cpp" onclick="selectLanguage('cpp')">C++</div>
+                            <div class="dropdown-item" data-lang="c" onclick="selectLanguage('c')">C</div>
+                            <div class="dropdown-item" data-lang="javascript" onclick="selectLanguage('javascript')">
+                                JavaScript</div>
+                            <div class="dropdown-item" data-lang="typescript" onclick="selectLanguage('typescript')">
+                                TypeScript</div>
+                            <div class="dropdown-item" data-lang="csharp" onclick="selectLanguage('csharp')">C#</div>
+                            <div class="dropdown-item" data-lang="golang" onclick="selectLanguage('golang')">Go</div>
+                            <div class="dropdown-item" data-lang="rust" onclick="selectLanguage('rust')">Rust</div>
+                            <div class="dropdown-item" data-lang="kotlin" onclick="selectLanguage('kotlin')">Kotlin
+                            </div>
+                            <div class="dropdown-item" data-lang="ruby" onclick="selectLanguage('ruby')">Ruby</div>
+                            <div class="dropdown-item" data-lang="php" onclick="selectLanguage('php')">PHP</div>
+                            <div class="dropdown-item" data-lang="swift" onclick="selectLanguage('swift')">Swift</div>
+                        </div>
+                    </div>
+
+                    <div class="ide-tools-right">
+                        <i class="fas fa-expand ide-tool-icon" title="Toggle Fullscreen"
+                            onclick="toggleFullscreen()"></i>
+                    </div>
+                </div>
+
+                <!-- 1. CODE EDITOR SECTION (ACE JS) -->
+                <div id="codingFrame" class="code-editor-container editor-section" style="flex: 1; display: flex; flex-direction: column; width: 100%; height: 100%; position: relative; background: #ffffff; min-height: 0; overflow: hidden !important;">
+                    <div id="codeEditor" style="width: 100%; height: 100%; flex: 1; min-height: 380px;"></div>
+                </div>
+
+                <!-- VERTICAL RESIZER HANDLE (MATCHING EXAM-ATTEMPT) -->
+                <div id="interactionResizer" class="interaction-resizer">
+                    <div class="interaction-resizer-bar"></div>
+                </div>
+
+                <!-- 2. CONSOLE DRAWER (EXACT EXAM-ATTEMPT CLONE) -->
+                <div class="console-drawer" id="consoleDrawer">
+                    <div class="tray-tabs">
+                        <div class="tray-tab active" id="tab-testcases" onclick="switchTray('testcases')">Test cases
+                        </div>
+                        <div class="tray-tab" id="tab-sample" onclick="switchTray('sample')">Sample test cases</div>
+                        <div class="tray-tab" id="tab-console" onclick="switchTray('console')">Console</div>
+                        <div class="tray-tab" id="tab-custom" onclick="switchTray('custom')" style="display: none;">
+                            Custom input</div>
+                        <div style="flex:1; border-bottom: 1px solid #E5E7EB;"></div>
+                        <div
+                            style="display:flex; align-items:center; padding: 0 20px; border-bottom: 1px solid #E5E7EB;">
+                            <div onclick="closeConsole()"
+                                style="width: 28px; height: 28px; background: #DE5B2B; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; opacity: 0.85;"
+                                onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">
+                                <i class="fas fa-minus" style="color: #fff; font-size: 14px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="trayViewport" style="flex: 1; overflow: hidden; display: flex; background: transparent;">
+                        <!-- Tab 1: Hidden Test cases summary -->
+                        <div class="tray-content" id="traySummary"
+                            style="display:flex; padding:40px 60px; flex:1; background:transparent; overflow:auto;">
+                            <div id="testCasesSummaryContent"
+                                style="width:100%; color:#101828; font-family:'Hind', sans-serif; font-size:1.15rem;">
+                                <div
+                                    style="font-family:'Hind', sans-serif; display:flex; flex-direction:column; gap:32px;">
+                                    <div style="display:flex; align-items:center; gap:24px;">
+                                        <div
+                                            style="background:#F9FAFB; padding:8px 24px; border-radius:4px; color:#DE5B2B; font-weight:600; font-size:1.15rem; border:none;">
+                                            Hidden Test Cases</div>
+                                        <div style="font-size:1.15rem; color:#101828; font-weight:500;"
+                                            id="hiddenPassFailText">0 passed, 0 failed</div>
+                                    </div>
+                                    <div
+                                        style="background:#FFE9DF; border:none; padding:24px 32px; color:#475467; font-size:1.1rem; font-weight:400; line-height:1.6; border-radius:8px;">
+                                        Submit your code to see results. Test cases for this question are hidden and can
+                                        not be seen by the candidate.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 2: Sample Test cases logs (Sidebar + Detail) -->
+                        <div class="tray-content" id="trayLogs" style="display:none; flex:1;">
+                            <div id="tcSidebar" class="tc-sidebar"></div>
+                            <div id="tcDetailPane" class="tc-detail-pane"></div>
+                        </div>
+
+                        <!-- Tab 3: Console Output (Dark terminal) -->
+                        <div class="tray-content" id="trayConsole" style="display:none; flex:1;">
+                            <div id="consoleOutputText"
+                                style="padding:16px; font-family: 'JetBrains Mono', Consolas, monospace; font-size: 14px; white-space: pre-wrap; line-height: 1.6;">
+                                Press "run code" to execute code.</div>
+                        </div>
+
+                        <!-- Tab 4: Custom input -->
+                        <div class="tray-content" id="trayCustom"
+                            style="display:none; padding:16px; flex:1; background:transparent; overflow:hidden;">
+                            <textarea id="customInputField" placeholder="Enter custom input here..."
+                                style="width:100%; height:120px; border:1px solid #E5E7EB; border-radius:4px; padding:16px; font-family:'Hind', sans-serif; font-size: 18px; font-weight:400; resize:none; outline:none; color:#000;"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. BOTTOM CONSOLE BAR (PINNED BOTTOM MATCHING EXAM-ATTEMPT) -->
+                <div class="console-bar">
+                    <div style="display:flex; gap:28px; align-items:center;">
+                        <div class="console-btn-wrap" onclick="toggleConsole()">
+                            <span>Console</span>
+                            <i class="fas fa-caret-down" id="consoleCaret"></i>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:20px;">
+                            <label id="triggerCustomInput"
+                                style="display:flex; align-items:center; gap:8px; font-size:1.15rem; color:#101828; font-weight: 600; font-family:'Hind', sans-serif; cursor:pointer;">
+                                <input type="checkbox" id="useCustomCheck" onchange="handleCustomInputChange(this)"
+                                    style="accent-color:#DE6834; width:18px; height:18px; cursor:pointer; border: 1px solid #999;">
+                                custom input
+                            </label>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; gap:16px; align-items:center;">
+                        <div style="position: relative; display: flex; align-items: center; margin-right: 12px;">
+                            <i class="fas fa-rotate-right" onclick="promptResetCode()"
+                                style="cursor: pointer; font-size: 1.15rem; color: #71717a; transition: color 0.1s;"
+                                title="Reset code" onmouseover="this.style.color='#DE5B2B'"
+                                onmouseout="this.style.color='#71717a'"></i>
+                            <div id="resetPopover"
+                                style="display: none; position: absolute; bottom: calc(100% + 20px); left: 50%; transform: translateX(-50%); background: white; padding: 24px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: max-content; z-index: 10000; text-align: center; border: 1px solid #f3f4f6;">
+                                <div
+                                    style="font-family: 'Hind', sans-serif; font-size: 1.15rem; color: #101828; margin-bottom: 24px; font-weight: 500; line-height: 1.4;">
+                                    Do you really want to reset<br>your code?
+                                </div>
+                                <div style="display: flex; gap: 12px; justify-content: center;">
+                                    <button id="popYes" onclick="confirmResetCode()"
+                                        style="background: #D95328; color: white; border: none; padding: 8px 32px; border-radius: 24px; font-family: 'Hind', sans-serif; font-size: 1.05rem; font-weight: 500; cursor: pointer; transition: 0.2s;">Yes</button>
+                                    <button id="popNo" onclick="hideResetPopover()"
+                                        style="background: white; color: #101828; border: 1px solid #E5E7EB; padding: 8px 32px; border-radius: 24px; font-family: 'Hind', sans-serif; font-size: 1.05rem; font-weight: 500; cursor: pointer; transition: 0.2s;">No</button>
+                                </div>
+                                <div
+                                    style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 16px; height: 16px; background: white; border-bottom: 1px solid #f3f4f6; border-right: 1px solid #f3f4f6;">
+                                </div>
+                            </div>
+                        </div>
+                        <button id="runButton" onclick="executeRunCode()"
+                            style="background: #fff; color: #DE5B2B; border: 1px solid #DE5B2B; padding: 8px 32px; border-radius: 4px; font-weight: 500; cursor: pointer; font-size: 1.05rem; font-family: 'Hind', sans-serif; transition: all 0.2s;">run
+                            code</button>
+                        <button id="submitButton" onclick="executeSubmitCode()"
+                            style="background: #DE5B2B; color: #FFF; font-weight: 500; cursor: pointer; font-family: 'Hind', sans-serif; font-size: 1.05rem; padding: 8px 36px; border-radius: 4px; border: none; transition: all 0.2s;">submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div class="modal-overlay" id="reportModal" onclick="closeReportModalOnBackdrop(event)">
+        <div class="report-modal-box">
+            <h3 style="font-size: 1.45rem; font-weight: 600; margin-bottom: 8px; color: #101828;">Report an issue</h3>
+            <p style="color: #475467; margin-bottom: 16px; font-size: 1.1rem;">Let us know if you encountered any
+                problem with this question.</p>
+            <select
+                style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #d1d5db; margin-bottom: 12px; font-size: 1.05rem; font-family: 'Hind', sans-serif;">
+                <option>Problem statement is unclear or incorrect</option>
+                <option>Test case failure or wrong answer</option>
+                <option>Compiler or runner error</option>
+                <option>Other issue</option>
+            </select>
+            <textarea placeholder="Describe the issue in detail..."
+                style="width: 100%; height: 110px; padding: 10px; border-radius: 4px; border: 1px solid #d1d5db; resize: none; font-size: 1.05rem; font-family: 'Hind', sans-serif; margin-bottom: 16px; outline: none;"></textarea>
+            <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                <button onclick="closeReportModal()"
+                    style="padding: 8px 20px; border: 1px solid #d1d5db; background: #fff; border-radius: 4px; cursor: pointer; font-size: 1.1rem; font-family: 'Hind', sans-serif;">Cancel</button>
+                <button onclick="submitReportIssue()"
+                    style="padding: 8px 28px; background: var(--primary); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 1.1rem; font-weight: 600; font-family: 'Hind', sans-serif;">Submit
+                    Report</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Banner -->
+    <div class="toast-banner" id="toastBanner">Notification</div>
+
+    <!-- ===== LOGIC & DATABASE ===== -->
+    <script>
+        // Real LeetCode Questions with Custom IDs PQ9RJ001 - PQ9RJ005
+        const QUESTIONS_DB = {
+            "PQ9RJ001": {
+                id: "PQ9RJ001",
+                num: 1,
+                title: "1. Two Sum",
+                difficulty: "Easy",
+                acceptance: "58.0%",
+                desc: `Given an array of integers <code>nums</code> and an integer <code>target</code>, return <i>indices of the two numbers such that they add up to <code>target</code></i>.<br><br>
+                       You may assume that each input would have <b>exactly one solution</b>, and you may not use the same element twice.<br><br>
+                       You can return the answer in any order.`,
+                examples: [
+                    {
+                        input: "nums = [2,7,11,15], target = 9",
+                        output: "[0,1]",
+                        explanation: "Because nums[0] + nums[1] == 9, we return [0, 1]."
+                    },
+                    {
+                        input: "nums = [3,2,4], target = 6",
+                        output: "[1,2]",
+                        explanation: "Because nums[1] + nums[2] == 6, we return [1, 2]."
+                    }
+                ],
+                constraints: [
+                    "2 <= nums.length <= 10<sup>4</sup>",
+                    "-10<sup>9</sup> <= nums[i] <= 10<sup>9</sup>",
+                    "-10<sup>9</sup> <= target <= 10<sup>9</sup>",
+                    "Only one valid answer exists."
+                ],
+                starterCode: {
+                    java: `import java.util.*;
+
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        // Write your code here...
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            int complement = target - nums[i];
+            if (map.containsKey(complement)) {
+                return new int[] { map.get(complement), i };
+            }
+            map.put(nums[i], i);
+        }
+        return new int[] {};
+    }
+}`,
+                    python: `class Solution:
+    def twoSum(self, nums: list[int], target: int) -> list[int]:
+        # Write your code here...
+        seen = {}
+        for i, num in enumerate(nums):
+            diff = target - num
+            if diff in seen:
+                return [seen[diff], i]
+            seen[num] = i
+        return []`,
+                    cpp: `#include <vector>
+#include <unordered_map>
+using namespace std;
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        // Write your code here...
+        unordered_map<int, int> mp;
+        for (int i = 0; i < nums.size(); i++) {
+            int diff = target - nums[i];
+            if (mp.find(diff) != mp.end()) {
+                return {mp[diff], i};
+            }
+            mp[nums[i]] = i;
+        }
+        return {};
+    }
+};`,
+                    c: `#include <stdio.h>
+#include <stdlib.h>
+
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
+    // Write your code here...
+    *returnSize = 2;
+    int* res = (int*)malloc(2 * sizeof(int));
+    for (int i = 0; i < numsSize; i++) {
+        for (int j = i + 1; j < numsSize; j++) {
+            if (nums[i] + nums[j] == target) {
+                res[0] = i;
+                res[1] = j;
+                return res;
+            }
+        }
+    }
+    return res;
+}`,
+                    javascript: `/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+var twoSum = function(nums, target) {
+    // Write your code here...
+    const map = new Map();
+    for (let i = 0; i < nums.length; i++) {
+        const diff = target - nums[i];
+        if (map.has(diff)) {
+            return [map.get(diff), i];
+        }
+        map.set(nums[i], i);
+    }
+    return [];
+};`,
+                    typescript: `function twoSum(nums: number[], target: number): number[] {
+    // Write your code here...
+    const map = new Map<number, number>();
+    for (let i = 0; i < nums.length; i++) {
+        const diff = target - nums[i];
+        if (map.has(diff)) {
+            return [map.get(diff)!, i];
+        }
+        map.set(nums[i], i);
+    }
+    return [];
+};`,
+                    csharp: `public class Solution {
+    public int[] TwoSum(int[] nums, int target) {
+        // Write your code here...
+        var map = new Dictionary<int, int>();
+        for (int i = 0; i < nums.Length; i++) {
+            int complement = target - nums[i];
+            if (map.ContainsKey(complement)) {
+                return new int[] { map[complement], i };
+            }
+            map[nums[i]] = i;
+        }
+        return new int[0];
+    }
+}`,
+                    golang: `package main
+
+func twoSum(nums []int, target int) []int {
+    // Write your code here...
+    m := make(map[int]int)
+    for i, num := range nums {
+        if idx, ok := m[target-num]; ok {
+            return []int{idx, i}
+        }
+        m[num] = i
+    }
+    return []int{}
+}`,
+                    rust: `impl Solution {
+    pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
+        // Write your code here...
+        use std::collections::HashMap;
+        let mut map = HashMap::new();
+        for (i, &num) in nums.iter().enumerate() {
+            if let Some(&idx) = map.get(&(target - num)) {
+                return vec![idx as i32, i as i32];
+            }
+            map.insert(num, i);
+        }
+        vec![]
+    }
+}`,
+                    kotlin: `class Solution {
+    fun twoSum(nums: IntArray, target: Int): IntArray {
+        // Write your code here...
+        val map = HashMap<Int, Int>()
+        for (i in nums.indices) {
+            val complement = target - nums[i]
+            if (map.containsKey(complement)) {
+                return intArrayOf(map[complement]!!, i)
+            }
+            map[nums[i]] = i
+        }
+        return intArrayOf()
+    }
+}`,
+                    ruby: `def two_sum(nums, target)
+    # Write your code here...
+    seen = {}
+    nums.each_with_index do |num, i|
+        diff = target - num
+        return [seen[diff], i] if seen.key?(diff)
+        seen[num] = i
+    end
+end`,
+                    php: `<?php
+class Solution {
+    function twoSum($nums, $target) {
+        // Write your code here...
+        $map = [];
+        foreach ($nums as $i => $num) {
+            $diff = $target - $num;
+            if (isset($map[$diff])) {
+                return [$map[$diff], $i];
+            }
+            $map[$num] = $i;
+        }
+        return [];
+    }
+}`,
+                    swift: `class Solution {
+    func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
+        // Write your code here...
+        var map = [Int: Int]()
+        for (i, num) in nums.enumerated() {
+            if let idx = map[target - num] {
+                return [idx, i]
+            }
+            map[num] = i
+        }
+        return []
+    }
+}`
+                }
+            },
+            "PQ9RJ002": {
+                id: "PQ9RJ002",
+                num: 2,
+                title: "2. Add Two Numbers",
+                difficulty: "Medium",
+                acceptance: "49.6%",
+                desc: `You are given two <b>non-empty</b> linked lists representing two non-negative integers. The digits are stored in <b>reverse order</b>, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.<br><br>
+                       You may assume the two numbers do not contain any leading zero, except the number 0 itself.`,
+                examples: [
+                    {
+                        input: "l1 = [2,4,3], l2 = [5,6,4]",
+                        output: "[7,0,8]",
+                        explanation: "342 + 465 = 807."
+                    },
+                    {
+                        input: "l1 = [0], l2 = [0]",
+                        output: "[0]",
+                        explanation: "0 + 0 = 0."
+                    }
+                ],
+                constraints: [
+                    "The number of nodes in each linked list is in the range [1, 100].",
+                    "0 <= Node.val <= 9",
+                    "It is guaranteed that the list represents a number that does not have leading zeros."
+                ],
+                starterCode: {
+                    java: `class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        // Write your code here...
+        ListNode dummy = new ListNode(0);
+        ListNode curr = dummy;
+        int carry = 0;
+        while (l1 != null || l2 != null || carry != 0) {
+            int sum = carry + (l1 != null ? l1.val : 0) + (l2 != null ? l2.val : 0);
+            carry = sum / 10;
+            curr.next = new ListNode(sum % 10);
+            curr = curr.next;
+            if (l1 != null) l1 = l1.next;
+            if (l2 != null) l2 = l2.next;
+        }
+        return dummy.next;
+    }
+}`,
+                    python: `class Solution:
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        # Write your code here...
+        dummy = ListNode(0)
+        curr = dummy
+        carry = 0
+        while l1 or l2 or carry:
+            val = (l1.val if l1 else 0) + (l2.val if l2 else 0) + carry
+            carry = val // 10
+            curr.next = ListNode(val % 10)
+            curr = curr.next
+            l1 = l1.next if l1 else None
+            l2 = l2.next if l2 else None
+        return dummy.next`,
+                    cpp: `class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        // Write your code here...
+        ListNode dummy(0);
+        ListNode* curr = &dummy;
+        int carry = 0;
+        while (l1 || l2 || carry) {
+            int sum = carry + (l1 ? l1->val : 0) + (l2 ? l2->val : 0);
+            carry = sum / 10;
+            curr->next = new ListNode(sum % 10);
+            curr = curr->next;
+            l1 = l1 ? l1->next : nullptr;
+            l2 = l2 ? l2->next : nullptr;
+        }
+        return dummy.next;
+    }
+};`,
+                    c: `struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
+    // Write your code here...
+    return NULL;
+}`,
+                    javascript: `var addTwoNumbers = function(l1, l2) {
+    // Write your code here...
+    let dummy = new ListNode(0);
+    let curr = dummy;
+    let carry = 0;
+    while (l1 !== null || l2 !== null || carry !== 0) {
+        let sum = carry + (l1 ? l1.val : 0) + (l2 ? l2.val : 0);
+        carry = Math.floor(sum / 10);
+        curr.next = new ListNode(sum % 10);
+        curr = curr.next;
+        if (l1) l1 = l1.next;
+        if (l2) l2 = l2.next;
+    }
+    return dummy.next;
+};`
+                }
+            },
+            "PQ9RJ003": {
+                id: "PQ9RJ003",
+                num: 3,
+                title: "3. Longest Substring Without Repeating Characters",
+                difficulty: "Medium",
+                acceptance: "40.0%",
+                desc: `Given a string <code>s</code>, find the length of the <b>longest substring</b> without duplicate characters.`,
+                examples: [
+                    {
+                        input: 's = "abcabcbb"',
+                        output: "3",
+                        explanation: 'The answer is "abc", with the length of 3.'
+                    },
+                    {
+                        input: 's = "bbbbb"',
+                        output: "1",
+                        explanation: 'The answer is "b", with the length of 1.'
+                    }
+                ],
+                constraints: [
+                    "0 <= s.length <= 5 * 10<sup>4</sup>",
+                    "<code>s</code> consists of English letters, digits, symbols and spaces."
+                ],
+                starterCode: {
+                    java: `class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        // Write your code here...
+        Map<Character, Integer> map = new HashMap<>();
+        int left = 0, maxLen = 0;
+        for (int right = 0; right < s.length(); right++) {
+            char ch = s.charAt(right);
+            if (map.containsKey(ch) && map.get(ch) >= left) {
+                left = map.get(ch) + 1;
+            }
+            map.put(ch, right);
+            maxLen = Math.max(maxLen, right - left + 1);
+        }
+        return maxLen;
+    }
+}`,
+                    python: `class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        # Write your code here...
+        char_idx = {}
+        left = 0
+        max_len = 0
+        for right, ch in enumerate(s):
+            if ch in char_idx and char_idx[ch] >= left:
+                left = char_idx[ch] + 1
+            char_idx[ch] = right
+            max_len = max(max_len, right - left + 1)
+        return max_len`,
+                    cpp: `class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        // Write your code here...
+        unordered_map<char, int> mp;
+        int left = 0, maxLen = 0;
+        for (int right = 0; right < s.length(); right++) {
+            char ch = s[right];
+            if (mp.count(ch) && mp[ch] >= left) {
+                left = mp[ch] + 1;
+            }
+            mp[ch] = right;
+            maxLen = max(maxLen, right - left + 1);
+        }
+        return maxLen;
+    }
+};`,
+                    c: `int lengthOfLongestSubstring(char* s) {
+    // Write your code here...
+    return 0;
+}`,
+                    javascript: `var lengthOfLongestSubstring = function(s) {
+    // Write your code here...
+    let map = new Map();
+    let left = 0, maxLen = 0;
+    for (let right = 0; right < s.length; right++) {
+        let ch = s[right];
+        if (map.has(ch) && map.get(ch) >= left) {
+            left = map.get(ch) + 1;
+        }
+        map.set(ch, right);
+        maxLen = Math.max(maxLen, right - left + 1);
+    }
+    return maxLen;
+};`
+                }
+            },
+            "PQ9RJ004": {
+                id: "PQ9RJ004",
+                num: 4,
+                title: "4. Median of Two Sorted Arrays",
+                difficulty: "Hard",
+                acceptance: "47.9%",
+                desc: `Given two sorted arrays <code>nums1</code> and <code>nums2</code> of size <code>m</code> and <code>n</code> respectively, return <b>the median</b> of the two sorted arrays.<br><br>
+                       The overall run time complexity should be <code>O(log (m+n))</code>.`,
+                examples: [
+                    {
+                        input: "nums1 = [1,3], nums2 = [2]",
+                        output: "2.00000",
+                        explanation: "merged array = [1,2,3] and median is 2."
+                    },
+                    {
+                        input: "nums1 = [1,2], nums2 = [3,4]",
+                        output: "2.50000",
+                        explanation: "merged array = [1,2,3,4] and median is (2 + 3) / 2 = 2.5."
+                    }
+                ],
+                constraints: [
+                    "nums1.length == m",
+                    "nums2.length == n",
+                    "0 <= m <= 1000",
+                    "0 <= n <= 1000",
+                    "1 <= m + n <= 2000"
+                ],
+                starterCode: {
+                    java: `class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        // Write your code here...
+        if (nums1.length > nums2.length) return findMedianSortedArrays(nums2, nums1);
+        int m = nums1.length, n = nums2.length;
+        int low = 0, high = m;
+        while (low <= high) {
+            int i = (low + high) / 2;
+            int j = (m + n + 1) / 2 - i;
+            int maxLeft1 = (i == 0) ? Integer.MIN_VALUE : nums1[i - 1];
+            int minRight1 = (i == m) ? Integer.MAX_VALUE : nums1[i];
+            int maxLeft2 = (j == 0) ? Integer.MIN_VALUE : nums2[j - 1];
+            int minRight2 = (j == n) ? Integer.MAX_VALUE : nums2[j];
+            if (maxLeft1 <= minRight2 && maxLeft2 <= minRight1) {
+                if ((m + n) % 2 == 1) return Math.max(maxLeft1, maxLeft2);
+                return (Math.max(maxLeft1, maxLeft2) + Math.min(minRight1, minRight2)) / 2.0;
+            } else if (maxLeft1 > minRight2) high = i - 1;
+            else low = i + 1;
+        }
+        return 0.0;
+    }
+}`,
+                    python: `class Solution:
+    def findMedianSortedArrays(self, nums1: list[int], nums2: list[int]) -> float:
+        # Write your code here...
+        if len(nums1) > len(nums2):
+            nums1, nums2 = nums2, nums1
+        m, n = len(nums1), len(nums2)
+        low, high = 0, m
+        while low <= high:
+            i = (low + high) // 2
+            j = (m + n + 1) // 2 - i
+            maxLeft1 = float('-inf') if i == 0 else nums1[i - 1]
+            minRight1 = float('inf') if i == m else nums1[i]
+            maxLeft2 = float('-inf') if j == 0 else nums2[j - 1]
+            minRight2 = float('inf') if j == n else nums2[j]
+            if maxLeft1 <= minRight2 and maxLeft2 <= minRight1:
+                if (m + n) % 2 == 1:
+                    return float(max(maxLeft1, maxLeft2))
+                return (max(maxLeft1, maxLeft2) + min(minRight1, minRight2)) / 2.0
+            elif maxLeft1 > minRight2:
+                high = i - 1
+            else:
+                low = i + 1
+        return 0.0`,
+                    cpp: `class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        // Write your code here...
+        return 0.0;
+    }
+};`,
+                    c: `double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Size) {
+    // Write your code here...
+    return 0.0;
+}`,
+                    javascript: `var findMedianSortedArrays = function(nums1, nums2) {
+    // Write your code here...
+    return 0.0;
+};`
+                }
+            },
+            "PQ9RJ005": {
+                id: "PQ9RJ005",
+                num: 5,
+                title: "5. Longest Palindromic Substring",
+                difficulty: "Medium",
+                acceptance: "38.9%",
+                desc: `Given a string <code>s</code>, return the <i>longest palindromic substring</i> in <code>s</code>.`,
+                examples: [
+                    {
+                        input: 's = "babad"',
+                        output: '"bab"',
+                        explanation: '"aba" is also a valid answer.'
+                    },
+                    {
+                        input: 's = "cbbd"',
+                        output: '"bb"',
+                        explanation: '"bb" is the longest palindromic substring.'
+                    }
+                ],
+                constraints: [
+                    "1 <= s.length <= 1000",
+                    "<code>s</code> consist of only digits and English letters."
+                ],
+                starterCode: {
+                    java: `class Solution {
+    public String longestPalindrome(String s) {
+        // Write your code here...
+        if (s == null || s.length() < 1) return "";
+        int start = 0, end = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int len1 = expand(s, i, i);
+            int len2 = expand(s, i, i + 1);
+            int len = Math.max(len1, len2);
+            if (len > end - start) {
+                start = i - (len - 1) / 2;
+                end = i + len / 2;
+            }
+        }
+        return s.substring(start, end + 1);
+    }
+    private int expand(String s, int left, int right) {
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+        return right - left - 1;
+    }
+}`,
+                    python: `class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        # Write your code here...
+        if not s:
+            return ""
+        start, end = 0, 0
+        def expand(left, right):
+            while left >= 0 and right < len(s) and s[left] == s[right]:
+                left -= 1
+                right += 1
+            return right - left - 1
+        for i in range(len(s)):
+            l1 = expand(i, i)
+            l2 = expand(i, i + 1)
+            m = max(l1, l2)
+            if m > end - start:
+                start = i - (m - 1) // 2
+                end = i + m // 2
+        return s[start:end + 1]`,
+                    cpp: `class Solution {
+public:
+    string longestPalindrome(string s) {
+        // Write your code here...
+        return "";
+    }
+};`,
+                    c: `char* longestPalindrome(char* s) {
+    // Write your code here...
+    return "";
+}`,
+                    javascript: `var longestPalindrome = function(s) {
+    // Write your code here...
+    return "";
+};`
+                }
+            }
+        };
+
+        const QUESTION_KEYS = ["PQ9RJ001", "PQ9RJ002", "PQ9RJ003", "PQ9RJ004", "PQ9RJ005"];
+        let currentQId = "PQ9RJ001";
+        let currentLang = "java";
+        let editorInstance = null;
+        let isBookmarked = false;
+
+        // Language Configs with Ace Modes & Display Names
+        const LANG_CONFIG = {
+            java: { name: "Java", mode: "ace/mode/java" },
+            python: { name: "Python 3", mode: "ace/mode/python" },
+            cpp: { name: "C++", mode: "ace/mode/c_cpp" },
+            c: { name: "C", mode: "ace/mode/c_cpp" },
+            javascript: { name: "JavaScript", mode: "ace/mode/javascript" },
+            typescript: { name: "TypeScript", mode: "ace/mode/typescript" },
+            csharp: { name: "C#", mode: "ace/mode/csharp" },
+            golang: { name: "Go", mode: "ace/mode/golang" },
+            rust: { name: "Rust", mode: "ace/mode/rust" },
+            kotlin: { name: "Kotlin", mode: "ace/mode/kotlin" },
+            ruby: { name: "Ruby", mode: "ace/mode/ruby" },
+            php: { name: "PHP", mode: "ace/mode/php" },
+            swift: { name: "Swift", mode: "ace/mode/swift" }
+        };
+
+        // Initialize Page
+        window.addEventListener('DOMContentLoaded', () => {
+            initUserSession();
+            loadCustomDsaIntoDb();
+            parseUrlQuestionId();
+            initAceEditor();
+            loadQuestion(currentQId);
+            initPaneResizer();
+        });
+
+        // Load any custom DSA problems added by teachers/admins from localStorage
+        function loadCustomDsaIntoDb() {
+            try {
+                const stored = localStorage.getItem('CodeQuest_dsa_problems');
+                if (stored) {
+                    const customList = JSON.parse(stored);
+                    if (Array.isArray(customList)) {
+                        customList.forEach((p, idx) => {
+                            const qId = p.id || ('PQ9RJ' + String(idx + 1).padStart(3, '0'));
+                            if (!QUESTIONS_DB[qId]) {
+                                QUESTIONS_DB[qId] = {
+                                    id: qId,
+                                    num: p.num || (idx + 1),
+                                    title: p.title ? (p.title.match(/^\d+\./) ? p.title : `${p.num || (idx + 1)}. ${p.title}`) : `Problem ${idx + 1}`,
+                                    difficulty: p.diff || p.difficulty || "Easy",
+                                    acceptance: p.acceptance || "54.2%",
+                                    desc: p.desc || p.description || "Solve the problem according to standard specifications and edge conditions.",
+                                    examples: p.examples || [
+                                        { input: "nums = [2,7,11,15], target = 9", output: "[0,1]", explanation: "Standard sample case." }
+                                    ],
+                                    constraints: p.constraints || [
+                                        "1 <= n <= 10^5",
+                                        "Time Limit: 2.0 seconds"
+                                    ],
+                                    hiddenTests: p.hiddenTests || [],
+                                    starterCode: {
+                                        java: (p.code && p.code.includes('class')) ? p.code : `class Solution {\n    public void solve() {\n        // Write your solution here...\n    }\n}`,
+                                        python: (p.code && p.code.includes('def')) ? p.code : `class Solution:\n    def solve(self):\n        # Write your code here...\n        pass`,
+                                        cpp: `class Solution {\npublic:\n    void solve() {\n        // Write your code here...\n    }\n};`,
+                                        c: `void solve() {\n    // Write your code here...\n}`,
+                                        javascript: `var solve = function() {\n    // Write your code here...\n};`
+                                    }
+                                };
+                            }
+                            if (!QUESTION_KEYS.includes(qId)) {
+                                QUESTION_KEYS.push(qId);
+                            }
+                        });
+                    }
+                }
+            } catch (e) {
+                console.warn("Could not load external DSA problems:", e);
+            }
+        }
+
+        function parseUrlQuestionId() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            const q = params.get('q');
+
+            if (id && QUESTIONS_DB[id]) {
+                currentQId = id;
+            } else if (q) {
+                const qNum = parseInt(q, 10);
+                if (!isNaN(qNum) && qNum >= 1 && qNum <= QUESTION_KEYS.length) {
+                    currentQId = QUESTION_KEYS[qNum - 1];
+                } else if (QUESTIONS_DB[`PQ9RJ00${q}`]) {
+                    currentQId = `PQ9RJ00${q}`;
+                } else {
+                    currentQId = "PQ9RJ001";
+                }
+            } else {
+                currentQId = "PQ9RJ001";
+            }
+        }
+
+        function initUserSession() {
+            let session = null;
+            try {
+                session = JSON.parse(localStorage.getItem('CodeQuest_active_session')) ||
+                    JSON.parse(localStorage.getItem('TESTPAD_current_user'));
+            } catch (e) { }
+
+            const name = (session && session.name) ? session.name : "OM AGGARWAL";
+            const role = (session && session.roleDisplay) ? session.roleDisplay : "STUDENT";
+
+            const nameEl = document.getElementById('headerUserName');
+            const roleEl = document.getElementById('headerUserRole');
+            if (nameEl) nameEl.textContent = name.toUpperCase();
+            if (roleEl) roleEl.textContent = role.toUpperCase();
+        }
+
+        // Initialize Ace JS Editor (Exclusive Ace setup from exam-attempt.html)
+        function initAceEditor() {
+            try {
+                const editorEl = document.getElementById("codeEditor");
+                if (!editorEl) {
+                    console.warn("codeEditor DOM node missing.");
+                    return;
+                }
+
+                if (typeof ace === 'undefined') {
+                    console.warn("Ace editor CDN is still loading, will retry shortly...");
+                    setTimeout(initAceEditor, 300);
+                    return;
+                }
+
+                editorInstance = ace.edit("codeEditor");
+                editorInstance.setTheme("ace/theme/chrome");
+                editorInstance.session.setMode("ace/mode/java");
+                editorInstance.setFontSize("18px");
+                editorInstance.setOptions({
+                    enableBasicAutocompletion: true,
+                    enableLiveAutocompletion: true,
+                    showPrintMargin: false,
+                    highlightActiveLine: false,
+                    fontFamily: "Consolas, 'Monaco', 'Courier New', monospace",
+                    tabSize: 4,
+                    useSoftTabs: true
+                });
+                editorInstance.resize();
+            } catch (err) {
+                console.error("Ace init error:", err);
+            }
+        }
+
+        // Load Question Data (Hind font & crisp black text)
+        function loadQuestion(qId) {
+            const q = QUESTIONS_DB[qId];
+            if (!q) return;
+
+            currentQId = qId;
+            const titleEl = document.getElementById('problemTitle');
+            if (titleEl) titleEl.textContent = q.title;
+
+            let html = `<div class="problem-desc" style="font-size: 1.15rem; line-height: 1.6; color: #101828; margin-bottom: 20px;">${q.desc}</div>`;
+
+            // Examples
+            if (q.examples && q.examples.length > 0) {
+                q.examples.forEach((ex, idx) => {
+                    html += `
+                        <div style="font-weight: 700; margin-top: 22px; margin-bottom: 8px; font-family: 'Hind', sans-serif; font-size: 1.15rem; color: #101828;">Example ${idx + 1}:</div>
+                        <div class="sample-box" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:16px 20px; font-family:Consolas, monospace; font-size:15px; color:#1e293b; line-height:1.6; margin-bottom:16px;">
+                            <strong>Input:</strong> ${escapeHtml(ex.input)}<br>
+                            <strong>Output:</strong> ${escapeHtml(ex.output)}
+                            ${ex.explanation ? '<br><strong>Explanation:</strong> ' + escapeHtml(ex.explanation) : ''}
+                        </div>
+                    `;
+                });
+            }
+
+            // Constraints
+            if (q.constraints && q.constraints.length > 0) {
+                html += `<div class="constraints-title" style="font-weight: 700; margin-top: 24px; margin-bottom: 10px; font-family: 'Hind', sans-serif; font-size: 1.15rem; color: #101828;">Constraints:</div>`;
+                html += `<ul class="constraints-list" style="padding-left: 20px; margin-bottom: 30px; font-family: 'Hind', sans-serif; font-size: 1.05rem; color: #344054; line-height: 1.7;">`;
+                q.constraints.forEach(c => {
+                    html += `<li style="margin-bottom: 6px;">${c}</li>`;
+                });
+                html += `</ul>`;
+            }
+
+            const bodyEl = document.getElementById('problemBody');
+            if (bodyEl) bodyEl.innerHTML = html;
+
+            // Load starter code for current language
+            resetStarterCode();
+
+            // Populate sample test cases in drawer
+            renderTestCaseSidebar();
+
+            // Reset summary message
+            const passFailText = document.getElementById('hiddenPassFailText');
+            if (passFailText) passFailText.textContent = "0 passed, 0 failed";
+
+            // Update browser URL
+            try {
+                window.history.replaceState(null, q.title, `?id=${qId}`);
+            } catch (e) { }
+        }
+
+        // Render test cases into Sample test cases sidebar
+        function renderTestCaseSidebar() {
+            const sidebar = document.getElementById('tcSidebar');
+            if (!sidebar) return;
+
+            sidebar.innerHTML = '';
+            const q = QUESTIONS_DB[currentQId];
+            const examples = (q && q.examples && q.examples.length) ? q.examples : [{ input: "nums = [2,7,11,15], target = 9", output: "[0,1]" }];
+
+            examples.forEach((ex, idx) => {
+                const btn = document.createElement('div');
+                btn.className = `tc-pill-button ${idx === 0 ? 'active' : ''}`;
+                btn.id = `tc-pill-${idx + 1}`;
+                btn.textContent = `Case ${idx + 1}`;
+                btn.onclick = () => showTestCase(idx + 1, btn);
+                sidebar.appendChild(btn);
+            });
+
+            showTestCase(1, document.getElementById('tc-pill-1'));
+        }
+
+        function showTestCase(num, btn) {
+            document.querySelectorAll('.tc-pill-button').forEach(b => b.classList.remove('active'));
+            if (btn) {
+                btn.classList.add('active');
+            } else {
+                const target = document.getElementById(`tc-pill-${num}`);
+                if (target) target.classList.add('active');
+            }
+
+            const q = QUESTIONS_DB[currentQId];
+            const ex = (q && q.examples && q.examples[num - 1]) ? q.examples[num - 1] : { input: "Input test", output: "Output test" };
+
+            const detailPane = document.getElementById('tcDetailPane');
+            if (detailPane) {
+                detailPane.innerHTML = `
+                    <div style="font-family:'Hind', sans-serif;">
+                        <div style="font-weight: 600; color: #475467; font-size: 1rem; margin-bottom: 6px;">Input:</div>
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px 16px; font-family: Consolas, monospace; font-size: 15px; color: #1e293b; margin-bottom: 16px;">${escapeHtml(ex.input)}</div>
+                        <div style="font-weight: 600; color: #475467; font-size: 1rem; margin-bottom: 6px;">Expected Output:</div>
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px 16px; font-family: Consolas, monospace; font-size: 15px; color: #1e293b;">${escapeHtml(ex.output)}</div>
+                        ${ex.explanation ? `<div style="font-weight: 600; color: #475467; font-size: 1rem; margin-top: 14px; margin-bottom: 6px;">Explanation:</div><div style="color: #64748b; font-size: 14px; line-height: 1.5;">${escapeHtml(ex.explanation)}</div>` : ''}
+                    </div>
+                `;
+            }
+        }
+
+        function navigateAdjacentQuestion(delta) {
+            const curIdx = QUESTION_KEYS.indexOf(currentQId);
+            let newIdx = curIdx + delta;
+            if (newIdx < 0) newIdx = QUESTION_KEYS.length - 1;
+            if (newIdx >= QUESTION_KEYS.length) newIdx = 0;
+            const nextId = QUESTION_KEYS[newIdx];
+            loadQuestion(nextId);
+            showToast(`Loaded ${QUESTIONS_DB[nextId].title}`);
+        }
+
+        // Custom Language Selector Dropdown (Toggle & Select)
+        function toggleLanguageDropdown(e) {
+            e.stopPropagation();
+            const selector = document.getElementById('languageSelector');
+            if (selector) selector.classList.toggle('open');
+        }
+
+        window.addEventListener('click', (e) => {
+            const selector = document.getElementById('languageSelector');
+            if (selector && !selector.contains(e.target)) {
+                selector.classList.remove('open');
+            }
+        });
+
+        function selectLanguage(lang) {
+            if (!LANG_CONFIG[lang]) return;
+            currentLang = lang;
+
+            const textEl = document.getElementById('selectedLangText');
+            if (textEl) textEl.textContent = LANG_CONFIG[lang].name;
+
+            // Update active state in dropdown
+            document.querySelectorAll('#languageDropdownMenu .dropdown-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-lang') === lang) {
+                    item.classList.add('active');
+                }
+            });
+
+            // Update Ace mode
+            if (editorInstance) {
+                editorInstance.session.setMode(LANG_CONFIG[lang].mode);
+            }
+
+            // Close dropdown
+            const selector = document.getElementById('languageSelector');
+            if (selector) selector.classList.remove('open');
+
+            // Load starter code for selected language
+            resetStarterCode();
+            showToast(`Switched to ${LANG_CONFIG[lang].name}`);
+        }
+
+        function resetStarterCode() {
+            const q = QUESTIONS_DB[currentQId];
+            if (!q || !editorInstance) return;
+
+            let starter = (q.starterCode && q.starterCode[currentLang]) ? q.starterCode[currentLang] : null;
+
+            if (!starter) {
+                // Fallbacks
+                if (currentLang === 'csharp') {
+                    starter = `public class Solution {\n    // Write your code here...\n}`;
+                } else if (currentLang === 'golang') {
+                    starter = `package main\n\n// Write your code here...`;
+                } else if (currentLang === 'rust') {
+                    starter = `impl Solution {\n    // Write your code here...\n}`;
+                } else if (currentLang === 'kotlin') {
+                    starter = `class Solution {\n    // Write your code here...\n}`;
+                } else if (currentLang === 'ruby') {
+                    starter = `# Write your code here...`;
+                } else if (currentLang === 'php') {
+                    starter = `<?php\nclass Solution {\n    // Write your code here...\n}`;
+                } else if (currentLang === 'swift') {
+                    starter = `class Solution {\n    // Write your code here...\n}`;
+                } else if (currentLang === 'typescript') {
+                    starter = `// Write your code here...`;
+                } else {
+                    starter = `// Write your code here...`;
+                }
+            }
+
+            editorInstance.setValue(starter, -1);
+        }
+
+        // Tab Switching
+        function switchMainTab(tab) {
+            const tabQBtn = document.getElementById('tabQuestionBtn');
+            const tabABtn = document.getElementById('tabAttemptsBtn');
+            const qPane = document.getElementById('questionContentScroll');
+            const aPane = document.getElementById('attemptsContentScroll');
+
+            if (tab === 'question') {
+                if (tabQBtn) tabQBtn.classList.add('active');
+                if (tabABtn) tabABtn.classList.remove('active');
+                if (qPane) qPane.style.display = 'block';
+                if (aPane) aPane.style.display = 'none';
+            } else {
+                if (tabABtn) tabABtn.classList.add('active');
+                if (tabQBtn) tabQBtn.classList.remove('active');
+                if (qPane) qPane.style.display = 'none';
+                if (aPane) aPane.style.display = 'block';
+            }
+        }
+
+        // Console Drawer open/close & caret
+        function toggleConsole() {
+            const drawer = document.getElementById('consoleDrawer');
+            const caret = document.getElementById('consoleCaret');
+            if (!drawer) return;
+
+            if (drawer.classList.contains('open')) {
+                drawer.classList.remove('open');
+                if (caret) caret.style.transform = 'rotate(0deg)';
+            } else {
+                drawer.classList.add('open');
+                if (caret) caret.style.transform = 'rotate(180deg)';
+                if (editorInstance) editorInstance.resize();
+            }
+        }
+
+        function closeConsole() {
+            const drawer = document.getElementById('consoleDrawer');
+            const caret = document.getElementById('consoleCaret');
+            if (drawer) drawer.classList.remove('open');
+            if (caret) caret.style.transform = 'rotate(0deg)';
+            if (editorInstance) editorInstance.resize();
+        }
+
+        function switchTray(tab) {
+            const tabs = ['testcases', 'sample', 'console', 'custom'];
+            tabs.forEach(t => {
+                const tabEl = document.getElementById(`tab-${t}`);
+                if (tabEl) {
+                    if (t === tab) tabEl.classList.add('active');
+                    else tabEl.classList.remove('active');
+                }
+            });
+
+            const summary = document.getElementById('traySummary');
+            const logs = document.getElementById('trayLogs');
+            const consoleView = document.getElementById('trayConsole');
+            const custom = document.getElementById('trayCustom');
+            const customCheck = document.getElementById('useCustomCheck');
+            const customTab = document.getElementById('tab-custom');
+
+            if (summary) summary.style.display = (tab === 'testcases') ? 'flex' : 'none';
+            if (logs) logs.style.display = (tab === 'sample') ? 'flex' : 'none';
+            if (consoleView) consoleView.style.display = (tab === 'console') ? 'flex' : 'none';
+            if (custom) custom.style.display = (tab === 'custom') ? 'block' : 'none';
+
+            if (tab === 'custom') {
+                if (customCheck && !customCheck.checked) customCheck.checked = true;
+                if (customTab) customTab.style.display = 'block';
+            } else {
+                if (tab !== 'custom' && customCheck && customCheck.checked && tab !== 'console') {
+                    // keep custom tab visible if checked
+                }
+            }
+        }
+
+        function handleCustomInputChange(chk) {
+            const drawer = document.getElementById('consoleDrawer');
+            const customTab = document.getElementById('tab-custom');
+
+            if (chk.checked) {
+                if (customTab) customTab.style.display = 'block';
+                if (drawer && !drawer.classList.contains('open')) toggleConsole();
+                switchTray('custom');
+            } else {
+                if (customTab) customTab.style.display = 'none';
+                switchTray('sample');
+            }
+        }
+
+        // Code Reset Handlers
+        function promptResetCode() {
+            const pop = document.getElementById('resetPopover');
+            if (pop) pop.style.display = 'block';
+        }
+
+        function hideResetPopover() {
+            const pop = document.getElementById('resetPopover');
+            if (pop) pop.style.display = 'none';
+        }
+
+        function confirmResetCode() {
+            hideResetPopover();
+            resetStarterCode();
+            showToast("Code reset to starter template");
+        }
+
+        // Run Code Execution
+        function executeRunCode() {
+            const drawer = document.getElementById('consoleDrawer');
+            if (drawer && !drawer.classList.contains('open')) toggleConsole();
+            switchTray('sample');
+
+            const detailPane = document.getElementById('tcDetailPane');
+            const q = QUESTIONS_DB[currentQId];
+            const ex = (q && q.examples && q.examples[0]) ? q.examples[0] : { input: "nums = [2,7,11,15], target = 9", output: "[0,1]" };
+
+            if (detailPane) {
+                detailPane.innerHTML = `
+                    <div style="padding: 24px 0; font-family:'Hind', sans-serif;">
+                        <div style="display:inline-flex; align-items:center; gap:10px; background:#eff6ff; color:#2563eb; padding:10px 20px; border-radius:6px; font-weight:600; font-size:16px;">
+                            <i class="fas fa-spinner fa-spin"></i> Compiling and running sample test cases...
+                        </div>
+                    </div>
+                `;
+            }
+
+            const consoleOut = document.getElementById('consoleOutputText');
+            if (consoleOut) {
+                consoleOut.textContent = `Compiling code in ${LANG_CONFIG[currentLang].name}...\nExecuting sample test cases...\n`;
+            }
+
+            setTimeout(() => {
+                if (detailPane) {
+                    detailPane.innerHTML = `
+                        <div style="font-family:'Hind', sans-serif;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;">
+                                <span style="background: #dcfce7; color: #15803d; padding: 6px 14px; border-radius: 4px; font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; gap: 6px;">
+                                    <i class="fas fa-check-circle"></i> Accepted
+                                </span>
+                                <span style="font-size: 14px; color: #64748b; font-weight: 500;">Runtime: 1 ms &bull; Memory: 42.1 MB</span>
+                            </div>
+                            <div style="font-weight: 600; color: #475467; font-size: 14px; margin-bottom: 4px;">Input</div>
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 14px; font-family: Consolas, monospace; font-size: 14px; color: #1e293b; margin-bottom: 12px;">${escapeHtml(ex.input)}</div>
+                            <div style="font-weight: 600; color: #475467; font-size: 14px; margin-bottom: 4px;">Your Output</div>
+                            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 10px 14px; font-family: Consolas, monospace; font-size: 14px; color: #15803d; font-weight: 600; margin-bottom: 12px;">${escapeHtml(ex.output)}</div>
+                            <div style="font-weight: 600; color: #475467; font-size: 14px; margin-bottom: 4px;">Expected Output</div>
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 14px; font-family: Consolas, monospace; font-size: 14px; color: #1e293b;">${escapeHtml(ex.output)}</div>
+                        </div>
+                    `;
+                }
+                if (consoleOut) {
+                    consoleOut.textContent = `Execution completed in 1ms.\nStatus: Success\nMemory Usage: 42.1 MB\nAll sample test cases passed!`;
+                }
+                showToast("Sample test cases passed successfully!");
+            }, 600);
+        }
+
+        // Submit Code Execution
+        function executeSubmitCode() {
+            const drawer = document.getElementById('consoleDrawer');
+            if (drawer && !drawer.classList.contains('open')) toggleConsole();
+            switchTray('testcases');
+
+            const qObj = QUESTIONS_DB[currentQId];
+            const hiddenCount = (qObj && qObj.hiddenTests && qObj.hiddenTests.length) ? qObj.hiddenTests.length : 35;
+
+            const summary = document.getElementById('testCasesSummaryContent');
+            if (summary) {
+                summary.innerHTML = `
+                    <div style="font-family:'Hind', sans-serif; display:flex; flex-direction:column; gap:24px; padding: 20px 0;">
+                        <div style="display:flex; align-items:center; gap:16px;">
+                            <div style="background:#eff6ff; color:#2563eb; padding:10px 24px; border-radius:4px; font-weight:700; font-size:1.15rem; display:inline-flex; align-items:center; gap:10px;">
+                                <i class="fas fa-spinner fa-spin"></i> Evaluating Hidden Test Cases...
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            showToast("Submitting solution to judge...");
+
+            setTimeout(() => {
+                if (summary) {
+                    summary.innerHTML = `
+                        <div style="font-family:'Hind', sans-serif; display:flex; flex-direction:column; gap:28px;">
+                            <div style="display:flex; align-items:center; gap:24px;">
+                                <div style="background:#ECFDF3; padding:8px 24px; border-radius:4px; color:#027A48; font-weight:700; font-size:1.15rem; border:1px solid #A6F4C5;">Accepted</div>
+                                <div style="font-size:1.15rem; color:#027A48; font-weight:600;" id="hiddenPassFailText">${hiddenCount}/${hiddenCount} hidden test cases passed</div>
+                            </div>
+                            <div style="background:#F9FAFB; border:1px solid #EAECF0; padding:24px 32px; color:#344054; font-size:1.05rem; font-weight:400; line-height:1.6; border-radius:8px;">
+                                <strong>Runtime:</strong> 2 ms (Beats 91.2% of submissions)<br>
+                                <strong>Memory:</strong> 42.4 MB (Beats 78.5% of submissions)<br>
+                                Congratulations! Your solution has been accepted and recorded in your attempts history.
+                            </div>
+                        </div>
+                    `;
+                }
+                showToast(`Success! All ${hiddenCount} hidden test cases passed. Status: Accepted.`);
+            }, 900);
+        }
+
+        function toggleBookmark() {
+            isBookmarked = !isBookmarked;
+            const icon = document.getElementById('bookmarkBtn');
+            if (icon) {
+                if (isBookmarked) {
+                    icon.className = 'fas fa-bookmark bookmark-icon-btn';
+                    showToast("Saved to your bookmarks");
+                } else {
+                    icon.className = 'far fa-bookmark bookmark-icon-btn';
+                    showToast("Removed from bookmarks");
+                }
+            }
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => { });
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+            }
+        }
+
+        function initPaneResizer() {
+            const resizer = document.getElementById('splitResizer');
+            const leftPane = document.getElementById('leftPane');
+            if (!resizer || !leftPane) return;
+
+            let isDragging = false;
+
+            resizer.addEventListener('mousedown', () => {
+                isDragging = true;
+                document.body.style.cursor = 'col-resize';
+                document.body.style.userSelect = 'none';
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const newWidth = e.clientX - 48;
+                if (newWidth > 320 && newWidth < window.innerWidth - 380) {
+                    leftPane.style.width = newWidth + 'px';
+                    if (editorInstance) editorInstance.resize();
+                }
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    document.body.style.cursor = '';
+                    document.body.style.userSelect = '';
+                    if (editorInstance) editorInstance.resize();
+                }
+            });
+        }
+
+        function openReportModal() {
+            const m = document.getElementById('reportModal');
+            if (m) m.style.display = 'flex';
+        }
+
+        function closeReportModal() {
+            const m = document.getElementById('reportModal');
+            if (m) m.style.display = 'none';
+        }
+
+        function closeReportModalOnBackdrop(e) {
+            if (e.target === document.getElementById('reportModal')) {
+                closeReportModal();
+            }
+        }
+
+        function submitReportIssue() {
+            closeReportModal();
+            showToast("Thank you! Your report has been submitted.");
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toastBanner');
+            if (!t) return;
+            t.textContent = msg;
+            t.style.display = 'block';
+            setTimeout(() => { t.style.display = 'none'; }, 3200);
+        }
+
+        function escapeHtml(s) {
+            return (s || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+    </script>
+</body>
+
+</html>

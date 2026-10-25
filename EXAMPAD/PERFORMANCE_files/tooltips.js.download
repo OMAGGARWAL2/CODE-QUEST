@@ -1,0 +1,417 @@
+
+$('.notification-icon').qtip({ // Grab some elements to apply the tooltip to
+		    content: {
+		        text: 'Notifications'
+		    },
+		    position: {
+		        my: 'top center',  // Position my top left...
+		        at: 'bottom center', // at the bottom right of...
+		        adjust: {
+		            x: 0,
+		            y: 14
+		        }
+		        
+		    },
+		    style: {
+		        classes: 'qtip-tipsy qtip-shadow'
+		    },
+		    hide: { 
+		    	event: 'click mouseleave'
+		    	
+		    },
+			api: {
+				onRender: function() {
+					// Hide the tooltip when it is clicked
+					this.elements.tooltip.click(this.hide)
+				},
+				onHide: function() {
+					// Set a state cookie
+					$.cookie('qtip_hidden', true, { path: '/', expires: 10 });
+ 
+					// Destroy me since I have no futher use!
+					this.destroy();
+				}
+			}
+});
+$('.new-feature').qtip({ // Grab some elements to apply the tooltip to
+	content: {
+		text: 'Feature Updates'
+	},
+	position: {
+		my: 'top center',  // Position my top left...
+		at: 'bottom center', // at the bottom right of...
+		adjust: {
+			x: 0,
+			y: 14
+		}
+		
+	},
+	style: {
+		classes: 'qtip-tipsy qtip-shadow'
+	},
+	hide: { 
+		event: 'click mouseleave'
+		
+	},
+	api: {
+		onRender: function() {
+			// Hide the tooltip when it is clicked
+			this.elements.tooltip.click(this.hide)
+		},
+		onHide: function() {
+			// Set a state cookie
+			$.cookie('qtip_hidden', true, { path: '/', expires: 10 });
+
+			// Destroy me since I have no futher use!
+			this.destroy();
+		}
+	}
+});
+$('.change-log').qtip({ // Grab some elements to apply the tooltip to
+		    content: {
+		        text: 'Software Updates'
+		    },
+		    position: {
+		        my: 'top center',  // Position my top left...
+		        at: 'bottom center', // at the bottom right of...
+		        adjust: {
+		            x: 0,
+		            y: 14
+		        }
+		        
+		    },
+		    style: {
+		        classes: 'qtip-tipsy qtip-shadow',
+		    },
+		    hide: { 
+		    	event: 'click mouseleave'
+		    	
+		    },
+			api: {
+				onRender: function() {
+					// Hide the tooltip when it is clicked
+					this.elements.tooltip.click(this.hide)
+				},
+				onHide: function() {
+					// Set a state cookie
+					$.cookie('qtip_hidden', true, { path: '/', expires: 10 });
+ 
+					// Destroy me since I have no futher use!
+					this.destroy();
+				}
+			}
+});
+
+$('.message-icon').qtip({ // Grab some elements to apply the tooltip to
+		    content: {
+		        text: 'Messages'
+		    },
+		    position: {
+		        my: 'top center',  // Position my top left...
+		        at: 'bottom center', // at the bottom right of...
+		        adjust: {
+		            x: 0,
+		            y: 14
+		        }
+		    },
+		    style: {
+		        classes: 'qtip-tipsy qtip-shadow'
+		    },
+		    hide: { 
+		    	event: 'click mouseleave'
+		    	
+		    },
+			api: {
+				onRender: function() {
+					// Hide the tooltip when it is clicked
+					this.elements.tooltip.click(this.hide)
+				},
+				onHide: function() {
+					// Set a state cookie
+					$.cookie('qtip_hidden', true, { path: '/', expires: 10 });
+ 
+					// Destroy me since I have no futher use!
+					this.destroy();
+				}
+			}
+});
+
+$('.menu-icon').qtip({ // Grab some elements to apply the tooltip to
+		    content: {
+		        text: 'Menu Options'
+		    },
+		    position: {
+		        my: 'top center',  // Position my top left...
+		        at: 'bottom center', // at the bottom right of...
+		        adjust: {
+		            x: -2,
+		            y: 14
+		        }
+		    },
+		    style: {
+		        classes: 'qtip-tipsy qtip-shadow'
+		    },
+		    hide: { 
+		    	//target: $('.ui-menu-dropdown-list, .ui-menu-dropdown, .ui-menu-dropdown-class'),
+		    	event: 'click mouseleave'
+		    },
+			api: {
+				onRender: function() {
+					// Hide the tooltip when it is clicked
+					this.elements.tooltip.click(this.hide)
+				},
+				onHide: function() {
+					// Set a state cookie
+					$.cookie('qtip_hidden', true, { path: '/', expires: 10 });
+ 
+					// Destroy me since I have no futher use!
+					this.destroy();
+				}
+			}
+});
+
+$('.logout-icon').qtip({ // Grab some elements to apply the tooltip to
+		    content: {
+		        text: 'Logout'
+		    },
+		    position: {
+		        my: 'top center',  // Position my top left...
+		        at: 'bottom center', // at the bottom right of...
+		        adjust: {
+		        	x: -4,
+		            y: 14
+		        }
+		    },
+		    style: {
+		        classes: 'qtip-tipsy qtip-shadow'
+		    },
+		    hide: { 
+		    	event: 'click mouseleave'
+		    	
+		    },
+			api: {
+				onRender: function() {
+					// Hide the tooltip when it is clicked
+					this.elements.tooltip.click(this.hide)
+				},
+				onHide: function() {
+					// Set a state cookie
+					$.cookie('qtip_hidden', true, { path: '/', expires: 10 });
+ 
+					// Destroy me since I have no futher use!
+					this.destroy();
+				}
+			}
+});
+
+$('.vote-tooltip').qtip({ // Grab some elements to apply the tooltip to
+		    content: {
+		        text: 'Last submission date for this poll is already over'
+		    },
+		    position: {
+		        my: 'top center',  // Position my top left...
+		        at: 'bottom center', // at the bottom right of...
+		        adjust: {
+		        	x: 4,
+		            y: 6
+		        }
+		    },
+		    style: {
+		        classes: 'qtip-tipsy qtip-shadow'
+		    },
+		    hide: { 
+		    	event: 'click mouseleave'
+		    	
+		    },
+			api: {
+				onRender: function() {
+					// Hide the tooltip when it is clicked
+					this.elements.tooltip.click(this.hide)
+				},
+				onHide: function() {
+					// Set a state cookie
+					$.cookie('qtip_hidden', true, { path: '/', expires: 10 });
+ 
+					// Destroy me since I have no futher use!
+					this.destroy();
+				}
+			}
+});
+
+$('.slide-close-button').qtip({ // Grab some elements to apply the tooltip to
+		    content: {
+		        text: 'Close'
+		    },
+		    position: {
+		        my: 'top center',  // Position my top left...
+		        at: 'bottom center', // at the bottom right of...
+		        adjust: {
+		        	x: -2,
+		            y: 6
+		        }
+		    },
+		    style: {
+		        classes: 'qtip-tipsy qtip-shadow'
+		    },
+		    hide: { 
+		    	event: 'click mouseleave'
+		    	
+		    },
+			api: {
+				onRender: function() {
+					// Hide the tooltip when it is clicked
+					this.elements.tooltip.click(this.hide)
+				},
+				onHide: function() {
+					// Set a state cookie
+					$.cookie('qtip_hidden', true, { path: '/', expires: 10 });
+ 
+					// Destroy me since I have no futher use!
+					this.destroy();
+				}
+			}
+});
+
+$('.ui-print-icon').qtip({ // Grab some elements to apply the tooltip to
+		    content: {
+		        text: 'Print'
+		    },
+		    position: {
+		        my: 'top center',  // Position my top left...
+		        at: 'bottom center', // at the bottom right of...
+		        adjust: {
+		        	x: -2,
+		            y: 6
+		        }
+		    },
+		    style: {
+		        classes: 'qtip-tipsy qtip-shadow'
+		    },
+		    hide: { 
+		    	event: 'click mouseleave'
+		    	
+		    },
+			api: {
+				onRender: function() {
+					// Hide the tooltip when it is clicked
+					this.elements.tooltip.click(this.hide)
+				},
+				onHide: function() {
+					// Set a state cookie
+					$.cookie('qtip_hidden', true, { path: '/', expires: 10 });
+ 
+					// Destroy me since I have no futher use!
+					this.destroy();
+				}
+			}
+});
+
+function slidetip() {
+	$('.slide-close-button').qtip({ // Grab some elements to apply the tooltip to
+		    content: {
+		        text: 'Close'
+		    },
+		    position: {
+		        my: 'top center',  // Position my top left...
+		        at: 'bottom center', // at the bottom right of...
+		        adjust: {
+		        	x: -2,
+		            y: 6
+		        }
+		    },
+		    style: {
+		        classes: 'qtip-tipsy qtip-shadow'
+		    },
+		    hide: { 
+		    	event: 'click mouseleave'
+		    	
+		    },
+			api: {
+				onRender: function() {
+					// Hide the tooltip when it is clicked
+					this.elements.tooltip.click(this.hide)
+				},
+				onHide: function() {
+					// Set a state cookie
+					$.cookie('qtip_hidden', true, { path: '/', expires: 10 });
+ 
+					// Destroy me since I have no futher use!
+					this.destroy();
+				}
+			}
+	});
+
+	$('.ui-print-icon').qtip({ // Grab some elements to apply the tooltip to
+			    content: {
+			        text: 'Print'
+			    },
+			    position: {
+			        my: 'top center',  // Position my top left...
+			        at: 'bottom center', // at the bottom right of...
+			        adjust: {
+			        	x: -2,
+			            y: 6
+			        }
+			    },
+			    style: {
+			        classes: 'qtip-tipsy qtip-shadow'
+			    },
+			    hide: { 
+			    	event: 'click mouseleave'
+			    	
+			    },
+				api: {
+					onRender: function() {
+						// Hide the tooltip when it is clicked
+						this.elements.tooltip.click(this.hide)
+					},
+					onHide: function() {
+						// Set a state cookie
+						$.cookie('qtip_hidden', true, { path: '/', expires: 10 });
+	 
+						// Destroy me since I have no futher use!
+						this.destroy();
+					}
+				}
+	});	
+}
+
+function loadqtip() {
+			
+	$('.vote-tooltip').qtip({ // Grab some elements to apply the tooltip to
+		
+		content: {
+			    text: 'Last submission date for this poll is already over'
+			},
+		position: {
+			    my: 'top center',  // Position my top left...
+			    at: 'bottom center', // at the bottom right of...
+			    adjust: {
+			    	x: 4,
+			    	y: 6
+			    }
+			},
+		style: {
+			    classes: 'qtip-tipsy qtip-shadow'
+			},
+		hide: { 
+			    event: 'click mouseleave'
+			    	
+			},
+		api: {
+			onRender: function() {
+				// Hide the tooltip when it is clicked
+				this.elements.tooltip.click(this.hide)
+			},
+			onHide: function() {
+				// Set a state cookie
+				$.cookie('qtip_hidden', true, { path: '/', expires: 10 });
+	 
+				// Destroy me since I have no futher use!
+				this.destroy();
+			}
+		}
+
+	});
+
+}

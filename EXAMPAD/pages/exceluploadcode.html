@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3b5998;
+            --primary-dark: #2d4373;
+            --primary-light: #eef2f7;
+            --erp-bg: #e8ecf3;
+            --erp-border: #d0d7e5;
+            --erp-text: #333;
+            --success: #28a745;
+            --danger: #dc3545;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--erp-bg);
+            font-family: Tahoma, Arial, sans-serif;
+            color: var(--erp-text);
+            font-size: 12px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ERP Header */
+        .erp-topbar {
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 11px;
+            height: 35px;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Sidebar - Question Timeline */
+        .timeline-sidebar {
+            width: 280px;
+            background: #f8f9fb;
+            border-right: 1px solid var(--erp-border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 12px 15px;
+            background: var(--primary-light);
+            border-bottom: 1px solid var(--erp-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .question-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .q-item {
+            padding: 10px 12px;
+            background: white;
+            border: 1px solid #ddd;
+            margin-bottom: 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .q-item:hover { border-color: var(--primary); background: #fafafa; }
+        .q-item.active { border-left: 4px solid var(--primary); border-color: var(--primary); background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+
+        .q-item-title { font-weight: bold; color: #444; font-size: 11px; margin-bottom: 4px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .q-item-meta { font-size: 10px; color: #888; display: flex; justify-content: space-between; }
+
+        /* Workspace */
+        .workspace {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            overflow-y: auto;
+            padding: 20px 40px;
+        }
+
+        /* Breadcrumb & Section Titles */
+        .breadcrumb { font-size: 10px; margin-bottom: 8px; color: var(--primary); text-transform: uppercase; }
+        .erp-section-title {
+            background: var(--primary-light);
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid var(--erp-border);
+        }
+
+        /* Forms */
+        .form-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .form-group { margin-bottom: 10px; }
+        label { display: block; font-weight: bold; margin-bottom: 4px; color: #555; font-size: 11px; }
+        input[type="text"], input[type="number"], select { width: 100%; padding: 6px 8px; border: 1px solid var(--erp-border); border-radius: 2px; font-size: 11px; }
+
+        .rich-editor-container { height: 250px; border: 1px solid var(--erp-border); margin-bottom: 20px; }
+
+        /* Test Case Table */
+        .architect-table { width: 100%; border-collapse: collapse; border: 1px solid var(--erp-border); font-size: 11px; table-layout: fixed; }
+        .architect-table th { background: var(--primary-light); color: var(--primary); padding: 8px; text-align: left; border-bottom: 2px solid var(--erp-border); }
+        .architect-table td { padding: 0; border: 1px solid #eee; }
+        .cell-content { padding: 8px; outline: none; min-height: 24px; white-space: pre-wrap; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 11px; word-break: break-all; }
+        .cell-content:focus { background: #fff; box-shadow: inset 0 0 0 1px var(--primary); }
+        tr.selected { background: #eaf1fb !important; }
+
+        .bulk-actions-bar { background: #fdfdfd; padding: 6px 15px; border: 1px solid var(--erp-border); border-top: none; display: flex; gap: 10px; align-items: center; font-size: 10px; color: #666; }
+
+        /* Boilerplate Architect */
+        .lang-card { border: 1px solid var(--erp-border); margin-top: 20px; padding: 15px; background: #fff; }
+        .lang-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 15px; }
+        .editor-label { font-size: 10px; font-weight: bold; color: var(--primary); margin-top: 10px; display: block; background: #f0f0f0; padding: 3px 8px; border: 1px solid #ddd; border-bottom: none; }
+        .ace-cell-editor { height: 120px; width: 100%; border: 1px solid #ddd; }
+
+        /* Buttons */
+        .btn { padding: 4px 12px; border: 1px solid #ccc; border-radius: 2px; font-size: 11px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; background: #f5f5f5; color: #333; font-family: inherit; }
+        .btn-primary { background: var(--primary); color: white; border-color: var(--primary-dark); }
+        .btn-success { background: var(--success); color: white; border-color: #1e7e34; }
+        .btn-danger { background: var(--danger); color: white; border-color: #a71d2a; }
+        .btn:hover { opacity: 0.9; }
+
+        /* Modals & Toasts */
+        #customModalOverlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); display: none; justify-content: center; align-items: center; z-index: 10000; }
+        .modal-card { background: #fff; width: 500px; border: 1px solid #666; box-shadow: 0 5px 25px rgba(0,0,0,0.3); }
+        .modal-header { background: var(--primary); color: white; padding: 8px 12px; font-weight: bold; font-size: 11px; }
+        .modal-body { padding: 20px; font-size: 12px; }
+        .modal-actions { background: #f5f5f5; padding: 8px 12px; display: flex; gap: 8px; justify-content: flex-end; border-top: 1px solid #ddd; }
+
+        #toastContainer { position: fixed; bottom: 20px; right: 20px; z-index: 11000; display: flex; flex-direction: column; gap: 5px; }
+        .toast { background: #333; color: #fff; padding: 8px 15px; border-radius: 2px; font-size: 11px; border-left: 4px solid var(--primary); animation: slideIn 0.3s forwards; }
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+        #loader { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.7); display: none; justify-content: center; align-items: center; z-index: 12000; font-weight: bold; color: var(--primary); }
+
+        .empty-state { text-align: center; padding: 100px 20px; color: #999; }
+        .status-badge { font-size: 9px; padding: 1px 4px; border-radius: 2px; font-weight: bold; text-transform: uppercase; }
+        .status-draft { background: #eee; color: #777; }
+        .status-ready { background: #d4edda; color: #155724; }
+
+        /* Utilities */
+        .selected-cell { background: var(--primary-light) !important; box-shadow: inset 0 0 0 1px var(--primary); }
+
+        /* Accordion & Fullscreen */
+        .lang-card { border: 1px solid var(--erp-border); margin-top: 15px; background: #fff; overflow: hidden; border-radius: 4px; transition: all 0.3s; }
+        .lang-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background: #fdfdfd; cursor: pointer; border-bottom: 1px solid #eee; }
+        .lang-header:hover { background: #f5f5f5; }
+        .lang-content { padding: 15px; display: block; border-top: none; }
+        .lang-card.collapsed .lang-content { display: none; }
+        .lang-card.collapsed { border-bottom: 1px solid var(--erp-border); }
+
+        .editor-header-row { display: flex; justify-content: space-between; align-items: center; background: #f0f0f0; padding: 3px 10px; border: 1px solid #ddd; border-bottom: none; margin-top: 10px; }
+        .editor-label { font-size: 10px; font-weight: bold; color: var(--primary); }
+
+        .ace-cell-editor { height: 150px; width: 100%; border: 1px solid #ddd; position: relative; }
+        
+        /* Fullscreen Editor Styles */
+        #editorOverlay { position: fixed; inset: 0; background: #1e1e1e; z-index: 20000; display: none; flex-direction: column; }
+        .overlay-header { padding: 12px 24px; background: #252526; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; color: #fff; }
+        #overlayEditor { flex: 1; }
+
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+        .status-dot.empty { background: #ccc; }
+        .status-dot.filled { background: var(--success); }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+<body>
+
+<div id="loader"><i class="fas fa-spinner fa-spin"></i> Processing Matrix...</div>
+
+<!-- Fullscreen Overlay -->
+<div id="editorOverlay">
+    <div class="overlay-header">
+        <div id="overlayTitle" style="font-weight:700; font-family:'Inter'; font-size: 11px;">CODE ARCHITECT - FULLSCREEN MODE</div>
+        <button class="btn btn-danger" onclick="closeFullscreen()"><i class="fas fa-times"></i> Exit Fullscreen</button>
+    </div>
+    <div id="overlayEditor" style="flex:1;"></div>
+</div>
+
+<div class="erp-topbar">
+    <span>Session Jan-Jun 2026 Admin Portal</span>
+    <i class="fas fa-home" style="cursor:pointer;" title="Return to Dashboard" onclick="location.href='teacher-dashboard.html'"></i>
+    <i class="fas fa-sign-out-alt" style="cursor:pointer;" title="Sign Out" onclick="location.href='login.html'"></i>
+</div>
+
+<div class="main-layout">
+    <!-- Sidebar -->
+    <div class="timeline-sidebar">
+        <div class="sidebar-header">
+            <span>Coding Timeline</span>
+            <button class="btn btn-primary" style="padding: 2px 6px;" onclick="addNewQuestion()"><i class="fas fa-plus"></i> Add Q</button>
+        </div>
+        <div class="question-list" id="questionList">
+            <!-- Questions will appear here -->
+        </div>
+        <div style="padding: 10px; border-top: 1px solid var(--erp-border); background: #eee;">
+            <button class="btn btn-success" style="width: 100%; justify-content: center;" onclick="syncAllQuestions()">
+                <i class="fas fa-cloud-upload-alt"></i> Synchronize All
+            </button>
+        </div>
+    </div>
+
+    <!-- Workspace -->
+    <div class="workspace" id="workspace">
+        <div class="empty-state" id="emptyState">
+            <i class="fas fa-code-branch fa-4x" style="opacity: 0.1; margin-bottom: 20px; display: block;"></i>
+            <h2>Coding Architect Matrix</h2>
+            <p>Select a question from the timeline or create a new one to begin architecting.</p>
+        </div>
+
+        <div id="editorWorkspace" style="display: none;">
+            <div class="breadcrumb">Home » Exam Creator » <b>Coding Architect</b></div>
+            <div class="erp-section-title">
+                <div id="currentQDisplay">Architecting Question #1</div>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn btn-danger" onclick="deleteCurrentQuestion()"><i class="fas fa-trash"></i> Delete</button>
+                    <button class="btn" onclick="duplicateCurrentQuestion()"><i class="fas fa-copy"></i> Duplicate</button>
+                </div>
+            </div>
+
+            <!-- Metadata -->
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Question Heading / Title</label>
+                    <input type="text" id="q_heading" placeholder="e.g. Matrix Rotation" oninput="saveCurrentState()">
+                </div>
+                <div class="form-group">
+                    <label>Institutional Section</label>
+                    <select id="q_section" onchange="saveCurrentState()">
+                        <!-- Loaded dynamically -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Total Marks</label>
+                    <input type="number" id="q_marks" value="10" readonly style="background:#f9f9f9;" title="Calculated from test cases">
+                </div>
+            </div>
+
+            <label>Problem Statement (Rich Text Specification)</label>
+            <div id="editor-container" class="rich-editor-container"></div>
+
+            <!-- Test Cases -->
+            <div class="erp-section-title" style="margin-top: 30px; font-size: 11px;">
+                <div><i class="fas fa-vial"></i> Test Case Matrix (Sample & Hidden)</div>
+                <div style="display:flex; gap:5px;">
+                    <span style="font-size:10px; color:#666; font-weight:normal; margin-right:10px; align-self:center;">Paste data from Excel directly into the grid</span>
+                    <button class="btn" style="padding: 2px 8px;" onclick="addNewTestCase(false)"><i class="fas fa-plus"></i> Hidden</button>
+                    <button class="btn" style="padding: 2px 8px;" onclick="addNewTestCase(true)"><i class="fas fa-eye"></i> Sample</button>
+                </div>
+            </div>
+            <table class="architect-table" id="tcTable">
+                <thead>
+                    <tr>
+                        <th style="width: 30px; text-align: center;"><input type="checkbox" id="selectAllTC" onclick="toggleSelectAllTC(this.checked)"></th>
+                        <th style="width: 40px; text-align: center;">#</th>
+                        <th style="width: 80px;">Type</th>
+                        <th>Standard Input</th>
+                        <th>Expected Output</th>
+                        <th style="width: 60px; text-align: center;">Marks</th>
+                        <th style="width: 40px; text-align: center;">X</th>
+                    </tr>
+                </thead>
+                <tbody id="testCaseMatrix" onpaste="handleTCPaste(event)"></tbody>
+            </table>
+            <div class="bulk-actions-bar">
+                <span id="selectedCountText">0 rows selected</span>
+                <span style="border-right:1px solid #ddd; height:12px; margin:0 5px;"></span>
+                <button class="btn" style="padding:2px 6px; font-size:10px;" onclick="deleteSelectedTC()"><i class="fas fa-trash"></i> Delete Selected</button>
+                <button class="btn" style="padding:2px 6px; font-size:10px;" onclick="toggleSelectedType(true)"><i class="fas fa-eye"></i> Mark as Sample</button>
+                <button class="btn" style="padding:2px 6px; font-size:10px;" onclick="toggleSelectedType(false)"><i class="fas fa-eye-slash"></i> Mark as Hidden</button>
+            </div>
+
+            <!-- Language Boilerplates -->
+            <div class="erp-section-title" style="margin-top: 30px; font-size: 11px;">
+                <div><i class="fas fa-laptop-code"></i> Polyglot Boilerplate Architect</div>
+                <div style="display:flex; gap:5px;">
+                    <select id="langSelector" style="width:100px;">
+                        <option value="python">Python</option>
+                        <option value="java">Java</option>
+                        <option value="cpp">C++</option>
+                        <option value="c">C</option>
+                        <option value="javascript">JS</option>
+                    </select>
+                    <button class="btn btn-primary" style="padding: 2px 8px;" onclick="addLanguageFromSelector()">Add Lang</button>
+                </div>
+            </div>
+            <div id="languageArchitect"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.10.1/ace.js"></script>
+<script src="../js/db.js"></script>
+
+<script>
+    let exams = JSON.parse(localStorage.getItem('TESTPAD_creator_temp')) || { questions: [], sections: ['General'], title: '' };
+    let questionsPool = []; // Current session questions
+    let activeQIndex = -1;
+    let quill = null;
+    let aceEditors = {};
+    let activeLangAccordion = null; // Tracks which language card is expanded
+    let fullscreenEditor = null; // Reference to the Ace editor in the overlay
+    
+    // Grid Selection State
+    let isSelecting = false;
+    let selectionStart = { r: 0, c: 0 };
+    let selectionEnd = { r: 0, c: 0 };
+
+    function initPage() {
+        // Load existing coding questions from exams if any
+        const existingCoding = exams.questions.filter(q => q.type === 'coding');
+        if (existingCoding.length > 0) {
+            questionsPool = JSON.parse(JSON.stringify(existingCoding));
+        }
+        
+        updateTimeline();
+        initQuill();
+
+        // Global mouseup to stop selection
+        window.addEventListener('mouseup', () => { isSelecting = false; });
+        
+        // Global copy handler for grid
+        document.addEventListener('copy', handleGridCopy);
+    }
+
+    function initQuill() {
+        quill = new Quill('#editor-container', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline'],
+                    ['code-block', 'image'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['clean']
+                ]
+            }
+        });
+        quill.on('text-change', () => saveCurrentState());
+    }
+
+    function updateTimeline() {
+        const list = document.getElementById('questionList');
+        list.innerHTML = '';
+        questionsPool.forEach((q, i) => {
+            const div = document.createElement('div');
+            div.className = `q-item ${i === activeQIndex ? 'active' : ''}`;
+            div.onclick = () => selectQuestion(i);
+            
+            const marks = (q.testCases || []).reduce((s, tc) => s + (parseInt(tc.marks) || 0), 0);
+            
+            div.innerHTML = `
+                <span class="q-item-title">${q.heading || `Question #${i+1}`}</span>
+                <div class="q-item-meta">
+                    <span>${q.section || 'General'}</span>
+                    <span>${marks} Pts</span>
+                </div>
+            `;
+            list.appendChild(div);
+        });
+        
+        if (questionsPool.length === 0) {
+            document.getElementById('emptyState').style.display = 'block';
+            document.getElementById('editorWorkspace').style.display = 'none';
+        }
+    }
+
+    function addNewQuestion() {
+        const newQ = {
+            id: 'code_' + Date.now() + Math.random().toString(36).substr(2, 5),
+            source: 'exam',
+            type: 'coding',
+            heading: 'New Coding Problem',
+            title: '<p>Problem description goes here...</p>', // Description
+            marks: 10,
+            section: exams.sections[0] || 'General',
+            testCases: [
+                { input: '1 2', output: '3', marks: 0, isSample: true },
+                { input: '4 5', output: '9', marks: 10, isSample: false }
+            ],
+            code: {}, // lang -> {prefix, middle, suffix}
+            languages: [],
+            timer: 0,
+            teacherNotes: 'Imported via Bulk Architect'
+        };
+        questionsPool.push(newQ);
+        selectQuestion(questionsPool.length - 1);
+        showToast("New question added to timeline");
+    }
+
+    function selectQuestion(index) {
+        if (activeQIndex !== -1) saveCurrentState();
+        
+        activeQIndex = index;
+        const q = questionsPool[index];
+        activeLangAccordion = null; // Reset accordion state for new question
+        
+        document.getElementById('emptyState').style.display = 'none';
+        document.getElementById('editorWorkspace').style.display = 'block';
+        document.getElementById('currentQDisplay').innerText = `Architecting Question #${index + 1}`;
+        
+        // Load metadata
+        document.getElementById('q_heading').value = q.heading;
+        
+        const secSelect = document.getElementById('q_section');
+        secSelect.innerHTML = exams.sections.map(s => `<option value="${s}" ${s === q.section ? 'selected' : ''}>${s}</option>`).join('');
+        secSelect.innerHTML += `<option value="__NEW__">+ Add New Section...</option>`;
+        
+        quill.root.innerHTML = q.title;
+        
+        // Load Test Cases
+        renderTestCases(q.testCases);
+        
+        // Load Languages
+        renderLanguages(q);
+        
+        updateTimeline();
+        updateMarksCount();
+    }
+
+    function renderTestCases(tcList) {
+        const matrix = document.getElementById('testCaseMatrix');
+        matrix.innerHTML = '';
+        tcList.forEach((tc, i) => {
+            const isSelected = tc.selected || false;
+            const tr = document.createElement('tr');
+            tr.className = isSelected ? 'selected' : '';
+            tr.style.background = tc.isSample ? '#f6ffed' : 'transparent';
+            
+            // Grid columns: Select(0) | Num(1) | Type(2) | Input(3) | Output(4) | Marks(5) | X(6)
+            tr.innerHTML = `
+                <td style="text-align:center;"><input type="checkbox" class="row-select" ${isSelected ? 'checked' : ''} onclick="toggleRowSelection(${i}, this.checked)"></td>
+                <td style="text-align:center; color:#999; font-weight:bold;">${i+1}</td>
+                <td><select style="border:none; background:transparent;" onchange="updateTCType(${i}, this.value)">
+                    <option value="sample" ${tc.isSample ? 'selected' : ''}>Sample</option>
+                    <option value="hidden" ${!tc.isSample ? 'selected' : ''}>Hidden</option>
+                </select></td>
+                <td class="cell-container" data-row="${i}" data-col="${3}">
+                    <div class="cell-content" contenteditable="true" oninput="updateTCValue(${i}, 'input', this.innerText)">${tc.input || ''}</div>
+                </td>
+                <td class="cell-container" data-row="${i}" data-col="${4}">
+                    <div class="cell-content" contenteditable="true" oninput="updateTCValue(${i}, 'output', this.innerText)">${tc.output || ''}</div>
+                </td>
+                <td class="cell-container" data-row="${i}" data-col="${5}">
+                    <div class="cell-content" contenteditable="true" oninput="updateTCValue(${i}, 'marks', this.innerText)" style="text-align:center;">${tc.marks}</div>
+                </td>
+                <td style="text-align:center;"><i class="fas fa-times" style="color:#ff4d4f; cursor:pointer;" onclick="removeTestCase(${i})"></i></td>
+            `;
+            matrix.appendChild(tr);
+            
+            // Add grid listeners
+            const cells = tr.querySelectorAll('.cell-container .cell-content');
+            cells.forEach(cell => {
+                cell.addEventListener('mousedown', startSelection);
+                cell.addEventListener('mouseover', updateSelection);
+                cell.addEventListener('keydown', handleGridKeydown);
+            });
+        });
+        updateSelectedUI();
+    }
+
+    // --- GRID SELECTION LOGIC ---
+    function startSelection(e) {
+        if (e.shiftKey) return;
+        isSelecting = true;
+        const target = e.target.closest('.cell-container');
+        const row = parseInt(target.dataset.row);
+        const col = parseInt(target.dataset.col);
+        selectionStart = { r: row, c: col };
+        selectionEnd = { r: row, c: col };
+        updateSelectionStyles();
+    }
+
+    function updateSelection(e) {
+        if (!isSelecting) return;
+        const target = e.target.closest('.cell-container');
+        if (!target) return;
+        const row = parseInt(target.dataset.row);
+        const col = parseInt(target.dataset.col);
+        selectionEnd = { r: row, c: col };
+        updateSelectionStyles();
+    }
+
+    function updateSelectionStyles() {
+        clearRangeSelection();
+        const minR = Math.min(selectionStart.r, selectionEnd.r);
+        const maxR = Math.max(selectionStart.r, selectionEnd.r);
+        const minC = Math.min(selectionStart.c, selectionEnd.c);
+        const maxC = Math.max(selectionStart.c, selectionEnd.c);
+
+        const matrix = document.getElementById('testCaseMatrix');
+        for (let r = minR; r <= maxR; r++) {
+            const tr = matrix.children[r];
+            if (!tr) continue;
+            for (let c = minC; c <= maxC; c++) {
+                const td = tr.querySelector(`[data-col="${c}"]`);
+                if (td) td.classList.add('selected-cell');
+            }
+        }
+    }
+
+    function clearRangeSelection() {
+        document.querySelectorAll('.selected-cell').forEach(el => el.classList.remove('selected-cell'));
+    }
+
+    function handleGridCopy(e) {
+        const selection = window.getSelection();
+        if (selection.toString().length > 0) return; // Standard text selection takes priority
+
+        const minR = Math.min(selectionStart.r, selectionEnd.r);
+        const maxR = Math.max(selectionStart.r, selectionEnd.r);
+        const minC = Math.min(selectionStart.c, selectionEnd.c);
+        const maxC = Math.max(selectionStart.c, selectionEnd.c);
+
+        const matrix = document.getElementById('testCaseMatrix');
+        let copyText = '';
+        for (let r = minR; r <= maxR; r++) {
+            const tr = matrix.children[r];
+            if (!tr) continue;
+            let rowData = [];
+            for (let c = minC; c <= maxC; c++) {
+                const td = tr.querySelector(`[data-col="${c}"]`);
+                const content = td ? td.innerText.trim() : '';
+                rowData.push(content);
+            }
+            copyText += rowData.join('\t') + '\n';
+        }
+
+        if (copyText.trim()) {
+            e.clipboardData.setData('text/plain', copyText.trim());
+            e.preventDefault();
+            showToast('Selected Architect Range Copied');
+        }
+    }
+
+    function handleGridKeydown(e) {
+        const target = e.target.closest('.cell-container');
+        const r = parseInt(target.dataset.row);
+        const c = parseInt(target.dataset.col);
+        const matrix = document.getElementById('testCaseMatrix');
+
+        if (e.shiftKey && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+            e.preventDefault();
+            if (e.key === 'ArrowUp') selectionEnd.r = Math.max(0, selectionEnd.r - 1);
+            if (e.key === 'ArrowDown') selectionEnd.r = Math.min(matrix.children.length - 1, selectionEnd.r + 1);
+            if (e.key === 'ArrowLeft') selectionEnd.c = Math.max(3, selectionEnd.c - 1);
+            if (e.key === 'ArrowRight') selectionEnd.c = Math.min(5, selectionEnd.c + 1);
+            updateSelectionStyles();
+            return;
+        }
+
+        // Navigation
+        if (e.key === 'ArrowRight' && (window.getSelection().anchorOffset === e.target.innerText.length || e.ctrlKey)) {
+            const nextTd = target.nextElementSibling;
+            if (nextTd && nextTd.classList.contains('cell-container')) nextTd.querySelector('.cell-content').focus();
+        } else if (e.key === 'ArrowLeft' && (window.getSelection().anchorOffset === 0 || e.ctrlKey)) {
+            const prevTd = target.previousElementSibling;
+            if (prevTd && prevTd.classList.contains('cell-container')) prevTd.querySelector('.cell-content').focus();
+        } else if (e.key === 'ArrowDown') {
+            const nextTr = target.parentElement.nextElementSibling;
+            if (nextTr) {
+                const targetCell = nextTr.querySelector(`[data-col="${c}"]`);
+                if (targetCell) targetCell.querySelector('.cell-content').focus();
+            }
+        } else if (e.key === 'ArrowUp') {
+            const prevTr = target.parentElement.previousElementSibling;
+            if (prevTr) {
+                const targetCell = prevTr.querySelector(`[data-col="${c}"]`);
+                if (targetCell) targetCell.querySelector('.cell-content').focus();
+            }
+        }
+    }
+
+    function toggleSelectAllTC(checked) {
+        if (activeQIndex === -1) return;
+        questionsPool[activeQIndex].testCases.forEach(tc => tc.selected = checked);
+        renderTestCases(questionsPool[activeQIndex].testCases);
+    }
+
+    function toggleRowSelection(i, checked) {
+        questionsPool[activeQIndex].testCases[i].selected = checked;
+        renderTestCases(questionsPool[activeQIndex].testCases);
+    }
+
+    function updateSelectedUI() {
+        if (activeQIndex === -1) return;
+        const selected = questionsPool[activeQIndex].testCases.filter(tc => tc.selected);
+        document.getElementById('selectedCountText').innerText = `${selected.length} rows selected`;
+        document.getElementById('selectAllTC').checked = selected.length > 0 && selected.length === questionsPool[activeQIndex].testCases.length;
+    }
+
+    function deleteSelectedTC() {
+        if (activeQIndex === -1) return;
+        questionsPool[activeQIndex].testCases = questionsPool[activeQIndex].testCases.filter(tc => !tc.selected);
+        renderTestCases(questionsPool[activeQIndex].testCases);
+        updateMarksCount();
+    }
+
+    function toggleSelectedType(isSample) {
+        if (activeQIndex === -1) return;
+        questionsPool[activeQIndex].testCases.forEach(tc => {
+            if (tc.selected) {
+                tc.isSample = isSample;
+                if (isSample) tc.marks = 0;
+            }
+        });
+        renderTestCases(questionsPool[activeQIndex].testCases);
+        updateMarksCount();
+    }
+
+    function parseExcelTSV(text) {
+        let rows = [];
+        let currentRow = [];
+        let currentCell = '';
+        let inQuotes = false;
+
+        for (let i = 0; i < text.length; i++) {
+            let char = text[i];
+            let nextChar = text[i + 1] || '';
+
+            if (inQuotes) {
+                if (char === '"') {
+                    if (nextChar === '"') {
+                        currentCell += '"';
+                        i++; // skip escaped quote
+                    } else {
+                        inQuotes = false;
+                    }
+                } else {
+                    currentCell += char;
+                }
+            } else {
+                if (char === '"') {
+                    inQuotes = true;
+                } else if (char === '\t') {
+                    currentRow.push(currentCell);
+                    currentCell = '';
+                } else if (char === '\n' || (char === '\r' && nextChar === '\n')) {
+                    if (char === '\r') i++; // skip \n
+                    currentRow.push(currentCell);
+                    rows.push(currentRow);
+                    currentRow = [];
+                    currentCell = '';
+                } else {
+                    currentCell += char;
+                }
+            }
+        }
+        
+        if (currentCell !== '' || currentRow.length > 0) {
+            currentRow.push(currentCell);
+            rows.push(currentRow);
+        }
+        
+        return rows.filter(row => row.some(cell => cell.trim() !== ''));
+    }
+
+    function handleTCPaste(e) {
+        e.preventDefault();
+        let text = (e.originalEvent || e).clipboardData.getData('text/plain');
+        
+        if (activeQIndex === -1) return;
+        const q = questionsPool[activeQIndex];
+        const target = e.target.closest('.cell-container');
+
+        // HEURISTIC: If pasting into a cell and NO tabs are present, 
+        // treat as a single multi-line value even if it has newlines.
+        if (target) {
+            const row = parseInt(target.dataset.row);
+            const col = parseInt(target.dataset.col);
+
+            let val = text;
+
+            // Clean quotes
+            if (val.startsWith('"') && val.endsWith('"')) {
+                val = val.slice(1, -1).replace(/""/g, '"');
+            }
+            
+            // Remove trailing single newline often added by clipboard systems
+            val = val.replace(/\r?\n$/, '');
+
+            if (col === 3) q.testCases[row].input = val;
+            if (col === 4) q.testCases[row].output = val;
+            if (col === 5) q.testCases[row].marks = parseInt(val) || 0;
+
+            renderTestCases(q.testCases);
+            updateMarksCount();
+            return;
+        }
+
+        const rows = parseExcelTSV(text);
+        
+        // If not pasting into a specific cell, behave like bulk append
+        if (!target) {
+            rows.forEach(cols => {
+                if (cols.length >= 2) {
+                    q.testCases.push({
+                        input: cols[0],
+                        output: cols[1],
+                        marks: (cols[3] || "").toLowerCase().includes("sample") ? 0 : (parseInt(cols[2]) || 5),
+                        isSample: (cols[3] || "").toLowerCase().includes("sample"),
+                        selected: false
+                    });
+                }
+            });
+            showToast(`Bulk Appended ${rows.length} test cases`);
+        }
+
+        renderTestCases(q.testCases);
+        updateMarksCount();
+    }
+
+    function addNewTestCase(isSample) {
+        if (activeQIndex === -1) return;
+        questionsPool[activeQIndex].testCases.push({
+            input: '',
+            output: '',
+            marks: isSample ? 0 : 5,
+            isSample: isSample,
+            selected: false
+        });
+        renderTestCases(questionsPool[activeQIndex].testCases);
+        updateMarksCount();
+    }
+
+    function removeTestCase(i) {
+        questionsPool[activeQIndex].testCases.splice(i, 1);
+        renderTestCases(questionsPool[activeQIndex].testCases);
+        updateMarksCount();
+    }
+
+    function updateTCType(i, val) {
+        questionsPool[activeQIndex].testCases[i].isSample = (val === 'sample');
+        if (val === 'sample') questionsPool[activeQIndex].testCases[i].marks = 0;
+        renderTestCases(questionsPool[activeQIndex].testCases);
+        updateMarksCount();
+    }
+
+    function updateTCValue(i, key, val) {
+        const q = questionsPool[activeQIndex];
+        if (key === 'marks') {
+            q.testCases[i][key] = parseInt(val) || 0;
+            updateMarksCount();
+        } else {
+            q.testCases[i][key] = val;
+        }
+    }
+
+    function updateMarksCount() {
+        if (activeQIndex === -1) return;
+        const total = questionsPool[activeQIndex].testCases.reduce((s, tc) => s + (parseInt(tc.marks) || 0), 0);
+        document.getElementById('q_marks').value = total;
+        questionsPool[activeQIndex].marks = total;
+    }
+
+    function renderLanguages(q) {
+        const container = document.getElementById('languageArchitect');
+        container.innerHTML = '';
+        aceEditors = {};
+        
+        q.languages.forEach(langId => {
+            const isCollapsed = activeLangAccordion !== langId;
+            const card = document.createElement('div');
+            card.className = `lang-card ${isCollapsed ? 'collapsed' : ''}`;
+            card.id = `lang_card_${langId}`;
+            
+            const code = q.code[langId] || { prefix: '', middle: '', suffix: '' };
+            const hasPrefix = (code.prefix || '').trim().length > 0;
+            const hasMiddle = (code.middle || '').trim().length > 0;
+            const hasSuffix = (code.suffix || '').trim().length > 0;
+
+            card.innerHTML = `
+                <div class="lang-header" onclick="toggleAccordion('${langId}')">
+                    <div style="font-weight:bold; color:var(--primary); display:flex; align-items:center; gap:10px;">
+                        <i class="fas fa-chevron-right" id="arrow_${langId}" style="transition:0.3s; transform:${isCollapsed ? 'rotate(0deg)' : 'rotate(90deg)'}"></i>
+                        <span class="status-dot ${hasPrefix && hasMiddle && hasSuffix ? 'filled' : 'empty'}" id="status_${langId}"></span>
+                        <i class="fas fa-terminal"></i> ${langId.toUpperCase()} ARCHITECT
+                    </div>
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <span style="font-size:10px; color:#999;">${isCollapsed ? 'Click to expand' : 'Expand to edit boilerplates'}</span>
+                        <button class="btn btn-danger" style="padding:2px 8px;" onclick="event.stopPropagation(); removeLanguage('${langId}')"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+                <div class="lang-content">
+                    <div class="editor-header-row">
+                        <span class="editor-label">HEADER (LOCKED REGION)</span>
+                        <button class="btn" style="padding:0 5px; font-size:9px;" onclick="openFullscreen('${langId}', 'prefix')"><i class="fas fa-expand-arrows-alt"></i> Fullscreen</button>
+                    </div>
+                    <div id="ace_${langId}_prefix" class="ace-cell-editor"></div>
+
+                    <div class="editor-header-row">
+                        <span class="editor-label">STUDENT REGION (EDITABLE)</span>
+                        <button class="btn" style="padding:0 5px; font-size:9px;" onclick="openFullscreen('${langId}', 'middle')"><i class="fas fa-expand-arrows-alt"></i> Fullscreen</button>
+                    </div>
+                    <div id="ace_${langId}_middle" class="ace-cell-editor"></div>
+
+                    <div class="editor-header-row">
+                        <span class="editor-label">FOOTER (LOCKED REGION)</span>
+                        <button class="btn" style="padding:0 5px; font-size:9px;" onclick="openFullscreen('${langId}', 'suffix')"><i class="fas fa-expand-arrows-alt"></i> Fullscreen</button>
+                    </div>
+                    <div id="ace_${langId}_suffix" class="ace-cell-editor"></div>
+                </div>
+            `;
+            container.appendChild(card);
+            
+            if (!isCollapsed) {
+                setupAce(`${langId}_prefix`, langId, code.prefix);
+                setupAce(`${langId}_middle`, langId, code.middle);
+                setupAce(`${langId}_suffix`, langId, code.suffix);
+            }
+        });
+    }
+
+    function toggleAccordion(langId) {
+        if (activeLangAccordion === langId) {
+            activeLangAccordion = null;
+        } else {
+            activeLangAccordion = langId;
+        }
+        renderLanguages(questionsPool[activeQIndex]);
+        
+        // Scroll to card if expanded
+        if (activeLangAccordion) {
+            setTimeout(() => {
+                document.getElementById(`lang_card_${langId}`).scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+    }
+
+    function setupAce(suffixId, langId, value) {
+        let mode = "ace/mode/python";
+        if (langId === 'java') mode = "ace/mode/java";
+        if (langId === 'cpp' || langId === 'c') mode = "ace/mode/c_cpp";
+        if (langId === 'javascript') mode = "ace/mode/javascript";
+
+        const editorId = `ace_${suffixId}`;
+        const editor = ace.edit(editorId);
+        editor.setTheme("ace/theme/chrome");
+        editor.session.setMode(mode);
+        editor.setValue(value || '', -1);
+        editor.setOptions({ fontSize: "12px", showPrintMargin: false });
+        
+        editor.on('change', () => {
+            const [lang, part] = suffixId.split('_');
+            const q = questionsPool[activeQIndex];
+            if (q.code[lang]) {
+                q.code[lang][part] = editor.getValue();
+                updateStatusDot(lang);
+            }
+        });
+        
+        aceEditors[editorId] = editor;
+    }
+
+    function updateStatusDot(langId) {
+        const q = questionsPool[activeQIndex];
+        const code = q.code[langId];
+        const hasPrefix = (code.prefix || '').trim().length > 0;
+        const hasMiddle = (code.middle || '').trim().length > 0;
+        const hasSuffix = (code.suffix || '').trim().length > 0;
+        const dot = document.getElementById(`status_${langId}`);
+        if (dot) {
+            if (hasPrefix && hasMiddle && hasSuffix) {
+                dot.classList.remove('empty');
+                dot.classList.add('filled');
+            } else {
+                dot.classList.remove('filled');
+                dot.classList.add('empty');
+            }
+        }
+    }
+
+    // --- FULLSCREEN LOGIC ---
+    let currentFsLang = null;
+    let currentFsPart = null;
+
+    function openFullscreen(langId, part) {
+        currentFsLang = langId;
+        currentFsPart = part;
+        const q = questionsPool[activeQIndex];
+        const code = q.code[langId][part];
+        
+        document.getElementById('editorOverlay').style.display = 'flex';
+        document.getElementById('overlayTitle').innerText = `${langId.toUpperCase()} ARCHITECT - FULLSCREEN (${part.toUpperCase()})`;
+        
+        if (!fullscreenEditor) {
+            fullscreenEditor = ace.edit("overlayEditor");
+            fullscreenEditor.setTheme("ace/theme/chrome");
+            fullscreenEditor.setOptions({ fontSize: "14px", showPrintMargin: false });
+        }
+        
+        let mode = "ace/mode/python";
+        if (langId === 'java') mode = "ace/mode/java";
+        if (langId === 'cpp' || langId === 'c') mode = "ace/mode/c_cpp";
+        if (langId === 'javascript') mode = "ace/mode/javascript";
+        
+        fullscreenEditor.session.setMode(mode);
+        fullscreenEditor.setValue(code || '', -1);
+        fullscreenEditor.focus();
+    }
+
+    function closeFullscreen() {
+        if (currentFsLang && currentFsPart) {
+            const newVal = fullscreenEditor.getValue();
+            questionsPool[activeQIndex].code[currentFsLang][currentFsPart] = newVal;
+            
+            // Sync back to small editor
+            const smallEditorId = `ace_${currentFsLang}_${currentFsPart}`;
+            if (aceEditors[smallEditorId]) {
+                aceEditors[smallEditorId].setValue(newVal, -1);
+            }
+        }
+        document.getElementById('editorOverlay').style.display = 'none';
+        currentFsLang = null;
+        currentFsPart = null;
+    }
+
+    function addLanguageFromSelector() {
+        const langId = document.getElementById('langSelector').value;
+        if (activeQIndex === -1) return;
+        if (questionsPool[activeQIndex].languages.includes(langId)) return;
+        
+        questionsPool[activeQIndex].languages.push(langId);
+        questionsPool[activeQIndex].code[langId] = { 
+            prefix: '', middle: '', suffix: '', 
+            lockPrefix: true, lockSuffix: true, hidePrefix: false, hideSuffix: false 
+        };
+        
+        // Auto-expand the new language
+        activeLangAccordion = langId;
+        renderLanguages(questionsPool[activeQIndex]);
+        
+        // Scroll to the new card
+        setTimeout(() => {
+            document.getElementById(`lang_card_${langId}`).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 150);
+    }
+
+    function removeLanguage(langId) {
+        questionsPool[activeQIndex].languages = questionsPool[activeQIndex].languages.filter(l => l !== langId);
+        delete questionsPool[activeQIndex].code[langId];
+        if (activeLangAccordion === langId) activeLangAccordion = null;
+        renderLanguages(questionsPool[activeQIndex]);
+    }
+
+    function saveCurrentState() {
+        if (activeQIndex === -1) return;
+        const q = questionsPool[activeQIndex];
+        q.heading = document.getElementById('q_heading').value;
+        q.section = document.getElementById('q_section').value;
+        q.title = quill.root.innerHTML;
+        
+        // Handle New Section
+        if (q.section === '__NEW__') {
+            const newVal = prompt("Enter new section name:");
+            if (newVal) {
+                const trimmed = newVal.trim();
+                if (!exams.sections.includes(trimmed)) exams.sections.push(trimmed);
+                q.section = trimmed;
+                selectQuestion(activeQIndex); // Refresh
+            } else {
+                q.section = exams.sections[0];
+                document.getElementById('q_section').value = q.section;
+            }
+        }
+        
+        updateTimeline();
+    }
+
+    function deleteCurrentQuestion() {
+        if (activeQIndex === -1) return;
+        questionsPool.splice(activeQIndex, 1);
+        activeQIndex = -1;
+        updateTimeline();
+    }
+
+    function duplicateCurrentQuestion() {
+        if (activeQIndex === -1) return;
+        const copy = JSON.parse(JSON.stringify(questionsPool[activeQIndex]));
+        copy.id = 'code_' + Date.now();
+        copy.heading += ' (Copy)';
+        questionsPool.push(copy);
+        activeQIndex = questionsPool.length - 1;
+        updateTimeline();
+        selectQuestion(activeQIndex);
+    }
+
+    let isSyncing = false;
+    function syncAllQuestions() {
+        if (isSyncing) return;
+        saveCurrentState();
+        if (questionsPool.length === 0) {
+            showToast("No questions to synchronize!");
+            return;
+        }
+
+        isSyncing = true;
+
+        document.getElementById('loader').style.display = 'flex';
+        
+        setTimeout(() => {
+            // Remove existing coding questions first to avoid duplicates
+            exams.questions = exams.questions.filter(q => q.type !== 'coding');
+            
+            // Add new ones
+            questionsPool.forEach(q => {
+                exams.questions.push(q);
+                if (typeof db !== 'undefined') db.addToQuestionPool(q);
+            });
+
+            localStorage.setItem('TESTPAD_creator_temp', JSON.stringify(exams));
+            document.getElementById('loader').style.display = 'none';
+            showToast(`Synchronized ${questionsPool.length} coding questions successfully!`);
+            
+            setTimeout(() => {
+                const lastId = localStorage.getItem('TESTPAD_creator_last_id');
+                const targetPage = exams.isCompetitive ? 'comexam-creator.html' : 'exam-creator.html';
+                if (lastId && lastId !== 'new') {
+                    window.location.href = `./${targetPage}?edit=` + lastId;
+                } else {
+                    window.location.href = `./${targetPage}`;
+                }
+            }, 1000);
+        }, 800);
+    }
+
+    function showToast(msg) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = msg;
+        container.appendChild(toast);
+        setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
+    }
+
+    initPage();
+</script>
+
+<div id="customModalOverlay"></div>
+<div id="toastContainer"></div>
+</body>
+</html>

@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3b5998;
+            --primary-dark: #2d4373;
+            --primary-light: #eef2f7;
+            --erp-bg: #e8ecf3;
+            --erp-border: #d0d7e5;
+            --erp-text: #333;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--erp-bg);
+            font-family: Tahoma, Arial, sans-serif;
+            color: var(--erp-text);
+            font-size: 12px;
+        }
+
+        /* ERP Topbar */
+        .erp-topbar {
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 11px;
+            height: 35px;
+            gap: 15px;
+        }
+
+        .erp-container {
+            max-width: 1400px;
+            margin: 10px auto;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            min-height: 85vh;
+        }
+
+        .breadcrumb {
+            font-size: 10px;
+            margin-bottom: 8px;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .erp-section-title {
+            background: var(--primary-light);
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid var(--erp-border);
+        }
+
+        /* Tools Bar */
+        .tools-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        /* Grid Wrapper and Table */
+        .grid-wrapper {
+            border: 1px solid var(--erp-border);
+            overflow: auto;
+            max-height: calc(100vh - 220px);
+            background: #fff;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            table-layout: auto;
+        }
+
+        th {
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: bold;
+            padding: 6px 10px;
+            text-align: left;
+            border: 1px solid var(--erp-border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            font-size: 11px;
+        }
+
+        td {
+            border: 1px solid #ddd;
+            padding: 0;
+            height: 30px;
+            vertical-align: middle;
+        }
+
+        .row-num {
+            background: #f0f0f0;
+            font-size: 10px;
+            color: #777;
+            text-align: center;
+            width: 40px;
+            border-right: 1px solid var(--erp-border);
+        }
+
+        .cell-input {
+            width: 100%;
+            height: 100%;
+            padding: 0 8px;
+            border: none;
+            outline: none;
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #444;
+            white-space: nowrap;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        .cell-input:focus {
+            background: #fff;
+            box-shadow: inset 0 0 0 1px var(--primary);
+            z-index: 5;
+        }
+
+        .cell-select {
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            padding: 0 6px;
+            font-size: 11px;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 2px;
+            font-weight: bold;
+            background: #eee;
+            color: #999;
+        }
+        .status-valid { background: #d4edda; color: #155724; }
+        .status-error { background: #f8d7da; color: #721c24; }
+
+        /* Buttons */
+        .btn {
+            padding: 4px 12px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #f5f5f5;
+            color: #333;
+            font-family: inherit;
+        }
+        .btn-primary { background: var(--primary); color: white; border-color: var(--primary-dark); }
+        .btn-primary:hover { opacity: 0.9; }
+
+        .selected-cell { background: var(--primary-light) !important; box-shadow: inset 0 0 0 1px var(--primary); }
+        .selection-active { user-select: none; }
+        [contenteditable=true]:empty:before { content: attr(data-placeholder); color: #ccc; font-style: italic; font-size: 10px; }
+
+        #customModalOverlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); display: none; justify-content: center; align-items: center; z-index: 10000; }
+        .modal-card { background: #fff; width: 450px; border: 1px solid #666; box-shadow: 0 5px 25px rgba(0,0,0,0.3); }
+        .modal-header { background: var(--primary); color: white; padding: 6px 12px; font-weight: bold; font-size: 11px; }
+        .modal-body { padding: 20px; font-size: 12px; }
+        .modal-actions { background: #f5f5f5; padding: 8px 12px; display: flex; gap: 8px; justify-content: flex-end; border-top: 1px solid #ddd; }
+        
+        #toastContainer { position: fixed; bottom: 20px; left: 20px; z-index: 11000; display: flex; flex-direction: column; gap: 5px; }
+        .toast { background: #333; color: #fff; padding: 8px 15px; border-radius: 2px; font-size: 11px; border-left: 4px solid var(--primary); animation: toastSlideIn 0.3s forwards; }
+        @keyframes toastSlideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        #loader { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.7); display: none; justify-content: center; align-items: center; z-index: 12000; font-weight: bold; color: var(--primary); }
+
+        /* ERP Context Menu */
+        .context-menu {
+            position: fixed;
+            background: white;
+            border: 1px solid var(--primary);
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.15);
+            z-index: 15000;
+            display: none;
+            min-width: 180px;
+            padding: 5px 0;
+            border-radius: 2px;
+        }
+
+        .context-menu-item {
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 11px;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.2s;
+        }
+
+        .context-menu-item:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .context-menu-divider {
+            height: 1px;
+            background: #eee;
+            margin: 5px 0;
+        }
+
+        .context-menu-item i {
+            width: 14px;
+            text-align: center;
+            font-size: 12px;
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+<body>
+    <div id="loader"><i class="fas fa-spinner fa-spin"></i> Processing Matrix...</div>
+
+    <div class="erp-topbar">
+        <div style="margin-right: auto; display: flex; align-items: center; gap: 10px;">
+            <span onclick="goBack()" style="cursor:pointer; display: flex; align-items: center; gap: 5px; font-weight: bold; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 3px;">
+                <i class="fas fa-arrow-left"></i> PREV
+            </span>
+            <span style="opacity: 0.7;">| Bulk Architect Tool</span>
+        </div>
+        <span>Session Jan-Jun 2026</span>
+        <i class="fas fa-home" style="cursor:pointer;" onclick="location.href='index.html'"></i>
+        <i class="fas fa-sign-out-alt" style="cursor:pointer;"></i>
+    </div>
+
+    <div class="erp-container">
+        <div class="breadcrumb">Home » Course Creator » Bulk Course Architect</div>
+        <div class="erp-section-title">
+            <div><i class="fas fa-th-list"></i> Bulk Question Architect (Institutional Matrix)</div>
+            <div class="tools-bar">
+                <button class="btn" onclick="addRow()"><i class="fas fa-plus"></i> Add Row</button>
+                <button class="btn" onclick="clearTable()"><i class="fas fa-trash-alt"></i> Wipe Matrix</button>
+                <button class="btn" onclick="goBack()"><i class="fas fa-undo"></i> Discard</button>
+                <button class="btn btn-primary" onclick="validateAndSave()"><i class="fas fa-cloud-upload-alt"></i> Synchronize Questions</button>
+            </div>
+        </div>
+
+        <div id="errorSummary" style="display:none; background:#fff2f2; color:#b91c1c; padding:10px; border:1px solid #fecaca; font-size:11px; margin-bottom:10px;"></div>
+
+        <div class="grid-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:40px;">#</th>
+                        <th onclick="selectColumn(0)" style="cursor:pointer;" title="Click to select column">Title</th>
+                        <th onclick="selectColumn(1)" style="cursor:pointer; width:250px;" title="Click to select column">Question Content</th>
+                        <th onclick="selectColumn(2)" style="cursor:pointer;" title="Click to select column">Opt 1</th>
+                        <th onclick="selectColumn(3)" style="cursor:pointer;" title="Click to select column">Opt 2</th>
+                        <th onclick="selectColumn(4)" style="cursor:pointer;" title="Click to select column">Opt 3</th>
+                        <th onclick="selectColumn(5)" style="cursor:pointer;" title="Click to select column">Opt 4</th>
+                        <th onclick="selectColumn(6)" style="cursor:pointer; width:60px; text-align:center;" title="Click to select column">Ans</th>
+                        <th onclick="selectColumn(7)" style="cursor:pointer; width:120px;" title="Click to select column">Module</th>
+                        
+                        <th style="width:70px; text-align:center;">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="gridBody"></tbody>
+            </table>
+        </div>
+        <div id="rowCounter" style="margin-top:10px; font-size:11px; color:#666;">0 Questions Detected in Architect Range.</div>
+    </div>
+
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        const headers = ['title', 'text', 'opt1', 'opt2', 'opt3', 'opt4', 'answer', 'module'];
+        let courseData = JSON.parse(localStorage.getItem('current_editing_course')) || { modules: [{ title: 'Module 1', lessons: [] }] };
+        const gridBody = document.getElementById('gridBody');
+        let isSelecting = false;
+        let selectionStart = { r: 0, c: 0 };
+        let selectionEnd = { r: 0, c: 0 };
+
+        function initGrid() {
+            for (let i = 0; i < 12; i++) addRow();
+            
+            const firstRowInputs = gridBody.firstChild.querySelectorAll('.cell-input');
+            const firstRowSelect = gridBody.firstChild.querySelector('.cell-select');
+            
+            if (firstRowInputs.length >= 8) {
+                // Initialized empty
+                if (firstRowSelect) firstRowSelect.value = 'General';
+            }
+            validateRealtime();
+        }
+
+        function addRow() {
+            const rowIndex = gridBody.children.length + 1;
+            const tr = document.createElement('tr');
+            
+            const sectionOptions = (courseData.modules && courseData.modules.length > 0 ? courseData.modules : [{title: 'Module 1'}])
+                .map(m => `<option value="${m.title}">${m.title}</option>`).join('');
+
+            const placeholders = {
+                'title': 'Brief Title',
+                'text': 'Question Content',
+                'opt1': 'Choice 1',
+                'opt2': 'Choice 2',
+                'opt3': 'Choice 3 (Opt)',
+                'opt4': 'Choice 4 (Opt)',
+                'answer': '1 to 4',
+                
+            };
+
+            tr.innerHTML = `
+                <td class="row-num" style="text-align: center; color: #999; font-weight: 600; font-size: 0.75rem; user-select: none;">${rowIndex}</td>
+                ${headers.map((h, i) => {
+                    if (h === 'module') {
+                        return `
+                            <td class="cell-container" data-row="${rowIndex-1}" data-col="${i}">
+                                <select class="cell-select" data-key="${h}" data-row="${rowIndex-1}" data-col="${i}" 
+                                    style="width: 100%; border: none; outline: none; background: transparent; height: 100%; padding: 0 16px; font-family: inherit; font-size: inherit; color: inherit; cursor: pointer;">
+                                    ${sectionOptions}
+                                    <option value="__NEW__" style="font-weight: bold; color: var(--primary);">+ Add New Module...</option>
+                                </select>
+                            </td>
+                        `;
+                    }
+                    return `
+                        <td class="cell-container" data-row="${rowIndex-1}" data-col="${i}">
+                            <div class="cell-input" contenteditable="true" data-key="${h}" data-row="${rowIndex-1}" data-col="${i}" data-placeholder="${placeholders[h] || ''}"></div>
+                        </td>
+                    `;
+                }).join('')}
+                <td style="padding: 10px; text-align: center; user-select: none;"><span class="status-badge">Empty</span></td>
+            `;
+            gridBody.appendChild(tr);
+            updateCounter();
+            
+            const inputs = tr.querySelectorAll('.cell-input');
+            inputs.forEach(input => {
+                input.addEventListener('paste', handlePaste);
+                input.addEventListener('input', validateRealtime);
+                input.addEventListener('mousedown', startSelection);
+                input.addEventListener('mouseover', updateSelection);
+
+                if (input.dataset.key === 'answer') {
+                    input.addEventListener('keypress', (e) => {
+                        if (!/[0-9]/.test(e.key)) e.preventDefault();
+                    });
+                }
+
+                input.addEventListener('focus', (e) => {
+                    const cell = e.target.closest('.cell-container');
+                    if (cell && cell.classList.contains('selected-cell')) {
+                        // Don't clear if already selected (e.g. right click)
+                    } else {
+                        clearSelection();
+                    }
+                    e.target.classList.add('focused-cell');
+                });
+                input.addEventListener('blur', (e) => e.target.classList.remove('focused-cell'));
+            });
+
+            // Handle Section Changes
+            const select = tr.querySelector('.cell-select');
+            if (select) {
+                select.addEventListener('change', (e) => {
+                    if (e.target.value === '__NEW__') {
+                        showPromptModal('Create New Architecture Module', 'Give your new module a clear, academic title.', (newVal) => {
+                            if (newVal) {
+                                const trimmed = newVal.trim();
+                                if (!courseData.modules.find(m => m.title === trimmed)) {
+                                    courseData.modules.push({ title: trimmed, lessons: [] });
+                                    updateAllDropdowns(trimmed);
+                                } else {
+                                    e.target.value = trimmed;
+                                }
+                            } else {
+                                e.target.value = courseData.modules[0].title;
+                            }
+                        });
+                    }
+                    validateRealtime();
+                });
+            }
+        }
+
+        function updateAllDropdowns(newVal) {
+            document.querySelectorAll('.cell-select').forEach(sel => {
+                const currentVal = sel.value;
+                sel.innerHTML = `
+                    ${courseData.modules.map(m => `<option value="${m.title}">${m.title}</option>`).join('')}
+                    <option value="__NEW__" style="font-weight: bold; color: var(--primary);">+ Add New Module...</option>
+                `;
+                if (currentVal !== '__NEW__') {
+                    sel.value = currentVal;
+                } else {
+                    sel.value = newVal;
+                }
+            });
+        }
+
+        function startSelection(e) {
+            if (e.shiftKey || e.button !== 0) return;
+            isSelecting = true;
+            const target = e.target.closest('.cell-container');
+            if (!target) return;
+            const row = parseInt(target.dataset.row);
+            const col = parseInt(target.dataset.col);
+            selectionStart = { r: row, c: col };
+            selectionEnd = { r: row, c: col };
+            updateSelectionStyles();
+        }
+
+        function updateSelection(e) {
+            if (!isSelecting) return;
+            const target = e.target.closest('.cell-container');
+            if (!target) return;
+            const row = parseInt(target.dataset.row);
+            const col = parseInt(target.dataset.col);
+            selectionEnd = { r: row, c: col };
+            updateSelectionStyles();
+        }
+
+        function updateSelectionStyles() {
+            clearSelection();
+            const minR = Math.min(selectionStart.r, selectionEnd.r);
+            const maxR = Math.max(selectionStart.r, selectionEnd.r);
+            const minC = Math.min(selectionStart.c, selectionEnd.c);
+            const maxC = Math.max(selectionStart.c, selectionEnd.c);
+
+            for (let r = minR; r <= maxR; r++) {
+                const tr = gridBody.children[r];
+                if (!tr) continue;
+                const containers = tr.querySelectorAll('.cell-container');
+                for (let c = minC; c <= maxC; c++) {
+                    const td = containers[c];
+                    if (td) td.classList.add('selected-cell');
+                }
+            }
+        }
+
+        function clearSelection() {
+            document.querySelectorAll('.selected-cell').forEach(el => el.classList.remove('selected-cell'));
+        }
+
+        window.addEventListener('mouseup', () => {
+            isSelecting = false;
+        });
+
+        document.addEventListener('copy', (e) => {
+            const minR = Math.min(selectionStart.r, selectionEnd.r);
+            const maxR = Math.max(selectionStart.r, selectionEnd.r);
+            const minC = Math.min(selectionStart.c, selectionEnd.c);
+            const maxC = Math.max(selectionStart.c, selectionEnd.c);
+
+            let copyText = '';
+            for (let r = minR; r <= maxR; r++) {
+                const tr = gridBody.children[r];
+                if (!tr) continue;
+                let rowData = [];
+                const containers = tr.querySelectorAll('.cell-container');
+                for (let c = minC; c <= maxC; c++) {
+                    const input = containers[c].querySelector('.cell-input, .cell-select');
+                    rowData.push(input ? (input.value || input.innerText) : '');
+                }
+                copyText += rowData.join('\t') + '\n';
+            }
+
+            if (copyText.trim()) {
+                e.clipboardData.setData('text/plain', copyText.trim());
+                e.preventDefault();
+                showToast('Architect Range Copied');
+            }
+        });
+
+        function handlePaste(e) {
+            e.preventDefault();
+            const text = (e.originalEvent || e).clipboardData.getData('text/plain');
+            const rows = text.split(/\r?\n/);
+            const targetContainer = e.target.closest('.cell-container');
+            const startR = parseInt(targetContainer.dataset.row);
+            const startC = parseInt(targetContainer.dataset.col);
+
+            rows.forEach((rowText, rOffset) => {
+                const targetR = startR + rOffset;
+                if (!gridBody.children[targetR]) addRow();
+                
+                const tr = gridBody.children[targetR];
+                const columns = rowText.split('\t');
+                
+                columns.forEach((colText, cOffset) => {
+                    const targetC = startC + cOffset;
+                    const containers = tr.querySelectorAll('.cell-container');
+                    if (containers[targetC]) {
+                        const input = containers[targetC].querySelector('.cell-input');
+                        const select = containers[targetC].querySelector('.cell-select');
+                        
+                        if (input) input.innerText = colText.trim();
+                        if (select) {
+                            const val = colText.trim();
+                            const option = Array.from(select.options).find(o => o.value.toLowerCase() === val.toLowerCase());
+                            if (option) {
+                                select.value = option.value;
+                            } else if (val) {
+                                if (!courseData.modules.find(m => m.title === val)) {
+                                    courseData.modules.push({ title: val, lessons: [] });
+                                    updateAllDropdowns(val);
+                                }
+                                select.value = val;
+                            }
+                        }
+                    }
+                });
+            });
+            
+            validateRealtime();
+        }
+
+        function validateRealtime() {
+            Array.from(gridBody.children).forEach(tr => {
+                const title = tr.querySelector('[data-key="title"]').innerText.trim();
+                const text = tr.querySelector('[data-key="text"]').innerText.trim();
+                const statusCell = tr.lastElementChild;
+                
+                if (title !== '' || text !== '') {
+                    const inputs = Array.from(tr.querySelectorAll('.cell-input'));
+                    const select = tr.querySelector('.cell-select');
+                    const data = {};
+                    inputs.forEach(i => data[i.dataset.key] = i.innerText.trim());
+                    data.module = select ? select.value : courseData.modules[0].title;
+                    
+                    const errors = [];
+                    if (!data.title) errors.push('Title missing');
+                    if (!data.text) errors.push('Question text missing');
+                    if (!data.opt1 || !data.opt2) errors.push('Min 2 choices needed');
+                    
+                    if (!data.answer) {
+                        errors.push('Correct Ans missing');
+                    } else {
+                        const ansInt = parseInt(data.answer);
+                        if (isNaN(ansInt) || ansInt < 1 || ansInt > 4) {
+                            errors.push('Correct Ans must be 1-4');
+                        }
+                    }
+
+                    
+
+                    if (!data.module || data.module === '__NEW__') errors.push('Select Module');
+
+                    if (errors.length > 0) {
+                        statusCell.innerHTML = `<span class="status-badge status-error" title="${errors.join(', ')}">Error</span>`;
+                        tr.classList.add('error-row');
+                    } else {
+                        statusCell.innerHTML = `<span class="status-badge status-valid">Valid</span>`;
+                        tr.classList.remove('error-row');
+                    }
+                } else {
+                    statusCell.innerHTML = `<span class="status-badge">Empty</span>`;
+                    tr.classList.remove('error-row');
+                }
+            });
+            updateCounter();
+        }
+
+        function updateCounter() {
+            let active = 0;
+            Array.from(gridBody.children).forEach(tr => {
+                const title = tr.querySelector('[data-key="title"]').innerText.trim();
+                const text = tr.querySelector('[data-key="text"]').innerText.trim();
+                if (title !== '' || text !== '') active++;
+            });
+            document.getElementById('rowCounter').innerText = `${active} Questions Detected`;
+        }
+
+        function clearTable() {
+            showConfirmModal('Wipe Drafting Matrix', 'This will erase all unsynced data from your current grid session. This action is irreversible.', () => {
+                gridBody.innerHTML = '';
+                courseData = JSON.parse(localStorage.getItem('current_editing_course')) || { modules:[{ title: 'Module 1', lessons: [] }] };
+                initGrid();
+                updateCounter();
+                showToast('Architect Matrix Cleared');
+            });
+        }
+
+        function goBack() {
+            window.location.href = './course-creator.html';
+        }
+
+        function showProcessing() {
+            document.getElementById('loader').style.display = 'flex';
+        }
+
+        function hideProcessing() {
+            document.getElementById('loader').style.display = 'none';
+        }
+
+        function validateAndSave() {
+            const rows = Array.from(gridBody.children);
+            const validQuestions = [];
+            const errorsAtRows = [];
+
+            let foundValid = false;
+            rows.forEach((tr, index) => {
+                const title = tr.querySelector('[data-key="title"]').innerText.trim();
+                const text = tr.querySelector('[data-key="text"]').innerText.trim();
+                if (title === '' && text === '') return;
+
+                const inputs = Array.from(tr.querySelectorAll('.cell-input'));
+                const select = tr.querySelector('.cell-select');
+                const data = {};
+                inputs.forEach(i => data[i.dataset.key] = i.innerText.trim());
+                data.module = select.value;
+                
+                let rowErrors = [];
+                if (!data.title) rowErrors.push('Title');
+                if (!data.text) rowErrors.push('Text');
+                if (!data.opt1 || !data.opt2) rowErrors.push('Options');
+                const ansInt = parseInt(data.answer);
+                if (isNaN(ansInt) || ansInt < 1 || ansInt > 4) rowErrors.push('Ans (1-4)');
+                if (!data.module || data.module === '__NEW__') rowErrors.push('Module');
+
+                if (rowErrors.length > 0) {
+                    errorsAtRows.push(`Row ${index + 1}: ${rowErrors.join(', ')} missing/invalid`);
+                } else {
+                    const options = [data.opt1, data.opt2, data.opt3, data.opt4].filter(o => o);
+                    let correctlyMappedAnswer = options[ansInt - 1] || options[0];
+
+                    const less = {
+                        id: 'mcq_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                        type: 'mcq',
+                        title: data.title,
+                        data: {
+                            question: `<p>${data.text}</p>`,
+                            options: options,
+                            correct: correctlyMappedAnswer
+                        }
+                    };
+                    validQuestions.push({ lesson: less, moduleTitle: data.module });
+                    foundValid = true;
+                }
+            });
+
+            if (errorsAtRows.length > 0) {
+                const summary = document.getElementById('errorSummary');
+                summary.innerHTML = `<i class="fas fa-exclamation-circle"></i> Please fix errors before syncing: <br>${errorsAtRows.join('<br>')}`;
+                summary.style.display = 'block';
+                summary.scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+
+            if (!foundValid) {
+                showToast('No active questions found to save!');
+                return;
+            }
+
+            showProcessing();
+            setTimeout(() => {
+                validQuestions.forEach(item => {
+                    let mod = courseData.modules.find(m => m.title === item.moduleTitle);
+                    if (!mod) {
+                        mod = { title: item.moduleTitle, lessons: [] };
+                        courseData.modules.push(mod);
+                    }
+                    mod.lessons.push(item.lesson);
+                });
+
+                localStorage.setItem('current_editing_course', JSON.stringify(courseData));
+                hideProcessing();
+                showToast(`Successfully synced ${validQuestions.length} questions! Redirecting...`);
+                setTimeout(goBack, 1500);
+            }, 1000);
+        }
+
+        function showConfirmModal(title, desc, onConfirm) {
+            const overlay = document.getElementById('customModalOverlay');
+            overlay.innerHTML = `
+                <div class="modal-card">
+                    <div class="modal-header">CONFIRM ACTION</div>
+                    <div class="modal-body">
+                        <div style="font-weight:bold; margin-bottom:10px;">${title}</div>
+                        <div>${desc}</div>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn btn-ghost" id="modalCancelBtn">Cancel</button>
+                        <button class="btn btn-primary" id="modalConfirmBtn">Proceed</button>
+                    </div>
+                </div>
+            `;
+            overlay.style.display = 'flex';
+            document.getElementById('modalCancelBtn').onclick = () => { overlay.style.display = 'none'; };
+            document.getElementById('modalConfirmBtn').onclick = () => { onConfirm(); overlay.style.display = 'none'; };
+        }
+
+        function showPromptModal(title, desc, onConfirm) {
+            const overlay = document.getElementById('customModalOverlay');
+            overlay.innerHTML = `
+                <div class="modal-card">
+                    <div class="modal-header">INPUT REQUIRED</div>
+                    <div class="modal-body">
+                        <div style="font-weight:bold; margin-bottom:10px;">${title}</div>
+                        <div style="margin-bottom:15px;">${desc}</div>
+                        <input type="text" id="modalPromptInput" style="width:100%; padding:8px; border:1px solid #ccc;" placeholder="Type value here...">
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn btn-ghost" id="modalCancelBtn">Cancel</button>
+                        <button class="btn btn-primary" id="modalConfirmBtn">Save</button>
+                    </div>
+                </div>
+            `;
+            overlay.style.display = 'flex';
+            const input = document.getElementById('modalPromptInput');
+            input.focus();
+            document.getElementById('modalCancelBtn').onclick = () => { onConfirm(null); overlay.style.display = 'none'; };
+            document.getElementById('modalConfirmBtn').onclick = () => { onConfirm(input.value); overlay.style.display = 'none'; };
+        }
+
+        function showToast(msg) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = msg;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
+        }
+
+        initGrid();
+
+        document.addEventListener('keydown', (e) => {
+            const isInput = e.target.classList.contains('cell-input');
+            const isSelect = e.target.classList.contains('cell-select');
+            if (!isInput && !isSelect) return;
+
+            const r = parseInt(e.target.dataset.row);
+            const c = parseInt(e.target.dataset.col);
+
+            if (e.shiftKey && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                e.preventDefault();
+                if (e.key === 'ArrowUp') selectionEnd.r = Math.max(0, selectionEnd.r - 1);
+                if (e.key === 'ArrowDown') selectionEnd.r = Math.min(gridBody.children.length - 1, selectionEnd.r + 1);
+                if (e.key === 'ArrowLeft') selectionEnd.c = Math.max(0, selectionEnd.c - 1);
+                if (e.key === 'ArrowRight') selectionEnd.c = Math.min(headers.length - 1, selectionEnd.c + 1);
+                updateSelectionStyles();
+                return;
+            }
+
+            if (e.key === 'ArrowRight' && (isSelect || (e.target.innerText && window.getSelection().anchorOffset === e.target.innerText.length) || e.ctrlKey)) {
+                const nextTd = e.target.parentElement.nextElementSibling;
+                if (nextTd && nextTd.querySelector('.cell-input, .cell-select')) nextTd.querySelector('.cell-input, .cell-select').focus();
+            } else if (e.key === 'ArrowLeft' && (isSelect || window.getSelection().anchorOffset === 0 || e.ctrlKey)) {
+                const prevTd = e.target.parentElement.previousElementSibling;
+                if (prevTd && prevTd.querySelector('.cell-input, .cell-select')) prevTd.querySelector('.cell-input, .cell-select').focus();
+            } else if (e.key === 'ArrowDown') {
+                const nextTr = e.target.parentElement.parentElement.nextElementSibling;
+                if (nextTr && nextTr.children[c+1]) nextTr.children[c+1].querySelector('.cell-input, .cell-select').focus();
+            } else if (e.key === 'ArrowUp') {
+                const prevTr = e.target.parentElement.parentElement.previousElementSibling;
+                if (prevTr && prevTr.children[c+1]) prevTr.children[c+1].querySelector('.cell-input, .cell-select').focus();
+            }
+        });
+
+        function selectColumn(colIndex) {
+            selectionStart = { r: 0, c: colIndex };
+            selectionEnd = { r: gridBody.children.length - 1, c: colIndex };
+            updateSelectionStyles();
+            showToast(`Column ${headers[colIndex].toUpperCase()} Selected. Right-click to fill.`);
+        }
+    </script>
+    <div id="customModalOverlay"></div>
+    <div id="toastContainer"></div>
+
+    <!-- ERP Context Menu -->
+    <div id="gridContextMenu" class="context-menu">
+        <div class="context-menu-item" onclick="handleContextMenuAction('copy')">
+            <i class="fas fa-copy"></i> Copy <span style="margin-left:auto; color:#999; font-size:10px;">Ctrl+C</span>
+        </div>
+        <div class="context-menu-item" onclick="handleContextMenuAction('cut')">
+            <i class="fas fa-cut"></i> Cut <span style="margin-left:auto; color:#999; font-size:10px;">Ctrl+X</span>
+        </div>
+        <div class="context-menu-item" onclick="handleContextMenuAction('paste')">
+            <i class="fas fa-paste"></i> Paste <span style="margin-left:auto; color:#999; font-size:10px;">Ctrl+V</span>
+        </div>
+        <div class="context-menu-divider"></div>
+        <div class="context-menu-item" onclick="handleContextMenuAction('setValue')" style="font-weight:bold; color: var(--primary);">
+            <i class="fas fa-edit"></i> Set Specific Value...
+        </div>
+        <div class="context-menu-item" onclick="handleContextMenuAction('moveSection')">
+            <i class="fas fa-layer-group"></i> Move to Module...
+        </div>
+        <div class="context-menu-divider"></div>
+        <div class="context-menu-item" onclick="handleContextMenuAction('clear')">
+            <i class="fas fa-eraser"></i> Clear Selection
+        </div>
+    </div>
+
+    <script>
+        // Context Menu Logic
+        const contextMenu = document.getElementById('gridContextMenu');
+        
+        document.addEventListener('contextmenu', (e) => {
+            const cell = e.target.closest('.cell-container');
+            if (cell) {
+                e.preventDefault();
+                
+                // If the right-clicked cell is NOT part of current selection, select it
+                const row = parseInt(cell.dataset.row);
+                const col = parseInt(cell.dataset.col);
+                
+                const minR = Math.min(selectionStart.r, selectionEnd.r);
+                const maxR = Math.max(selectionStart.r, selectionEnd.r);
+                const minC = Math.min(selectionStart.c, selectionEnd.c);
+                const maxC = Math.max(selectionStart.c, selectionEnd.c);
+                
+                const isInside = (row >= minR && row <= maxR && col >= minC && col <= maxC);
+                
+                if (!isInside) {
+                    selectionStart = { r: row, c: col };
+                    selectionEnd = { r: row, c: col };
+                    updateSelectionStyles();
+                }
+
+                contextMenu.style.display = 'block';
+                contextMenu.style.left = e.pageX + 'px';
+                contextMenu.style.top = e.pageY + 'px';
+            } else {
+                contextMenu.style.display = 'none';
+            }
+        });
+
+        document.addEventListener('click', () => {
+            contextMenu.style.display = 'none';
+        });
+
+        async function handleContextMenuAction(action) {
+            contextMenu.style.display = 'none';
+            
+            const minR = Math.min(selectionStart.r, selectionEnd.r);
+            const maxR = Math.max(selectionStart.r, selectionEnd.r);
+            const minC = Math.min(selectionStart.c, selectionEnd.c);
+            const maxC = Math.max(selectionStart.c, selectionEnd.c);
+
+            switch(action) {
+                case 'copy':
+                    document.execCommand('copy');
+                    break;
+                case 'cut':
+                    document.execCommand('copy');
+                    clearSelectionRange();
+                    break;
+                case 'paste':
+                    // We need to focus a cell to trigger native paste or handle it manually
+                    const startCell = gridBody.children[minR].querySelectorAll('.cell-container')[minC];
+                    const input = startCell.querySelector('.cell-input');
+                    if (input) {
+                        input.focus();
+                        try {
+                            const text = await navigator.clipboard.readText();
+                            handlePaste({ preventDefault: () => {}, clipboardData: { getData: () => text }, target: input });
+                        } catch (err) {
+                            showToast("Paste failed: Browser permission denied.");
+                        }
+                    }
+                    break;
+                case 'setValue':
+                    showPromptModal('Bulk Architect Action', 'Enter the value to apply to the entire selection:', (val) => {
+                        if (val !== null) {
+                            applyValueToSelection(val);
+                        }
+                    });
+                    break;
+                case 'moveSection':
+                    showModulePickerModal((section) => {
+                        if (section) {
+                            applyModuleToSelection(section);
+                        }
+                    });
+                    break;
+                case 'clear':
+                    clearSelectionRange();
+                    break;
+            }
+        }
+
+        function clearSelectionRange() {
+            const minR = Math.min(selectionStart.r, selectionEnd.r);
+            const maxR = Math.max(selectionStart.r, selectionEnd.r);
+            const minC = Math.min(selectionStart.c, selectionEnd.c);
+            const maxC = Math.max(selectionStart.c, selectionEnd.c);
+
+            for (let r = minR; r <= maxR; r++) {
+                const tr = gridBody.children[r];
+                const containers = tr.querySelectorAll('.cell-container');
+                for (let c = minC; c <= maxC; c++) {
+                    const input = containers[c].querySelector('.cell-input');
+                    if (input) input.innerText = '';
+                }
+            }
+            validateRealtime();
+        }
+
+        function applyValueToSelection(val) {
+            const minR = Math.min(selectionStart.r, selectionEnd.r);
+            const maxR = Math.max(selectionStart.r, selectionEnd.r);
+            const minC = Math.min(selectionStart.c, selectionEnd.c);
+            const maxC = Math.max(selectionStart.c, selectionEnd.c);
+
+            for (let r = minR; r <= maxR; r++) {
+                const tr = gridBody.children[r];
+                const containers = tr.querySelectorAll('.cell-container');
+                for (let c = minC; c <= maxC; c++) {
+                    const input = containers[c].querySelector('.cell-input');
+                    const select = containers[c].querySelector('.cell-select');
+                    
+                    if (input) {
+                        input.innerText = val;
+                    } else if (select) {
+                        // Check if value exists in options, else add it if it's a section
+                        const key = select.dataset.key;
+                        if (key === 'module') {
+                            const trimmed = val.trim();
+                            if (trimmed && !courseData.modules.find(m => m.title === trimmed)) {
+                                courseData.modules.push({ title: trimmed, lessons: [] });
+                                updateAllDropdowns(trimmed);
+                            }
+                            select.value = trimmed;
+                        } else {
+                            select.value = val;
+                        }
+                    }
+                }
+            }
+            validateRealtime();
+            showToast(`Applied "${val}" to architect range.`);
+        }
+
+        function applyModuleToSelection(sectionName) {
+            const minR = Math.min(selectionStart.r, selectionEnd.r);
+            const maxR = Math.max(selectionStart.r, selectionEnd.r);
+            
+            for (let r = minR; r <= maxR; r++) {
+                const tr = gridBody.children[r];
+                const select = tr.querySelector('.cell-select');
+                if (select) {
+                    select.value = sectionName;
+                }
+            }
+            validateRealtime();
+            showToast(`Moved selection to section: ${sectionName}`);
+        }
+
+        function showModulePickerModal(onConfirm) {
+            const overlay = document.getElementById('customModalOverlay');
+            const options = courseData.modules.map(m => `<option value="${m.title}">${m.title}</option>`).join('');
+            
+            overlay.innerHTML = `
+                <div class="modal-card">
+                    <div class="modal-header">SELECT DESTINATION MODULE</div>
+                    <div class="modal-body">
+                        <div style="font-weight:bold; margin-bottom:10px;">Bulk Move to Module</div>
+                        <div style="margin-bottom:15px;">Choose the module for all selected questions:</div>
+                        <select id="modalSectionSelect" style="width:100%; padding:8px; border:1px solid #ccc; font-family: inherit;">
+                            ${options}
+                        </select>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn btn-ghost" id="modalCancelBtn">Cancel</button>
+                        <button class="btn btn-primary" id="modalConfirmBtn">Apply Module</button>
+                    </div>
+                </div>
+            `;
+            overlay.style.display = 'flex';
+            document.getElementById('modalCancelBtn').onclick = () => { overlay.style.display = 'none'; };
+            document.getElementById('modalConfirmBtn').onclick = () => { 
+                onConfirm(document.getElementById('modalSectionSelect').value); 
+                overlay.style.display = 'none'; 
+            };
+        }
+    </script>
+</body>
+</html>

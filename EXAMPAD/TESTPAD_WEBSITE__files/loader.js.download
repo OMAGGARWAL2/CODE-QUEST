@@ -1,0 +1,38 @@
+const loader = document.getElementById('loader-container');
+const loaderProgress = document.getElementById('loader-container-progress');
+const toggleLoader = (val) => {
+  if (val == true) {
+    loader.style.display = 'block';
+  } else if (val == false) {
+    loader.style.display = 'none';
+  }
+};
+toggleLoader(true);
+
+const toggleProcessLoader = (val) => {
+  if (val == true) {
+    resetProcessBar();
+    loaderProgress.style.display = 'block';
+  } else {
+    loaderProgress.style.display = 'none';
+    document.getElementById('progress-bar').style.width == '0%';
+  }
+}
+
+/**
+ * 
+ * @param {HTMLProgressElement} element 
+ */
+const changeValueOfProgressBar = (valueToSet, message) => {
+  document.getElementById('progress-bar').style.width = `${valueToSet}%`;
+  if (message) {
+    document.getElementById('progress-bar-message').innerText = message;
+  }
+}
+
+const resetProcessBar = () => {
+  document.getElementById('progress-bar').style.width = '0%';
+  document.getElementById('progress-bar-message').innerText = 'Processing';
+}
+
+window.onload = function () { toggleLoader(false); };

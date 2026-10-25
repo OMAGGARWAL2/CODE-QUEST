@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts: Inter and Outfit -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="https://api.learntechww.com/college_icon/logo1733989968823.jpg">
+    <style>
+        :root {
+            --primary: #D92D20;
+            --primary-hover: #B42318;
+            --primary-soft: #FEF3F2;
+            --secondary: #667085;
+            --text-main: #101828;
+            --text-secondary: #475467;
+            --bg-body: #F9FAFB;
+            --bg-card: #FFFFFF;
+            --border: #EAECF0;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --shadow-premium: 0 10px 40px rgba(0, 0, 0, 0.06);
+            --erp-maroon: #800000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1,
+        h2,
+        h3,
+        .logo-text {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* --- HEADER --- */
+        .site-header {
+            height: 72px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .logo-square {
+            width: 40px;
+            height: 40px;
+            overflow: hidden;
+        }
+
+        .logo-square img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-container {
+            flex: 1;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .search-section {
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            margin-bottom: 40px;
+            background: #fff;
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-premium);
+        }
+
+        .search-section h1 {
+            font-size: 2rem;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        .search-section p {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            position: relative;
+            display: flex;
+            gap: 12px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            flex: 1;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary);
+        }
+
+        .roll-input {
+            width: 100%;
+            padding: 14px 14px 14px 44px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .roll-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-soft);
+        }
+
+        .btn-search {
+            padding: 0 24px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Outfit', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-search:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        /* --- RESULT SECTION --- */
+        .result-section {
+            width: 100%;
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-actions {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .btn-action {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+
+        .btn-action:hover {
+            background: #f9fafb;
+            border-color: var(--secondary);
+        }
+
+        .btn-action.primary {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+        }
+
+        .btn-action.primary:hover {
+            background: var(--primary-hover);
+            box-shadow: 0 4px 12px rgba(217, 45, 32, 0.2);
+        }
+
+        /* --- ADMIT CARD PREVIEW (Copied styles from admit-card.html) --- */
+        .admit-card-container {
+            max-width: 800px;
+            margin: 0 auto 60px;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid #000;
+            position: relative;
+        }
+
+        .admit-card-container::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: repeating-linear-gradient(45deg,
+                    rgba(128, 0, 0, 0.012),
+                    rgba(128, 0, 0, 0.012) 2px,
+                    transparent 2px,
+                    transparent 10px);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .admit-card-header {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .uni-name {
+            font-size: 24px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            color: var(--erp-maroon);
+        }
+
+        .doc-title {
+            font-size: 16px;
+            font-weight: 700;
+            border: 1px solid #000;
+            display: inline-block;
+            padding: 4px 15px;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        .student-profile {
+            display: grid;
+            grid-template-columns: 1fr 140px;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+
+        .info-val {
+            font-size: 14px;
+            font-weight: 700;
+            color: #000;
+        }
+
+        .photo-box {
+            width: 140px;
+            height: 160px;
+            border: 1px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafc;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-label {
+            font-size: 10px;
+            position: absolute;
+            bottom: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            width: 100%;
+            text-align: center;
+        }
+
+        .seating-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .seating-table th,
+        .seating-table td {
+            border: 1px solid #000;
+            padding: 10px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        .seating-table th {
+            background: #f1f5f9;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+
+        .qr-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 40px;
+        }
+
+        .qr-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .qr-img {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #eee;
+        }
+
+        .signature-zone {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .sig-line {
+            width: 180px;
+            border-top: 1px solid #000;
+            margin-top: 8px;
+        }
+
+        .sig-label {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #1e293b;
+        }
+
+        .instructions {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px dashed #ccc;
+            font-size: 11px;
+            color: #444;
+        }
+
+        .instructions h4 {
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-size: 12px;
+            color: #000;
+        }
+
+        .instructions ul {
+            padding-left: 15px;
+        }
+
+        .instructions li {
+            margin-bottom: 4px;
+        }
+
+        /* --- LOADER --- */
+        .loader {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .loader i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        @media print {
+
+            .site-header,
+            .search-section,
+            .result-actions {
+                display: none !important;
+            }
+
+            .main-container {
+                padding: 0;
+            }
+
+            .admit-card-container {
+                box-shadow: none;
+                margin: 0;
+                border: 1px solid #000;
+            }
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="header-left">
+            <div class="logo-container" onclick="location.href='./student-dashboard.html'">
+                <div class="logo-square">
+                    <img src="https://api.learntechww.com/college_icon/logo1733989968823.jpg" alt="CHITKARA">
+                </div>
+                <div class="logo-text">TESTPAD</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="btn-action" onclick="location.href='./student-dashboard.html'">
+                <i class="fas fa-arrow-left"></i> BACK TO DASHBOARD
+            </button>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="search-section" id="searchBox">
+            <h1>Examination Admit Card</h1>
+            <p>Enter your University Roll Number to generate and download your official admit card and seating plan for
+                June 2026 sessions.</p>
+
+            <form onsubmit="handleSearch(event)">
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <i class="fas fa-user-graduate"></i>
+                        <input type="text" class="roll-input" id="rollNumber"
+                            placeholder="Enter Roll Number (e.g. 2210990001)" required>
+                    </div>
+                    <button type="submit" class="btn-search">SEARCH</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="loader" id="loader">
+            <i class="fas fa-spinner fa-spin"></i>
+        </div>
+
+        <section class="result-section" id="resultSection">
+            <div class="result-actions">
+                <button class="btn-action" onclick="window.print()">
+                    <i class="fas fa-print"></i> PRINT ADMIT CARD
+                </button>
+                <button class="btn-action primary" onclick="downloadPDF()">
+                    <i class="fas fa-download"></i> DOWNLOAD PDF
+                </button>
+            </div>
+
+            <div class="admit-card-container">
+                <div class="admit-card-header">
+                    <div class="uni-name">CHITKARA UNIVERSITY, PUNJAB</div>
+                    <div style="font-size: 14px; font-weight: 600;">(Established by Punjab State Legislature vide Act
+                        No. 2 of 2010)</div>
+                    <div class="doc-title">ADMIT CARD | End Term Examination - June 2026</div>
+                </div>
+
+                <div class="student-profile">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Candidate Name</span>
+                            <span class="info-val" id="dispName">OM AGGARWAL</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Roll Number</span>
+                            <span class="info-val" id="dispRoll">2210990001</span>
+                        </div>
+                        <div class="info-item" style="grid-column: span 2;">
+                            <span class="info-label">Course / Program</span>
+                            <span class="info-val" id="dispCourse">B.E. COMPUTER SCIENCE & ENGINEERING</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Semester</span>
+                            <span class="info-val">6TH SEMESTER</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Examination Center</span>
+                            <span class="info-val">BLOCK A, MAIN CAMPUS</span>
+                        </div>
+                    </div>
+                    <div class="photo-box">
+                        <img src="https://ui-avatars.com/api/?name=Om+Aggarwal&background=f1f5f9&size=150"
+                            id="dispPhoto" alt="STUDENT PHOTO">
+                        <div class="photo-label">CANDIDATE PHOTO</div>
+                    </div>
+                </div>
+
+                <table class="seating-table">
+                    <thead>
+                        <tr>
+                            <th>DATE & DAY</th>
+                            <th>TIME BLOCK</th>
+                            <th>SUB CODE</th>
+                            <th>SUBJECT TITLE</th>
+                            <th>ROOM / SEATING</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scheduleBody">
+                        <!-- Dynamic Rows -->
+                    </tbody>
+                </table>
+
+                <div class="qr-section">
+                    <div class="qr-box">
+                        <img src="" id="qrImg" class="qr-img" alt="VERIFICATION QR">
+                        <div style="font-family: 'JetBrains Mono'; font-size: 10px; font-weight: 700;"
+                            id="dispVerifyID">VER_7X92K4M1L</div>
+                    </div>
+
+                    <div class="signature-zone">
+                        <div
+                            style="font-family: 'Outfit'; font-size: 12px; font-weight: 700; color: #800000; margin-bottom: 5px;">
+                            Digitally Signed by</div>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Jon_Kirsch_Signature.png"
+                            style="height: 40px; opacity: 0.8;" alt="SIG">
+                        <div class="sig-line"></div>
+                        <div class="sig-label">CONTROLLER OF EXAMINATIONS</div>
+                    </div>
+                </div>
+
+                <div class="instructions">
+                    <h4>Important Instructions for Candidates:</h4>
+                    <ul>
+                        <li>Candidates must carry this admit card and original University ID card to the examination
+                            hall.</li>
+                        <li>Entry to the examination hall will not be permitted after 15 minutes of session start.</li>
+                        <li>Calculators, mobile phones, or any electronic gadgets are strictly prohibited unless
+                            specified.</li>
+                        <li>Please verify the seating plan and room assignment at least 30 minutes prior to the
+                            examination.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const sampleData = {
+            "2210990001": {
+                name: "OM AGGARWAL",
+                course: "B.E. COMPUTER SCIENCE & ENGINEERING",
+                photo: "https://i.pinimg.com/236x/8b/4c/89/8b4c898b1e16f3af509ed9b139783f8b.jpg",
+                schedule: [
+                    { date: "15-JUN (MON)", time: "10:00 AM", code: "CS-401", title: "Artificial Intelligence", room: "BLOCK A | R-101", seat: "B-5 (S-1)" },
+                    { date: "18-JUN (THU)", time: "01:30 PM", code: "CS-402", title: "Advanced Databases", room: "BLOCK B | R-205", seat: "B-12 (S-2)" },
+                    { date: "22-JUN (MON)", time: "10:00 AM", code: "CS-403", title: "Cloud Computing", room: "BLOCK A | R-101", seat: "B-8 (S-1)" }
+                ]
+            },
+            "2210990002": {
+                name: "BRUCE WAYNE",
+                course: "B.E. MECHANICAL ENGINEERING",
+                photo: "https://i.pinimg.com/236x/21/6f/30/216f30d07ee3e6027376044716447c20.jpg",
+                schedule: [
+                    { date: "15-JUN (MON)", time: "10:00 AM", code: "ME-301", title: "Thermodynamics", room: "BLOCK C | R-301", seat: "B-1 (S-1)" },
+                    { date: "19-JUN (FRI)", time: "10:00 AM", code: "ME-302", title: "Fluid Mechanics", room: "BLOCK C | R-304", seat: "B-15 (S-2)" }
+                ]
+            }
+        };
+
+        function handleSearch(e) {
+            e.preventDefault();
+            const roll = document.getElementById('rollNumber').value.trim();
+            const loader = document.getElementById('loader');
+            const resultSection = document.getElementById('resultSection');
+            const searchBox = document.getElementById('searchBox');
+
+            loader.style.display = 'block';
+            resultSection.style.display = 'none';
+
+            setTimeout(() => {
+                loader.style.display = 'none';
+                const data = sampleData[roll];
+
+                if (data) {
+                    displayResult(roll, data);
+                    resultSection.style.display = 'block';
+                } else {
+                    alert("No admit card found for this Roll Number. Please contact the Examination Office.");
+                }
+            }, 1000);
+        }
+
+        function displayResult(roll, data) {
+            document.getElementById('dispName').innerText = data.name;
+            document.getElementById('dispRoll').innerText = roll;
+            document.getElementById('dispCourse').innerText = data.course;
+            document.getElementById('dispPhoto').src = data.photo || `https://ui-avatars.com/api/?name=${data.name.replace(' ', '+')}&background=f1f5f9&size=150`;
+
+            const verifyID = "VER_" + Math.random().toString(36).substr(2, 9).toUpperCase();
+            document.getElementById('dispVerifyID').innerText = verifyID;
+            document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=TESTPAD_AUTH_${verifyID}_ROLL_${roll}`;
+
+            const scheduleBody = document.getElementById('scheduleBody');
+            scheduleBody.innerHTML = data.schedule.map(s => `
+                <tr>
+                    <td><strong>${s.date}</strong></td>
+                    <td>${s.time}</td>
+                    <td style="font-family: 'JetBrains Mono'; font-weight:700;">${s.code}</td>
+                    <td>${s.title}</td>
+                    <td>
+                        <div style="font-weight:800; color:#800000;">${s.room}</div>
+                        <div style="font-size:10px; color:#64748b; font-weight:700;">${s.seat}</div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function downloadPDF() {
+            alert("Generating Secure PDF... Please wait.");
+            window.print();
+        }
+    </script>
+</body>
+
+</html>

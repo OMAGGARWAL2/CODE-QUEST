@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Hind:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Lato:wght@400;700&family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #df7b4f;
+            --primary-hover: #d9815b;
+            --bg-color: #ffffff;
+            --text-color: #333;
+            --accent-soft: rgba(222, 104, 52, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 2vh;
+            /* Top edge */
+            overflow: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        body::after {
+            content: "";
+            background-image: url(../BGNEW01.png);
+            background-size: 100%;
+            background-repeat: no-repeat;
+            background-position: top;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: -5;
+        }
+
+        .bg-wave {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bg-wave svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .main-container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1000px;
+            text-align: center;
+            padding: 5px 20px;
+            /* Reduced vertical padding */
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 70px;
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        .official-logo {
+            width: 100%;
+            max-width: 240px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .input-wrapper {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 10px;
+        }
+
+        .input-label {
+            display: block;
+            text-align: left;
+            font-size: 1rem;
+            color: #000000;
+            margin-bottom: 10px;
+            padding-left: 2px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .test-input {
+            width: 100%;
+            padding: 5px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            background: #ffffff;
+            color: #333;
+            outline: none;
+            box-shadow: none;
+            font-family: 'Hind', sans-serif;
+            text-align: left;
+            /* Changed back to left */
+        }
+
+        .test-input:focus {
+            outline: none !important;
+            border: 1px solid #e76525 !important;
+            box-shadow: none !important;
+        }
+
+        .go-btn {
+            background-color: #e7550c;
+            border: none;
+            color: #faeedc;
+            padding: 5px 38px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 400;
+            font-family: 'Hind', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+            margin-bottom: 30px;
+        }
+
+        .go-btn:hover {
+            background-color: #a24314;
+            box-shadow: 0 4px 12px rgba(184, 79, 27, 0.2);
+        }
+
+        .notice-box {
+            background-color: #ffecd6;
+            border: none;
+            border-radius: 14px;
+            padding: 10px 30px;
+            font-size: 1.55rem;
+            color: #ec9e29;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            line-height: 1.4;
+            margin-top: 15px;
+            font-weight: 500;
+            font-family: 'Hind', sans-serif;
+        }
+
+        .notice-box * {
+            font-family: 'Hind', sans-serif !important;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 45px;
+            /* Shifted up further */
+            left: 0;
+            width: 100%;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #de6834;
+            font-size: 1.65rem;
+            font-family: 'Hind', sans-serif;
+            z-index: 100;
+        }
+
+        .footer * {
+            font-family: 'Hind', sans-serif !important;
+        }
+
+        .footer-left {
+            font-weight: 600;
+            margin-left: 80px;
+        }
+
+        .footer-right {
+            font-weight: 600;
+            margin-right: 190px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-container {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .error-banner {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #FEF3F2;
+            color: #B42318;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            font-weight: 400;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            transition: all 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #FECDCA;
+            font-family: 'Arial', 'Roboto', sans-serif;
+            white-space: nowrap;
+        }
+
+        .error-banner.show {
+            top: 30px;
+        }
+
+        .reattempt-dropdown {
+            position: fixed;
+            bottom: 80px;
+            left: 40px;
+            width: 280px;
+            background: #ffffff url('../BGNEW01.png') no-repeat center;
+            background-size: cover;
+            border-radius: 0;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(222, 104, 52, 0.25);
+            padding: 18px 0 8px 0;
+            display: none;
+            flex-direction: column;
+            z-index: 10000;
+            animation: popUp 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 420px;
+            overflow-y: auto;
+            text-align: left;
+            font-family: 'Hind', sans-serif;
+        }
+
+        @keyframes popUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.97);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .dropdown-header {
+            padding: 0 20px 12px 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            color: #000000;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-family: 'Hind', sans-serif;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dropdown-item {
+            padding: 14px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.15s;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(222, 104, 52, 0.08);
+            padding-left: 24px;
+        }
+
+        .dropdown-item-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #000000;
+            font-family: 'Hind', sans-serif;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.3;
+        }
+
+        .dropdown-item-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #000000;
+            font-family: 'Hind', sans-serif;
+        }
+
+        .status-badge {
+            background: #f1f5f9;
+            color: #64748b;
+            padding: 3px 10px;
+            border-radius: 0;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge.submitted {
+            background: #d1fadf;
+            color: #027a48;
+        }
+
+        .status-badge.in-progress {
+            background: #fef0c7;
+            color: #d97706;
+        }
+
+        .empty-dropdown {
+            padding: 30px 20px;
+            text-align: center;
+            color: #888;
+            font-size: 0.95rem;
+            font-family: 'Hind', sans-serif;
+        }
+
+        .reattempt-dropdown::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .reattempt-dropdown::-webkit-scrollbar-thumb {
+            background: rgba(222, 104, 52, 0.25);
+            border-radius: 10px;
+        }
+    </style>
+
+    <style>
+        ::selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+
+        ::-moz-selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="reattemptDropdown" class="reattempt-dropdown">
+    </div>
+
+    <div id="errorBanner" class="error-banner">
+        <span>Invalid test/invite link. Please check and try again.</span>
+    </div>
+    <div class="bg-wave">
+        <svg viewBox="0 0 1440 900" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Subtle Secondary Wave (Behind - Magenta Line shape) -->
+            <path
+                d="M0,900 L0,520 C150,420 250,680 400,640 C600,580 680,150 800,50 C1000,-20 1200,30 1440,60 L1440,900 Z"
+                fill="#fde6d8" opacity="0.15"></path>
+            <!-- Elegant Main Wave (In Front - Black Line shape) -->
+            <path d="M0,900 L0,680 C250,860 450,650 520,500 C600,320 800,180 1440,250 L1440,900 Z" fill="#ffe3c6"
+                opacity="0.30"></path>
+        </svg>
+    </div>
+
+    <div class="main-container">
+        <div class="logo-section" style="justify-content: center;">
+            <img src="https://www.chitkara.edu.in/chitkara-university-logo.png" alt="Chitkara University"
+                class="official-logo">
+        </div>
+
+        <div class="input-wrapper">
+            <label class="input-label">Enter test/invite link</label>
+            <input type="text" id="testLink" class="test-input" autocomplete="off">
+        </div>
+
+        <button class="go-btn" id="goBtn">Go</button>
+
+        <div class="notice-box">
+            <span style="cursor: pointer;" onclick="toggleReattemptMenu(event)">To exit please press</span> Alt+F4,
+            <span style="cursor: pointer;" onclick="window.location.href='./makelinks.html'">only
+                when test</span> has not been <span style="cursor: pointer;" onclick="location.reload()">started</span>.
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-left" style="display: flex; align-items: center; gap: 8px;">
+            <span style="cursor: pointer; user-select: none;" onclick="handleQuickStart()">Powered by Chitkara</span>
+        </div>
+        <div class="footer-right" style="cursor: pointer;" onclick="window.location.href='../index.html'">Version:
+            1.2.106
+        </div>
+    </div>
+
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        const testInput = document.getElementById('testLink');
+        const goBtn = document.getElementById('goBtn');
+        const errorBanner = document.getElementById('errorBanner');
+        let errorTimeout;
+
+        function showError(message) {
+            errorBanner.querySelector('span').textContent = message;
+            errorBanner.classList.add('show');
+
+            clearTimeout(errorTimeout);
+            errorTimeout = setTimeout(() => {
+                errorBanner.classList.remove('show');
+            }, 3000);
+        }
+
+        function tryDirectRedirect(testId, passcode) {
+            try {
+                if (typeof auth === 'undefined' || typeof db === 'undefined') return false;
+
+                let user = null;
+                if (auth.isLoggedIn() && auth.isStudent()) {
+                    user = auth.getCurrentUser();
+                } else {
+                    // Try to auto-log in the last student user if not logged in
+                    const users = JSON.parse(localStorage.getItem('TESTPAD_users')) || [];
+                    const student = [...users].reverse().find(u => u.role === 'student');
+                    if (student) {
+                        db.createSession(student.id, 'student');
+                        if (typeof auth.loadSession === 'function') {
+                            auth.loadSession();
+                        }
+                        user = student;
+                    }
+                }
+
+                if (user) {
+                    const exam = db.getExamByTestId(testId) || db.getExamById(testId);
+                    if (exam) {
+                        let res = db.startAttempt(exam.id, user.id);
+
+                        // Resume or re-attempt support
+                        if (!res.success && res.existingAttempt) {
+                            if (res.existingAttempt.status === 'submitted' || res.existingAttempt.status === 'reviewed' || res.existingAttempt.status === 'completed') {
+                                // Start a fresh re-attempt
+                                res = db.startAttempt(exam.id, user.id, true);
+                                if (res.success && res.attempt) {
+                                    sessionStorage.removeItem(`exam_started_${res.attempt.id}`);
+                                    sessionStorage.removeItem(`quickStartAttemptId_${exam.id}`);
+                                }
+                            } else {
+                                // Resume in-progress attempt
+                                res.success = true;
+                                res.attempt = res.existingAttempt;
+                            }
+                        }
+
+                        if (res.success || res.attempt) {
+                            const attempt = res.attempt || res.existingAttempt;
+                            sessionStorage.removeItem(`exam_started_${attempt.id}`);
+                            const roll = user.rollNo || user.id || 'STUDENT';
+                            sessionStorage.setItem('joined_via_link', 'true');
+                            if (passcode) sessionStorage.setItem('pending_passcode', passcode);
+                            window.location.href = `./exam-attempt.html?attemptId=${attempt.id}&vialink=true&ctrlE=true`;
+                            return true;
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error("Direct redirect check failed:", e);
+            }
+            return false;
+        }
+
+        function handleGo() {
+            let link = testInput.value.trim();
+            if (!link) {
+                showError('Please enter a valid test/invite link.');
+                return;
+            }
+
+            let testId = "";
+            let passcode = "";
+
+            const lowerLink = link.toLowerCase();
+            const looksLikeLink = /^https?:\/\//i.test(link) || (link.includes('.') && !link.includes(' '));
+
+            if (looksLikeLink) {
+                if (lowerLink.includes('/test/')) {
+                    const parts = link.split(/\/test\//i);
+                    if (parts.length > 1) {
+                        let idPart = parts[1].split('?')[0];
+                        idPart = idPart.split('/')[0];
+                        testId = idPart.toUpperCase();
+
+                        if (link.includes('?')) {
+                            try {
+                                const sp = new URLSearchParams(link.split('?')[1]);
+                                passcode = sp.get('passcode') || "";
+                            } catch (e) { }
+                        }
+                    }
+                } else {
+                    showError("Unsupported application.");
+                    return;
+                }
+            } else {
+                // Just an ID
+                testId = link.toUpperCase();
+            }
+
+            const voidLinks = JSON.parse(localStorage.getItem('void_links')) || {};
+            const inputClean = link.trim().toLowerCase();
+            const idClean = (testId || '').toLowerCase();
+
+            let matchedKey = null;
+            if (voidLinks[inputClean]) matchedKey = inputClean;
+            else if (idClean && voidLinks[idClean]) matchedKey = idClean;
+            else {
+                for (let k in voidLinks) {
+                    if (k === inputClean || (idClean && k === idClean) || inputClean.includes(k) || k.includes(inputClean) || (idClean && (idClean.includes(k) || k.includes(idClean)))) {
+                        matchedKey = k;
+                        break;
+                    }
+                }
+            }
+
+            if (matchedKey) {
+                window.location.href = `./exam-attempt.html?voidLink=${encodeURIComponent(matchedKey)}&vialink=true&ctrlE=true`;
+                return;
+            }
+
+            if (testId) {
+                const exam = db.getExamByTestId(testId) || db.getExamById(testId) || db.getExamByJoiningKey(testId) || db.getAllExams().find(e => e.joiningKey && String(e.joiningKey).toLowerCase() === testId.toLowerCase());
+
+                if (exam) {
+                    const finalTestId = exam.testId || exam.id;
+                    if (tryDirectRedirect(finalTestId, passcode)) return;
+
+                    let user = auth.isLoggedIn() ? auth.getCurrentUser() : null;
+                    if (!user) {
+                        const users = JSON.parse(localStorage.getItem('TESTPAD_users')) || [];
+                        user = [...users].reverse().find(u => u.role === 'student');
+                        if (user) db.createSession(user.id, 'student');
+                    }
+                    let res = user ? db.startAttempt(exam.id, user.id, true) : null;
+                    const attId = res && (res.attempt || res.existingAttempt) ? (res.attempt || res.existingAttempt).id : '';
+                    if (attId) sessionStorage.removeItem(`exam_started_${attId}`);
+                    sessionStorage.setItem('joined_via_link', 'true');
+                    if (passcode) sessionStorage.setItem('pending_passcode', passcode);
+                    window.location.href = `./exam-attempt.html?${attId ? 'attemptId=' + attId + '&' : ''}examId=${exam.id}&vialink=true&ctrlE=true`;
+                    return;
+                } else {
+                    showError("No such test exists");
+                    return;
+                }
+            } else {
+                showError("No such test exists");
+                return;
+            }
+        }
+
+        goBtn.addEventListener('click', handleGo);
+
+        testInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleGo();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key.toLowerCase() === 'e') {
+                e.preventDefault();
+                console.log("[JOINVIALINK] Ctrl+E pressed -> Launching Quick Start!");
+                handleQuickStart();
+                return;
+            }
+            if ((e.key === 'v' || e.key === 'V') && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                window.location.href = '../index.html';
+            }
+        });
+
+
+
+        // --- QUICK START FEATURE ---
+        function handleQuickStart() {
+            try {
+                if (typeof db === 'undefined' || typeof auth === 'undefined') {
+                    console.error("System engines not ready.");
+                    return;
+                }
+
+                const users = JSON.parse(localStorage.getItem('TESTPAD_users')) || [];
+                const student = [...users].reverse().find(u => u.role === 'student');
+
+                if (!student) {
+                    showError("No student account found. Access restricted.");
+                    return;
+                }
+
+                const allExams = JSON.parse(localStorage.getItem('TESTPAD_exams')) || [];
+                const allAttempts = JSON.parse(localStorage.getItem('TESTPAD_attempts')) || [];
+
+                // Just pick the latest exam available for the student (to allow unlimited reattempts)
+                const pendingExam = [...allExams].reverse()[0];
+
+                db.createSession(student.id, 'student');
+
+                if (pendingExam) {
+                    console.log(`[QUICK START] Fast-tracking to ${pendingExam.title} for ${student.name}`);
+
+                    let res = db.startAttempt(pendingExam.id, student.id, true);
+                    const attempt = res.attempt || res.existingAttempt;
+
+                    if (attempt) {
+                        sessionStorage.removeItem(`exam_started_${attempt.id}`);
+                        sessionStorage.removeItem(`quickStartAttemptId_${pendingExam.id}`);
+                        const roll = student.rollNo || student.id || 'STUDENT';
+                        sessionStorage.setItem(`exam_roll_${attempt.id}`, roll);
+
+                        window.location.href = `./exam-attempt.html?attemptId=${attempt.id}&quickStart=true&vialink=true&reattempt=true&ctrlE=true`;
+                    }
+                } else {
+                    console.log(`[QUICK START] All exams completed for ${student.name}. Loading dashboard.`);
+                    window.location.href = `./student-dashboard.html?vialink=true`;
+                }
+            } catch (e) {
+                console.error("Quick Start Exception:", e);
+                showError("System encountered a problem during quick start.");
+            }
+        }
+
+        // --- REATTEMPT MENU LOGIC ---
+        function toggleReattemptMenu(e) {
+            e.stopPropagation();
+            const dropdown = document.getElementById('reattemptDropdown');
+            const isShowing = dropdown.style.display === 'flex';
+
+            if (isShowing) {
+                dropdown.style.display = 'none';
+                return;
+            }
+
+            populateReattemptMenu();
+            dropdown.style.display = 'flex';
+        }
+
+        document.addEventListener('click', () => {
+            const dropdown = document.getElementById('reattemptDropdown');
+            if (dropdown) dropdown.style.display = 'none';
+        });
+
+        const dropdownEl = document.getElementById('reattemptDropdown');
+        if (dropdownEl) {
+            dropdownEl.addEventListener('click', (e) => e.stopPropagation());
+        }
+
+        function populateReattemptMenu() {
+            const dropdown = document.getElementById('reattemptDropdown');
+            dropdown.innerHTML = '';
+
+            const users = JSON.parse(localStorage.getItem('TESTPAD_users')) || [];
+            const student = [...users].reverse().find(u => u.role === 'student');
+
+            if (!student) {
+                dropdown.innerHTML = `<div class="empty-dropdown">No student logged in recently.</div>`;
+                return;
+            }
+
+            const header = document.createElement('div');
+            header.className = 'dropdown-header';
+            header.innerHTML = `<span>Recent Tests</span><span style="color:#de6834; font-weight:700;">${escapeHtml(student.name)}</span>`;
+            dropdown.appendChild(header);
+
+            const allAttempts = JSON.parse(localStorage.getItem('TESTPAD_attempts')) || [];
+            const allExams = JSON.parse(localStorage.getItem('TESTPAD_exams')) || [];
+
+            const studentAttempts = allAttempts.filter(a => a && a.studentId === student.id);
+            studentAttempts.sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
+
+            const distinctExamIds = [];
+            const recentExams = [];
+
+            for (const att of studentAttempts) {
+                if (!distinctExamIds.includes(att.examId)) {
+                    distinctExamIds.push(att.examId);
+                    const examObj = allExams.find(e => e && e.id === att.examId);
+                    if (examObj) {
+                        recentExams.push({ exam: examObj, latestAttempt: att });
+                    }
+                }
+                if (recentExams.length >= 20) break;
+            }
+
+            if (recentExams.length < 20) {
+                for (const ex of [...allExams].reverse()) {
+                    if (ex && !distinctExamIds.includes(ex.id)) {
+                        distinctExamIds.push(ex.id);
+                        recentExams.push({ exam: ex, latestAttempt: { status: 'new', startTime: null } });
+                    }
+                    if (recentExams.length >= 20) break;
+                }
+            }
+
+            if (recentExams.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'empty-dropdown';
+                empty.textContent = "No tests found for this student.";
+                dropdown.appendChild(empty);
+                return;
+            }
+
+            const basePath = './exam-attempt.html';
+
+            recentExams.forEach(({ exam, latestAttempt }) => {
+                const item = document.createElement('div');
+                item.className = 'dropdown-item';
+
+                const dateStr = latestAttempt.startTime ? new Date(latestAttempt.startTime).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Unattempted';
+                const statusStr = latestAttempt.status || 'new';
+                const isSub = statusStr === 'submitted' || statusStr === 'reviewed';
+                const isProg = statusStr === 'in-progress';
+
+                item.innerHTML = `
+                    <div class="dropdown-item-title">${escapeHtml(exam.title || exam.testId || 'Assessment')}</div>
+                    <div class="dropdown-item-meta">
+                        <span>${escapeHtml(exam.testId || 'TEST')} • ${dateStr}</span>
+                        <span class="status-badge ${isSub ? 'submitted' : (isProg ? 'in-progress' : '')}">${statusStr}</span>
+                    </div>
+                `;
+
+                item.onclick = (e) => {
+                    e.stopPropagation();
+                    dropdown.style.display = 'none';
+                    window.location.href = `${basePath}?examId=${exam.id}&quickStart=true&vialink=true&reattempt=true`;
+                };
+
+                dropdown.appendChild(item);
+            });
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+    </script>
+</body>
+
+</html>

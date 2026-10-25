@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Company / Official Login</title>
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #000;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url('BGNEW01.png') no-repeat center center fixed;
+            background-size: cover;
+            padding: 20px;
+        }
+
+        .box {
+            background: #fff;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 10px;
+            padding: 30px 28px;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+        }
+
+        .box h1 {
+            font-size: 1.15rem;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .box p.sub {
+            font-size: 0.8rem;
+            color: #444;
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 0.9rem;
+            border: 1px solid #bbb;
+            border-radius: 6px;
+            margin-bottom: 14px;
+            background: #fff;
+        }
+
+        input[type="file"] {
+            padding: 8px;
+            border: 1px dashed #bbb;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #df5a22;
+        }
+
+        .row2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        button.primary {
+            width: 100%;
+            padding: 11px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            background: #df5a22;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button.primary:hover { background: #c54814; }
+
+        .err {
+            display: none;
+            font-size: 0.78rem;
+            color: #b00020;
+            margin-bottom: 12px;
+        }
+
+        .ok {
+            display: none;
+            font-size: 0.78rem;
+            color: #027a48;
+            margin-bottom: 12px;
+        }
+
+        .bottom {
+            margin-top: 18px;
+            font-size: 0.78rem;
+            text-align: center;
+            color: #444;
+        }
+
+        .bottom a {
+            color: #df5a22;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .bottom a:hover { text-decoration: underline; }
+
+        .hidden { display: none; }
+
+        /* Approval confirmation overlay */
+        #confirmModal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 100;
+        }
+
+        #confirmModal .card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 28px 24px;
+            max-width: 340px;
+            width: 100%;
+            text-align: center;
+        }
+
+        #confirmModal .tick {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: #ecfdf3;
+            color: #027a48;
+            font-size: 1.8rem;
+            line-height: 54px;
+            margin: 0 auto 14px;
+        }
+
+        #confirmModal h2 { font-size: 1.1rem; margin-bottom: 8px; }
+        #confirmModal p { font-size: 0.85rem; color: #333; margin-bottom: 18px; }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <!-- ===== LOGIN ===== -->
+        <div id="loginView">
+            <h1>Company &amp; Official Login</h1>
+            <p class="sub">For teachers, companies, placement coordinators and other officials. Students sign in from the main page.</p>
+
+            <form onsubmit="return doLogin(event)">
+                <label for="loginUser">Username / Official ID</label>
+                <input type="text" id="loginUser" placeholder="Enter your username" required>
+
+                <label for="loginPass">Password</label>
+                <input type="password" id="loginPass" placeholder="Enter your password" required>
+
+                <div class="err" id="loginErr"></div>
+
+                <button type="submit" class="primary">Login</button>
+            </form>
+
+            <div class="bottom">
+                New official / company? <a href="#" onclick="showView('signup'); return false;">Create an account</a><br><br>
+                <a href="firstpage.html">Student? Go back to main login</a>
+            </div>
+        </div>
+
+        <!-- ===== SIGNUP (officials / companies) ===== -->
+        <div id="signupView" class="hidden">
+            <h1>Official Account Application</h1>
+            <p class="sub">Fill in your details. Your account is created after verification by the administrator.</p>
+
+            <form onsubmit="return doSignup(event)">
+                <label for="suName">Full Name</label>
+                <input type="text" id="suName" placeholder="Your name" required>
+
+                <label for="suRole">Designation</label>
+                <select id="suRole" required>
+                    <option value="Teacher / Faculty">Teacher / Faculty</option>
+                    <option value="Company Recruiter / HR">Company Recruiter / HR</option>
+                    <option value="Placement Coordinator">Placement Coordinator</option>
+                    <option value="College / School Official">College / School Official</option>
+                    <option value="Other Official">Other Official</option>
+                </select>
+
+                <label for="suCollege">College / School</label>
+                <input type="text" id="suCollege" placeholder="Institution name" required>
+
+                <label for="suCompany">Company Name</label>
+                <input type="text" id="suCompany" placeholder="Company / department" required>
+
+                <div class="row2">
+                    <div>
+                        <label for="suLocation">Location</label>
+                        <input type="text" id="suLocation" placeholder="City, State" required>
+                    </div>
+                    <div>
+                        <label for="suOfficialId">ID (Employee / Official)</label>
+                        <input type="text" id="suOfficialId" placeholder="Your ID" required>
+                    </div>
+                </div>
+
+                <label for="suUser">Username (used to log in)</label>
+                <input type="text" id="suUser" placeholder="Pick a username or email" required>
+
+                <div class="row2">
+                    <div>
+                        <label for="suPass">Password</label>
+                        <input type="password" id="suPass" placeholder="Min 6 characters" required>
+                    </div>
+                    <div>
+                        <label for="suPass2">Confirm Password</label>
+                        <input type="password" id="suPass2" placeholder="Type it again" required>
+                    </div>
+                </div>
+
+                <label for="suIdImg">ID Card Image</label>
+                <input type="file" id="suIdImg" accept="image/*">
+
+                <label for="suDocType">Identity Verification Document</label>
+                <select id="suDocType">
+                    <option value="Aadhaar Card">Aadhaar Card</option>
+                    <option value="PAN Card">PAN Card</option>
+                    <option value="Passport">Passport</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label for="suDocImg">Upload Verification Document</label>
+                <input type="file" id="suDocImg" accept="image/*">
+
+                <div class="err" id="signupErr"></div>
+
+                <button type="submit" class="primary">Submit Application</button>
+            </form>
+
+            <div class="bottom">
+                Already applied? <a href="#" onclick="showView('login'); return false;">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Approval confirmation -->
+    <div id="confirmModal">
+        <div class="card">
+            <div class="tick">&#10003;</div>
+            <h2>Application Submitted!</h2>
+            <p>Your application has been processed. Wait for approval. Once approved by the administrator, you will be able to log in with your credentials anytime.</p>
+            <button class="primary" onclick="closeModalAndLogin()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        const APPS_KEY = 'CodeQuest_official_applications'; // read by ONLALP.html
+        const USERS_KEY = 'TESTPAD_users';
+
+        function getApps() {
+            try { return JSON.parse(localStorage.getItem(APPS_KEY)) || []; }
+            catch (e) { return []; }
+        }
+        function saveApps(apps) { localStorage.setItem(APPS_KEY, JSON.stringify(apps)); }
+
+        function showView(which) {
+            document.getElementById('loginView').classList.toggle('hidden', which !== 'login');
+            document.getElementById('signupView').classList.toggle('hidden', which !== 'signup');
+        }
+
+        function showErr(id, msg) {
+            const el = document.getElementById(id);
+            el.textContent = msg;
+            el.style.display = 'block';
+        }
+
+        function readFile(el) {
+            return new Promise((resolve) => {
+                const f = el.files && el.files[0];
+                if (!f) { resolve(''); return; }
+                const r = new FileReader();
+                r.onload = () => resolve(r.result);
+                r.onerror = () => resolve('');
+                r.readAsDataURL(f);
+            });
+        }
+
+        function doLogin(e) {
+            e.preventDefault();
+            const id = document.getElementById('loginUser').value.trim();
+            const pass = document.getElementById('loginPass').value;
+
+            // Master admin -> approval portal
+            if (id === 'ALPHAWINNERS' && pass === 'CodeQuest12') {
+                sessionStorage.setItem('ONLALP_admin_auth', 'true');
+                window.location.href = 'ONLALP.html';
+                return false;
+            }
+
+            // Approved officials can log in with their chosen credentials
+            const apps = getApps();
+            const app = apps.find(a =>
+                (a.username && a.username.toLowerCase() === id.toLowerCase()) ||
+                (a.officialId && a.officialId.toLowerCase() === id.toLowerCase())
+            );
+
+            if (app) {
+                let passOk = false;
+                try { passOk = atob(app.password) === pass; } catch (ex) { passOk = app.password === pass; }
+                if (!passOk) {
+                    showErr('loginErr', 'Wrong password for this account.');
+                    return false;
+                }
+                if (app.status !== 'Approved') {
+                    showErr('loginErr', 'Your account is not approved yet. Please wait for administrator approval.');
+                    return false;
+                }
+                // Recruiters (designation "Company Recruiter / HR", etc.) open the recruiter portal
+                const isRecruiter = /recruiter|\bhr\b|employer/i.test(app.role || '');
+                localStorage.setItem('CodeQuest_active_session', JSON.stringify({
+                    name: app.fullName, email: app.username, role: isRecruiter ? 'recruiter' : 'official'
+                }));
+                localStorage.setItem('TESTPAD_current_user', JSON.stringify({
+                    name: app.fullName, email: app.username, role: isRecruiter ? 'recruiter' : 'official'
+                }));
+                window.location.href = isRecruiter ? 'recruiterindex.html' : 'teacherindex.html';
+                return false;
+            }
+
+            // Fallback: users already pushed into TESTPAD_users by ONLALP approval
+            const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+            const u = users.find(x =>
+                (x.email && x.email.toLowerCase() === id.toLowerCase()) ||
+                (x.rollNo && x.rollNo.toLowerCase() === id.toLowerCase()) ||
+                (x.companyId && x.companyId.toLowerCase() === id.toLowerCase())
+            );
+            if (u && (u.role === 'teacher' || u.role === 'company' || u.role === 'official' || u.role === 'recruiter')) {
+                let ok = false;
+                try { ok = atob(u.password) === pass; } catch (ex) { ok = u.password === pass; }
+                if (ok) {
+                    localStorage.setItem('CodeQuest_active_session', JSON.stringify({
+                        name: u.name, email: u.email || id, role: u.role
+                    }));
+                    localStorage.setItem('TESTPAD_current_user', JSON.stringify({
+                        name: u.name, email: u.email || id, role: u.role
+                    }));
+                    window.location.href = (u.role === 'recruiter') ? 'recruiterindex.html' : 'teacherindex.html';
+                    return false;
+                }
+                showErr('loginErr', 'Wrong password for this account.');
+                return false;
+            }
+
+            showErr('loginErr', 'No approved account found for this ID. If you just applied, wait for approval.');
+            return false;
+        }
+
+        async function doSignup(e) {
+            e.preventDefault();
+            const name = document.getElementById('suName').value.trim();
+            const role = document.getElementById('suRole').value;
+            const college = document.getElementById('suCollege').value.trim();
+            const company = document.getElementById('suCompany').value.trim();
+            const location = document.getElementById('suLocation').value.trim();
+            const officialId = document.getElementById('suOfficialId').value.trim();
+            const user = document.getElementById('suUser').value.trim();
+            const pass = document.getElementById('suPass').value;
+            const pass2 = document.getElementById('suPass2').value;
+            const docType = document.getElementById('suDocType').value;
+
+            if (pass !== pass2) { showErr('signupErr', 'Passwords do not match.'); return false; }
+            if (pass.length < 6) { showErr('signupErr', 'Password must be at least 6 characters.'); return false; }
+            if (user.toUpperCase() === 'ALPHAWINNERS') { showErr('signupErr', 'This username is reserved.'); return false; }
+
+            const apps = getApps();
+            if (apps.some(a => (a.username || '').toLowerCase() === user.toLowerCase() ||
+                (a.officialId || '').toLowerCase() === officialId.toLowerCase())) {
+                showErr('signupErr', 'This username or ID is already applied. Please wait for approval or log in.');
+                return false;
+            }
+
+            const idImg = await readFile(document.getElementById('suIdImg'));
+            const docImg = await readFile(document.getElementById('suDocImg'));
+
+            apps.push({
+                id: 'APP_' + Date.now(),
+                fullName: name,
+                role: role,
+                college: college,
+                company: company,
+                location: location,
+                officialId: officialId,
+                docType: docType,
+                idCardImage: idImg || '',
+                govDocImage: docImg || '',
+                username: user,
+                password: btoa(pass),
+                submittedAt: new Date().toLocaleString('en-US'),
+                status: 'Pending'
+            });
+            saveApps(apps);
+
+            document.getElementById('confirmModal').style.display = 'flex';
+            return false;
+        }
+
+        function closeModalAndLogin() {
+            document.getElementById('confirmModal').style.display = 'none';
+            document.getElementById('signupView').reset?.();
+            showView('login');
+            showErr('loginErr', 'Application received. You can log in once it is approved.');
+        }
+    </script>
+</body>
+</html>

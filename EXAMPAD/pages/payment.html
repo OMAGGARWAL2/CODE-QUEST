@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-900: #0f172a;
+            --accent: #f26b3a;
+            --accent-hover: #ea580c;
+            --success: #059669;
+            --error: #dc2626;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: var(--slate-900);
+            font-family: 'Inter', -apple-system, sans-serif;
+            line-height: 1.5;
+        }
+
+        /* --- LOGO & HEADER --- */
+        .checkout-header {
+            border-bottom: 1px solid var(--border);
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .brand-link {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .brand-name {
+            font-family: 'Outfit';
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--slate-900);
+        }
+
+        .breadcrumb {
+            display: flex;
+            gap: 12px;
+            font-size: 0.8rem;
+            color: var(--slate-400);
+            font-weight: 600;
+        }
+
+        .breadcrumb span.active {
+            color: var(--slate-900);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 0.85rem;
+            color: var(--slate-600);
+            font-weight: 500;
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 8px;
+            background: var(--slate-50);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        /* --- MAIN LAYOUT --- */
+        .checkout-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            min-height: calc(100vh - 65px);
+        }
+
+        /* LEFT COLUMN: PAYMENT */
+        .payment-section {
+            padding: 60px 80px 60px 40px;
+            border-right: 1px solid var(--border);
+            min-height: 100%;
+        }
+
+        .view-container {
+            display: none;
+        }
+
+        .view-container.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .payment-methods {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .method-tab {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--slate-600);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .method-tab.active {
+            border-color: var(--accent);
+            background: #fff;
+            color: var(--slate-900);
+            box-shadow: 0 0 0 1px var(--accent);
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--slate-700);
+        }
+
+        .field-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .field-container i {
+            position: absolute;
+            left: 14px;
+            color: var(--slate-400);
+            font-size: 0.9rem;
+        }
+
+        .field-container .card-brand-icon {
+            position: absolute;
+            right: 14px;
+            font-size: 1.25rem;
+            transition: color 0.2s;
+        }
+
+        .input {
+            width: 100%;
+            padding: 12px 14px 12px 40px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            color: var(--slate-900);
+            outline: none;
+            transition: 0.15s;
+        }
+
+        .input::placeholder {
+            color: var(--slate-300);
+        }
+
+        .input:focus {
+            border-color: var(--slate-900);
+            box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.05);
+        }
+
+        .input.invalid {
+            border-color: var(--error);
+        }
+
+        .inline-feedback {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--error);
+            margin-top: 4px;
+            display: none;
+        }
+
+        .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .terms-box {
+            margin-top: 32px;
+            display: flex;
+            gap: 12px;
+            font-size: 0.8rem;
+            color: var(--slate-600);
+            line-height: 1.4;
+        }
+
+        .terms-box input {
+            margin-top: 3px;
+            cursor: pointer;
+        }
+
+        .pay-button {
+            margin-top: 32px;
+            width: 100%;
+            padding: 14px;
+            background: var(--slate-900);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.2s;
+        }
+
+        .pay-button:hover {
+            background: #000;
+        }
+
+        .pay-button:disabled {
+            background: var(--slate-200);
+            cursor: not-allowed;
+            color: var(--slate-400);
+        }
+
+        /* SPINNER */
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .trust-footer {
+            margin-top: 48px;
+            border-top: 1px solid var(--border);
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .trust-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: var(--slate-400);
+            font-weight: 600;
+        }
+
+        .trust-tag i {
+            color: #10b981;
+        }
+
+        /* RIGHT COLUMN: SUMMARY */
+        .summary-section {
+            background: var(--slate-50);
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .order-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .plan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .plan-name {
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .plan-price {
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: var(--slate-600);
+            font-weight: 500;
+        }
+
+        .feature-item i {
+            color: var(--accent);
+            font-size: 0.75rem;
+        }
+
+        .billing-toggle {
+            display: flex;
+            background: var(--slate-100);
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            background: transparent;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: 0.2s;
+            color: var(--slate-400);
+        }
+
+        .toggle-btn.active {
+            background: #fff;
+            color: var(--slate-900);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .price-summary {
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--slate-600);
+        }
+
+        .summary-total {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed var(--slate-200);
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--slate-900);
+        }
+
+        .billing-note {
+            margin-top: auto;
+            font-size: 0.75rem;
+            color: var(--slate-400);
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        /* SUCCESS STATE */
+        #successModal {
+            position: fixed;
+            inset: 0;
+            background: #ffffff;
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .success-tick {
+            width: 56px;
+            height: 56px;
+            background: #dcfce7;
+            color: #166534;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+
+    <!-- BREADCRUMB HEADER -->
+    <header class="checkout-header">
+        <div class="header-left">
+            <a href="digitallib.html" class="brand-link">
+                <div class="brand-icon"
+                    style="background: transparent; border-radius: 0; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px;">
+                    <img src="https://api.learntechww.com/college_icon/logo1733989968823.jpg" alt="Chitkara"
+                        style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+                <span class="brand-name">TESTPAD</span>
+            </a>
+            <div class="breadcrumb">
+                <span>Library</span>
+                <i class="fas fa-chevron-right"></i>
+                <span>Upgrade</span>
+                <i class="fas fa-chevron-right"></i>
+                <span class="active">Secure Checkout</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="user-pill">
+                <i class="fas fa-user-circle"></i>
+                <span>om.aggarwal@example.com</span>
+            </div>
+            <i class="fas fa-shield-check" style="color:#10b981;"></i>
+        </div>
+    </header>
+
+    <div class="checkout-wrapper">
+        <!-- LEFT: PAYMENT DETAILS -->
+        <main class="payment-section">
+            <h2 class="section-title">Payment Method</h2>
+
+            <div class="payment-methods">
+                <div class="method-tab active" onclick="switchMethod('card', this)">
+                    <i class="fas fa-credit-card"></i> Card
+                </div>
+                <div class="method-tab" onclick="switchMethod('gpay', this)">
+                    <i class="fab fa-google-pay" style="font-size: 1.2rem;"></i> Google Pay
+                </div>
+                <div class="method-tab">
+                    <i class="fas fa-building-columns"></i> Net Banking
+                </div>
+            </div>
+
+            <!-- CARD VIEW -->
+            <div id="cardView" class="view-container active">
+                <form class="form-grid" id="checkoutForm">
+                    <div class="input-group">
+                        <label class="label">CARDHOLDER NAME</label>
+                        <div class="field-container">
+                            <i class="fas fa-user-edit"></i>
+                            <input type="text" class="input" placeholder="e.g. Om Aggarwal" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="label">CARD NUMBER</label>
+                        <div class="field-container">
+                            <i class="fas fa-credit-card"></i>
+                            <input type="text" class="input" id="cardNumber" placeholder="0000 0000 0000 0000"
+                                maxlength="19" required>
+                            <i class="fab fa-cc-visa card-brand-icon" id="brandIcon"></i>
+                        </div>
+                        <div class="inline-feedback" id="cardError">Invalid card number</div>
+                    </div>
+
+                    <div class="row-2">
+                        <div class="input-group">
+                            <label class="label">EXPIRY DATE</label>
+                            <div class="field-container">
+                                <i class="far fa-calendar-alt"></i>
+                                <input type="text" class="input" id="cardExpiry" placeholder="MM / YY" maxlength="7"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label class="label">CVC / CVV</label>
+                            <div class="field-container">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" class="input" placeholder="•••" maxlength="4" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="terms-box">
+                        <input type="checkbox" id="termsAgree" checked>
+                        <label for="termsAgree">
+                            I agree to TESTPAD's <a href="#"
+                                style="color:var(--slate-900); font-weight:700; text-decoration:none;">Terms of
+                                Service</a>
+                            and acknowledge the <a href="#"
+                                style="color:var(--slate-900); font-weight:700; text-decoration:none;">Privacy
+                                Policy</a>.
+                            Your card will not be charged until you confirm.
+                        </label>
+                    </div>
+
+                    <button type="submit" class="pay-button" id="payBtn">
+                        <div class="spinner" id="btnSpinner"></div>
+                        <span id="btnText">Confirm & Pay ₹399.00</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- GPAY VIEW -->
+            <div id="gpayView" class="view-container">
+                <div
+                    style="background: var(--slate-50); border-radius: 12px; border: 1px solid var(--border); padding: 32px;">
+                    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
+                        <div
+                            style="width: 48px; height: 48px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                            <i class="fab fa-google-pay" style="font-size: 1.5rem; color: #4285F4;"></i>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1rem; font-weight: 700;">Google Pay / UPI</h3>
+                            <p style="font-size: 0.75rem; color: var(--slate-400);">Securely pay via your linked mobile
+                                number or ID</p>
+                        </div>
+                    </div>
+
+                    <div id="gpayInitial">
+                        <div class="input-group" style="margin-bottom: 20px;">
+                            <label class="label">MOBILE NUMBER OR UPI ID</label>
+                            <div class="field-container">
+                                <i class="fas fa-mobile-screen"></i>
+                                <input type="text" class="input" id="gpayUserInput"
+                                    placeholder="e.g. 9876543210 or om@okaxis">
+                            </div>
+                        </div>
+
+                        <button class="pay-button" onclick="initiateGPay()" id="gpaySubmitBtn"
+                            style="background: #000; color: #fff; width: 100%;">
+                            <i class="fab fa-google"></i> Verify & Pay ₹399.00
+                        </button>
+                    </div>
+
+                    <div id="gpayPending" style="display: none; text-align: center; padding: 20px 0;">
+                        <div class="spinner"
+                            style="display: inline-block; border-top-color: var(--slate-900); border-width: 3px; width: 24px; height: 24px;">
+                        </div>
+                        <h4 style="margin-top: 16px; font-weight: 700;">Awaiting Confirmation</h4>
+                        <p style="font-size: 0.85rem; color: var(--slate-600); margin-top: 8px; line-height: 1.5;">
+                            We've sent a payment request to your GPay app.<br>
+                            Please approve it to complete the transaction.
+                        </p>
+                    </div>
+
+                    <div
+                        style="margin-top: 32px; font-size: 0.75rem; color: var(--slate-400); display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-shield-check" style="color: #10b981;"></i>
+                        Secure, encrypted handshake with Google Pay Servers
+                    </div>
+                </div>
+            </div>
+
+            <div class="trust-footer">
+                <div class="trust-tag">
+                    <i class="fas fa-shield-check"></i>
+                    <span>PCI-DSS Compliant</span>
+                </div>
+                <div class="trust-tag">
+                    <span style="font-size: 0.65rem; color: #94a3b8;">POWERED BY STRIPE & RAZORPAY API</span>
+                </div>
+                <div style="display: flex; gap: 8px; font-size: 1.2rem; color: var(--slate-200);">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-apple-pay"></i>
+                </div>
+            </div>
+        </main>
+
+        <!-- RIGHT: ORDER SUMMARY -->
+        <aside class="summary-section">
+            <h2 class="section-title" style="font-size: 1rem;">Order Summary</h2>
+
+            <div class="order-card">
+                <div class="plan-header">
+                    <span class="plan-name">Student Pro</span>
+                    <span class="plan-price" id="displayPrice">₹399.00</span>
+                </div>
+
+                <div class="billing-toggle">
+                    <button class="toggle-btn active" id="btnMonthly">Monthly</button>
+                    <button class="toggle-btn" id="btnYearly">Yearly (Save 20%)</button>
+                </div>
+
+                <ul class="feature-list">
+                    <li class="feature-item"><i class="fas fa-check"></i> Unlimited academic resources</li>
+                    <li class="feature-item"><i class="fas fa-check"></i> AI-powered study summaries</li>
+                    <li class="feature-item"><i class="fas fa-check"></i> High-quality PDF exports</li>
+                    <li class="feature-item"><i class="fas fa-check"></i> Priority support & no ads</li>
+                </ul>
+
+                <div class="price-summary">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="subtotal">₹338.14</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>GST (18%)</span>
+                        <span id="tax">₹60.86</span>
+                    </div>
+                    <div class="summary-row summary-total">
+                        <span>Due Today</span>
+                        <span id="totalPrice">₹399.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="billing-note">
+                Your subscription will automatically renew on <strong>March 25, 2026</strong> for ₹399.00. You can
+                cancel anytime from your account settings.
+                <br><br>
+                <a href="#" style="color:var(--slate-600); font-weight:700; text-decoration:none;">Contact Support</a> •
+                <a href="#" style="color:var(--slate-600); font-weight:700; text-decoration:none;">Help Center</a>
+            </div>
+        </aside>
+    </div>
+
+    <!-- SUCCESS OVERLAY -->
+    <div id="successModal">
+        <div class="success-tick"><i class="fas fa-check"></i></div>
+        <h2 style="font-family:'Outfit'; font-size:1.5rem; margin-bottom:8px;">Payment Successful</h2>
+        <p style="color:var(--slate-600); font-size:0.9rem; margin-bottom: 24px;">Thank you for your purchase. We're
+            setting up your Pro account...</p>
+        <div class="spinner"
+            style="display:block; border-top-color:var(--slate-900); border-width:3px; width:24px; height:24px; margin: 0 auto;">
+        </div>
+        <p style="color:var(--slate-400); font-size:0.75rem; margin-top:20px;">Securely redirecting to Library in 2s</p>
+    </div>
+
+    <script>
+        // --- NAVIGATION ---
+        function switchMethod(method, el) {
+            document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+
+            document.querySelectorAll('.view-container').forEach(v => v.classList.remove('active'));
+            if (method === 'card') document.getElementById('cardView').classList.add('active');
+            if (method === 'gpay') document.getElementById('gpayView').classList.add('active');
+        }
+
+        // --- REAL-WORLD FRICTION & LOGIC ---
+        const cardNumber = document.getElementById('cardNumber');
+        const cardBrand = document.getElementById('brandIcon');
+        const form = document.getElementById('checkoutForm');
+        const payBtn = document.getElementById('payBtn');
+        const btnText = document.getElementById('btnText');
+        const btnSpinner = document.getElementById('btnSpinner');
+
+        // Card Brand Detection (Visa/Mastercard)
+        cardNumber.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '');
+            e.target.value = val.replace(/(\d{4})/g, '$1 ').trim();
+
+            if (val.startsWith('4')) {
+                cardBrand.className = 'fab fa-cc-visa card-brand-icon';
+                cardBrand.style.color = '#0055A4';
+            } else if (val.startsWith('5')) {
+                cardBrand.className = 'fab fa-cc-mastercard card-brand-icon';
+                cardBrand.style.color = '#EB001B';
+            } else {
+                cardBrand.className = 'fas fa-credit-card card-brand-icon';
+                cardBrand.style.color = '#cbd5e1';
+            }
+        });
+
+        // Expiry Auto-slash
+        document.getElementById('cardExpiry').addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v.length > 2) v = v.slice(0, 2) + ' / ' + v.slice(2);
+            e.target.value = v;
+        });
+
+        // Price Toggling
+        const monthlyBtn = document.getElementById('btnMonthly');
+        const yearlyBtn = document.getElementById('btnYearly');
+        const subtotal = document.getElementById('subtotal');
+        const tax = document.getElementById('tax');
+        const total = document.getElementById('totalPrice');
+        const displayPrice = document.getElementById('displayPrice');
+
+        function updatePrice(isYearly) {
+            if (isYearly) {
+                subtotal.innerText = '₹3,244.07';
+                tax.innerText = '₹583.93';
+                total.innerText = '₹3,828.00';
+                displayPrice.innerText = '₹319/mo';
+                btnText.innerText = 'Confirm & Pay ₹3,828.00';
+            } else {
+                subtotal.innerText = '₹338.14';
+                tax.innerText = '₹60.86';
+                total.innerText = '₹399.00';
+                displayPrice.innerText = '₹399.00';
+                btnText.innerText = 'Confirm & Pay ₹399.00';
+            }
+        }
+
+        monthlyBtn.onclick = () => { monthlyBtn.classList.add('active'); yearlyBtn.classList.remove('active'); updatePrice(false); };
+        yearlyBtn.onclick = () => { yearlyBtn.classList.add('active'); monthlyBtn.classList.remove('active'); updatePrice(true); };
+
+        // Submission Flow
+        form.onsubmit = (e) => {
+            e.preventDefault();
+
+            // Card specific validation
+            if (cardNumber.value.replace(/\s/g, '').length < 16) {
+                document.getElementById('cardError').style.display = 'block';
+                cardNumber.classList.add('invalid');
+                return;
+            }
+
+            startPaymentFlow();
+        };
+
+        function initiateGPay() {
+            const input = document.getElementById('gpayUserInput');
+            if (!input.value.trim()) {
+                alert("Please enter a valid Phone Number or UPI ID");
+                return;
+            }
+
+            // Move to pending state
+            document.getElementById('gpayInitial').style.display = 'none';
+            document.getElementById('gpayPending').style.display = 'block';
+
+            // Simulate banking confirm lag
+            setTimeout(() => {
+                showSuccess();
+            }, 4500);
+        }
+
+        function startPaymentFlow(msg = 'Processing via Secure Gateway...') {
+            // Start "Processing" View
+            payBtn.disabled = true;
+            btnText.innerText = msg;
+            btnSpinner.style.display = 'block';
+
+            // Simulate Banking Delay
+            setTimeout(() => {
+                showSuccess();
+            }, 3000);
+        }
+
+        function showSuccess() {
+            localStorage.setItem('ex_pro', 'true');
+            document.getElementById('successModal').style.display = 'flex';
+
+            // Final Redirect
+            setTimeout(() => {
+                location.href = 'digitallib.html';
+            }, 2500);
+        }
+    </script>
+</body>
+
+</html>

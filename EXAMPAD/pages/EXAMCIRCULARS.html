@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #004a99;
+            --bg: #f2f2f2;
+            --border: #ddd;
+            --text: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            padding-bottom: 50px;
+        }
+
+        /* --- ERP HEADER --- */
+        .inst-header {
+            background: #fff;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .inst-id {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .inst-logo {
+            width: 45px;
+            height: 45px;
+            background: var(--primary);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 900;
+            border-radius: 4px;
+        }
+
+        .inst-name-top {
+            display: block;
+            font-weight: 800;
+            font-size: 16px;
+            color: #1a1a1a;
+        }
+
+        .inst-name-sub {
+            display: block;
+            font-size: 10px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- NAV --- */
+        .nav-tabs-bar {
+            background: var(--primary);
+            display: flex;
+            padding: 0 40px;
+        }
+
+        .nav-tab {
+            padding: 12px 25px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-tab:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: #fff;
+        }
+
+        .nav-tab.active {
+            background: #fff;
+            color: var(--primary);
+        }
+
+        /* --- MAIN --- */
+        .main-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            background: #fff;
+            border: 1px solid var(--border);
+            padding: 40px;
+            min-height: 80vh;
+        }
+
+        .page-title-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary);
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+
+        /* --- TIMELINE STYLES --- */
+        .timeline-container {
+            position: relative;
+            padding-left: 120px;
+            padding-top: 20px;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 81px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #4a90e2;
+            opacity: 0.8;
+        }
+
+        .date-marker {
+            position: relative;
+            text-align: center;
+            margin-bottom: 50px;
+            margin-left: -120px;
+        }
+
+        .date-marker span {
+            background: #fff;
+            padding: 0 30px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #555;
+            position: relative;
+            z-index: 1;
+        }
+
+        .date-marker::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50px;
+            right: 50px;
+            height: 1px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+
+        .circular-item {
+            position: relative;
+            margin-bottom: 60px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .circular-badge {
+            position: absolute;
+            left: -110px;
+            top: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #219672;
+            text-transform: capitalize;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .circular-badge::after {
+            content: '';
+            width: 20px;
+            height: 1px;
+            background: #219672;
+            display: inline-block;
+        }
+
+        .circular-icon-box {
+            position: absolute;
+            left: -60px;
+            top: 0;
+            width: 44px;
+            height: 44px;
+            background: #62a392;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid #fff;
+            z-index: 3;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(98, 163, 146, 0.3);
+        }
+
+        .circular-content {
+            padding-left: 20px;
+        }
+
+        .circular-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+        }
+
+        .circular-body {
+            font-size: 0.95rem;
+            color: #444;
+            line-height: 1.6;
+            max-width: 850px;
+        }
+
+        .btn-erp {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 6px 15px;
+            font-weight: 700;
+            font-size: 11px;
+            cursor: pointer;
+            border-radius: 2px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+    <div class="inst-header">
+        <div class="inst-id">
+            <div class="inst-logo"
+                style="background: transparent; border-radius: 0; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;">
+                <img src="https://api.learntechww.com/college_icon/logo1733989968823.jpg" alt="Chitkara"
+                    style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
+            <div>
+                <span class="inst-name-top">TESTPAD RE-EXAMINATION DEPARTMENT</span>
+                <span class="inst-name-sub">Circulars & Public Notices Registry | Academic Cell</span>
+            </div>
+        </div>
+        <div style="font-size: 11px; color:#666;">
+            <b>PORTAL STATUS:</b> <span style="color:green;">SECURE-ACTIVE</span>
+        </div>
+    </div>
+
+    <nav class="nav-tabs-bar">
+        <div class="nav-tab" onclick="location.href='./student-dashboard.html'">Student Dashboard</div>
+        <div class="nav-tab active">Circulars & Notices</div>
+        <div class="nav-tab" onclick="location.href='./resultsfinal.html'">Performance Registry</div>
+    </nav>
+
+    <main class="main-container">
+        <div class="page-title-box">
+            <h1 class="page-title">Digital Circulars Timeline (Official Repository)</h1>
+            <span style="font-size:11px; color:#888;">Session: FALL-2025</span>
+        </div>
+
+        <div class="timeline-container" id="circularsTimeline">
+            <div class="timeline-line"></div>
+            <!-- Dynamic data injected here -->
+            <div id="noData" style="text-align:center; padding:100px; color:#bbb;">
+                <i class="fas fa-box-open" style="font-size: 3rem; margin-bottom: 20px;"></i>
+                <p>Registering access to Official Repository... No new circulars found in current session.</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/db.js"></script>
+    <script>
+        const db = new TestpadDB();
+
+        function loadTimeline() {
+            const timeline = document.getElementById('circularsTimeline');
+            const data = db.getCirculars();
+
+            if (!data || data.length === 0) return;
+
+            // Remove noData and initial spinner
+            document.getElementById('noData')?.remove();
+
+            // Group by date
+            const grouped = {};
+            data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).forEach(c => {
+                const dateStr = new Date(c.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                if (!grouped[dateStr]) grouped[dateStr] = [];
+                grouped[dateStr].push(c);
+            });
+
+            let html = '<div class="timeline-line"></div>';
+
+            for (const [date, items] of Object.entries(grouped)) {
+                html += `<div class="date-marker"><span>${date.toUpperCase()}</span></div>`;
+                items.forEach(c => {
+                    const icon = c.category === 'Notice' ? 'fa-id-card' : 'fa-file-invoice';
+                    const color = c.category === 'Notice' ? '#4a90e2' : '#62a392';
+                    html += `
+                        <div class="circular-item">
+                            <span class="circular-badge" style="color:${color};">${c.category}</span>
+                            <div class="circular-icon-box" style="background:${color};">
+                                <i class="fas ${icon}"></i>
+                            </div>
+                            <div class="circular-content">
+                                <h4 class="circular-title">${c.title}</h4>
+                                <p class="circular-body">${c.content}</p>
+                                ${c.attachment ? `<button class="btn-erp" style="margin-top:15px; background:${color};"><i class="fas fa-download"></i> DOWNLOAD ATTACHMENT</button>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            timeline.innerHTML = html;
+        }
+
+        window.onload = loadTimeline;
+    </script>
+</body>
+
+</html>

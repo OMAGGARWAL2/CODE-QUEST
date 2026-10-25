@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="../js/theme-engine.js"></script>
+    <style>
+        :root {
+            --primary: #F26B3A;
+            --primary-soft: #FFF1EC;
+            --bg: #FFFFFF;
+            --subtle: #F9FAFB;
+            --border: #EAECF0;
+            --text-dark: #101828;
+            --text-muted: #475467;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--subtle);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        /* --- TESTPAD STYLE MINIMAL HEADER --- */
+        .top-nav {
+            background: #fff;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Outfit';
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        /* --- PROFILE CONTAINER --- */
+        .profile-container {
+            max-width: 900px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 40px;
+            padding: 0 20px;
+        }
+
+        /* --- SIDEBAR --- */
+        .profile-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .photo-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+        }
+
+        .avatar-frame {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            position: relative;
+            background: var(--subtle);
+            border: 4px solid #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .avatar-frame img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .upload-badge {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 36px;
+            height: 36px;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 3px solid #fff;
+            transition: transform 0.2s;
+        }
+
+        .upload-badge:hover {
+            transform: scale(1.1);
+        }
+
+        .sidebar-stats {
+            background: #fff;
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .stat-val {
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        /* --- MAIN FORM --- */
+        .profile-main {
+            background: #fff;
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+        }
+
+        .section-title {
+            font-family: 'Outfit';
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .section-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 32px;
+        }
+
+        .field-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .field-box {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .field-box.full {
+            grid-column: span 2;
+        }
+
+        label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            background: var(--subtle);
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px var(--primary-soft);
+        }
+
+        textarea {
+            height: 100px;
+            resize: none;
+        }
+
+        .btn-save {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 20px;
+            transition: all 0.2s;
+        }
+
+        .btn-save:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(242, 107, 58, 0.2);
+        }
+
+        /* --- TOAST --- */
+        #toast {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            background: #101828;
+            color: #fff;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            display: none;
+            z-index: 1000;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+    <nav class="top-nav">
+        <a href="./student-dashboard.html" class="logo">TESTPAD</a>
+        <div class="nav-links">
+            <a href="./student-dashboard.html" class="nav-link">Dashboard</a>
+            <a href="./preferences.html" class="nav-link">Preferences</a>
+            <a href="#" class="nav-link" id="userNameLabel">Om Aggarwal</a>
+        </div>
+    </nav>
+
+    <div class="profile-container">
+        <div class="profile-sidebar">
+            <div class="photo-card">
+                <div class="avatar-frame">
+                    <img src="https://img.freepik.com/premium-vector/avatar-icon-illustration-vector-design_672535-159.jpg"
+                        id="profilePic" alt="Avatar">
+                    <label for="picInput" class="upload-badge">
+                        <i class="fas fa-camera"></i>
+                    </label>
+                    <input type="file" id="picInput" style="display:none" accept="image/*" onchange="previewPic(this)">
+                </div>
+                <h3 id="sideName" style="font-family:'Outfit';">Student Name</h3>
+                <p id="sideEmail" style="font-size:0.85rem; color:var(--text-muted);">student@TESTPAD.edu</p>
+            </div>
+
+            <div class="sidebar-stats">
+                <h4
+                    style="margin-bottom:16px; font-size:0.9rem; border-bottom:1px solid var(--border); padding-bottom:8px;">
+                    Quick Stats</h4>
+                <div class="stat-row">
+                    <span class="stat-label">Tests Taken</span>
+                    <span class="stat-val" id="statTests">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Avg Score</span>
+                    <span class="stat-val" id="statAvg">--%</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Credits</span>
+                    <span class="stat-val">48.5</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-main">
+            <h1 class="section-title">Edit Profile</h1>
+            <p class="section-desc">Keep your academic identity updated for official transcripts.</p>
+
+            <form id="profileForm" onsubmit="saveProfile(event)">
+                <div class="field-grid">
+                    <div class="field-box">
+                        <label>Full Name</label>
+                        <input type="text" id="fullName" placeholder="John Doe" required>
+                    </div>
+                    <div class="field-box">
+                        <label>Email Address</label>
+                        <input type="email" id="email" placeholder="john@example.com" readonly
+                            style="opacity:0.6; cursor:not-allowed;">
+                    </div>
+                    <div class="field-box">
+                        <label>Phone Number</label>
+                        <input type="tel" id="phone" placeholder="+1 234 567 890">
+                    </div>
+                    <div class="field-box">
+                        <label>Academic Roll No.</label>
+                        <input type="text" id="rollNo" placeholder="2024SRX001">
+                    </div>
+                    <div class="field-box">
+                        <label>Department / Stream</label>
+                        <select id="department">
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Information Technology">Information Technology</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Mechanical">Mechanical</option>
+                            <option value="Business Admin">Business Admin</option>
+                        </select>
+                    </div>
+                    <div class="field-box">
+                        <label>Current Semester</label>
+                        <input type="number" id="semester" min="1" max="10" placeholder="e.g. 5">
+                    </div>
+                    <div class="field-box full">
+                        <label>Biography / About Me</label>
+                        <textarea id="bio" placeholder="Briefly describe your academic interests..."></textarea>
+                    </div>
+                </div>
+
+                <div style="padding-top:20px; border-top:1px solid var(--border);">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <p style="font-weight:700; font-size:0.9rem;">Public Profile</p>
+                            <p style="font-size:0.75rem; color:var(--text-muted);">Visible to instructors and peers</p>
+                        </div>
+                        <i class="fas fa-toggle-on" style="color:var(--primary); font-size:1.4rem;"></i>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-save">Update Academic Profile</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast">Changes saved successfully!</div>
+
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        const user = auth.getCurrentUser();
+
+        function init() {
+            if (!user) {
+                window.location.href = './login.html';
+                return;
+            }
+
+            // Load from DB/Auth
+            document.getElementById('userNameLabel').textContent = user.name;
+            document.getElementById('sideName').textContent = user.name;
+            document.getElementById('fullName').value = user.name;
+            document.getElementById('rollNo').value = user.rollNo || user.id.toUpperCase();
+
+            const email = user.email || (user.name.toLowerCase().replace(/\s/g, '.') + '@TESTPAD.edu');
+            document.getElementById('email').value = email;
+            document.getElementById('sideEmail').textContent = email;
+
+            // Load extended data from localStorage
+            const extData = JSON.parse(localStorage.getItem('userExt_' + user.id) || '{}');
+            document.getElementById('phone').value = extData.phone || '';
+            document.getElementById('department').value = extData.department || 'Computer Science';
+            document.getElementById('semester').value = extData.semester || '';
+            document.getElementById('bio').value = extData.bio || '';
+
+            const savedPic = localStorage.getItem('userPic_' + user.id);
+            if (savedPic) document.getElementById('profilePic').src = savedPic;
+
+            // Load Stats
+            const attempts = db.getStudentAttempts(user.id).filter(a => a.status === 'submitted' || a.status === 'reviewed');
+            document.getElementById('statTests').textContent = attempts.length;
+
+            if (attempts.length > 0) {
+                let s = 0, t = 0;
+                attempts.forEach(a => {
+                    const sc = db.calculateScore(a);
+                    s += sc.score; t += sc.totalMarks;
+                });
+                document.getElementById('statAvg').textContent = Math.round((s / t) * 100) + '%';
+            }
+        }
+
+        function previewPic(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('profilePic').src = e.target.result;
+                    localStorage.setItem('userPic_' + user.id, e.target.result);
+                    showToast("Profile image updated locally!");
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function saveProfile(e) {
+            e.preventDefault();
+            const extData = {
+                phone: document.getElementById('phone').value,
+                department: document.getElementById('department').value,
+                semester: document.getElementById('semester').value,
+                bio: document.getElementById('bio').value
+            };
+
+            localStorage.setItem('userExt_' + user.id, JSON.stringify(extData));
+
+            // Update Auth & DB
+            const updatedName = document.getElementById('fullName').value;
+            const updatedRoll = document.getElementById('rollNo').value;
+
+            const updatedUser = db.updateUser(user.id, {
+                name: updatedName,
+                rollNo: updatedRoll
+            });
+
+            if (updatedUser) {
+                localStorage.setItem('auth_user', JSON.stringify(updatedUser));
+            }
+
+            showToast("Your profile has been updated.");
+            setTimeout(() => location.reload(), 1500);
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

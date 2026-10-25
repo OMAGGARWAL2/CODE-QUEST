@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #004a99;
+            --bg: #f2f2f2;
+            --border: #ccc;
+            --text-dark: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dark);
+        }
+
+        .login-box {
+            width: 420px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-top: 5px solid var(--primary);
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .login-header {
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            font-family: 'Outfit';
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .login-header p {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #555;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background 0.2s;
+        }
+
+        .btn-login:hover {
+            background: #003366;
+        }
+
+        .footer-note {
+            margin-top: 24px;
+            font-size: 0.7rem;
+            color: #999;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            display: none;
+            z-index: 1000;
+            font-weight: 600;
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+    <div class="login-box">
+        <div class="login-header">
+            <div
+                style="width: 50px; height: 50px; background: var(--primary); color: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 800; margin: 0 auto 15px; font-family: 'Outfit';">
+                E</div>
+            <h1>Department Login</h1>
+            <p>Institutional Performance & Registry Services</p>
+        </div>
+
+        <div class="form-group">
+            <label>Educational Email / Roll ID</label>
+            <input type="text" id="email" placeholder="e.g. 2024SR22720">
+        </div>
+
+
+
+        <button class="btn-login" onclick="performLogin()">Access Records</button>
+
+        <div class="footer-note">
+            <p>© 2026 TESTPAD RE-EXAMINATION DEPARTMENT</p>
+            <p style="margin-top: 4px;">Secure Gateway | Academic Integrity First</p>
+        </div>
+    </div>
+
+    <div id="toast">Message here</div>
+
+    <script src="../js/db.js"></script>
+    <script>
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
+
+        function performLogin() {
+            const email = document.getElementById('email').value.trim();
+
+            if (!email) {
+                showToast("Please enter Educational Email / Roll ID.");
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('TESTPAD_users')) || [];
+            const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() || (u.rollNo && u.rollNo.toLowerCase() === email.toLowerCase()));
+
+            if (user && user.role === 'student') {
+                sessionStorage.setItem('results_auth_user', JSON.stringify(user));
+                window.location.href = './resultsfinal.html';
+            } else {
+                showToast("Invalid ID. Please verify your Roll Number.");
+            }
+        }
+
+        // Bypassing logic: if already logged in via main system or this system
+        window.onload = function () {
+            if (sessionStorage.getItem('results_auth_user')) {
+                window.location.href = './resultsfinal.html';
+            }
+        };
+    </script>
+</body>
+
+</html>

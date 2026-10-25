@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Job Postings</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Hind:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+    <style>
+        :root {
+            --primary: #D92D20;
+            --primary-hover: #B42318;
+            --primary-soft: #FEF3F2;
+            --text-main: #101828;
+            --text-secondary: #475467;
+            --text-tertiary: #667085;
+            --bg-body: #F9FAFB;
+            --border: #EAECF0;
+            --green: #12B76A;
+            --amber: #F79009;
+            --red: #D92D20;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-body); color: var(--text-main); min-height: 100vh; }
+
+        .site-header { height: 72px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; position: sticky; top: 0; z-index: 1000; }
+        .header-left { display: flex; align-items: center; gap: 24px; }
+        .logo-container { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; }
+        .logo-square { width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .logo-square img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text { font-size: 1.35rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; text-transform: uppercase; line-height: 1; }
+        .logo-text small { display: block; font-size: 0.7rem; font-weight: 700; color: var(--primary); letter-spacing: 0.8px; margin-top: 3px; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--text-tertiary); text-decoration: none; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 0.95rem; padding: 8px 14px; border-radius: 8px; }
+        .back-link:hover { background: var(--primary-soft); color: var(--primary); }
+        .avatar { width: 40px; height: 40px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .wrap { max-width: 1180px; margin: 0 auto; padding: 32px 24px 90px; }
+        .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 26px; }
+        .toolbar h1 { font-family: 'Mulish', sans-serif; font-size: 1.7rem; font-weight: 800; }
+        .toolbar .sub { color: var(--text-tertiary); font-family: 'Hind', sans-serif; font-size: 1rem; margin-top: 2px; }
+        .btn { border: none; border-radius: 9px; padding: 11px 20px; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 0.92rem; cursor: pointer; display: inline-flex; align-items: center; gap: 9px; transition: all 0.2s; }
+        .btn.primary { background: var(--primary); color: #fff; }
+        .btn.primary:hover { background: var(--primary-hover); }
+        .btn.ghost { background: #fff; color: #475467; border: 1px solid var(--border); }
+        .btn.ghost:hover { border-color: var(--primary); color: var(--primary); }
+        .btn.sm { padding: 7px 13px; font-size: 0.82rem; }
+        .btn.danger { color: var(--red); border-color: #fecdca; background: #fff; }
+        .btn.danger:hover { background: #fef3f2; }
+
+        /* ===== JOB CARDS ===== */
+        .job-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 22px; }
+        .job-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); display: flex; flex-direction: column; gap: 12px; transition: all 0.25s; }
+        .job-card:hover { box-shadow: 0 14px 34px rgba(21,112,239,0.12); transform: translateY(-3px); }
+        .jc-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+        .jc-co { display: flex; align-items: center; gap: 12px; }
+        .jc-logo { width: 46px; height: 46px; border-radius: 10px; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; font-family: 'Mulish'; font-weight: 900; font-size: 1.2rem; flex-shrink: 0; }
+        .jc-title { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.18rem; color: #101828; line-height: 1.3; }
+        .jc-company { color: var(--text-tertiary); font-size: 0.9rem; font-family: 'Hind', sans-serif; }
+        .jc-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .jc-tag { background: #f2f4f7; color: #475467; border-radius: 6px; padding: 4px 10px; font-size: 0.78rem; font-weight: 700; font-family: 'Mulish', sans-serif; display: inline-flex; align-items: center; gap: 6px; }
+        .jc-tag.fee { background: #fffaeb; color: #b54708; }
+        .jc-tag.deadline { background: #fef3f2; color: #b42318; }
+        .jc-tag.open { background: #ecfdf3; color: #027a48; }
+        .jc-tag.closed { background: #f2f4f7; color: #98a2b3; }
+        .jc-desc { color: var(--text-secondary); font-family: 'Hind', sans-serif; font-size: 0.98rem; line-height: 1.5; }
+        .jc-qual { font-size: 0.88rem; color: #475467; font-family: 'Hind', sans-serif; }
+        .jc-foot { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 8px; gap: 10px; flex-wrap: wrap; }
+        .jc-count { font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 0.85rem; color: var(--text-tertiary); }
+        .empty { grid-column: 1/-1; text-align: center; padding: 70px 20px; color: #98a2b3; font-family: 'Mulish', sans-serif; }
+        .empty i { font-size: 2.6rem; color: #d0d5dd; display: block; margin-bottom: 14px; }
+
+        /* ===== MODALS ===== */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(16,24,40,0.55); z-index: 5000; align-items: flex-start; justify-content: center; padding: 36px 18px; overflow-y: auto; }
+        .modal-card { background: #fff; border-radius: 16px; width: 100%; max-width: 720px; padding: 30px 32px; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
+        .modal-card.wide { max-width: 900px; }
+        .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+        .modal-head h3 { font-family: 'Mulish', sans-serif; font-size: 1.35rem; font-weight: 800; }
+        .modal-close { background: #f2f4f7; border: none; width: 36px; height: 36px; border-radius: 9px; font-size: 1.1rem; cursor: pointer; color: #475467; }
+        .fg { margin-bottom: 16px; }
+        .fr { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .fl { display: block; font-family: 'Mulish', sans-serif; font-size: 0.85rem; font-weight: 700; color: #344054; margin-bottom: 7px; }
+        .fi, .fsel, .fta { width: 100%; padding: 11px 13px; border: 1px solid #d0d5dd; border-radius: 8px; font-size: 0.95rem; font-family: 'Mulish', sans-serif; color: #101828; outline: none; background: #fff; }
+        .fi:focus, .fsel:focus, .fta:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+        .fta { min-height: 84px; resize: vertical; }
+        .section-h { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1rem; color: #101828; margin: 22px 0 12px; padding-top: 16px; border-top: 1px solid #eaecf0; display: flex; align-items: center; gap: 9px; }
+        .section-h i { color: var(--primary); }
+        .chk { display: flex; align-items: center; gap: 10px; font-family: 'Hind', sans-serif; font-size: 0.98rem; color: #344054; cursor: pointer; }
+        .chk input { width: 18px; height: 18px; accent-color: var(--primary); }
+
+        /* form builder */
+        .fb-row { display: grid; grid-template-columns: 1.4fr 1fr auto auto; gap: 10px; align-items: center; margin-bottom: 10px; background: #f9fafb; border: 1px solid #eaecf0; border-radius: 10px; padding: 10px; }
+        .fb-row .req { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-family: 'Mulish'; font-weight: 700; color: #475467; }
+        .fb-del { background: #fff; border: 1px solid #fecdca; color: var(--red); width: 34px; height: 34px; border-radius: 8px; cursor: pointer; }
+        .fb-opt { grid-column: 1/-1; }
+        .modal-foot { display: flex; justify-content: flex-end; gap: 12px; margin-top: 26px; }
+
+        /* apply / fee */
+        .fee-box { background: #fffaeb; border: 1px solid #fed7aa; border-radius: 12px; padding: 18px; margin-bottom: 18px; }
+        .fee-amt { font-family: 'Mulish', sans-serif; font-weight: 900; font-size: 1.5rem; color: #b54708; }
+        .qr-img { max-width: 190px; border: 1px solid #ddd; border-radius: 10px; margin-top: 10px; display: block; }
+        .paid-flag { color: #027a48; font-weight: 700; font-family: 'Mulish'; font-size: 0.85rem; }
+
+        /* applications table */
+        .app-table { width: 100%; border-collapse: collapse; font-family: 'Hind', sans-serif; }
+        .app-table th { text-align: left; font-family: 'Mulish'; font-weight: 800; font-size: 0.82rem; color: #475467; text-transform: uppercase; padding: 10px 12px; border-bottom: 2px solid #eaecf0; }
+        .app-table td { padding: 12px; border-bottom: 1px solid #f2f4f7; font-size: 0.95rem; color: #344054; vertical-align: top; }
+        .app-table tr:hover td { background: #f9fafb; }
+        .sel-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-family: 'Mulish'; font-weight: 700; font-size: 0.75rem; cursor: pointer; border: 1px solid transparent; }
+        .sel-pending { background: #f2f4f7; color: #475467; }
+        .sel-shortlisted { background: #fffaeb; color: #b54708; }
+        .sel-selected { background: #ecfdf3; color: #027a48; }
+        .sel-rejected { background: #fef3f2; color: #b42318; }
+        .toast-box { position: fixed; bottom: 24px; right: 24px; background: #101828; color: #fff; padding: 14px 24px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; z-index: 100000; font-weight: 600; font-family: 'Mulish', sans-serif; }
+        input[type=file] { display: none; }
+        @media (max-width: 720px) { .fr { grid-template-columns: 1fr; } .fb-row { grid-template-columns: 1fr 1fr; } }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="header-left">
+        <a href="#" class="logo-container" onclick="goHome(event)">
+            <div class="logo-square"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest"></div>
+            <div class="logo-text">CodeQuest<small>Job Postings</small></div>
+        </a>
+        <a href="#" class="back-link" onclick="goHome(event)"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+    <div class="header-right"><div class="avatar"><img src="EXAMPAD/LINUX_TEST_CHITKARA_files/user-icon.3d6e2547.svg" alt="Profile"></div></div>
+</header>
+
+<div class="wrap">
+    <div class="toolbar">
+        <div>
+            <h1 id="pageTitle">Open Positions</h1>
+            <div class="sub" id="pageSub">Browse companies and apply in a few clicks.</div>
+        </div>
+        <div id="recruiterActions" style="display:none; gap:12px;">
+            <button class="btn ghost" onclick="openApplications('')"><i class="fas fa-users"></i> All Applications</button>
+            <button class="btn primary" onclick="location.href='createjob.html'"><i class="fas fa-plus"></i> Create Job Posting</button>
+        </div>
+    </div>
+    <div class="job-grid" id="jobGrid"></div>
+</div>
+
+<!-- ===== APPLY MODAL (student) ===== -->
+<div class="modal-overlay" id="applyModal">
+    <div class="modal-card">
+        <div class="modal-head"><h3 id="applyTitle">Apply</h3><button class="modal-close" onclick="closeApply()">&#10005;</button></div>
+        <div id="applyQual" class="jc-qual" style="margin-bottom:16px;"></div>
+        <div id="applyFee"></div>
+        <form onsubmit="handleSubmitApplication(event)">
+            <input type="hidden" id="aJobId">
+            <div id="applyFields"></div>
+            <div class="modal-foot"><button type="button" class="btn ghost" onclick="closeApply()">Cancel</button><button type="submit" class="btn primary"><i class="fas fa-paper-plane"></i> Submit Application</button></div>
+        </form>
+    </div>
+</div>
+
+<!-- ===== APPLICATIONS MODAL (recruiter) ===== -->
+<div class="modal-overlay" id="appsModal">
+    <div class="modal-card wide">
+        <div class="modal-head"><h3 id="appsTitle">Applications</h3><button class="modal-close" onclick="closeApps()">&#10005;</button></div>
+        <div id="appsBody" style="max-height:66vh; overflow:auto;"></div>
+    </div>
+</div>
+
+<div class="toast-box" id="toast">Done</div>
+
+<script>
+    const JOBS_KEY = 'CodeQuest_job_postings';
+    const APPS_KEY = 'CodeQuest_job_applications';
+    const MAX_FILE = 4 * 1024 * 1024;
+    let qrData = '';
+
+    function readJSON(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
+    function getJobs() { return readJSON(JOBS_KEY, []); }
+    function saveJobs(v) { try { localStorage.setItem(JOBS_KEY, JSON.stringify(v)); return true; } catch (e) { toast('Storage full — QR/attachment too large.'); return false; } }
+    function getApps() { return readJSON(APPS_KEY, {}); }
+    function saveApps(v) { try { localStorage.setItem(APPS_KEY, JSON.stringify(v)); return true; } catch (e) { toast('Storage full.'); return false; } }
+    function appsFor(jobId) { return getApps()[jobId] || []; }
+    function esc(s) { return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function session() { return readJSON('CodeQuest_active_session', null) || readJSON('TESTPAD_current_user', {}); }
+    function myRole() { const r = (session().role || '').toLowerCase(); if (r === 'recruiter' || r === 'admin') return 'recruiter'; if (r === 'teacher' || r === 'faculty' || r === 'official') return 'teacher'; return 'student'; }
+    function goHome(e) { e.preventDefault(); const r = myRole(); location.href = r === 'recruiter' ? 'recruiterindex.html' : (r === 'teacher' ? 'teacherindex.html' : 'studentindex.html'); }
+    function isClosed(job) { return job.deadline && (new Date(job.deadline + 'T23:59:59').getTime() < Date.now()); }
+    function fmtDeadline(d) { if (!d) return ''; return new Date(d).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }); }
+
+    /* ============ RENDER LIST ============ */
+    function renderJobs() {
+        const role = myRole();
+        document.getElementById('recruiterActions').style.display = role === 'recruiter' ? 'flex' : 'none';
+        document.getElementById('pageTitle').textContent = role === 'recruiter' ? 'My Job Postings' : 'Open Positions';
+        document.getElementById('pageSub').textContent = role === 'recruiter'
+            ? 'Create postings, collect registrations, then run the final selection test.'
+            : 'Browse companies and apply in a few clicks.';
+
+        let jobs = getJobs().sort((a, b) => b.createdAt - a.createdAt);
+        if (role === 'recruiter') {
+            const s = session();
+            jobs = jobs.filter(j => !s.email || j.createdBy === s.email || !j.createdBy);
+        }
+        const grid = document.getElementById('jobGrid');
+        if (!jobs.length) {
+            grid.innerHTML = `<div class="empty"><i class="far fa-briefcase"></i>${role === 'recruiter' ? 'No postings yet. Click "Create Job Posting".' : 'No open positions right now. Check back soon.'}</div>`;
+            return;
+        }
+        const me = session().email || session().name || '';
+        grid.innerHTML = jobs.map(j => {
+            const closed = isClosed(j);
+            const applied = appsFor(j.id).some(a => a.applicantEmail === me || a.applicantName === me);
+            const count = appsFor(j.id).length;
+            let actions;
+            if (role === 'recruiter') {
+                actions = `<div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <button class="btn ghost sm" onclick="openApplications('${j.id}')"><i class="fas fa-users"></i> Applications (${count})</button>
+                    <button class="btn primary sm" onclick="makeTest('${j.id}')"><i class="fas fa-file-circle-check"></i> Selection Test</button>
+                    <button class="btn ghost sm" onclick="editJob('${j.id}')"><i class="fas fa-edit"></i></button>
+                    <button class="btn danger sm" onclick="deleteJob('${j.id}')"><i class="fas fa-trash"></i></button>
+                </div>`;
+            } else {
+                actions = closed
+                    ? `<span class="jc-tag closed"><i class="fas fa-lock"></i> Applications closed</span>`
+                    : (applied
+                        ? `<span class="jc-tag open"><i class="fas fa-circle-check"></i> Applied</span>`
+                        : `<button class="btn primary sm" onclick="openApply('${j.id}')"><i class="fas fa-pen"></i> Apply Now</button>`);
+            }
+            return `<div class="job-card">
+                <div class="jc-top">
+                    <div class="jc-co">
+                        <div class="jc-logo">${esc((j.company || '?').charAt(0).toUpperCase())}</div>
+                        <div><div class="jc-title">${esc(j.title)}</div><div class="jc-company">${esc(j.company)}</div></div>
+                    </div>
+                    <span class="jc-tag ${closed ? 'closed' : 'open'}">${closed ? 'Closed' : 'Open'}</span>
+                </div>
+                <div class="jc-tags">
+                    ${j.location ? `<span class="jc-tag"><i class="fas fa-location-dot"></i> ${esc(j.location)}</span>` : ''}
+                    ${j.type ? `<span class="jc-tag"><i class="fas fa-briefcase"></i> ${esc(j.type)}</span>` : ''}
+                    ${j.salary ? `<span class="jc-tag"><i class="fas fa-sack-dollar"></i> ${esc(j.salary)}</span>` : ''}
+                    ${j.feeApplicable ? `<span class="jc-tag fee"><i class="fas fa-indian-rupee-sign"></i> ${esc(j.feeAmount || 0)} fee</span>` : '<span class="jc-tag"><i class="fas fa-gift"></i> Free</span>'}
+                    <span class="jc-tag deadline"><i class="far fa-calendar-check"></i> ${fmtDeadline(j.deadline)}</span>
+                </div>
+                ${j.description ? `<div class="jc-desc">${esc((j.description || '').slice(0, 150))}${(j.description || '').length > 150 ? '…' : ''}</div>` : ''}
+                ${j.qualification ? `<div class="jc-qual"><i class="fas fa-graduation-cap" style="color:var(--primary);"></i> ${esc(j.qualification)}</div>` : ''}
+                <div class="jc-foot">
+                    <span class="jc-count">${(j.fields || []).length} form field(s)${role === 'recruiter' ? ' · ' + count + ' applied' : ''}</span>
+                    ${actions}
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    /* ============ JOB CREATE / EDIT (now a dedicated page: createjob.html) ============ */
+    function editJob(id) { location.href = 'createjob.html?id=' + encodeURIComponent(id); }
+    function deleteJob(id) {
+        if (!confirm('Delete this posting and all its applications?')) return;
+        saveJobs(getJobs().filter(j => j.id !== id));
+        const apps = getApps(); delete apps[id]; saveApps(apps);
+        renderJobs(); toast('Posting deleted.');
+    }
+    function makeTest(id) { location.href = 'interview-makerforrecruiter.html?job=' + encodeURIComponent(id); }
+
+    /* ============ APPLY (student) ============ */
+    function openApply(id) {
+        const j = getJobs().find(x => x.id === id); if (!j) return;
+        const s = session();
+        document.getElementById('applyTitle').textContent = 'Apply — ' + j.title + ' @ ' + j.company;
+        document.getElementById('applyQual').innerHTML = j.qualification ? `<i class="fas fa-graduation-cap" style="color:var(--primary);"></i> <strong>Eligibility:</strong> ${esc(j.qualification)}` : '';
+        document.getElementById('aJobId').value = j.id;
+        // fee block
+        if (j.feeApplicable) {
+            document.getElementById('applyFee').innerHTML = `<div class="fee-box">
+                <div>Application fee</div><div class="fee-amt">₹${esc(j.feeAmount || 0)}</div>
+                ${j.qr ? `<img class="qr-img" src="${j.qr}" alt="Payment QR"><div class="jc-qual" style="margin-top:8px;">Scan &amp; pay, then enter your transaction reference below.</div>` : '<div class="jc-qual">Pay the fee, then enter your transaction reference below.</div>'}
+            </div>`;
+        } else {
+            document.getElementById('applyFee').innerHTML = `<div class="fee-box" style="background:#ecfdf3;border-color:#abefc6;"><div class="paid-flag"><i class="fas fa-circle-check"></i> No application fee — free to apply.</div></div>`;
+        }
+        // dynamic fields
+        const fields = (j.fields || []).slice();
+        if (j.feeApplicable) fields.push({ label: 'Payment Transaction Reference', type: 'text', required: true, options: '' });
+        document.getElementById('applyFields').innerHTML = fields.map((f, i) => renderApplyField(f, i, s)).join('');
+        document.getElementById('applyModal').dataset.fields = JSON.stringify(fields.map(f => f.label));
+        document.getElementById('applyModal').style.display = 'flex';
+    }
+    function renderApplyField(f, i, s) {
+        const req = f.required ? 'required' : '';
+        const id = 'af_' + i;
+        let val = '';
+        if (/name/i.test(f.label)) val = s.name || '';
+        if (/email/i.test(f.type) || /email/i.test(f.label)) val = s.email || '';
+        if (/roll|registration/i.test(f.label)) val = s.roll || s.regNo || '';
+        let inner;
+        if (f.type === 'select') {
+            const opts = (f.options || '').split(',').map(o => o.trim()).filter(Boolean).map(o => `<option>${esc(o)}</option>`).join('');
+            inner = `<select class="fsel" id="${id}" ${req}><option value="">Select...</option>${opts}</select>`;
+        } else if (f.type === 'textarea') {
+            inner = `<textarea class="fta" id="${id}" ${req}></textarea>`;
+        } else if (f.type === 'file') {
+            inner = `<input type="file" id="${id}" ${req} onchange="fileChosen(this)"><button type="button" class="btn ghost sm" onclick="document.getElementById('${id}').click()"><i class="fas fa-upload"></i> Choose file</button> <span class="jc-qual" id="${id}_fn"></span>`;
+        } else {
+            inner = `<input type="${f.type}" class="fi" id="${id}" value="${esc(val)}" ${req}>`;
+        }
+        return `<div class="fg"><label class="fl">${esc(f.label)}${f.required ? ' *' : ''}</label>${inner}</div>`;
+    }
+    function fileChosen(inp) { const fn = document.getElementById(inp.id + '_fn'); if (fn) fn.textContent = inp.files[0] ? inp.files[0].name : ''; }
+    function handleSubmitApplication(e) {
+        e.preventDefault();
+        const jobId = document.getElementById('aJobId').value;
+        const j = getJobs().find(x => x.id === jobId); if (!j) return;
+        const labels = JSON.parse(document.getElementById('applyModal').dataset.fields || '[]');
+        const s = session();
+        const values = {};
+        let resume = null;
+        const allFields = (j.fields || []).slice();
+        if (j.feeApplicable) allFields.push({ label: 'Payment Transaction Reference', type: 'text' });
+        for (let i = 0; i < allFields.length; i++) {
+            const f = allFields[i];
+            const el = document.getElementById('af_' + i);
+            if (!el) continue;
+            if (f.type === 'file') {
+                if (el.files[0]) {
+                    if (el.files[0].size > MAX_FILE) { toast(`"${el.files[0].name}" too large (max 4 MB).`); return; }
+                    const r = new FileReader();
+                    r.onload = () => { values[f.label] = { file: el.files[0].name, dataURL: r.result }; finishSubmit(jobId, values); };
+                    r.readAsDataURL(el.files[0]);
+                    return; // async; continue in onload
+                } else { values[f.label] = ''; }
+            } else {
+                values[f.label] = el.value;
+            }
+        }
+        finishSubmit(jobId, values);
+    }
+    function finishSubmit(jobId, values) {
+        const s = session();
+        const apps = getApps();
+        const list = apps[jobId] || [];
+        const email = s.email || s.name || 'student';
+        if (list.some(a => a.applicantEmail === email)) { toast('You already applied to this posting.'); return; }
+        list.push({
+            id: 'APP' + Date.now(),
+            jobId, applicantName: s.name || 'Student', applicantEmail: email, applicantRoll: s.roll || s.regNo || '',
+            values, status: 'pending', submittedAt: Date.now()
+        });
+        apps[jobId] = list;
+        if (!saveApps(apps)) return;
+        closeApply(); renderJobs(); toast('Application submitted!');
+    }
+    function closeApply() { document.getElementById('applyModal').style.display = 'none'; }
+
+    /* ============ APPLICATIONS (recruiter) ============ */
+    function openApplications(jobId) {
+        const jobs = getJobs();
+        let target = jobId;
+        if (!target) {
+            // "All Applications" — show first job with apps, or picker
+            if (!jobs.length) { toast('No postings yet.'); return; }
+            target = jobs[0].id;
+        }
+        renderApps(target);
+        document.getElementById('appsModal').style.display = 'flex';
+    }
+    function renderApps(jobId) {
+        const j = getJobs().find(x => x.id === jobId); if (!j) return;
+        const labels = (j.fields || []).map(f => f.label);
+        if (j.feeApplicable) labels.push('Payment Transaction Reference');
+        const list = appsFor(jobId);
+        document.getElementById('appsTitle').innerHTML = `Applications — ${esc(j.title)} <span style="font-weight:400;color:#98a2b3;font-size:0.9rem;">(${list.length})</span>`;
+        if (!list.length) { document.getElementById('appsBody').innerHTML = `<div class="empty"><i class="far fa-folder-open"></i>No applications yet for this posting.</div>`; return; }
+        const selOpts = ['pending', 'shortlisted', 'selected', 'rejected'].map(st => `<option value="${st}" ${list._job === jobId ? '' : ''}>${st}</option>`).join('');
+        let head = `<tr><th>#</th><th>Applicant</th>` + labels.map(l => `<th>${esc(l)}</th>`).join('') + `<th>Status</th><th></th></tr>`;
+        let rows = list.map((a, i) => {
+            const cells = labels.map(l => {
+                const v = a.values ? a.values[l] : '';
+                if (v && typeof v === 'object' && v.file) return `<td><a href="${v.dataURL || '#'}" download="${esc(v.file)}" style="color:var(--primary);"><i class="fas fa-file-arrow-down"></i> ${esc(v.file)}</a></td>`;
+                return `<td>${esc(v || '—')}</td>`;
+            }).join('');
+            return `<tr>
+                <td>${i + 1}</td>
+                <td><strong>${esc(a.applicantName)}</strong><br><span class="jc-qual">${esc(a.applicantRoll || '')}</span></td>
+                ${cells}
+                <td><span class="sel-badge sel-${a.status || 'pending'}">${esc(a.status || 'pending')}</span></td>
+                <td><select class="fsel" style="padding:5px 8px;font-size:0.8rem;" onchange="setStatus('${jobId}','${a.id}',this.value)">
+                    <option value="pending" ${a.status === 'pending' ? 'selected' : ''}>pending</option>
+                    <option value="shortlisted" ${a.status === 'shortlisted' ? 'selected' : ''}>shortlisted</option>
+                    <option value="selected" ${a.status === 'selected' ? 'selected' : ''}>selected</option>
+                    <option value="rejected" ${a.status === 'rejected' ? 'selected' : ''}>rejected</option>
+                </select></td>
+            </tr>`;
+        }).join('');
+        document.getElementById('appsBody').innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:12px;flex-wrap:wrap;">
+            <select class="fsel" style="max-width:280px;" onchange="renderApps(this.value)">${getJobs().map(x => `<option value="${x.id}" ${x.id === jobId ? 'selected' : ''}>${esc(x.title)} — ${esc(x.company)}</option>`).join('')}</select>
+            <button class="btn ghost sm" onclick="exportApps('${jobId}')"><i class="fas fa-file-csv"></i> Export CSV</button>
+        </div><table class="app-table">${head}${rows}</table>`;
+    }
+    function setStatus(jobId, appId, status) {
+        const apps = getApps(); const list = apps[jobId] || [];
+        const a = list.find(x => x.id === appId); if (a) { a.status = status; saveApps(apps); renderApps(jobId); toast('Status updated.'); }
+    }
+    function exportApps(jobId) {
+        const j = getJobs().find(x => x.id === jobId); if (!j) return;
+        const labels = (j.fields || []).map(f => f.label); if (j.feeApplicable) labels.push('Payment Transaction Reference');
+        const list = appsFor(jobId);
+        const csvCell = v => `"${String(v == null ? '' : (typeof v === 'object' ? v.file : v)).replace(/"/g, '""')}"`;
+        let csv = ['Name', 'Roll', ...labels, 'Status', 'Submitted'].map(csvCell).join(',') + '\n';
+        list.forEach(a => { csv += [a.applicantName, a.applicantRoll, ...labels.map(l => a.values ? a.values[l] : ''), a.status || 'pending', new Date(a.submittedAt).toLocaleString()].map(csvCell).join(',') + '\n'; });
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = (j.title || 'applications') + '_applications.csv'; a.click();
+    }
+    function closeApps() { document.getElementById('appsModal').style.display = 'none'; }
+
+    function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(toast._h); toast._h = setTimeout(() => t.style.display = 'none', 3000); }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        renderJobs();
+        const params = new URLSearchParams(location.search);
+        if (params.get('view') === 'applications') openApplications(params.get('job') || '');
+        else if (params.get('job') && myRole() !== 'recruiter') openApply(params.get('job'));
+        document.addEventListener('click', () => {});
+    });
+</script>
+</body>
+
+</html>

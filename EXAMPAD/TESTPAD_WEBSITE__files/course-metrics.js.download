@@ -1,0 +1,171 @@
+let metricsDataLoader = {
+  isLoading: false,
+  setState(value) {
+    this.isLoading = value;
+  }
+};
+
+async function loadMetricsData(courseId, userId) {
+  if(metricsDataLoader.isLoading) {
+    // return;
+  }
+  metricsDataLoader.setState(true);
+  userId = userId === "-1" ? undefined : userId;
+  await updateSubSelectElements(courseId);
+  let sectionId = $('#sectionId-leaderboardSelect')?.val();
+  if (sectionId == -1) {
+    sectionId = undefined;
+  }
+  if (!userId) {
+    const currentUserId = $('#userId-leaderboardSelect').val();
+    if (currentUserId && currentUserId != "-1") {
+      userId = currentUserId;
+    }
+  }
+  let batchId = $('#batchId-leaderboardSelect').val();
+  if (batchId == "-1") {
+    batchId = undefined;
+  }
+  await loadGraphs({
+    sectionId,
+    courseId,
+    batchId,
+    userId,
+    dateRange: getDateRange()
+  })
+  metricsDataLoader.setState(false);
+}
+
+async function updateUserSubSelectElement(batchId, selectedUserId) {
+  /** @type {HTMLSelectElement} */
+  const userIdSelectElement = document.getElementById("userId-leaderboardSelect");
+  while(userIdSelectElement?.options.length > 0) {
+    userIdSelectElement.options.remove(0);
+  }
+  userIdSelectElement?.add(new Option("All Users", "-1", true));
+
+  try {
+    const response = await fetch("/api/batch/getBatchContentFromBatchId/" + batchId);
+    const { data: users } = await response.json();
+    for(const user of users) {
+      const option = new Option(user.displayname, user._id);
+      option.setAttribute('email', user.email);
+      userIdSelectElement.add(option);
+    }
+  } catch(ex) {
+    console.log(ex);
+  }
+  $(userIdSelectElement).selectpicker("refresh");
+  if(selectedUserId) {
+    $(userIdSelectElement).val(selectedUserId).change();
+  }
+}
+
+/** @returns {[ from: Date | null, to: Date | null ]} */
+function getDateRange() {
+  const fromDateValue = $("#fromDate-metricsInput").val();
+  const toDateValue = $("#toDate-metricsInput").val();
+  const fromDate = fromDateValue === "" ? null : $("#fromDate-metricsInput").datetimepicker("getValue");
+  const toDate = toDateValue === "" ? null : $("#toDate-metricsInput").datetimepicker("getValue");
+  return [ fromDate, toDate ];
+}
+
+function handleDateRangeChange(courseId, userId) {
+  loadMetricsData(courseId, userId);
+}
+
+async function updateMetricsDatePickers(courseId, userId) {
+
+  $("#fromDate-metricsInput").datetimepicker({
+    format: "d M Y",
+    mask: false,
+    parentID: "#date-metricsInputContainer",
+    defaultTime: "00:00",
+    timepicker: false,
+    /** @param {Date} date */
+    onChangeDateTime(date) {
+      $("#toDate-metricsInput").datetimepicker("setOptions", { minDate: date ?? false });
+      handleDateRangeChange(courseId, userId);
+    }
+  });
+
+  $("#toDate-metricsInput").datetimepicker({
+    format: "d M Y",
+    mask: false,
+    parentID: "#date-metricsInputContainer",
+    defaultTime: "00:00",
+    timepicker: false,
+    /** @param {Date} date */
+    onChangeDateTime(date) {
+      $("#fromDate-metricsInput").datetimepicker("setOptions", { maxDate: date ?? false });
+      handleDateRangeChange(courseId, userId);
+    }
+  });
+  $("#fromDate-metricsInput")[0]?.form.addEventListener("reset", onDateFormReset);
+  console.log("%c%s", "color: skyblue", updateMetricsDatePickers.name);
+
+}
+
+/** @type {(this: HTMLFormElement, event: Event) => void} */
+function onDateFormReset(event) {
+  console.log("reset")
+  const inputs = this.elements.namedItem("dateInput");
+  if(inputs instanceof RadioNodeList === false) {
+    return;
+  }
+  event.preventDefault();
+  for(const input of inputs) {
+    if(input.value === "") {
+      continue;
+    }
+    input.value = "";
+    $(input).datetimepicker("validate");
+  }
+}
+
+function initMetrics(courseId, userId) {
+
+  return new Promise(resolve => {
+
+    window.addEventListener("load", async function() {
+
+      $("#userId-leaderboardSelect").selectpicker({ liveSearch: true });
+      await updateMetricsDatePickers(courseId, userId);
+
+      $("select.leaderboard-select").on("change", async function() {
+        if(this.closest(".tab-container").dataset.for !== "metrics") {
+          return;
+        }
+        if(this.id === "batchId-leaderboardSelect") {
+          if(this.value !== "-1") {
+            toggleLoader(true);
+            await updateUserSubSelectElement(this.value, TempStorage.release("view-user-id"));
+            $("#userId-leaderboardSelect-wrapper").removeClass("hide");
+            toggleLoader(false);
+          } else {
+            $("#userId-leaderboardSelect-wrapper").addClass("hide");
+          }
+        }
+        loadMetricsData(courseId, userId);
+      });
+
+      resolve();
+
+    });
+
+  });
+
+}
+
+class TempStorage {
+  /** @type {Map<string, string>} */
+  static #map = new Map;
+  static store(key, value) {
+    this.#map.set(key, value);
+  }
+  static release(key) {
+    const value = this.#map.get(key);
+    this.#map.delete(key);
+    return value;
+  }
+};

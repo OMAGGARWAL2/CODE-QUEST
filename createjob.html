@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Create Job Posting</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&family=Hind:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+    <style>
+        :root {
+            --primary: #D92D20;
+            --primary-hover: #B42318;
+            --primary-soft: #FEF3F2;
+            --text-main: #101828;
+            --text-tertiary: #667085;
+            --border: #EAECF0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind', sans-serif; }
+        body { background: #fff; color: var(--text-main); min-height: 100vh; }
+
+        .site-header { height: 72px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; position: sticky; top: 0; z-index: 1000; }
+        .header-left { display: flex; align-items: center; gap: 24px; }
+        .logo-container { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; }
+        .logo-square { width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .logo-square img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text { font-size: 1.35rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; text-transform: uppercase; line-height: 1; font-family: 'Mulish', sans-serif; }
+        .logo-text small { display: block; font-size: 0.7rem; font-weight: 700; color: var(--primary); letter-spacing: 0.8px; margin-top: 3px; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--text-tertiary); text-decoration: none; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 1rem; padding: 8px 14px; border-radius: 8px; }
+        .back-link:hover { background: var(--primary-soft); color: var(--primary); }
+        .avatar { width: 40px; height: 40px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .wrap { max-width: 960px; margin: 0 auto; padding: 48px 28px 90px; }
+        .page-title { font-family: 'Mulish', sans-serif; font-size: 2.4rem; font-weight: 800; margin-bottom: 6px; }
+        .page-sub { font-size: 1.25rem; color: var(--text-tertiary); margin-bottom: 34px; }
+
+        .section-h { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.35rem; color: #101828; margin: 34px 0 18px; padding-top: 22px; border-top: 1px solid #eaecf0; display: flex; align-items: center; gap: 12px; }
+        .section-h i { color: var(--primary); }
+        .section-h .hint { font-weight: 400; color: #98a2b3; font-size: 1rem; }
+
+        .form-group { margin-bottom: 24px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        label { display: block; font-family: 'Mulish', sans-serif; font-size: 1.05rem; font-weight: 700; color: #344054; margin-bottom: 9px; }
+        input[type=text], input[type=number], input[type=date], select, textarea {
+            width: 100%; padding: 14px 16px; border: 1.5px solid #d0d5dd; border-radius: 10px;
+            font-size: 1.12rem; font-family: 'Hind', sans-serif; color: #101828; outline: none; background: #fff;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-soft); }
+        textarea { min-height: 120px; resize: vertical; line-height: 1.6; }
+        .chk { display: flex; align-items: center; gap: 12px; font-size: 1.15rem; color: #344054; cursor: pointer; }
+        .chk input { width: 20px; height: 20px; accent-color: var(--primary); }
+        .qr-img { max-width: 200px; border: 1px solid #ddd; border-radius: 10px; margin-top: 12px; display: block; }
+
+        .fb-row { display: grid; grid-template-columns: 1.5fr 1fr auto auto; gap: 12px; align-items: center; margin-bottom: 12px; background: #f9fafb; border: 1px solid #eaecf0; border-radius: 12px; padding: 14px; }
+        .fb-row .req { display: flex; align-items: center; gap: 7px; font-size: 0.95rem; font-family: 'Mulish'; font-weight: 700; color: #475467; }
+        .fb-row .req input { width: 18px; height: 18px; accent-color: var(--primary); }
+        .fb-del { background: #fff; border: 1px solid #fecdca; color: var(--primary); width: 40px; height: 40px; border-radius: 9px; cursor: pointer; font-size: 1rem; }
+        .fb-opt { grid-column: 1/-1; }
+
+        .btn { border: none; border-radius: 10px; padding: 14px 26px; font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.05rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; }
+        .btn.ghost { background: #fff; color: #475467; border: 1.5px solid #d0d5dd; }
+        .btn.ghost:hover { border-color: var(--primary); color: var(--primary); }
+        .btn.primary { background: var(--primary); color: #fff; }
+        .btn.primary:hover { background: var(--primary-hover); }
+        .btn.sm { padding: 10px 18px; font-size: 0.95rem; }
+        .actions { display: flex; justify-content: flex-end; gap: 16px; margin-top: 40px; }
+        input[type=file] { display: none; }
+        @media (max-width: 720px) { .form-row { grid-template-columns: 1fr; } .fb-row { grid-template-columns: 1fr 1fr; } .page-title { font-size: 1.9rem; } }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="header-left">
+        <a href="recruiterindex.html" class="logo-container">
+            <div class="logo-square"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest"></div>
+            <div class="logo-text">CodeQuest<small>Recruiter Portal</small></div>
+        </a>
+        <a href="openjobposting.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Job Postings</a>
+    </div>
+    <div class="header-right"><div class="avatar"><img src="EXAMPAD/LINUX_TEST_CHITKARA_files/user-icon.3d6e2547.svg" alt="Profile"></div></div>
+</header>
+
+<div class="wrap">
+    <h1 class="page-title" id="pageTitle">Create Job Posting</h1>
+    <p class="page-sub">Describe the role, set the eligibility &amp; fee, and build the registration form applicants will fill.</p>
+
+    <form onsubmit="handleSaveJob(event)">
+        <input type="hidden" id="jobId">
+
+        <div class="form-row">
+            <div class="form-group"><label for="jTitle">Job Title *</label><input type="text" id="jTitle" placeholder="e.g. Software Engineer" required></div>
+            <div class="form-group"><label for="jCompany">Company *</label><input type="text" id="jCompany" placeholder="e.g. Google" required></div>
+        </div>
+        <div class="form-row">
+            <div class="form-group"><label for="jLocation">Location</label><input type="text" id="jLocation" placeholder="e.g. Bengaluru / Remote"></div>
+            <div class="form-group"><label for="jType">Employment Type</label>
+                <select id="jType"><option>Full-time</option><option>Internship</option><option>Part-time</option><option>Contract</option></select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group"><label for="jSalary">Salary / Stipend</label><input type="text" id="jSalary" placeholder="e.g. ₹18 LPA / ₹50,000 pm"></div>
+            <div class="form-group"><label for="jDeadline">Application Deadline *</label><input type="date" id="jDeadline" required></div>
+        </div>
+        <div class="form-group"><label for="jDesc">Job Description</label><textarea id="jDesc" placeholder="Role responsibilities, tech stack, what you're looking for..."></textarea></div>
+        <div class="form-group"><label for="jQual">Qualification Criteria (who can apply)</label><textarea id="jQual" style="min-height:90px;" placeholder="e.g. B.Tech CSE 2025 batch, CGPA &gt;= 7.5, no backlogs"></textarea></div>
+
+        <div class="section-h"><i class="fas fa-indian-rupee-sign"></i> Application Fee</div>
+        <div class="form-group"><label class="chk"><input type="checkbox" id="jFeeApplicable" onchange="document.getElementById('jFeeDetails').style.display=this.checked?'block':'none'"> Fee applicable for this posting</label></div>
+        <div id="jFeeDetails" style="display:none;">
+            <div class="form-row">
+                <div class="form-group"><label for="jFeeAmount">Fee Amount (₹)</label><input type="number" id="jFeeAmount" min="0" placeholder="e.g. 250"></div>
+                <div class="form-group"><label>Payment QR (upload)</label>
+                    <button type="button" class="btn ghost sm" onclick="document.getElementById('jQrFile').click()"><i class="fas fa-qrcode"></i> Upload QR</button>
+                    <input type="file" id="jQrFile" accept="image/*" onchange="handleQr(this.files)">
+                    <img id="jQrPreview" class="qr-img" style="display:none;">
+                </div>
+            </div>
+        </div>
+
+        <div class="section-h"><i class="fas fa-list-check"></i> Registration Form Fields <span class="hint">(what applicants must fill)</span></div>
+        <div id="formBuilder"></div>
+        <button type="button" class="btn ghost sm" onclick="addFieldRow()"><i class="fas fa-plus"></i> Add Field</button>
+
+        <div class="actions">
+            <button type="button" class="btn ghost" onclick="location.href='openjobposting.html'">Cancel</button>
+            <button type="submit" class="btn primary"><i class="fas fa-floppy-disk"></i> Save Posting</button>
+        </div>
+    </form>
+</div>
+
+<div id="recToast" style="position:fixed;bottom:24px;right:24px;background:#101828;color:#fff;padding:14px 24px;border-radius:8px;display:none;z-index:100000;font-weight:600;font-family:'Mulish',sans-serif;">Done</div>
+
+<script>
+    const JOBS_KEY = 'CodeQuest_job_postings';
+    const MAX_FILE = 4 * 1024 * 1024;
+    let qrData = '';
+    const FIELD_TYPES = [['text', 'Text'], ['email', 'Email'], ['number', 'Number'], ['tel', 'Phone'], ['date', 'Date'], ['select', 'Dropdown'], ['textarea', 'Long text'], ['file', 'File / résumé']];
+
+    function readJSON(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
+    function getJobs() { return readJSON(JOBS_KEY, []); }
+    function saveJobs(v) { try { localStorage.setItem(JOBS_KEY, JSON.stringify(v)); return true; } catch (e) { toast('Storage full — QR image too large.'); return false; } }
+    function esc(s) { return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function session() { return readJSON('CodeQuest_active_session', null) || readJSON('TESTPAD_current_user', {}); }
+
+    function addFieldRow(f) {
+        f = f || { label: '', type: 'text', required: true, options: '' };
+        const row = document.createElement('div');
+        row.className = 'fb-row';
+        const opts = FIELD_TYPES.map(([v, l]) => `<option value="${v}" ${f.type === v ? 'selected' : ''}>${l}</option>`).join('');
+        row.innerHTML = `
+            <input class="fb-label" placeholder="Field label (e.g. CGPA)" value="${esc(f.label)}">
+            <select class="fb-type" onchange="toggleOpt(this)">${opts}</select>
+            <label class="req"><input type="checkbox" class="fb-req" ${f.required ? 'checked' : ''}> Required</label>
+            <button type="button" class="fb-del" onclick="this.closest('.fb-row').remove()"><i class="fas fa-trash"></i></button>
+            <input class="fb-opt" placeholder="Dropdown options, comma separated (e.g. 1st Year,2nd Year,3rd Year)" value="${esc(f.options || '')}" style="${f.type === 'select' ? '' : 'display:none;'}">`;
+        document.getElementById('formBuilder').appendChild(row);
+    }
+    function toggleOpt(sel) { const opt = sel.closest('.fb-row').querySelector('.fb-opt'); opt.style.display = sel.value === 'select' ? '' : 'none'; }
+    function collectFields() {
+        return Array.from(document.querySelectorAll('#formBuilder .fb-row')).map(r => ({
+            label: r.querySelector('.fb-label').value.trim(),
+            type: r.querySelector('.fb-type').value,
+            required: r.querySelector('.fb-req').checked,
+            options: r.querySelector('.fb-opt').value.trim()
+        })).filter(f => f.label);
+    }
+
+    function handleQr(files) {
+        const f = files[0]; if (!f) return;
+        if (f.size > MAX_FILE) { toast('QR image too large (max 4 MB).'); return; }
+        const r = new FileReader();
+        r.onload = () => { qrData = r.result; const p = document.getElementById('jQrPreview'); p.src = qrData; p.style.display = 'block'; };
+        r.readAsDataURL(f);
+    }
+
+    function handleSaveJob(e) {
+        e.preventDefault();
+        const jobs = getJobs();
+        const id = document.getElementById('jobId').value;
+        const s = session();
+        const data = {
+            id: id || ('JOB' + Date.now()),
+            title: document.getElementById('jTitle').value.trim(),
+            company: document.getElementById('jCompany').value.trim(),
+            location: document.getElementById('jLocation').value.trim(),
+            type: document.getElementById('jType').value,
+            salary: document.getElementById('jSalary').value.trim(),
+            deadline: document.getElementById('jDeadline').value,
+            description: document.getElementById('jDesc').value.trim(),
+            qualification: document.getElementById('jQual').value.trim(),
+            feeApplicable: document.getElementById('jFeeApplicable').checked,
+            feeAmount: document.getElementById('jFeeAmount').value.trim(),
+            qr: qrData || (id ? (jobs.find(j => j.id === id) || {}).qr || '' : ''),
+            fields: collectFields(),
+            createdBy: s.email || s.name || 'recruiter',
+            createdByName: s.name || 'Recruiter',
+            createdAt: id ? (jobs.find(j => j.id === id) || {}).createdAt || Date.now() : Date.now()
+        };
+        if (!data.fields.length) { toast('Add at least one registration form field.'); return; }
+        if (id) { const idx = jobs.findIndex(j => j.id === id); if (idx >= 0) jobs[idx] = data; else jobs.push(data); }
+        else jobs.push(data);
+        if (!saveJobs(jobs)) return;
+        toast(id ? 'Posting updated.' : 'Job posting published.');
+        setTimeout(() => { location.href = 'openjobposting.html'; }, 700);
+    }
+
+    function loadForEdit(id) {
+        const j = getJobs().find(x => x.id === id); if (!j) return;
+        document.getElementById('pageTitle').textContent = 'Edit Job Posting';
+        document.getElementById('jobId').value = j.id;
+        document.getElementById('jTitle').value = j.title || '';
+        document.getElementById('jCompany').value = j.company || '';
+        document.getElementById('jLocation').value = j.location || '';
+        document.getElementById('jType').value = j.type || 'Full-time';
+        document.getElementById('jSalary').value = j.salary || '';
+        document.getElementById('jDeadline').value = j.deadline || '';
+        document.getElementById('jDesc').value = j.description || '';
+        document.getElementById('jQual').value = j.qualification || '';
+        document.getElementById('jFeeApplicable').checked = !!j.feeApplicable;
+        document.getElementById('jFeeDetails').style.display = j.feeApplicable ? 'block' : 'none';
+        document.getElementById('jFeeAmount').value = j.feeAmount || '';
+        qrData = j.qr || '';
+        const qp = document.getElementById('jQrPreview'); if (qrData) { qp.src = qrData; qp.style.display = 'block'; }
+        document.getElementById('formBuilder').innerHTML = '';
+        (j.fields || []).forEach(f => addFieldRow(f));
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const id = new URLSearchParams(location.search).get('id');
+        if (id) { loadForEdit(id); return; }
+        addFieldRow({ label: 'Full Name', type: 'text', required: true });
+        addFieldRow({ label: 'Roll / Registration No', type: 'text', required: true });
+        addFieldRow({ label: 'Email', type: 'email', required: true });
+        addFieldRow({ label: 'Résumé / CV', type: 'file', required: false });
+    });
+    function toast(msg) { const t = document.getElementById('recToast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(toast._h); toast._h = setTimeout(() => t.style.display = 'none', 2500); }
+</script>
+</body>
+
+</html>

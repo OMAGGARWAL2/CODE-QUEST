@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Student Dashboard</title>
+    <!-- Google Fonts: Mulish primary, Roboto, JetBrains Mono for code (Exact matching student-dashboard.html) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+    <style>
+        :root {
+            --primary: #df5a22;
+            --primary-dark: #c54814;
+            --primary-light: #fff5f0;
+            --bg: #ffffff;
+            --white: #ffffff;
+            --text-main: #222222;
+            --text-muted: #777777;
+            --text-light: #999999;
+            --border: #f0f0f0;
+            --border-dark: #e0e0e0;
+            --easy: #00b8a3;
+            --medium: #ffc01e;
+            --hard: #ff375f;
+            --radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Mulish', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-size: 15px;
+        }
+
+        /* ===== SITE HEADER (Exact student-dashboard.html design with icons) ===== */
+        .site-header {
+            height: 84px;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid #eeeeee;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            text-decoration: none;
+        }
+
+        .logo-box:hover {
+            opacity: 0.85;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .brand-text-block {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.15;
+        }
+
+        .brand-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #1a1a1a;
+            text-transform: uppercase;
+        }
+
+        .brand-subtitle {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        /* Header Navigation Icons (From student-dashboard.html) */
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .icon-btn-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            transition: all 0.15s ease-in-out;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .icon-btn-box:hover {
+            background-color: #f7f7f7;
+        }
+
+        .icon-btn-box.active {
+            background-color: #fff5f0;
+        }
+
+        .icon-btn-box img {
+            width: 28px;
+            height: 28px;
+        }
+
+        /* Header Center: Join Assessment Pill */
+        .header-center {
+            display: flex;
+            align-items: center;
+        }
+
+        .join-assessment-btn {
+            background: #fff5f0;
+            color: #df5a22;
+            border: 1px solid #fce8e0;
+            border-radius: 20px;
+            padding: 8px 20px;
+            font-weight: 700;
+            font-family: 'Mulish', sans-serif;
+            font-size: 0.92rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .join-assessment-btn:hover {
+            background: #ffece5;
+        }
+
+        /* Header Right: Profile Display */
+        .header-right {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-stack {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 30px;
+            transition: background 0.2s;
+        }
+
+        .profile-stack:hover {
+            background: #f8f8f8;
+        }
+
+        .profile-text {
+            text-align: right;
+            line-height: 1.25;
+        }
+
+        .profile-name {
+            display: block;
+            font-weight: 700;
+            font-size: 1.05rem;
+            text-transform: uppercase;
+            color: #333;
+        }
+
+        .profile-role {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Profile Dropdown */
+        .profile-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 220px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+            margin-top: 10px;
+            padding: 10px;
+            display: none;
+            z-index: 2000;
+            border: 1px solid #eee;
+            animation: fadeInDown 0.18s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 6px;
+            color: #444;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .menu-item:hover {
+            background: #fff5f0;
+            color: var(--primary);
+        }
+
+        .menu-item.logout {
+            color: #d32f2f;
+        }
+
+        .menu-item.logout:hover {
+            background: #fff5f5;
+        }
+
+        /* ===== FULL WIDTH CONTENT CONTAINER (No right partition, clean white page) ===== */
+        .main-container {
+            width: 100%;
+            max-width: 1260px;
+            margin: 0 auto;
+            padding: 40px 30px 80px 30px;
+            background: #ffffff;
+        }
+
+        /* Section Headers with Underline Search (Exact student-dashboard style) */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            gap: 20px;
+        }
+
+        .section-title {
+            font-family: 'Mulish', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #222222;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-count {
+            color: #888888;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .search-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-wrapper i {
+            position: absolute;
+            left: 10px;
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+
+        .search-input-underline {
+            border: none;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 7px 12px 7px 34px;
+            font-size: 0.95rem;
+            font-family: 'Mulish', sans-serif;
+            color: #444;
+            outline: none;
+            background: transparent;
+            width: 270px;
+            transition: border-color 0.2s;
+        }
+
+        .search-input-underline:focus {
+            border-bottom-color: var(--primary);
+        }
+
+        /* ===== SECTION 1: YOUR QUESTION LIST (LeetCode Table Row Design as in Image 2) ===== */
+        .topic-filters-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .topic-tag-pill {
+            background: #f7f7f8;
+            color: #475467;
+            border: 1px solid #eaecf0;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+
+        .topic-tag-pill:hover {
+            background: #ededf0;
+            color: #111;
+        }
+
+        .topic-tag-pill.active {
+            background: #262626;
+            color: #ffffff;
+            border-color: #262626;
+        }
+
+        /* LeetCode Questions Table */
+        .leetcode-table-container {
+            width: 100%;
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #f0f0f0;
+            overflow: hidden;
+            margin-bottom: 60px;
+        }
+
+        .leetcode-table-header {
+            display: grid;
+            grid-template-columns: 80px 1fr 140px 120px 100px;
+            gap: 16px;
+            padding: 14px 24px;
+            background: #ffffff;
+            border-bottom: 1px solid #eeeeee;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #888888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .leetcode-row {
+            display: grid;
+            grid-template-columns: 80px 1fr 140px 120px 100px;
+            gap: 16px;
+            align-items: center;
+            padding: 16px 24px;
+            background: #ffffff;
+            border-bottom: 1px solid #f5f5f5;
+            transition: background 0.15s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .leetcode-row:nth-child(even) {
+            background: #ffffff;
+        }
+
+        .leetcode-row:hover {
+            background: #fdfdfd;
+        }
+
+        .leetcode-row:last-child {
+            border-bottom: none;
+        }
+
+        .status-col {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00b8a3;
+            font-size: 1rem;
+        }
+
+        .title-col {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #262626;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .title-col:hover {
+            color: var(--primary);
+        }
+
+        .acceptance-col {
+            font-size: 0.9rem;
+            color: #666666;
+            font-family: 'Mulish', sans-serif;
+            font-weight: 500;
+        }
+
+        .difficulty-col {
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .diff-easy {
+            color: var(--easy);
+        }
+
+        .diff-med {
+            color: var(--medium);
+        }
+
+        .diff-hard {
+            color: var(--hard);
+        }
+
+        .action-col {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .btn-solve-pill {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid #f9d3c5;
+            padding: 5px 14px;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-solve-pill:hover {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+        }
+
+        /* ===== SECTION 2: YOUR COURSES & SECTION 3: YOUR INTERVIEWS AND TESTS ===== */
+        .cards-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 60px;
+        }
+
+        .learning-module-card {
+            background: #ffffff;
+            border: 1px solid #f0f0f0;
+            border-radius: 10px;
+            padding: 22px 28px;
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.02);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .learning-module-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            border-color: #e5e5e5;
+        }
+
+        .card-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .card-item-title {
+            font-family: 'Mulish', sans-serif;
+            font-size: 1.18rem;
+            font-weight: 600;
+            color: #111111;
+            margin: 0;
+            line-height: 1.35;
+            flex: 1;
+        }
+
+        .card-action-icons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .card-meta-text {
+            font-family: 'Mulish', sans-serif;
+            font-size: 0.90rem;
+            color: #888888;
+            font-weight: 400;
+        }
+
+        .progress-bar-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 4px;
+            width: 100%;
+        }
+
+        .progress-track {
+            width: 270px;
+            max-width: 60%;
+            height: 6px;
+            background: #f5c6b6;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #df5a22;
+            transition: width 0.6s ease;
+        }
+
+        .progress-label {
+            font-family: 'Mulish', sans-serif;
+            font-size: 0.86rem;
+            color: #888888;
+            font-weight: 400;
+        }
+
+        /* ===== PROBLEM SOLVE MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: white;
+            width: 100%;
+            max-width: 820px;
+            max-height: 90vh;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: modalScale 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalScale {
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-header-bar {
+            padding: 20px 24px;
+            border-bottom: 1px solid #eeeeee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #111;
+        }
+
+        .modal-close-icon {
+            background: #f5f5f5;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content-area {
+            padding: 24px;
+            overflow-y: auto;
+            line-height: 1.6;
+            color: #444;
+            font-size: 0.95rem;
+        }
+
+        .code-block-leet {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 14px 18px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            margin: 12px 0;
+            overflow-x: auto;
+        }
+
+        .modal-footer-bar {
+            padding: 16px 24px;
+            border-top: 1px solid #eeeeee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            background: #fafafa;
+        }
+
+        .btn-cancel-modal {
+            background: #ffffff;
+            border: 1px solid #dddddd;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-run-modal {
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 8px 22px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .toast-popup {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #333333;
+            color: #ffffff;
+            padding: 14px 22px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 10001;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== SITE HEADER (Matching student-dashboard.html) ===== -->
+    <header class="site-header">
+        <div class="header-left">
+            <a href="studentindex.html" class="logo-box" title="CodeQuest Arena">
+                <div class="logo-icon">
+                    <img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest Logo">
+                </div>
+                <div class="brand-text-block">
+                    <span class="brand-title">CodeQuest</span>
+                    <span class="brand-subtitle">Student Portal</span>
+                </div>
+            </a>
+
+            <!-- Header Nav Icons (from student-dashboard.html) -->
+            <nav class="nav-icons">
+                <div class="icon-btn-box active" onclick="scrollToSection('questionSection')" title="Question List">
+                    <img src="EXAMPAD/TESTPAD_WEBSITE__files/menu-1.svg" alt="Question List">
+                </div>
+                <div class="icon-btn-box" onclick="scrollToSection('coursesSection')" title="Your Courses">
+                    <img src="EXAMPAD/TESTPAD_WEBSITE__files/folder-2.svg" alt="Your Courses">
+                </div>
+                <div class="icon-btn-box" onclick="window.location.href='CodeQuestProgress.html'" title="Attempts & Progress">
+                    <img src="EXAMPAD/TESTPAD_WEBSITE__files/statistics.svg" alt="Attempts & Progress">
+                </div>
+                <div class="icon-btn-box" onclick="window.location.href='createchat.html'" title="Chat Groups">
+                    <i class="fas fa-comments" style="font-size: 1.25rem; color: #075E54;"></i>
+                </div>
+                <div class="icon-btn-box" onclick="window.location.href='recPosts.html'" title="Notifications">
+                    <i class="fas fa-bell" style="font-size: 1.25rem; color: #1570EF;"></i>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Center Join Assessment Pill (Exact student-dashboard style) -->
+        <div class="header-center">
+            <button class="join-assessment-btn" onclick="promptJoinTest()">
+                <span>Join Assessment</span>
+                <i class="fas fa-chevron-down" style="font-size: 0.8rem;"></i>
+            </button>
+        </div>
+
+        <!-- Right: Profile Name, Role, and Avatar Circle -->
+        <div class="header-right">
+            <div class="profile-stack" onclick="toggleProfileMenu(event)">
+                <div class="profile-text">
+                    <span class="profile-name" id="userName">Om Aggarwal</span>
+                    <span class="profile-role" id="userRole">Student</span>
+                </div>
+                <div class="avatar-circle" id="userInitial">
+                    <img src="EXAMPAD/LINUX_TEST_CHITKARA_files/user-icon.3d6e2547.svg" alt="Profile"
+                        onerror="this.style.display='none'; document.getElementById('userInitialLetter').style.display='block';">
+                    <span id="userInitialLetter" style="display: none;">O</span>
+                </div>
+            </div>
+
+            <!-- Profile Menu -->
+            <div class="profile-menu" id="profileMenu">
+                <div class="menu-item" onclick="location.href='firstpage.html'">
+                    <i class="fas fa-user-circle" style="color: var(--primary);"></i>
+                    <span>Switch Account</span>
+                </div>
+                <div class="menu-item logout" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== MAIN CONTENT CONTAINER (Full width, no partition, plain white) ===== -->
+    <main class="main-container">
+
+        <!-- ========================================== -->
+        <!-- SECTION 1: YOUR QUESTION LIST              -->
+        <!-- ========================================== -->
+        <section id="questionSection" style="margin-bottom: 50px;">
+            <div class="section-header">
+                <h2 class="section-title">
+                    Your Question List <span class="section-count" id="questionCount">(5)</span>
+                </h2>
+                <div class="search-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="questionSearchInput" class="search-input-underline"
+                        placeholder="Search questions..." onkeyup="filterQuestions()">
+                </div>
+            </div>
+
+            <!-- Topic Filter Pills (LeetCode style) -->
+            <div class="topic-filters-row">
+                <button class="topic-tag-pill active" onclick="filterByTopic('All', this)">All Topics</button>
+                <button class="topic-tag-pill" onclick="filterByTopic('Algorithms', this)">Algorithms</button>
+                <button class="topic-tag-pill" onclick="filterByTopic('Array', this)">Arrays</button>
+                <button class="topic-tag-pill" onclick="filterByTopic('String', this)">Strings</button>
+                <button class="topic-tag-pill" onclick="filterByTopic('Hash Table', this)">Hash Table</button>
+                <button class="topic-tag-pill" onclick="filterByTopic('Dynamic Programming', this)">Dynamic Programming</button>
+            </div>
+
+            <!-- LeetCode Table Row List (Matches Image 2) -->
+            <div class="leetcode-table-container">
+                <div class="leetcode-table-header">
+                    <div>Status</div>
+                    <div>Title</div>
+                    <div>Acceptance</div>
+                    <div>Difficulty</div>
+                    <div style="text-align: right;">Action</div>
+                </div>
+
+                <div id="questionsTableBody">
+                    <!-- 1. Two Sum -->
+                    <div class="leetcode-row" data-id="PQ9RJ001" data-topics="Algorithms,Array,Hash Table"
+                        data-title="1. Two Sum" onclick="openQuestionAttempt('PQ9RJ001')">
+                        <div class="status-col"><i class="fas fa-check"></i></div>
+                        <div class="title-col">1. Two Sum</div>
+                        <div class="acceptance-col">58.0%</div>
+                        <div class="difficulty-col diff-easy">Easy</div>
+                        <div class="action-col">
+                            <button class="btn-solve-pill" onclick="event.stopPropagation(); openQuestionAttempt('PQ9RJ001');">Solve</button>
+                        </div>
+                    </div>
+
+                    <!-- 2. Add Two Numbers -->
+                    <div class="leetcode-row" data-id="PQ9RJ002" data-topics="Algorithms,Linked List,Math"
+                        data-title="2. Add Two Numbers" onclick="openQuestionAttempt('PQ9RJ002')">
+                        <div class="status-col" style="color: #bbb;"><i class="far fa-circle"></i></div>
+                        <div class="title-col">2. Add Two Numbers</div>
+                        <div class="acceptance-col">49.6%</div>
+                        <div class="difficulty-col diff-med">Med.</div>
+                        <div class="action-col">
+                            <button class="btn-solve-pill" onclick="event.stopPropagation(); openQuestionAttempt('PQ9RJ002');">Solve</button>
+                        </div>
+                    </div>
+
+                    <!-- 3. Longest Substring Without Repeating Characters -->
+                    <div class="leetcode-row" data-id="PQ9RJ003" data-topics="Algorithms,Hash Table,String"
+                        data-title="3. Longest Substring Without Repeating Characters" onclick="openQuestionAttempt('PQ9RJ003')">
+                        <div class="status-col"><i class="fas fa-check"></i></div>
+                        <div class="title-col" style="color: #df5a22;">3. Longest Substring Without Repeating Characters</div>
+                        <div class="acceptance-col">40.0%</div>
+                        <div class="difficulty-col diff-med">Med.</div>
+                        <div class="action-col">
+                            <button class="btn-solve-pill" onclick="event.stopPropagation(); openQuestionAttempt('PQ9RJ003');">Solve</button>
+                        </div>
+                    </div>
+
+                    <!-- 4. Median of Two Sorted Arrays -->
+                    <div class="leetcode-row" data-id="PQ9RJ004" data-topics="Algorithms,Array,Binary Search"
+                        data-title="4. Median of Two Sorted Arrays" onclick="openQuestionAttempt('PQ9RJ004')">
+                        <div class="status-col"><i class="fas fa-check"></i></div>
+                        <div class="title-col">4. Median of Two Sorted Arrays</div>
+                        <div class="acceptance-col">47.9%</div>
+                        <div class="difficulty-col diff-hard">Hard</div>
+                        <div class="action-col">
+                            <button class="btn-solve-pill" onclick="event.stopPropagation(); openQuestionAttempt('PQ9RJ004');">Solve</button>
+                        </div>
+                    </div>
+
+                    <!-- 5. Longest Palindromic Substring -->
+                    <div class="leetcode-row" data-id="PQ9RJ005" data-topics="Algorithms,String,Dynamic Programming"
+                        data-title="5. Longest Palindromic Substring" onclick="openQuestionAttempt('PQ9RJ005')">
+                        <div class="status-col" style="color: #bbb;"><i class="far fa-circle"></i></div>
+                        <div class="title-col">5. Longest Palindromic Substring</div>
+                        <div class="acceptance-col">38.9%</div>
+                        <div class="difficulty-col diff-med">Med.</div>
+                        <div class="action-col">
+                            <button class="btn-solve-pill" onclick="event.stopPropagation(); openQuestionAttempt('PQ9RJ005');">Solve</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 2: YOUR COURSES                    -->
+        <!-- ========================================== -->
+        <section id="coursesSection" style="margin-bottom: 50px;">
+            <div class="section-header">
+                <h2 class="section-title">
+                    Your Courses <span class="section-count" id="courseCount">(0)</span>
+                </h2>
+                <div class="search-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="courseSearchInput" class="search-input-underline"
+                        placeholder="Search courses..." onkeyup="filterCourses()">
+                </div>
+            </div>
+
+            <div class="cards-list" id="coursesListContainer">
+                <div style="padding: 12px 0 20px 0; color: #555555; font-size: 1.15rem; font-weight: 400; font-family: 'Hind', sans-serif;">
+                    Not created yet
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 3: YOUR INTERVIEWS AND TESTS       -->
+        <!-- ========================================== -->
+        <section id="testsSection">
+            <div class="section-header">
+                <h2 class="section-title">
+                    Your interviews and tests <span class="section-count" id="testsCount">(0)</span>
+                </h2>
+                <div class="search-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="testSearchInput" class="search-input-underline"
+                        placeholder="Search interviews & tests..." onkeyup="filterTests()">
+                </div>
+            </div>
+
+            <div class="cards-list" id="testsListContainer">
+                <div style="padding: 12px 0 20px 0; color: #555555; font-size: 1.15rem; font-weight: 400; font-family: 'Hind', sans-serif;">
+                    Not created yet
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===== PROBLEM DETAIL & SOLVE MODAL ===== -->
+    <div class="modal-overlay" id="problemModal" onclick="closeModalOnBackdrop(event)">
+        <div class="modal-box">
+            <div class="modal-header-bar">
+                <h3 class="modal-title-text" id="modalTitle">1. Two Sum</h3>
+                <button class="modal-close-icon" onclick="closeProblemModal()">✕</button>
+            </div>
+            <div class="modal-content-area" id="modalBody">
+                <!-- Dynamically injected -->
+            </div>
+            <div class="modal-footer-bar">
+                <button class="btn-cancel-modal" onclick="closeProblemModal()">Close</button>
+                <button class="btn-run-modal" onclick="simulateRunSolution()">Run Solution</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast-popup" id="toastMsg">Notification message</div>
+
+    <!-- ===== SCRIPT LOGIC ===== -->
+    <script>
+        // 5 Real LeetCode Problem Details
+        const PROBLEMS_INFO = {
+            1: {
+                title: "1. Two Sum (Easy)",
+                desc: `Given an array of integers <code>nums</code> and an integer <code>target</code>, return indices of the two numbers such that they add up to <code>target</code>.<br><br>You may assume that each input would have <b>exactly one solution</b>, and you may not use the same element twice.`,
+                code: `class Solution:
+    def twoSum(self, nums: list[int], target: int) -> list[int]:
+        seen = {}
+        for i, num in enumerate(nums):
+            diff = target - num
+            if diff in seen:
+                return [seen[diff], i]
+            seen[num] = i
+        return []`
+            },
+            2: {
+                title: "2. Add Two Numbers (Medium)",
+                desc: `You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.`,
+                code: `class Solution:
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = ListNode(0)
+        curr = dummy
+        carry = 0
+        while l1 or l2 or carry:
+            val = (l1.val if l1 else 0) + (l2.val if l2 else 0) + carry
+            carry = val // 10
+            curr.next = ListNode(val % 10)
+            curr = curr.next
+            l1 = l1.next if l1 else None
+            l2 = l2.next if l2 else None
+        return dummy.next`
+            },
+            3: {
+                title: "3. Longest Substring Without Repeating Characters (Medium)",
+                desc: `Given a string <code>s</code>, find the length of the <b>longest substring</b> without repeating characters.`,
+                code: `class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        char_idx = {}
+        left = 0
+        max_len = 0
+        for right, ch in enumerate(s):
+            if ch in char_idx and char_idx[ch] >= left:
+                left = char_idx[ch] + 1
+            char_idx[ch] = right
+            max_len = max(max_len, right - left + 1)
+        return max_len`
+            },
+            4: {
+                title: "4. Median of Two Sorted Arrays (Hard)",
+                desc: `Given two sorted arrays <code>nums1</code> and <code>nums2</code> of size <code>m</code> and <code>n</code> respectively, return the median of the two sorted arrays. The overall run time complexity should be <b>O(log (m+n))</b>.`,
+                code: `class Solution:
+    def findMedianSortedArrays(self, nums1: list[int], nums2: list[int]) -> float:
+        if len(nums1) > len(nums2):
+            nums1, nums2 = nums2, nums1
+        m, n = len(nums1), len(nums2)
+        low, high = 0, m
+        while low <= high:
+            i = (low + high) // 2
+            j = (m + n + 1) // 2 - i
+            maxLeft1 = float('-inf') if i == 0 else nums1[i - 1]
+            minRight1 = float('inf') if i == m else nums1[i]
+            maxLeft2 = float('-inf') if j == 0 else nums2[j - 1]
+            minRight2 = float('inf') if j == n else nums2[j]
+            if maxLeft1 <= minRight2 and maxLeft2 <= minRight1:
+                if (m + n) % 2 == 1:
+                    return float(max(maxLeft1, maxLeft2))
+                return (max(maxLeft1, maxLeft2) + min(minRight1, minRight2)) / 2.0
+            elif maxLeft1 > minRight2:
+                high = i - 1
+            else:
+                low = i + 1
+        return 0.0`
+            },
+            5: {
+                title: "5. Longest Palindromic Substring (Medium)",
+                desc: `Given a string <code>s</code>, return the longest palindromic substring in <code>s</code>.`,
+                code: `class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        if not s:
+            return ""
+        start, end = 0, 0
+        def expand(left, right):
+            while left >= 0 and right < len(s) and s[left] == s[right]:
+                left -= 1
+                right += 1
+            return right - left - 1
+        for i in range(len(s)):
+            l1 = expand(i, i)
+            l2 = expand(i, i + 1)
+            m = max(l1, l2)
+            if m > end - start:
+                start = i - (m - 1) // 2
+                end = i + m // 2
+        return s[start:end + 1]`
+            }
+        };
+
+        // Initialize user info from session
+        function initUser() {
+            let session = null;
+            try {
+                session = JSON.parse(localStorage.getItem('CodeQuest_active_session')) ||
+                          JSON.parse(localStorage.getItem('TESTPAD_current_user'));
+            } catch (e) {}
+
+            const name = (session && session.name) ? session.name : "Om Aggarwal";
+            const role = (session && session.roleDisplay) ? session.roleDisplay : "Student";
+            const letter = name.trim().charAt(0).toUpperCase() || 'O';
+
+            document.getElementById('userName').textContent = name;
+            document.getElementById('userRole').textContent = role;
+            const letterEl = document.getElementById('userInitialLetter');
+            if (letterEl) letterEl.textContent = letter;
+        }
+
+        // Profile Menu
+        function toggleProfileMenu(e) {
+            e.stopPropagation();
+            const m = document.getElementById('profileMenu');
+            m.style.display = m.style.display === 'block' ? 'none' : 'block';
+        }
+
+        window.onclick = function(e) {
+            const m = document.getElementById('profileMenu');
+            if (m && m.style.display === 'block') m.style.display = 'none';
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('CodeQuest_active_session');
+            localStorage.removeItem('TESTPAD_current_user');
+            window.location.href = 'firstpage.html';
+        }
+
+        // Scroll to sections
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        const COURSES_STORAGE_KEY = 'CodeQuest_teacher_courses';
+        const TESTS_STORAGE_KEY = 'CodeQuest_teacher_tests';
+        const DSA_STORAGE_KEY = 'CodeQuest_dsa_problems';
+        const BATCHES_KEY = 'CodeQuest_batches';
+
+        // ===== AUDIENCE / BATCH VISIBILITY =====
+        function _cqSession() { try { return JSON.parse(localStorage.getItem('CodeQuest_active_session')) || JSON.parse(localStorage.getItem('TESTPAD_current_user')) || {}; } catch (e) { return {}; } }
+        function _myBatchIds() {
+            const s = _cqSession(); const email = (s.email || '').toLowerCase(); const name = (s.name || '').toLowerCase();
+            let batches = []; try { batches = JSON.parse(localStorage.getItem(BATCHES_KEY)) || []; } catch (e) {}
+            const ids = [];
+            batches.forEach(b => {
+                (b.students || []).forEach(st => {
+                    const u = (st.username || '').toLowerCase(), r = (st.regNo || '').toLowerCase(), n = (st.name || '').toLowerCase();
+                    if ((email && (u === email || r === email)) || (name && n === name)) { if (!ids.includes(b.id)) ids.push(b.id); }
+                });
+            });
+            return ids;
+        }
+        function _amApplicant(jobId) {
+            if (!jobId) return false;
+            const s = _cqSession(); const email = (s.email || '').toLowerCase(); const name = (s.name || '').toLowerCase(); const roll = String(s.roll || s.regNo || '').toLowerCase();
+            let apps = {}; try { apps = JSON.parse(localStorage.getItem('CodeQuest_job_applications')) || {}; } catch (e) {}
+            return (apps[jobId] || []).some(a => (email && (a.applicantEmail || '').toLowerCase() === email) || (roll && String(a.applicantRoll || '').toLowerCase() === roll) || (name && (a.applicantName || '').toLowerCase() === name));
+        }
+        function _visibleToStudent(item) {
+            // 'universal' (default) visible to all; 'batch' only to linked-batch members; 'registered' only to job applicants
+            if (!item) return true;
+            if (item.audience === 'registered' || item.registeredOnly) return _amApplicant(item.jobId);
+            if (item.audience !== 'batch') return true;
+            const my = _myBatchIds();
+            return (item.batchIds || []).some(id => my.includes(id));
+        }
+
+        const DEFAULT_SEEDED_COURSES = [
+            {
+                id: "24CSE0101",
+                code: "24CSE0101-Problem Solving Using Python Programming-1stSem-2024",
+                sectionsCount: 7,
+                progress: 100
+            },
+            {
+                id: "24CSE0102",
+                code: "24CSE0102-Front End Engineering-I-1st Sem-2024",
+                sectionsCount: 13,
+                progress: 57
+            },
+            {
+                id: "24CSE0208",
+                code: "24CSE0208-Data Structures using Object Oriented Programming-2024-CSE-3Sem",
+                sectionsCount: 12,
+                progress: 100
+            }
+        ];
+
+        const DEFAULT_SEEDED_TESTS = [
+            {
+                id: "CQ_TEST_101",
+                title: "Google Technical Mock Interview - DSA & System Design Round",
+                duration: "90 Mins",
+                status: "ACTIVE",
+                questionsCount: 4,
+                code: "CQ-GOOG-2024"
+            },
+            {
+                id: "CQ_TEST_102",
+                title: "Amazon SDE-1 Coding Assessment - Arrays & Dynamic Programming",
+                duration: "120 Mins",
+                status: "ACTIVE",
+                questionsCount: 3,
+                code: "CQ-AMZN-2024"
+            },
+            {
+                id: "CQ_TEST_103",
+                title: "Frontend Engineering Round - React, JavaScript & DOM Algorithms",
+                duration: "60 Mins",
+                status: "ACTIVE",
+                questionsCount: 5,
+                code: "CQ-FED-2024"
+            }
+        ];
+
+        function promptJoinTest() {
+            const key = prompt("Enter your Assessment ID or Joining Key:");
+            if (key && key.trim()) {
+                window.location.href = `interound-attempt.html?id=${encodeURIComponent(key.trim())}`;
+            }
+        }
+
+        function getDsaList() {
+            try {
+                const stored = localStorage.getItem(DSA_STORAGE_KEY);
+                if (stored) return JSON.parse(stored);
+            } catch(e) {}
+            const defaults = [
+                { id: "PQ9RJ001", num: 1, title: "1. Two Sum", diff: "Easy", acceptance: "58.0%", topics: "Algorithms,Array,Hash Table", status: "done" },
+                { id: "PQ9RJ002", num: 2, title: "2. Add Two Numbers", diff: "Med.", acceptance: "49.6%", topics: "Algorithms,Linked List,Math", status: "open" },
+                { id: "PQ9RJ003", num: 3, title: "3. Longest Substring Without Repeating Characters", diff: "Med.", acceptance: "40.0%", topics: "Algorithms,Hash Table,String", status: "done" },
+                { id: "PQ9RJ004", num: 4, title: "4. Median of Two Sorted Arrays", diff: "Hard", acceptance: "47.9%", topics: "Algorithms,Array,Binary Search", status: "done" },
+                { id: "PQ9RJ005", num: 5, title: "5. Longest Palindromic Substring", diff: "Med.", acceptance: "38.9%", topics: "Algorithms,String,Dynamic Programming", status: "open" }
+            ];
+            localStorage.setItem(DSA_STORAGE_KEY, JSON.stringify(defaults));
+            return defaults;
+        }
+
+        function renderQuestions() {
+            const list = getDsaList().filter(_visibleToStudent);
+            const container = document.getElementById('questionsTableBody');
+            if (!container) return;
+            container.innerHTML = '';
+            document.getElementById('questionCount').textContent = `(${list.length})`;
+
+            list.forEach(q => {
+                const diffClass = q.diff === 'Easy' ? 'diff-easy' : (q.diff === 'Hard' ? 'diff-hard' : 'diff-med');
+                const isDone = q.status === 'done';
+                const topicPills = (q.topics || '').split(',').filter(Boolean).map(t =>
+                    `<span style="background:#f2f4f7; color:#475467; font-size:0.75rem; padding:2px 8px; border-radius:12px; font-weight:600;">${escapeHtml(t.trim())}</span>`
+                ).join(' ');
+
+                const row = document.createElement('div');
+                row.className = 'leetcode-row';
+                row.setAttribute('data-id', q.id);
+                row.setAttribute('data-topics', q.topics || '');
+                row.setAttribute('data-title', q.title);
+                row.onclick = () => openQuestionAttempt(q.id);
+
+                row.innerHTML = `
+                    <div class="status-col" style="${isDone ? 'color: #00b8a3;' : 'color: #bbb;'}">
+                        <i class="${isDone ? 'fas fa-check' : 'far fa-circle'}"></i>
+                    </div>
+                    <div class="title-col" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                        <span style="font-weight:700;">${escapeHtml(q.title)}</span>
+                        <div style="display:inline-flex; gap:6px; flex-wrap:wrap;">${topicPills}</div>
+                    </div>
+                    <div class="acceptance-col">${escapeHtml(q.acceptance || '50.0%')}</div>
+                    <div class="difficulty-col ${diffClass}">${escapeHtml(q.diff || 'Med.')}</div>
+                    <div class="action-col">
+                        <button class="btn-solve-pill" onclick="event.stopPropagation(); openQuestionAttempt('${escapeHtml(q.id)}');">Solve</button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function renderCourses() {
+            let courses = [];
+            try {
+                const stored = localStorage.getItem(COURSES_STORAGE_KEY);
+                courses = stored ? JSON.parse(stored) : DEFAULT_SEEDED_COURSES;
+            } catch(e) { courses = DEFAULT_SEEDED_COURSES; }
+            courses = (courses || []).filter(_visibleToStudent);
+
+            const container = document.getElementById('coursesListContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            document.getElementById('courseCount').textContent = `(${courses.length})`;
+
+            courses.forEach(c => {
+                const cId = encodeURIComponent(c.id || c.code);
+                const card = document.createElement('div');
+                card.className = 'learning-module-card';
+                card.setAttribute('data-title', c.code);
+                card.onclick = () => {
+                    window.location.href = `course-player.html?courseId=${cId}`;
+                };
+
+                card.innerHTML = `
+                    <div class="card-top-row">
+                        <h3 class="card-item-title">${escapeHtml(c.code)}</h3>
+                        <div class="card-action-icons">
+                            <span style="color: var(--primary); font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
+                                <i class="fas fa-play-circle"></i> Open Course
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-meta-text">${c.sectionsCount || (c.sections && c.sections.length) || 5} sections &bull; Published Course Module</div>
+                    <div class="progress-bar-wrapper">
+                        <div class="progress-track">
+                            <div class="progress-fill" style="width: ${c.progress || 0}%;"></div>
+                        </div>
+                        <span class="progress-label">${c.progress || 0}% completed</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderTests() {
+            let tests = [];
+            try {
+                const stored = localStorage.getItem(TESTS_STORAGE_KEY);
+                tests = stored ? JSON.parse(stored) : DEFAULT_SEEDED_TESTS;
+            } catch(e) { tests = DEFAULT_SEEDED_TESTS; }
+            tests = (tests || []).filter(_visibleToStudent);
+
+            const container = document.getElementById('testsListContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            document.getElementById('testsCount').textContent = `(${tests.length})`;
+
+            tests.forEach(t => {
+                const tId = encodeURIComponent(t.id || t.code);
+                const card = document.createElement('div');
+                card.className = 'learning-module-card';
+                card.setAttribute('data-title', t.title);
+                card.onclick = () => {
+                    window.location.href = `interound-attempt.html?id=${tId}`;
+                };
+
+                card.innerHTML = `
+                    <div class="card-top-row">
+                        <h3 class="card-item-title">${escapeHtml(t.title)}</h3>
+                        <div class="card-action-icons">
+                            <span style="background: #fff5f0; color: #df5a22; border: 1px solid #fce8e0; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase;">
+                                ${escapeHtml(t.status || 'ACTIVE')}
+                            </span>
+                            <span style="color: var(--primary); font-weight: 700; font-size: 0.88rem; margin-left: 8px; display: flex; align-items: center; gap: 6px;">
+                                <i class="fas fa-arrow-right"></i> Start Round
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-meta-text">
+                        <i class="fas fa-stopwatch" style="color: var(--primary); margin-right: 4px;"></i>
+                        Duration: ${escapeHtml(t.duration || '90 Mins')} &bull; ID: ${escapeHtml(t.id || t.code)} &bull; Timed Technical Round
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Filter Questions
+        function filterQuestions() {
+            const q = (document.getElementById('questionSearchInput')?.value || '').toLowerCase();
+            const rows = document.querySelectorAll('.leetcode-row');
+            let count = 0;
+            rows.forEach(r => {
+                const title = (r.getAttribute('data-title') || '').toLowerCase();
+                const topics = (r.getAttribute('data-topics') || '').toLowerCase();
+                if (!q || title.includes(q) || topics.includes(q)) {
+                    r.style.display = 'grid';
+                    count++;
+                } else {
+                    r.style.display = 'none';
+                }
+            });
+            document.getElementById('questionCount').textContent = `(${count})`;
+        }
+
+        function filterByTopic(topic, btn) {
+            document.querySelectorAll('.topic-tag-pill').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const rows = document.querySelectorAll('.leetcode-row');
+            let count = 0;
+            rows.forEach(r => {
+                const topics = r.getAttribute('data-topics') || '';
+                if (topic === 'All' || topics.includes(topic)) {
+                    r.style.display = 'grid';
+                    count++;
+                } else {
+                    r.style.display = 'none';
+                }
+            });
+            document.getElementById('questionCount').textContent = `(${count})`;
+        }
+
+        // Filter Courses
+        function filterCourses() {
+            const q = (document.getElementById('courseSearchInput')?.value || '').toLowerCase();
+            const cards = document.querySelectorAll('#coursesListContainer .learning-module-card');
+            let count = 0;
+            cards.forEach(c => {
+                const title = (c.getAttribute('data-title') || c.innerText).toLowerCase();
+                if (!q || title.includes(q)) {
+                    c.style.display = 'flex';
+                    count++;
+                } else {
+                    c.style.display = 'none';
+                }
+            });
+            document.getElementById('courseCount').textContent = `(${count})`;
+        }
+
+        // Filter Tests
+        function filterTests() {
+            const q = (document.getElementById('testSearchInput')?.value || '').toLowerCase();
+            const cards = document.querySelectorAll('#testsListContainer .learning-module-card');
+            let count = 0;
+            cards.forEach(c => {
+                const title = (c.getAttribute('data-title') || c.innerText).toLowerCase();
+                if (!q || title.includes(q)) {
+                    c.style.display = 'flex';
+                    count++;
+                } else {
+                    c.style.display = 'none';
+                }
+            });
+            document.getElementById('testsCount').textContent = `(${count})`;
+        }
+
+        // Open question attempt page with dynamic question ID (PQ9RJ001 etc.)
+        function openQuestionAttempt(qId) {
+            window.location.href = `CodeQuestattempt.html?id=${encodeURIComponent(qId)}`;
+        }
+
+        // Problem Modal
+        function openProblemModal(id) {
+            const p = PROBLEMS_INFO[id];
+            if (!p) return;
+            document.getElementById('modalTitle').textContent = p.title;
+            document.getElementById('modalBody').innerHTML = `
+                <p style="margin-bottom: 16px;">${p.desc}</p>
+                <div style="font-weight: 700; margin-bottom: 6px;">Python 3 Solution:</div>
+                <pre class="code-block-leet"><code>${escapeHtml(p.code)}</code></pre>
+            `;
+            document.getElementById('problemModal').style.display = 'flex';
+        }
+
+        function closeProblemModal() {
+            document.getElementById('problemModal').style.display = 'none';
+        }
+
+        function closeModalOnBackdrop(e) {
+            if (e.target === document.getElementById('problemModal')) {
+                closeProblemModal();
+            }
+        }
+
+        function simulateRunSolution() {
+            closeProblemModal();
+            showToast("Accepted! 100% test cases passed.");
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toastMsg');
+            t.textContent = msg;
+            t.style.display = 'block';
+            setTimeout(() => { t.style.display = 'none'; }, 3000);
+        }
+
+        function escapeHtml(s) {
+            return (s || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initUser();
+            renderQuestions();
+            renderCourses();
+            renderTests();
+        });
+    </script>
+</body>
+
+</html>

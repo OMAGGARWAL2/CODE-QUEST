@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <link rel="icon" type="image/x-icon" href="../logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: url('https://cuiet.codebrigade.in/images/Chitkara_University_pic.jpg') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-red-bar {
+            height: 6px;
+            background-color: #ed3237;
+            width: 100%;
+        }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 990px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .login-wrapper {
+            position: absolute;
+            right: 10px;
+            top: 75px;
+            width: 285px;
+            height: 550px;
+            background-color: #ffffff;
+            border: 2px solid #cccccc;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .logo-section {
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .logo-section img {
+            width: 100%;
+            height: auto;
+        }
+
+        .logo-text {
+            font-size: 11px;
+            color: #444;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 4px;
+            border: 1px solid #7f9db9;
+            box-sizing: border-box;
+            font-size: 13px;
+            height: 24px;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 2px;
+            border: 1px solid #7f9db9;
+            box-sizing: border-box;
+            font-size: 12px;
+            height: 24px;
+        }
+
+        .remember-section {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .remember-section input {
+            margin: 0;
+        }
+
+        .btn-signin {
+            width: 100%;
+            background-color: #c9302c;
+            color: white;
+            border: 1px solid #ac2925;
+            padding: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .btn-signin:hover {
+            background-color: #ac2925;
+        }
+
+        .links-section {
+            font-size: 11px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .links-section a {
+            color: #337ab7;
+            text-decoration: none;
+        }
+
+        .links-section a:hover {
+            text-decoration: underline;
+        }
+
+        .app-icons {
+            margin-top: auto;
+            text-align: center;
+        }
+
+        .app-stores {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+
+        .app-stores img {
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .app-code {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .powered-by {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 11px;
+            color: #666;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+
+        .powered-by img {
+            height: 20px;
+        }
+
+        .error-msg {
+            color: #c00;
+            font-size: 12px;
+            margin-bottom: 10px;
+            display: none;
+            padding: 5px;
+            background: #fffafa;
+            border: 1px solid #fcc;
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+    <div class="top-red-bar"></div>
+
+    <div class="main-container">
+        <div class="login-wrapper">
+            <div class="logo-section">
+                <img src="https://cuiet.codebrigade.in/images/logo_373.png" alt="Chitkara University">
+                <div class="logo-text">Chitkara University Institute of Engineering & Technology</div>
+            </div>
+
+            <div class="error-msg" id="errorMsg">Invalid credentials. Please try again.</div>
+
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" id="username" class="form-input" value="2410990653">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" id="password" class="form-input" value="august02#">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Session</label>
+                <select class="form-select" id="session">
+                    <option value="19">JanJun2026</option>
+                    <option value="18">Jul-Dec2025</option>
+                </select>
+            </div>
+
+            <div class="remember-section">
+                <input type="checkbox" id="remember" checked>
+                <label for="remember">Remember Password</label>
+            </div>
+
+            <button class="btn-signin" onclick="doLogin()">Sign In</button>
+
+            <div class="links-section">
+                Forgot your password? <a href="#">Click here</a><br>
+                <a href="#">Privacy Policy</a>
+            </div>
+
+            <div class="app-icons">
+                <div class="app-stores">
+                    <img src="https://cuiet.codebrigade.in/images/apple_icon.png" alt="App Store">
+                    <img src="https://cuiet.codebrigade.in/images/google_play_icon.png" alt="Google Play">
+                </div>
+                <div class="app-code">Mobile App Code : 800002</div>
+                <div class="powered-by">
+                    <span>Powered by</span>
+                    <img src="https://cuiet.codebrigade.in/cb_top_right_icon.png" alt="CODEBRIGADE">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function doLogin() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            
+            // For demo purposes, we accept the credentials if they match our previous logic
+            // or if the user clicks sign in.
+            
+            const students = JSON.parse(localStorage.getItem('erp_students')) || [];
+            let student = students.find(s => s.username === user && s.password === pass);
+            
+            if (!student && user === "2410990653") {
+                // Default demo student
+                student = {
+                    username: "2410990653",
+                    name: "Demo Student",
+                    class: "BE CSE",
+                    rollNo: "2410990653"
+                };
+            }
+
+            if (student || user === "2410990653") {
+                sessionStorage.setItem('current_student', JSON.stringify(student || {username: user}));
+                window.location.href = 'erp.html';
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+
+</html>

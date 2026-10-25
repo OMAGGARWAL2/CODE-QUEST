@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">CodeQuest app icon</title>
+  <desc id="desc">White lowercase cq lettering inside a warm orange rounded square.</desc>
+  <rect x="20" y="20" width="472" height="472" rx="64" fill="#F0642B"/>
+  <g fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="190" letter-spacing="-14">
+    <text x="86" y="310">cq</text>
+  </g>
+</svg>

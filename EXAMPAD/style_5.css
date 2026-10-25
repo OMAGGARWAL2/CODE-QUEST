@@ -1,0 +1,414 @@
+
+        /* calender css */
+        .calendar-sidebar {
+            top: 53px;
+            z-index: 98;
+            width: 440px;
+            right: -440px;
+            position: fixed;
+            transition: 0.5s;
+            background-color: white;
+            height: calc(100vh - 53px);
+            -webkit-transition: all 0.25s ease-out;
+            -o-transition: all 0.25s ease-out;
+            transition: all 0.25s ease-out;
+            box-shadow: 0px 3px 6px #00000029;
+        }
+
+        .calendar-sidebar.show {
+            right: 0 !important;
+        }
+
+        .calender-sidebar-header {
+            display: flex;
+            padding: 15px 18px;
+            border-bottom: 1px solid #D1D1D1;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .calendar-sidebar .calender-sidebar-header .close {
+            font-size: 32px;
+        }
+
+        #calendarModal .calender-header {
+            padding: 10px 18px;
+        }
+
+        #calendarModal .current-dateInCalender {
+            width: 130px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        #calendarModal .goToHomeBtn {
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        #calendarModal #selectedClass {
+            color: #000;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        #calendarModal {
+            font-family: 'Mulish', sans-serif !important;
+        }
+
+        #calendarModal .icons i,
+        .icons i:hover {
+            color: #de6834;
+            font-size: 23px;
+            font-weight: 600;
+            border-radius: 50%;
+            padding: 5px 12px;
+            background-color: #FCEBE2;
+        }
+
+        #calendarModal .calendar ul {
+            display: flex;
+            flex-wrap: wrap;
+            list-style: none;
+            text-align: center;
+            padding: 0px 8px;
+        }
+
+        #calendarModal .calendar ul.weeks {
+            padding: 8.5px 8px;
+            background-color: #FFEEE5;
+        }
+
+        #calendarModal .calendar .days {
+            padding-bottom: 20px;
+        }
+
+        #calendarModal .calendar li {
+            color: #333;
+            font-size: 15px;
+            width: calc(100% / 7);
+        }
+
+        #calendarModal .calendar .weeks li {
+            cursor: default;
+            color: #de6834;
+            font-weight: 600;
+        }
+
+        #calendarModal .calendar .days li {
+            z-index: 1;
+            cursor: pointer;
+            position: relative;
+            margin-top: 12px;
+        }
+
+        #calendarModal .days li.inactive {
+            color: #aaa;
+            cursor: default;
+            opacity: 0;
+        }
+
+        #calendarModal .days li.active {
+            color: #fff;
+        }
+
+        #calendarModal .days li::before {
+            position: absolute;
+            content: "";
+            left: 50%;
+            top: 50%;
+            height: 40px;
+            width: 40px;
+            z-index: -1;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #calendarModal .days li.present::after {
+            position: absolute;
+            content: "";
+            left: 50%;
+            bottom: -4px;
+            height: 5px;
+            width: 5px;
+            z-index: 1;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #00C68D;
+        }
+
+        #calendarModal .days li.past::after {
+            position: absolute;
+            content: "";
+            left: 50%;
+            bottom: -4px;
+            height: 5px;
+            width: 5px;
+            z-index: 1;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgb(255, 0, 0);
+        }
+
+        #calendarModal .days li.past.selected::after {
+            background-color: #fff;
+        }
+
+        #calendarModal .days li.active {
+            color: #de6834;
+            font-weight: 600;
+        }
+
+        #calendarModal .days li.active::before {
+            background: transparent;
+        }
+
+        #calendarModal .days li:not(.active):hover::before {
+            background: #f2f2f2;
+        }
+
+        #calendarModal .days li.selected {
+            color: #fff;
+        }
+
+        #calendarModal .days li.selected::before,
+        #calendarModal .days li.selected:hover::before {
+            background: #de6834;
+        }
+
+        #calendarModal .linear-background {
+            animation-duration: 1s;
+            animation-fill-mode: forwards;
+            animation-iteration-count: infinite;
+            animation-name: placeHolderShimmer;
+            animation-timing-function: linear;
+            background: #f6f7f8;
+            background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+            background-size: 1000px 104px;
+            height: 115px;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes placeHolderShimmer {
+            0% {
+                background-position: -468px 0
+            }
+
+            100% {
+                background-position: 468px 0
+            }
+        }
+
+        #calendarModal ul.timeline {
+            list-style-type: none;
+            position: relative;
+            margin-left: 15px;
+        }
+
+        #calendarModal ul.timeline:before {
+            left: 5px;
+            width: 2px;
+            top: -20px;
+            height: 100%;
+            z-index: 400;
+            content: ' ';
+            position: absolute;
+            background: #d4d9df;
+            display: inline-block;
+        }
+
+        #calendarModal ul.timeline li {
+            margin: 0px 0px 20px 0px;
+            cursor: default;
+            margin-left: 20px;
+            margin-right: 20px;
+            position: relative;
+        }
+
+        #calendarModal ul.timeline li a,
+        ul.timeline li a:hover {
+            color: #333;
+            text-decoration: none;
+        }
+
+        #calendarModal ul.timeline li:last-child {
+            margin-bottom: 10px !important;
+        }
+
+        #calendarModal ul.timeline li:before {
+            top: 50%;
+            left: -19px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            z-index: 500;
+            content: ' ';
+            cursor: default;
+            position: absolute;
+            background: #898989;
+            display: inline-block;
+        }
+
+        #calendarModal .gap-5 {
+            gap: 5px;
+        }
+
+        #calendarModal .gap-30 {
+            gap: 0px 30px;
+        }
+
+
+
+
+
+
+
+
+
+        #calendarModal .previous {
+            left: unset;
+            min-height: fit-content;
+        }
+
+        #calendarModal .previous a {
+            opacity: .8;
+        }
+
+        #calendarModal .previous .badgeTime small {
+            font-size: 17px;
+            color: #333333;
+            font-weight: 700;
+            width: fit-content;
+            text-transform: lowercase;
+        }
+
+        #calendarModal .previous .class-title,
+        #calendarModal .upcoming .class-title {
+            font-size: 15px;
+            color: #333333;
+            font-weight: 700;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+        }
+
+        #calendarModal .previous small,
+        #calendarModal .upcoming small {
+            color: #333333;
+            font-weight: 600;
+        }
+
+
+        #calendarModal .upcoming {
+            min-height: fit-content;
+        }
+
+        #calendarModal ul.timeline li.upcoming:before {
+            background: #449839;
+        }
+
+        #calendarModal .upcoming .badgeTime small {
+            font-size: 17px;
+            color: #333333;
+            font-weight: 700;
+            width: fit-content;
+            text-transform: lowercase;
+        }
+
+        #calendarModal .filter-radio input {
+            width: 18px;
+            height: 18px;
+            vertical-align: middle;
+        }
+
+        #calendarModal .previous .class-content-section {
+            width: 70%;
+            padding: 6px 12px;
+            border-top-left-radius: 5px;
+            background-color: #F7F7F7;
+            border-bottom-left-radius: 5px;
+        }
+
+        #calendarModal .upcoming .class-content-section {
+            width: 70%;
+            padding: 6px 12px;
+            border-radius: 5px;
+            background-color: #DBFFD6;
+        }
+
+        #calendarModal .class-action-icons {
+            gap: 10px;
+            padding: 0px 12px;
+            justify-content: center;
+            border-bottom-right-radius: 5px;
+            border-top-right-radius: 5px;
+            border: 1px solid #D8D8D8;
+            border-left: none !important;
+        }
+
+        #calendarModal .class-action-icon img {
+            width: 30px;
+        }
+
+
+
+
+
+
+
+
+
+        #calendarModal #previousClassRadio {
+            accent-color: red;
+        }
+
+        #calendarModal #upcomingClassRadio {
+            accent-color: green;
+        }
+
+        #calendarModal #allClassRadio {
+            accent-color: black;
+        }
+
+        #calendarModal .dropdown.bootstrap-select {
+            width: unset !important;
+        }
+
+        #calendarModal .dropdown-calender {
+            position: relative;
+        }
+
+        #calendarModal .dropdown-menu-calender {
+            top: 25px;
+            left: 0px;
+            z-index: 10;
+            padding: 15px;
+            position: absolute;
+            background: #fff;
+            box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px;
+        }
+
+        #calendarModal .dropdown-menu-calender .bootstrap-select>.dropdown-toggle {
+            width: 165px !important;
+        }
+
+        #calendarModal .dropdown-menu-calender .dropdown-menu .inner.show,
+        #calendarModal .dropdown-menu-calender .dropdown-menu.show {
+            width: 165px !important;
+        }
+
+        #calendarModal .goToBtn {
+            border: 0;
+            outline: 0;
+            color: white;
+            border-radius: 3px;
+            font-weight: 500;
+            font-family: 'Hind', sans-serif;
+            padding: 8px 25px 6px 25px;
+            background-color: #de6834;
+        }
+    

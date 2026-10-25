@@ -1,0 +1,2082 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts: Hind, Inter, Outfit and Mulish -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Mulish:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- External Libraries for Export & Charts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            /* SaaS Professional Palette */
+            --bg-canvas: #FFFFFF;
+            --bg-subtle: #F9FAFB;
+            --bg-dark: #101828;
+            --text-primary: #111827;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --border-subtle: #F3F4F6;
+            --border-default: #E5E7EB;
+            --accent-primary: #101828;
+            /* Deep Charcoal instead of Red for "Real" feel */
+            --accent-red: #DC2626;
+            --accent-green: #059669;
+            --accent-blue: #2563EB;
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Custom Sleek Scrollbars */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+            border-left: 1px solid #CBD5E1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #64748B;
+            border-radius: 6px;
+            border: 2px solid #F1F5F9;
+            min-height: 40px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #64748B #F1F5F9;
+        }
+
+        body {
+            background-color: var(--bg-canvas);
+            color: var(--text-primary);
+            font-family: 'Mulish', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.5;
+        }
+
+        /* --- UTILITIES --- */
+        .outfit {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        /* --- HEADER --- */
+        .site-header {
+            height: 72px;
+            background: #fff;
+            border-bottom: 1px solid var(--border-default);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 48px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .logo-container:hover {
+            opacity: 0.8;
+        }
+
+        .logo-square {
+            width: 52px;
+            height: 52px;
+            background: transparent;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-square img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #101828;
+            letter-spacing: -0.5px;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 57px;
+            margin-left: 40px;
+        }
+
+        .nav-icon-btn {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #344054;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+        }
+
+        .nav-icon-btn img {
+            width: 32px !important;
+            height: 32px !important;
+        }
+
+        .nav-icon-btn:hover {
+            background: #F9FAFB;
+            color: #F46036;
+        }
+
+        .nav-icon-btn.active {
+            color: #F46036;
+            background: #FFF5F0;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .plus-btn {
+            width: 48px;
+            height: 72px;
+            background: #fff5f0;
+            color: #F46036;
+            border: none;
+            border-left: 1px solid #f0f0f0;
+            border-right: 1px solid #f0f0f0;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .plus-btn:hover {
+            background: #ffece5;
+            color: #F46036;
+        }
+
+        .grid-btn {
+            width: 54px;
+            height: 54px;
+            color: #344054;
+            border: none;
+            background: transparent;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border-radius: 14px;
+        }
+
+        .grid-btn img {
+            width: 32px !important;
+            height: 32px !important;
+        }
+
+        .grid-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .profile-bubble {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-left: 16px;
+            border-left: 1px solid var(--border-default);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            font-family: 'Mulish', sans-serif;
+            color: #444;
+            text-transform: uppercase;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            font-weight: 800;
+            font-family: 'Mulish', sans-serif;
+            color: #F46036;
+            text-transform: uppercase;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: #F46036;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-container {
+            position: relative;
+            width: 240px;
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #98a2b3;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 12px 8px 32px;
+            border: 1px solid #d0d5dd;
+            border-radius: 8px;
+            font-family: 'Mulish', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--text-primary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-utility {
+            padding: 8px 14px;
+            background: #fff;
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.15s;
+        }
+
+        .btn-utility:hover {
+            background: var(--bg-subtle);
+            border-color: var(--text-muted);
+            color: var(--text-primary);
+        }
+
+        .btn-primary-dark {
+            background: var(--bg-dark);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.15s;
+        }
+
+        .btn-primary-dark:hover {
+            opacity: 0.9;
+        }
+
+        /* --- MAIN LAYOUT --- */
+        .page-content {
+            max-width: 95%;
+            margin: 0 auto;
+            padding: 48px 32px;
+        }
+
+        .page-header {
+            margin-bottom: 40px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .page-header .meta {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 1rem;
+        }
+
+        /* --- KPI RIBBON --- */
+        .kpi-ribbon {
+            margin-bottom: 48px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background-color: var(--border-default);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .kpi-item {
+            background: #fff;
+            padding: 24px;
+        }
+
+        .kpi-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .kpi-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            font-family: 'Outfit';
+        }
+
+        .kpi-trend {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .kpi-trend.positive {
+            color: var(--accent-green);
+        }
+
+        .kpi-trend.negative {
+            color: var(--accent-red);
+        }
+
+        /* --- TABLE AREA (MATCHING QUESTIONPOOL.HTML) --- */
+        .audit-container {
+            border: 1px solid #eaecf0;
+            border-radius: 8px;
+            background: #fff;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .audit-top {
+            padding: 20px 24px;
+            border-bottom: 1px solid #eaecf0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+        }
+
+        .export-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .export-group .btn-utility {
+            border: none !important;
+            outline: none !important;
+            background: transparent;
+            box-shadow: none !important;
+            font-family: 'Mulish', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #475467;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .export-group .btn-utility:hover {
+            background: #FFF5F0;
+            color: #F46036;
+        }
+
+        .search-wrap {
+            position: relative;
+            width: 320px;
+        }
+
+        .search-wrap i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #98a2b3;
+            font-size: 0.9rem;
+        }
+
+        .search-wrap input {
+            width: 100%;
+            padding: 10px 14px 10px 38px;
+            border: 1px solid #d0d5dd;
+            border-radius: 8px;
+            font-family: 'Mulish', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .search-wrap input:focus {
+            border-color: #F46036;
+        }
+
+        .table-scroll-wrap {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table-scroll-wrap::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .table-scroll-wrap::-webkit-scrollbar-track {
+            background: #F9FAFB;
+            border-radius: 4px;
+        }
+
+        .table-scroll-wrap::-webkit-scrollbar-thumb {
+            background: #D0D5DD;
+            border-radius: 4px;
+        }
+
+        .table-scroll-wrap::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        table {
+            width: 100%;
+            min-width: 1050px;
+            border-collapse: collapse;
+            font-family: 'Mulish', sans-serif;
+        }
+
+        th {
+            padding: 16px 24px;
+            text-align: left;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #344054;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            background: #fff;
+            border-bottom: 1px solid #eaecf0;
+            font-family: 'Mulish', sans-serif;
+        }
+
+        td {
+            padding: 20px 24px;
+            border-bottom: 1px solid #eaecf0;
+            font-size: 1.05rem;
+            color: #101828;
+            vertical-align: middle;
+            font-family: 'Mulish', sans-serif;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr.active-row:hover td {
+            background: #FFF5F0;
+        }
+
+        .btn-action-small {
+            padding: 8px 16px;
+            background: #fff;
+            border: 1px solid #eaecf0;
+            border-radius: 8px;
+            font-family: 'Mulish', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #344054;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+        }
+
+        .btn-action-small:hover {
+            background: #d05a2b;
+            border-color: #d05a2b;
+            color: #ffffff;
+        }
+
+        .candidate-id {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-family: 'Mulish', sans-serif;
+        }
+
+        .status-chip {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: capitalize;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Mulish', sans-serif;
+        }
+
+        .status-chip::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .status-chip.submitted {
+            background: #ECFDF5;
+            color: #065F46;
+        }
+
+        .status-chip.submitted::before {
+            background: #10B981;
+        }
+
+        .status-chip.progress {
+            background: #EFF6FF;
+            color: #1E40AF;
+        }
+
+        .status-chip.progress::before {
+            background: #3B82F6;
+        }
+
+        .grade-val {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .accuracy-bar-wrap {
+            width: 120px;
+            height: 6px;
+            background: var(--border-subtle);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .accuracy-bar {
+            height: 100%;
+        }
+
+        .btn-action-small {
+            background: transparent;
+            border: 1px solid var(--border-default);
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-action-small:hover {
+            background: #d05a2b;
+            color: #fff;
+            border-color: #d05a2b;
+        }
+
+        /* --- MODAL (OVERHAUL) --- */
+        .modal-base {
+            position: fixed;
+            inset: 0;
+            background: rgba(16, 24, 40, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .modal-side-panel {
+            width: 850px;
+            height: 100%;
+            background: #ffffff;
+            box-shadow: -20px 0 50px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .panel-header {
+            padding: 32px 40px;
+            border-bottom: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            background: #ffffff;
+        }
+
+        .panel-body {
+            flex: 1;
+            padding: 32px 40px;
+            overflow-y: auto;
+            background: #ffffff;
+            scrollbar-gutter: stable;
+            scrollbar-width: thin;
+            scrollbar-color: #64748B #F1F5F9;
+        }
+
+        .review-card {
+            background: #ffffff;
+            border: none;
+            margin-bottom: 12px;
+            overflow: hidden;
+            box-shadow: none;
+        }
+
+        .tri-orange-line {
+            display: flex;
+            height: 8px;
+            width: 290px;
+            border-radius: 0px;
+            overflow: hidden;
+            margin: 12px 0 24px 0;
+        }
+
+        .tri-orange-line div:nth-child(1) { flex: 1; background: #DE6834; opacity: 0.2; }
+        .tri-orange-line div:nth-child(2) { flex: 1; background: #DE6834; opacity: 0.5; }
+        .tri-orange-line div:nth-child(3) { flex: 1; background: #DE6834; opacity: 1.0; }
+
+        .rc-top {
+            display: none;
+        }
+
+        .rc-content {
+            padding: 16px 24px;
+        }
+
+        .rc-question {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #000000;
+            margin-bottom: 24px;
+            line-height: 1.6;
+            font-family: 'Mulish', sans-serif;
+        }
+
+        .rc-comparison {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .rc-box:hover {
+            cursor: not-allowed;
+        }
+
+        .rc-box {
+            padding: 16px;
+            border-radius: 4px;
+            border: 1px solid #eaecf0;
+            background: #ffffff;
+        }
+
+        .rc-box.correct {
+            border-left: 4px solid #059669;
+        }
+
+        .rc-box.error {
+            border-left: 4px solid #dc2626;
+        }
+
+        .rc-box.skipped {
+            border-left: 4px solid #d97706;
+        }
+
+        .rc-label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #000000;
+            margin-bottom: 8px;
+            display: block;
+            font-family: 'Hind', sans-serif;
+        }
+
+        .rc-val {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #000000;
+            font-family: 'Hind', sans-serif;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 100px 0;
+            color: #101828;
+            font-weight: 700;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            opacity: 0.1;
+            margin-bottom: 20px;
+        }
+
+        /* --- EMAIL DRAFT AREA --- */
+        .email-draft-box {
+            display: none;
+            background: #ffffff;
+            border: 1px solid #eaecf0;
+            border-radius: 4px;
+            margin-top: 24px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .email-header {
+            padding: 16px 24px;
+            background: #F8F9FA;
+            border-bottom: 1px solid var(--border-default);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .email-content {
+            padding: 32px;
+            font-family: 'Inter', -apple-system, sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #333;
+            max-height: 600px;
+            overflow-y: auto;
+            background: #fff;
+        }
+
+        .email-preview-container {
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .hover-orange-light {
+            transition: background-color 0.2s ease;
+        }
+
+        .hover-orange-light:hover {
+            background-color: #fff7ed !important;
+        }
+
+        .btn-copy-mail {
+            margin: 16px 24px 24px;
+            background: var(--accent-blue);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-copy-mail:hover {
+            opacity: 0.9;
+        }
+
+        /* Performance Heatmap Icons */
+        .heatmap-grid {
+            display: flex;
+            gap: 3px;
+        }
+
+        .h-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+        }
+
+        .h-dot.ok {
+            background: var(--accent-green);
+        }
+
+        .h-dot.no {
+            background: var(--accent-red);
+        }
+
+        .h-dot.skip {
+            background: var(--border-default);
+        }
+    </style>
+
+    <style>
+        ::selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+
+        ::-moz-selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="header-left">
+            <div class="logo-container" onclick="location.reload()">
+                <div class="logo-square">
+                    <img src="../TESTPAD_WEBSITE__files/chitkara.png" alt="CHITKARA">
+                </div>
+                <div class="logo-text"></div>
+            </div>
+            <div class="header-nav">
+                <button class="nav-icon-btn" data-tooltip-bottom="Dashboard"
+                    onclick="location.href='./teacher-dashboard.html'">
+                    <img src="../TESTPAD_WEBSITE__files/menu-1.svg">
+                </button>
+                <button class="nav-icon-btn" data-tooltip-bottom="Assessments"
+                    onclick="location.href='./teacher-dashboard.html'">
+                    <img src="../TESTPAD_WEBSITE__files/quiz.svg">
+                </button>
+                <button class="nav-icon-btn" data-tooltip-bottom="Question Pool"
+                    onclick="location.href='./questionpool.html'">
+                    <img src="../TESTPAD_WEBSITE__files/folder-2.svg">
+                </button>
+                <button class="nav-icon-btn active" data-tooltip-bottom="Analytics"
+                    onclick="location.href='./studentreports.html'">
+                    <img src="../TESTPAD_WEBSITE__files/playground-normal.svg">
+                </button>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="search-container" style="width: 240px; margin-right: 16px;">
+                <i class="fas fa-search"></i>
+                <input type="text" class="search-input" placeholder="Quick Search..." id="globalSearch">
+            </div>
+            <button class="plus-btn" onclick="location.href='./teacher-dashboard.html'"
+                data-tooltip-bottom="Launch New Assessment">
+                <i class="fas fa-plus"></i>
+            </button>
+            <div class="grid-menu-container" style="position: relative;">
+                <button class="grid-btn" id="gridMenuBtn" onclick="toggleGridMenu()"
+                    style="display: flex; align-items: center; justify-content: center;" data-tooltip-bottom="Apps">
+                    <img src="../Testpad_pra_files_files/icons8-squared-menu-90.png"
+                        style="width: 24px; height: 24px; opacity: 0.75; transition: all 0.2s;"
+                        onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'">
+                </button>
+                <div id="gridMenuDropdown" class="grid-menu-dropdown"
+                    style="display: none; position: absolute; top: calc(100% + 15px); right: 0; background: #ffffff; border: 1px solid #f0f0f0; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 16px; width: 320px; z-index: 1000; flex-direction: row; justify-content: space-between;">
+                    <div class="grid-item" onclick="location.href='./TESTVIEW.html'"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../TESTPAD_WEBSITE__files/quiz.svg" style="width: 36px; height: 36px;">
+                        <span style="font-family: 'Mulish', sans-serif; font-size: 1rem; font-weight: 500;">Test</span>
+                    </div>
+                    <div class="grid-item" onclick="location.href='./COURSETRAY.html'"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../TESTPAD_WEBSITE__files/folder-2.svg" style="width: 36px; height: 36px;">
+                        <span
+                            style="font-family: 'Mulish', sans-serif; font-size: 1rem; font-weight: 500;">Courses</span>
+                    </div>
+                    <div class="grid-item" onclick="location.href='./mybookmarks.html'"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../Testpad_pra_files_files/iconmonstr-star-3.svg" style="width: 36px; height: 36px;">
+                        <span
+                            style="font-family: 'Mulish', sans-serif; font-size: 1rem; font-weight: 500;">Bookmarks</span>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-container" style="position: relative; margin-left: 10px;">
+                <div class="profile-bubble" id="profileToggle"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 12px;">
+                    <div class="user-info" style="text-align: right;">
+                        <div class="user-name" id="userName">OM AGGARWAL</div>
+                        <div class="user-role">PROFESSOR</div>
+                    </div>
+                    <div class="avatar"
+                        style="background: transparent; border: none; padding: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                        <img src="../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png"
+                            style="width: 100%; height: 100%; border-radius: 50%;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <!-- Assessment Selector Toolbar -->
+        <div style="margin-bottom: 24px; display: flex; align-items: center; justify-content: flex-start; gap: 16px;">
+            <div style="display: flex; align-items: center; gap: 12px; position: relative;">
+                <label
+                    style="font-family: 'Mulish', sans-serif; font-size: 0.95rem; font-weight: 700; color: #344054;">Select
+                    Assessment:</label>
+                <input type="hidden" id="assessmentSelect" value="">
+                <div class="custom-orange-select" style="position: relative;">
+                    <button id="customSelectBtn" onclick="toggleAssessmentDropdown(event)" type="button"
+                        style="background: #ffffff; color: #101828; border: 1px solid #d0d5dd; padding: 10px 16px; border-radius: 8px; font-family: 'Mulish', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; outline: none; box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05); min-width: 320px; text-align: left; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s;">
+                        <span id="customSelectLabel">Select Assessment...</span>
+                        <i class="fas fa-chevron-down"
+                            style="color: #667085; margin-left: 12px; font-size: 0.85rem;"></i>
+                    </button>
+                    <div id="customSelectMenu"
+                        style="display: none; position: absolute; top: calc(100% + 6px); left: 0; min-width: 320px; width: 100%; background: #ffffff; border: 1px solid #d0d5dd; border-radius: 8px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); z-index: 10000; overflow: hidden; max-height: 300px; overflow-y: auto;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <section class="audit-container">
+            <div class="audit-top">
+                <div class="search-wrap">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search by Candidate ID..." onkeyup="filterTable(this.value)">
+                </div>
+                <div class="export-group">
+                    <button class="btn-utility" onclick="exportData('csv')">CSV</button>
+                    <button class="btn-utility" onclick="exportData('excel')">Excel</button>
+                </div>
+            </div>
+            <div class="table-scroll-wrap">
+                <table id="reportsTable">
+                    <thead>
+                        <tr>
+                            <th style="min-width: 240px;">Candidate Profile</th>
+                            <th style="text-align: center;">Correct</th>
+                            <th style="text-align: center;">Skipped</th>
+                            <th style="text-align: center;">Wrong</th>
+                            <th style="text-align: center;">Sec - A</th>
+                            <th style="text-align: center;">Sec - B</th>
+                            <th style="text-align: center;">Time Taken</th>
+                            <th style="text-align: center;">Final Grade</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportsBody">
+                        <tr>
+                            <td colspan="9" class="empty-state">Loading data stream...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- POST-TABLE ANALYTICS & SUMMARY SECTION -->
+        <section style="margin-top: 32px; display: flex; flex-direction: column; gap: 24px;">
+            <!-- Summary Metric Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                <!-- Average Marks Card -->
+                <div class="hover-orange-light"
+                    style="background: #ffffff; border: 1px solid #eaecf0; border-radius: 4px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: center; text-align: center;">
+                    <span
+                        style="font-family: 'Mulish', sans-serif; font-size: 0.85rem; font-weight: 800; color: #101828; text-transform: uppercase; letter-spacing: 0.5px;">Average
+                        Marks</span>
+                    <div id="statAvgMarks"
+                        style="font-family: 'Mulish', sans-serif; font-size: 2.2rem; font-weight: 900; color: #101828; margin-top: 4px;">
+                        0 / 0</div>
+                </div>
+
+                <!-- Average Grade Card -->
+                <div class="hover-orange-light"
+                    style="background: #ffffff; border: 1px solid #eaecf0; border-radius: 4px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: center; text-align: center;">
+                    <span
+                        style="font-family: 'Mulish', sans-serif; font-size: 0.85rem; font-weight: 800; color: #101828; text-transform: uppercase; letter-spacing: 0.5px;">Average
+                        Grade</span>
+                    <div id="statAvgGrade"
+                        style="font-family: 'Mulish', sans-serif; font-size: 2.2rem; font-weight: 900; color: #101828; margin-top: 4px;">
+                        --</div>
+                </div>
+
+                <!-- Average Right / Wrong / Skipped Card -->
+                <div class="hover-orange-light"
+                    style="background: #ffffff; border: 1px solid #eaecf0; border-radius: 4px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: center; text-align: center;">
+                    <span
+                        style="font-family: 'Mulish', sans-serif; font-size: 0.85rem; font-weight: 800; color: #101828; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Average
+                        Question Stats</span>
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                        <div
+                            style="text-align: center; flex: 1; background: #ffffff; padding: 10px 6px; border-radius: 4px; border: 1px solid #eaecf0;">
+                            <div
+                                style="font-family: 'Mulish', sans-serif; font-size: 0.75rem; font-weight: 800; color: #101828;">
+                                Correct</div>
+                            <div id="statAvgCorrect"
+                                style="font-family: 'Mulish', sans-serif; font-size: 1.3rem; font-weight: 900; color: #101828; margin-top: 2px;">
+                                0</div>
+                        </div>
+                        <div
+                            style="text-align: center; flex: 1; background: #ffffff; padding: 10px 6px; border-radius: 4px; border: 1px solid #eaecf0;">
+                            <div
+                                style="font-family: 'Mulish', sans-serif; font-size: 0.75rem; font-weight: 800; color: #101828;">
+                                Wrong</div>
+                            <div id="statAvgWrong"
+                                style="font-family: 'Mulish', sans-serif; font-size: 1.3rem; font-weight: 900; color: #101828; margin-top: 2px;">
+                                0</div>
+                        </div>
+                        <div
+                            style="text-align: center; flex: 1; background: #ffffff; padding: 10px 6px; border-radius: 4px; border: 1px solid #eaecf0;">
+                            <div
+                                style="font-family: 'Mulish', sans-serif; font-size: 0.75rem; font-weight: 800; color: #101828;">
+                                Skipped</div>
+                            <div id="statAvgSkipped"
+                                style="font-family: 'Mulish', sans-serif; font-size: 1.3rem; font-weight: 900; color: #101828; margin-top: 2px;">
+                                0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Professional Charts Container (Bar Graph & Pie Chart) -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 24px;">
+                <!-- Bar Chart: Grade Distribution -->
+                <div
+                    style="background: #ffffff; border: 1px solid #eaecf0; border-radius: 4px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); display: flex; flex-direction: column;">
+                    <h3
+                        style="font-family: 'Mulish', sans-serif; font-size: 1.2rem; font-weight: 900; color: #101828; margin: 0 0 20px 0;">
+                        Grade Distribution</h3>
+                    <div style="flex: 1; min-height: 280px; position: relative;">
+                        <canvas id="barChartGrade"></canvas>
+                    </div>
+                </div>
+
+                <!-- Pie Chart: Overall Question Response Breakdown -->
+                <div
+                    style="background: #ffffff; border: 1px solid #eaecf0; border-radius: 4px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); display: flex; flex-direction: column;">
+                    <h3
+                        style="font-family: 'Mulish', sans-serif; font-size: 1.2rem; font-weight: 900; color: #101828; margin: 0 0 20px 0;">
+                        Response Breakdown</h3>
+                    <div
+                        style="flex: 1; min-height: 280px; position: relative; display: flex; align-items: center; justify-content: center;">
+                        <canvas id="pieChartResponses"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- SIDE PANEL MODAL -->
+    <div class="modal-base" id="reportModal" onclick="if(event.target==this) closeModal()">
+        <div class="modal-side-panel">
+            <div class="panel-header">
+                <div class="candidate-profile" style="display: flex; flex-direction: column; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="profile-avatar" id="modalInitial" style="overflow: hidden; background: transparent; width: 44px; height: 44px; border-radius: 50%; border: 1px solid #eaecf0; flex-shrink: 0;">
+                            <img id="modalAvatarImg" src="../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <h2 id="modalCandidateId" style="font-size: 2.2rem; font-weight: 600; font-family: 'Mulish', sans-serif; color: #101828; margin: 0;">Candidate Name</h2>
+                    </div>
+                    <div id="modalDetailsBox" style="font-size: 1.05rem; color: #475467; font-family: 'Mulish', sans-serif; display: flex; flex-direction: column; gap: 6px; line-height: 1.5;"></div>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-utility" id="gmailActionBtn" onclick="toggleEmailExpert()" title="Generate Gmail" style="padding: 10px; display: flex; align-items: center; justify-content: center;">
+                        <img src="../GMAIL.png" alt="Gmail" style="width: 20px; height: 20px; object-fit: contain;">
+                    </button>
+                    <button class="btn-utility" onclick="closeModal()" style="padding: 10px; display: flex; align-items: center; justify-content: center;">
+                        <img src="../Testpad_pra_files_files/close (4).png" alt="Close" style="width: 16px; height: 16px;">
+                    </button>
+                </div>
+            </div>
+
+            <div id="emailExpertArea" class="panel-body email-draft-box">
+                <div style="margin-bottom: 20px;">
+                    <span
+                        style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Email
+                        Preview</span>
+                    <div class="email-header">Subject: <span id="emailSubjectId"></span></div>
+                    <div class="email-preview-container">
+                        <div class="email-content" id="emailDraftBody"></div>
+                    </div>
+                </div>
+                <button class="btn-copy-mail" onclick="copyEmailToClipboard()">
+                    <i class="fas fa-copy"></i> Copy Rich-Text for Gmail
+                </button>
+                <p style="padding: 0 24px 24px; font-size: 0.75rem; color: var(--text-muted);">Paste directly into
+                    Gmail, Outlook, or any email client to preserve styling.</p>
+            </div>
+
+            <div id="modalSummary"
+                style="padding: 0 40px 24px 40px; background:#fff;">
+                <!-- Filled by JS -->
+            </div>
+
+            <div class="panel-body" id="modalListing">
+                <!-- Question Cards -->
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        let examId = urlParams.get('examId');
+        let rawAttempts = [];
+
+        function init() {
+            populateAssessmentDropdown();
+            loadSelectedExamReport(examId);
+
+            document.addEventListener('click', function (e) {
+                const btn = document.getElementById('customSelectBtn');
+                const menu = document.getElementById('customSelectMenu');
+                if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) {
+                    menu.style.display = 'none';
+                }
+            });
+        }
+
+        function populateAssessmentDropdown() {
+            const exams = db.getAllExams();
+            const menu = document.getElementById('customSelectMenu');
+            const label = document.getElementById('customSelectLabel');
+            if (!menu) return;
+
+            let itemsHtml = '';
+            exams.forEach(e => {
+                const isSel = e.id === examId;
+                const title = `${e.title || 'Untitled'} (${e.testId || e.id})`;
+                if (isSel && label) label.textContent = title;
+
+                itemsHtml += `
+                    <div class="custom-opt-item" 
+                         onclick="selectAssessmentOption('${e.id}', '${title.replace(/'/g, "\\'")}')"
+                         style="padding: 12px 16px; cursor: pointer; font-family: 'Mulish', sans-serif; font-size: 0.95rem; font-weight: ${isSel ? '800' : '600'}; color: ${isSel ? '#F46036' : '#344054'}; background-color: ${isSel ? '#FFF5F0' : '#ffffff'}; transition: all 0.15s; display: flex; align-items: center; justify-content: space-between;"
+                         onmouseover="if('${examId}' !== '${e.id}') { this.style.backgroundColor='#F9FAFB'; this.style.color='#101828'; }"
+                         onmouseout="if('${examId}' !== '${e.id}') { this.style.backgroundColor='#ffffff'; this.style.color='#344054'; }">
+                        <span>${title}</span>
+                        ${isSel ? '<i class="fas fa-check" style="color:#F46036; font-size:0.85rem;"></i>' : ''}
+                    </div>
+                `;
+            });
+
+            menu.innerHTML = itemsHtml;
+        }
+
+        function toggleAssessmentDropdown(e) {
+            if (e) e.stopPropagation();
+            const menu = document.getElementById('customSelectMenu');
+            if (!menu) return;
+            menu.style.display = (menu.style.display === 'none' || !menu.style.display) ? 'block' : 'none';
+        }
+
+        function selectAssessmentOption(val, text) {
+            examId = val;
+            const hiddenInput = document.getElementById('assessmentSelect');
+            if (hiddenInput) hiddenInput.value = val;
+
+            const menu = document.getElementById('customSelectMenu');
+            if (menu) menu.style.display = 'none';
+
+            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?examId=' + val;
+            window.history.pushState({ path: newUrl }, '', newUrl);
+
+            populateAssessmentDropdown();
+            loadSelectedExamReport(val);
+        }
+
+        function loadSelectedExamReport(targetId) {
+            const exams = db.getAllExams();
+            if (!exams || exams.length === 0) return;
+
+            let exam = db.getExamById(targetId);
+            if (!exam) {
+                exam = exams[0];
+                examId = exam.id;
+            }
+
+            const title = `${exam.title || 'Untitled'} (${exam.testId || exam.id})`;
+            const label = document.getElementById('customSelectLabel');
+            if (label) label.textContent = title;
+
+            const elTitle = document.getElementById('assessmentTitle');
+            if (elTitle) elTitle.textContent = (exam.title || 'Untitled Assessment').toUpperCase();
+            const elIdTag = document.getElementById('examIdTag');
+            if (elIdTag) elIdTag.textContent = exam.testId || exam.id;
+
+            rawAttempts = db.getExamAttempts(exam.id);
+            renderDashboard(exam, rawAttempts);
+        }
+
+        function renderDashboard(exam, attempts) {
+            updateKPIs(exam, attempts);
+            renderTable(exam, attempts);
+            updateAnalyticsSummary(exam, attempts);
+        }
+
+        let gradeChartInstance = null;
+        let pieChartInstance = null;
+
+        function updateAnalyticsSummary(exam, attempts) {
+            if (!attempts || attempts.length === 0) {
+                const elAvgMarks = document.getElementById('statAvgMarks');
+                if (elAvgMarks) elAvgMarks.textContent = '0 / 0';
+                const elAvgGrade = document.getElementById('statAvgGrade');
+                if (elAvgGrade) {
+                    elAvgGrade.textContent = '--';
+                    elAvgGrade.style.color = '#101828';
+                }
+                const elAvgCorrect = document.getElementById('statAvgCorrect');
+                if (elAvgCorrect) elAvgCorrect.textContent = '0';
+                const elAvgWrong = document.getElementById('statAvgWrong');
+                if (elAvgWrong) elAvgWrong.textContent = '0';
+                const elAvgSkipped = document.getElementById('statAvgSkipped');
+                if (elAvgSkipped) elAvgSkipped.textContent = '0';
+                return;
+            }
+
+            let sumMarks = 0;
+            let sumMaxMarks = 0;
+            let sumPct = 0;
+            let sumCorrect = 0;
+            let sumWrong = 0;
+            let sumSkipped = 0;
+
+            const gradeCounts = { 'A+': 0, 'A': 0, 'B': 0, 'C': 0, 'D': 0, 'F': 0 };
+
+            attempts.forEach(a => {
+                const studentQuestions = getAttemptQuestions(a, exam);
+                let cCount = 0;
+                let sCount = 0;
+                let wCount = 0;
+                let cScore = 0;
+                let attMaxMarks = 0;
+
+                studentQuestions.forEach(q => {
+                    const qMarks = (parseFloat(q.marks) !== undefined && !isNaN(parseFloat(q.marks))) ? parseFloat(q.marks) : 1;
+                    attMaxMarks += qMarks;
+
+                    const resp = a.responses ? (Array.isArray(a.responses) ? a.responses.find(r => r && (r.questionId === q.id || r.id === q.id)) : a.responses[q.id]) : null;
+                    const isSkipped = !resp || (typeof resp === 'string' && resp.trim() === '');
+                    const hasManualMark = resp && resp.manualMark !== undefined && resp.manualMark !== null && resp.manualMark !== '';
+
+                    if (hasManualMark) {
+                        const mark = parseFloat(resp.manualMark) || 0;
+                        cScore += mark;
+                        if (mark > 0) cCount++;
+                        else if (isSkipped) sCount++;
+                        else wCount++;
+                    } else if (isSkipped) {
+                        sCount++;
+                    } else if (db.checkAnswer(q, resp)) {
+                        cCount++;
+                        cScore += qMarks;
+                    } else {
+                        wCount++;
+                    }
+                });
+
+                if (attMaxMarks === 0) attMaxMarks = studentQuestions.length || 1;
+
+                sumMarks += cScore;
+                sumMaxMarks += attMaxMarks;
+                sumCorrect += cCount;
+                sumWrong += wCount;
+                sumSkipped += sCount;
+
+                const gradePct = attMaxMarks > 0 ? (cScore / attMaxMarks) * 100 : 0;
+                sumPct += gradePct;
+
+                if (gradePct >= 90) gradeCounts['A+']++;
+                else if (gradePct >= 80) gradeCounts['A']++;
+                else if (gradePct >= 70) gradeCounts['B']++;
+                else if (gradePct >= 60) gradeCounts['C']++;
+                else if (gradePct >= 50) gradeCounts['D']++;
+                else gradeCounts['F']++;
+            });
+
+            const count = attempts.length;
+            const avgMarks = (sumMarks / count).toFixed(1);
+            const avgMaxMarksRaw = sumMaxMarks / count;
+            const avgMaxMarks = Number.isInteger(avgMaxMarksRaw) ? avgMaxMarksRaw : avgMaxMarksRaw.toFixed(1);
+            const avgPct = (sumPct / count).toFixed(1);
+            const avgC = (sumCorrect / count).toFixed(1);
+            const avgW = (sumWrong / count).toFixed(1);
+            const avgS = (sumSkipped / count).toFixed(1);
+
+            let avgGradeLetter = 'F';
+            let avgGradeColor = '#DC2626';
+
+            if (avgPct >= 90) { avgGradeLetter = 'A+'; avgGradeColor = '#059669'; }
+            else if (avgPct >= 80) { avgGradeLetter = 'A'; avgGradeColor = '#059669'; }
+            else if (avgPct >= 70) { avgGradeLetter = 'B'; avgGradeColor = '#2563EB'; }
+            else if (avgPct >= 60) { avgGradeLetter = 'C'; avgGradeColor = '#D97706'; }
+            else if (avgPct >= 50) { avgGradeLetter = 'D'; avgGradeColor = '#D97706'; }
+
+            const elAvgMarks = document.getElementById('statAvgMarks');
+            if (elAvgMarks) elAvgMarks.textContent = `${avgMarks} / ${avgMaxMarks}`;
+
+            const elAvgGrade = document.getElementById('statAvgGrade');
+            if (elAvgGrade) {
+                elAvgGrade.textContent = avgGradeLetter;
+                elAvgGrade.style.color = avgGradeColor;
+            }
+
+            const elAvgCorrect = document.getElementById('statAvgCorrect');
+            if (elAvgCorrect) elAvgCorrect.textContent = avgC;
+
+            const elAvgWrong = document.getElementById('statAvgWrong');
+            if (elAvgWrong) elAvgWrong.textContent = avgW;
+
+            const elAvgSkipped = document.getElementById('statAvgSkipped');
+            if (elAvgSkipped) elAvgSkipped.textContent = avgS;
+
+            renderBarChart(gradeCounts);
+            renderPieChart(sumCorrect, sumWrong, sumSkipped);
+        }
+
+        function renderBarChart(gradeCounts) {
+            const ctx = document.getElementById('barChartGrade');
+            if (!ctx) return;
+
+            if (gradeChartInstance) {
+                gradeChartInstance.destroy();
+            }
+
+            gradeChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['A+ (90%+)', 'A (80%+)', 'B (70%+)', 'C (60%+)', 'D (50%+)', 'F (<50%)'],
+                    datasets: [{
+                        label: 'Students',
+                        data: [
+                            gradeCounts['A+'],
+                            gradeCounts['A'],
+                            gradeCounts['B'],
+                            gradeCounts['C'],
+                            gradeCounts['D'],
+                            gradeCounts['F']
+                        ],
+                        backgroundColor: '#F46036',
+                        borderRadius: 0,
+                        barThickness: 36
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => ` Students: ${ctx.raw}`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1, precision: 0, color: '#101828', font: { family: 'Mulish', weight: '800' } },
+                            grid: { color: '#F2F4F7' }
+                        },
+                        x: {
+                            ticks: { color: '#101828', font: { family: 'Mulish', weight: '800' } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderPieChart(correct, wrong, skipped) {
+            const ctx = document.getElementById('pieChartResponses');
+            if (!ctx) return;
+
+            if (pieChartInstance) {
+                pieChartInstance.destroy();
+            }
+
+            pieChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Correct Answers', 'Wrong Answers', 'Skipped Questions'],
+                    datasets: [{
+                        data: [correct, wrong, skipped],
+                        backgroundColor: ['#EA580C', '#F97316', '#FB923C'],
+                        hoverOffset: 6,
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { family: 'Mulish', weight: '800', size: 12 },
+                                color: '#101828',
+                                padding: 20,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => {
+                                    const total = correct + wrong + skipped;
+                                    const pct = total > 0 ? ((ctx.raw / total) * 100).toFixed(1) : 0;
+                                    return ` ${ctx.label}: ${ctx.raw} (${pct}%)`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '65%'
+                }
+            });
+        }
+
+        function updateKPIs(exam, attempts) {
+            const count = attempts.length;
+            const elTakers = document.getElementById('kpiTakers');
+            const elAvg = document.getElementById('kpiAvg');
+            const elIntegrity = document.getElementById('kpiIntegrity');
+            const elCompletion = document.getElementById('kpiCompletion');
+
+            if (count === 0) {
+                if (elTakers) elTakers.textContent = '0';
+                if (elAvg) elAvg.textContent = '0%';
+                if (elIntegrity) elIntegrity.textContent = '100%';
+                if (elCompletion) elCompletion.textContent = '0%';
+                return;
+            }
+
+            if (elTakers) elTakers.textContent = count;
+
+            let totalMarks = 0;
+            let totalSwitches = 0;
+            let submitted = 0;
+
+            attempts.forEach(a => {
+                let score = calculateGrade(a, exam);
+                totalMarks += score;
+                totalSwitches += (a.tabSwitchCount || 0);
+                if (a.status === 'submitted' || a.status === 'completed') submitted++;
+            });
+
+            if (elAvg) elAvg.textContent = Math.round(totalMarks / count) + '%';
+            if (elIntegrity) elIntegrity.textContent = Math.max(0, 100 - (totalSwitches * 2)) + '%';
+            if (elCompletion) elCompletion.textContent = Math.round((submitted / count) * 100) + '%';
+        }
+
+        function getAttemptQuestions(a, exam) {
+            if (typeof db !== 'undefined' && db && typeof db.getAttemptQuestions === 'function') {
+                return db.getAttemptQuestions(a, exam);
+            }
+            if (!a) return exam?.questions || [];
+            if (a.selectedQuestions && Array.isArray(a.selectedQuestions) && a.selectedQuestions.length > 0) {
+                return a.selectedQuestions;
+            }
+            const qIds = a.selectedQuestionIds || a.questionIds;
+            if (qIds && Array.isArray(qIds) && qIds.length > 0) {
+                const pool = (typeof db !== 'undefined' && db.getQuestionPool) ? db.getQuestionPool() : [];
+                return qIds.map(id => {
+                    const poolQ = pool.find(p => String(p.id) === String(id) || String(p.poolId) === String(id));
+                    const localQ = exam?.questions?.find(q => String(q.id) === String(id));
+                    const merged = { ...(localQ || {}), ...(poolQ || {}) };
+                    return (merged.id || merged.title) ? merged : null;
+                }).filter(Boolean);
+            }
+            return exam?.questions || [];
+        }
+
+        function calculateGrade(a, exam) {
+            const studentQuestions = getAttemptQuestions(a, exam);
+            if (!studentQuestions || studentQuestions.length === 0) return 0;
+            
+            let totalPossible = 0;
+            let earned = 0;
+            studentQuestions.forEach(q => {
+                const qMarks = (parseFloat(q.marks) !== undefined && !isNaN(parseFloat(q.marks))) ? parseFloat(q.marks) : 1;
+                totalPossible += qMarks;
+                const resp = a.responses ? a.responses[q.id] : null;
+                if (resp && resp.manualMark !== undefined && resp.manualMark !== null && resp.manualMark !== '') {
+                    earned += parseFloat(resp.manualMark) || 0;
+                } else if (resp && db.checkAnswer(q, resp)) {
+                    earned += qMarks;
+                }
+            });
+            if (totalPossible === 0) totalPossible = studentQuestions.length || 1;
+            const base = (earned / totalPossible) * 100;
+            const penalty = a.penalty || 0;
+            const penaltyWeight = (penalty / (totalPossible || 100)) * 100;
+            return Math.max(0, Math.min(100, base - penaltyWeight));
+        }
+
+        function getExamSections(exam) {
+            if (exam.sections && Array.isArray(exam.sections) && exam.sections.length > 0) {
+                return exam.sections;
+            }
+            const secSet = new Set();
+            if (exam.questions) {
+                exam.questions.forEach(q => {
+                    if (q.section) secSet.add(q.section);
+                });
+            }
+            if (secSet.size > 0) {
+                return Array.from(secSet);
+            }
+            return ['Section 1', 'Section 2'];
+        }
+
+        function renderTable(exam, attempts) {
+            const table = document.getElementById('reportsTable');
+            const sections = getExamSections(exam);
+
+            // Build Dynamic Table Headers based on Exam Sections
+            let headHtml = `
+                <tr>
+                    <th style="min-width: 240px;">Candidate Profile</th>
+                    <th style="text-align: center;">Correct</th>
+                    <th style="text-align: center;">Skipped</th>
+                    <th style="text-align: center;">Wrong</th>
+            `;
+
+            sections.forEach(secName => {
+                headHtml += `<th style="text-align: center;">${secName}</th>`;
+            });
+
+            headHtml += `
+                    <th style="text-align: center;">Time Taken</th>
+                    <th style="text-align: center;">Final Grade</th>
+                    <th style="text-align: right;">Actions</th>
+                </tr>
+            `;
+
+            table.querySelector('thead').innerHTML = headHtml;
+
+            const body = document.getElementById('reportsBody');
+            const colSpanCount = 7 + sections.length;
+
+            if (attempts.length === 0) {
+                body.innerHTML = `<tr><td colspan="${colSpanCount}" class="empty-state">No student records found.</td></tr>`;
+                return;
+            }
+
+            body.innerHTML = attempts.map(a => {
+                const user = db.getUserById(a.studentId) || {
+                    name: 'Guest Candidate',
+                    rollNo: a.studentId || '24CSE0317',
+                    email: 'no-email@TESTPAD.com',
+                    avatar: '../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png'
+                };
+
+                const studentQuestions = getAttemptQuestions(a, exam);
+                let correctCount = 0;
+                let skippedCount = 0;
+                let wrongCount = 0;
+
+                const sectionMarks = {};
+                const sectionMax = {};
+                sections.forEach(s => {
+                    sectionMarks[s] = 0;
+                    sectionMax[s] = 0;
+                });
+
+                const totalQ = studentQuestions.length;
+                const halfPoint = Math.ceil(totalQ / sections.length) || 1;
+
+                studentQuestions.forEach((q, idx) => {
+                    const resp = a.responses ? a.responses[q.id] : null;
+                    const isSkipped = !resp || (typeof resp === 'string' && resp.trim() === '');
+                    const isCorrect = !isSkipped && db.checkAnswer(q, resp);
+                    const qMarks = (parseFloat(q.marks) !== undefined && !isNaN(parseFloat(q.marks))) ? parseFloat(q.marks) : 1;
+
+                    let qSec = q.section;
+                    if (!qSec || !sections.includes(qSec)) {
+                        const secIdx = Math.min(sections.length - 1, Math.floor(idx / halfPoint));
+                        qSec = sections[secIdx];
+                    }
+
+                    if (sectionMax[qSec] !== undefined) {
+                        sectionMax[qSec] += qMarks;
+                    } else {
+                        sectionMax[qSec] = qMarks;
+                    }
+
+                    if (isSkipped) {
+                        skippedCount++;
+                    } else if (resp && typeof resp === 'object' && resp.manualMark !== undefined && resp.manualMark !== null && resp.manualMark !== '') {
+                        const mVal = parseFloat(resp.manualMark) || 0;
+                        if (sectionMarks[qSec] !== undefined) sectionMarks[qSec] += mVal;
+                        if (mVal > 0) correctCount++; else wrongCount++;
+                    } else if (isCorrect) {
+                        correctCount++;
+                        if (sectionMarks[qSec] !== undefined) {
+                            sectionMarks[qSec] += qMarks;
+                        }
+                    } else {
+                        wrongCount++;
+                    }
+                });
+
+                // Grade calculation
+                const gradePct = calculateGrade(a, exam);
+                let gradeLetter = 'F';
+                let gradeColor = '#DC2626';
+                let gradeBg = '#FEF2F2';
+
+                if (gradePct >= 90) { gradeLetter = 'A+'; gradeColor = '#059669'; gradeBg = '#ECFDF5'; }
+                else if (gradePct >= 80) { gradeLetter = 'A'; gradeColor = '#059669'; gradeBg = '#ECFDF5'; }
+                else if (gradePct >= 70) { gradeLetter = 'B'; gradeColor = '#2563EB'; gradeBg = '#EFF6FF'; }
+                else if (gradePct >= 60) { gradeLetter = 'C'; gradeColor = '#D97706'; gradeBg = '#FEF3C7'; }
+                else if (gradePct >= 50) { gradeLetter = 'D'; gradeColor = '#D97706'; gradeBg = '#FEF3C7'; }
+
+                // Time Taken calculation
+                let timeTakenStr = '12m 30s';
+                if (a.startTime) {
+                    let startMs = typeof a.startTime === 'string' ? new Date(a.startTime).getTime() : a.startTime;
+                    let endMs = (a.submitTime || a.endTime) ? (typeof (a.submitTime || a.endTime) === 'string' ? new Date(a.submitTime || a.endTime).getTime() : (a.submitTime || a.endTime)) : Date.now();
+                    if (!isNaN(startMs) && !isNaN(endMs)) {
+                        const diffMs = Math.max(0, endMs - startMs);
+                        const mins = Math.floor(diffMs / 60000);
+                        const secs = Math.floor((diffMs % 60000) / 1000);
+                        if (!isNaN(mins) && !isNaN(secs)) {
+                            timeTakenStr = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+                        }
+                    }
+                }
+
+                const rollDisplay = user.rollNo || user.rollNumber || a.studentId;
+                const avatarSrc = user.avatar || user.profileImage || '../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png';
+
+                // Sectional columns HTML
+                let secColsHtml = '';
+                sections.forEach(sName => {
+                    const earned = sectionMarks[sName] || 0;
+                    const max = sectionMax[sName] || 0;
+                    secColsHtml += `
+                        <td style="text-align: center;">
+                            <span style="font-family:'Mulish', sans-serif; font-weight:700; color:#101828; font-size:1.05rem;">${earned}</span>
+                            <span style="font-family:'Mulish', sans-serif; font-size:0.8rem; color:#667085; font-weight:600;">/${max}</span>
+                        </td>
+                    `;
+                });
+
+                return `
+                    <tr class="active-row">
+                        <td style="padding: 16px 24px;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; background: #fff5f0; border: 1px solid #ffece5; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                                    <img src="${avatarSrc}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png'">
+                                </div>
+                                <div>
+                                    <div style="font-family:'Mulish', sans-serif; font-weight:700; color:#101828; font-size:1rem; line-height: 1.2;">${user.name}</div>
+                                    <div style="font-family:'Mulish', sans-serif; font-size:0.8rem; color:#F46036; font-weight:700; margin-top: 2px;">Roll No: ${rollDisplay}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="text-align: center;">
+                            <span style="font-family:'Mulish', sans-serif; font-weight:700; color:#059669; font-size:1.05rem;">${correctCount}</span>
+                        </td>
+                        <td style="text-align: center;">
+                            <span style="font-family:'Mulish', sans-serif; font-weight:600; color:#667085; font-size:1.05rem;">${skippedCount}</span>
+                        </td>
+                        <td style="text-align: center;">
+                            <span style="font-family:'Mulish', sans-serif; font-weight:700; color:#DC2626; font-size:1.05rem;">${wrongCount}</span>
+                        </td>
+                        ${secColsHtml}
+                        <td style="text-align: center;">
+                            <div style="font-family:'Mulish', sans-serif; font-weight:600; color:#344054; font-size:0.95rem;">${timeTakenStr}</div>
+                            <div style="font-family:'Mulish', sans-serif; font-size:0.75rem; color:#98A2B3;">${a.startTime ? new Date(a.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</div>
+                        </td>
+                        <td style="text-align: center;">
+                            <div style="display: inline-flex; align-items: center; gap: 8px; background: ${gradeBg}; padding: 4px 12px; border-radius: 20px;">
+                                <span style="font-family:'Mulish', sans-serif; font-weight:800; font-size:1rem; color:${gradeColor};">${gradeLetter}</span>
+                                <span style="font-family:'Mulish', sans-serif; font-weight:600; font-size:0.85rem; color:${gradeColor};">(${gradePct.toFixed(0)}%)</span>
+                            </div>
+                        </td>
+                        <td style="text-align: right;">
+                            <button class="btn-action-small" onclick="openDetails('${a.id}')">Audit Response</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        let currentActiveAttempt = null;
+
+        function toggleEmailExpert() {
+            const area = document.getElementById('emailExpertArea');
+            const mainListing = document.getElementById('modalListing');
+            const btn = document.getElementById('gmailActionBtn');
+
+            if (area.style.display === 'block') {
+                area.style.display = 'none';
+                mainListing.style.display = 'block';
+                btn.innerHTML = '<img src="../GMAIL.png" alt="Gmail" style="width: 20px; height: 20px; object-fit: contain;">';
+            } else {
+                area.style.display = 'block';
+                mainListing.style.display = 'none';
+                btn.innerHTML = '<i class="fas fa-list" style="font-size: 16px;"></i>';
+                generateEmailReport();
+            }
+        }
+
+        function generateEmailReport() {
+            const a = currentActiveAttempt;
+            const user = db.getUserById(a.studentId) || { name: 'Candidate', email: '' };
+            const exam = db.getExamById(examId);
+            if (!a || !exam) return;
+
+            const studentQuestions = getAttemptQuestions(a, exam);
+            const scoreObj = db.calculateScore(a);
+            const grade = calculateGrade(a, exam);
+            const scoreColor = grade >= 80 ? '#059669' : (grade >= 40 ? '#111827' : '#DC2626');
+            const integrityColor = a.tabSwitchCount > 2 ? '#DC2626' : '#059669';
+
+            let breakdownRows = '';
+            studentQuestions.forEach((q, i) => {
+                const resp = a.responses ? a.responses[q.id] : null;
+                const ok = db.checkAnswer(q, resp);
+                const maxMarks = (parseFloat(q.marks) !== undefined && !isNaN(parseFloat(q.marks))) ? parseFloat(q.marks) : 1;
+                const earned = (resp && typeof resp === 'object' && resp.manualMark !== undefined && resp.manualMark !== null && resp.manualMark !== '') ? parseFloat(resp.manualMark) : (ok ? maxMarks : 0);
+                breakdownRows += `
+                    <tr>
+                        <td style="padding: 8px 0; font-size: 14px; font-weight: 600; color: #111827; text-align: justify; padding-right: 16px;">${i + 1}. ${q.heading || q.text || q.title || 'Question'}</td>
+                        <td style="padding: 8px 0; text-align: right; font-weight: 800; font-size: 15px; color: #000; width: 60px; vertical-align: top;">${earned} / ${maxMarks}</td>
+                    </tr>
+                `;
+            });
+
+            const htmlContent = `
+                <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; padding: 20px;">
+                    <div style="margin-bottom: 30px; text-align: center;">
+                        <img src="../Testpad_pra_files_files/chitkara.png" alt="Chitkara Logo" style="height: 60px;">
+                    </div>
+
+                    <div style="margin-bottom: 30px;">
+                        <h2 style="color: #111827; font-size: 18px; font-weight: 700;">Performance Report</h2>
+                        <p style="color: #374151; font-size: 14px; line-height: 1.6;">Hello <strong>${user.name}</strong>,<br><br>We have processed your attempt for the assessment: <strong>${exam.title}</strong>. Below is the breakdown of your performance and integrity logs.</p>
+                    </div>
+
+                    <div style="margin-bottom: 30px;">
+                        <table width="100%" style="border-collapse: collapse;">
+                            <tr>
+                                <td>
+                                    <span style="display: block; font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Final Grade</span>
+                                    <span style="font-size: 28px; font-weight: 800; color: ${scoreColor};">${grade.toFixed(1)}% <span style="font-size: 16px; color: #667085; font-weight:600;">(${scoreObj.score} / ${scoreObj.totalMarks})</span></span>
+                                </td>
+                                <td style="text-align: right;">
+                                    <span style="display: block; font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Security Log</span>
+                                    <span style="font-size: 14px; font-weight: 700; color: ${integrityColor};">${a.tabSwitchCount > 2 ? '⚠️ ATTENTION REQ' : '🛡 SATISFACTORY'}</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div style="margin-bottom: 30px;">
+                        <span style="display: block; font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 12px; text-transform: uppercase;">Detailed Question Analysis</span>
+                        <table width="100%" style="border-collapse: collapse;">
+                            <tbody>
+                                ${breakdownRows}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="background: #f0f8ff; padding: 20px; border-radius: 8px; margin-bottom: 30px; font-size: 13px; color: #1e293b; line-height: 1.6;">
+                        <p style="font-weight: 700; margin: 0 0 12px 0; color: #0f172a;">Note:</p>
+                        <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px;">
+                            <li>The University does not own for the error or omission, if any, in the statement. The marks in the record of the University are final.</li>
+                            <li>In case of any discrepancy in Name, Father's name, Mother's name, Course Code, Course Name, Credit, SGPA & CGPA, kindly submit an application with relevant documents in the Examination Department duly forwarded by the Dean within 7 working days.</li>
+                            <li>Student can apply for re-evaluation of theory external examination within 15 days of the date of declaration of result with prescribed fee.</li>
+                            <li>Abbreviations: "F" means Fail, "I" means incomplete, "E1" means Internal Re-appear, "E2" means External Re-appear & "E3" means Internal & External Re-appear.</li>
+                        </ul>
+                    </div>
+
+                    <div style="border-top: 1px solid #E5E7EB; padding-top: 24px; text-align: center;">
+                        <p style="margin: 0; font-size: 12px; color: #9CA3AF;">&copy; 2026 TESTPAD. All rights reserved.<br>This is a system-generated audit report.</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('emailSubjectId').textContent = `Performance Report: ${exam.title} - ${user.name} [ID: ${a.studentId}]`;
+            document.getElementById('emailDraftBody').innerHTML = htmlContent;
+        }
+
+        async function copyEmailToClipboard() {
+            const content = document.getElementById('emailDraftBody').innerHTML;
+            const plainText = document.getElementById('emailDraftBody').innerText;
+
+            try {
+                // Use the Clipboard API to write both HTML and plain text
+                const typeHtml = "text/html";
+                const typeText = "text/plain";
+                const blobHtml = new Blob([content], { type: typeHtml });
+                const blobText = new Blob([plainText], { type: typeText });
+
+                const data = [new ClipboardItem({
+                    [typeHtml]: blobHtml,
+                    [typeText]: blobText
+                })];
+
+                await navigator.clipboard.write(data);
+
+                const btn = document.querySelector('.btn-copy-mail');
+                const orig = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Rich Text Copied!';
+                btn.style.background = 'var(--accent-green)';
+                setTimeout(() => {
+                    btn.innerHTML = orig;
+                    btn.style.background = 'var(--accent-blue)';
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy rich text: ', err);
+                // Fallback for older browsers or if API fails
+                navigator.clipboard.writeText(plainText);
+                alert("Copied as plain text (Rich-text copy failed in this browser)");
+            }
+        }
+
+        function openDetails(attemptId) {
+            const a = rawAttempts.find(x => x.id === attemptId);
+            currentActiveAttempt = a;
+            const exam = db.getExamById(examId);
+            const user = db.getUserById(a.studentId) || { name: 'Candidate', email: '' };
+            if (!a || !exam) return;
+
+            // Reset view
+            document.getElementById('emailExpertArea').style.display = 'none';
+            document.getElementById('modalListing').style.display = 'block';
+            document.getElementById('gmailActionBtn').innerHTML = '<img src="../GMAIL.png" alt="Gmail" style="width: 20px; height: 20px; object-fit: contain;">';
+
+            document.getElementById('modalCandidateId').textContent = user.name;
+            document.getElementById('modalAvatarImg').src = user.avatar || '../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png';
+
+            const startTimeStr = a.startTime ? new Date(a.startTime).toLocaleString() : 'N/A';
+            const endTimeVal = a.submitTime || a.endTime;
+            const endTimeStr = endTimeVal ? new Date(endTimeVal).toLocaleString() : 'N/A';
+
+            document.getElementById('modalDetailsBox').innerHTML = `
+                <div><strong>Roll number:</strong> ${user.rollNo || 'N/A'}</div>
+                <div><strong>Start time:</strong> ${startTimeStr}</div>
+                <div><strong>End time:</strong> ${endTimeStr}</div>
+                <div><strong>Gmail ID:</strong> ${user.email || 'N/A'}</div>
+            `;
+
+            const scoreObj = db.calculateScore(a);
+            const grade = calculateGrade(a, exam);
+            document.getElementById('modalSummary').innerHTML = `
+                <div style="flex: 1;">
+                    <span class="kpi-label" style="display: block; margin-bottom: 4px; font-family: 'Mulish', sans-serif;">Final Score</span>
+                    <div style="font-size:2.2rem; font-weight:700; font-family:'Mulish', sans-serif; color: var(--text-primary);">${scoreObj.score} / ${scoreObj.totalMarks} <span style="font-size:1.4rem; color: #667085; font-weight:600;">(${grade.toFixed(1)}%)</span></div>
+                </div>
+            `;
+
+            const studentQuestions = getAttemptQuestions(a, exam);
+            const list = document.getElementById('modalListing');
+            list.innerHTML = studentQuestions.map((q, i) => {
+                const resp = a.responses ? a.responses[q.id] : null;
+                const isSkipped = !resp || (typeof resp === 'string' && resp.trim() === '');
+                let isCorrect = false;
+                let manualAward = null;
+                if (resp && typeof resp === 'object' && resp.manualMark !== undefined && resp.manualMark !== null && resp.manualMark !== '') {
+                    manualAward = parseFloat(resp.manualMark) || 0;
+                    isCorrect = manualAward > 0;
+                } else {
+                    isCorrect = !isSkipped && db.checkAnswer(q, resp);
+                }
+                const val = (typeof resp === 'object') ? (resp.value || (resp.selectedOption !== undefined ? resp.selectedOption : '-- No Response --')) : (resp || '-- No Response --');
+                const maxMarks = (parseFloat(q.marks) !== undefined && !isNaN(parseFloat(q.marks))) ? parseFloat(q.marks) : 1;
+                const securedMarks = manualAward !== null ? manualAward : (isCorrect ? maxMarks : 0);
+
+                let boxClass = isSkipped ? 'skipped' : (isCorrect ? 'correct' : 'error');
+                let chipText = isSkipped ? 'Skipped' : (isCorrect ? `<span style="display: inline-block; width: 14px; height: 14px; background-color: #059669; -webkit-mask: url('../Testpad_pra_files_files/foursquare-check-in.png') center/contain no-repeat; mask: url('../Testpad_pra_files_files/foursquare-check-in.png') center/contain no-repeat; margin-right: 4px; vertical-align: middle;"></span> Correct` : 'Incorrect');
+                let chipStyle = isSkipped ? 'background: #fffbeb; color: #d97706; border: 1px solid #fef3c7;' :
+                    (isCorrect ? 'background: #ecfdf5; color: #059669; border: 1px solid #d1fae5;' :
+                        'background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2;');
+
+                return `
+                    <div class="review-card">
+                        <div class="rc-content">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
+                                <div style="flex: 1;">
+                                    <div class="rc-question" style="margin-bottom: 0px;">${i + 1}. ${q.heading || q.text || q.title || 'Question Content'}</div>
+                                    <div class="tri-orange-line">
+                                        <div></div><div></div><div></div>
+                                    </div>
+                                </div>
+                                <div style="flex-shrink: 0; padding: 0 16px; text-align: center; cursor: not-allowed;">
+                                    <div style="font-weight:700; font-size: 1.1rem; font-family: 'Mulish', sans-serif; color: #000; line-height: 1;">${securedMarks} <span style="font-size:0.8rem; color:#667085;">/ ${maxMarks}M</span></div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 4px;">
+                                <button style="background: transparent; border: none; color: #000; font-weight: 500; font-family: 'Mulish', sans-serif; cursor: pointer; padding: 0; font-size: 1.05rem;" onclick="const el = document.getElementById('resp-view-${i}'); el.style.display = el.style.display === 'none' ? 'block' : 'none';">
+                                    View Response <i class="fas fa-chevron-down" style="margin-left: 6px;"></i>
+                                </button>
+                                <div id="resp-view-${i}" style="display: none; margin-top: 16px; padding: 0; font-weight: 400; font-size: 1.05rem; color: #101828; font-family: 'Mulish', sans-serif;">
+                                    ${val}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('reportModal').style.display = 'flex';
+        }
+
+        function closeModal() { document.getElementById('reportModal').style.display = 'none'; }
+
+        function filterTable(val) {
+            const term = val.toLowerCase();
+            const rows = document.querySelectorAll('#reportsBody tr.active-row');
+            rows.forEach(row => {
+                const text = row.querySelector('td:first-child').textContent.toLowerCase();
+                row.style.display = text.includes(term) ? '' : 'none';
+            });
+        }
+
+        function exportData(type) {
+            if (rawAttempts.length === 0) return;
+            const exam = db.getExamById(examId);
+            const headers = ["Candidate", "Grade %", "Integrity", "Status"];
+            const data = rawAttempts.map(a => [a.studentId, calculateGrade(a, exam).toFixed(1), a.tabSwitchCount, a.status]);
+
+            if (type === 'pdf') {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                doc.text("TESTPAD Audit Report", 14, 20);
+                doc.autoTable({ head: [headers], body: data, startY: 30 });
+                doc.save(`Audit_${examId}.pdf`);
+            } else if (type === 'excel') {
+                const ws = XLSX.utils.aoa_to_sheet([headers, ...data]);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Audit");
+                XLSX.writeFile(wb, `Audit_${examId}.xlsx`);
+            } else {
+                let csv = headers.join(",") + "\n" + data.map(r => r.join(",")).join("\n");
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+                link.download = `Audit_${examId}.csv`;
+                link.click();
+            }
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

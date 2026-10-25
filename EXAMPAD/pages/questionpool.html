@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts: Hind, Inter, Outfit and Mulish -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Mulish:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="https://api.learntechww.com/college_icon/logo1733989968823.jpg">
+    <style>
+        :root {
+            --primary: #D92D20;
+            --primary-hover: #B42318;
+            --primary-soft: #FEF3F2;
+            --secondary: #667085;
+            --text-main: #101828;
+            --text-secondary: #475467;
+            --text-tertiary: #667085;
+            --bg-body: #FFFFFF;
+            --bg-card: #FFFFFF;
+            --border: #EAECF0;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --shadow-sm: 0px 1px 2px rgba(16, 24, 40, 0.05);
+            --shadow-md: 0px 4px 8px -2px rgba(16, 24, 40, 0.1), 0px 2px 4px -2px rgba(16, 24, 40, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+
+
+        h1,
+        h2,
+        h3,
+        .logo-text {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* --- HEADER --- */
+        .site-header {
+            height: 72px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 48px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .logo-container:hover {
+            opacity: 0.8;
+        }
+
+        .logo-square {
+            width: 52px;
+            height: 52px;
+            background: transparent;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-square img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 57px;
+            margin-left: 40px;
+        }
+
+        .nav-icon-btn {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+        }
+
+        .nav-icon-btn img {
+            width: 32px !important;
+            height: 32px !important;
+        }
+
+        .nav-icon-btn:hover {
+            background: var(--bg-body);
+            color: var(--primary);
+        }
+
+        .nav-icon-btn.active {
+            color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .site-header .search-container {
+            position: relative;
+            width: 240px;
+        }
+
+        .site-header .search-container i {
+            position: absolute;
+            left: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999999;
+            font-size: 0.9rem;
+        }
+
+        .site-header .search-input {
+            width: 100%;
+            padding: 6px 8px 6px 28px;
+            border: none;
+            border-bottom: 1px solid #e0e0e0;
+            border-radius: 0;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+            background: transparent;
+            font-family: 'Mulish', sans-serif;
+            color: #222222;
+            box-shadow: none;
+        }
+
+        .site-header .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: none;
+        }
+
+        .plus-btn {
+            width: 48px;
+            height: 72px;
+            background: #fff5f0;
+            color: var(--primary);
+            border: none;
+            border-left: 1px solid #f0f0f0;
+            border-right: 1px solid #f0f0f0;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .plus-btn:hover {
+            background: #ffece5;
+            color: var(--primary);
+        }
+
+        .grid-btn {
+            width: 54px;
+            height: 54px;
+            color: var(--secondary);
+            border: none;
+            background: transparent;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border-radius: 14px;
+        }
+
+        .grid-btn img {
+            width: 32px !important;
+            height: 32px !important;
+        }
+
+        .grid-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .profile-bubble {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-left: 16px;
+            border-left: 1px solid var(--border);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            font-family: 'Mulish', sans-serif;
+            color: #444;
+            text-transform: uppercase;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            font-weight: 800;
+            font-family: 'Mulish', sans-serif;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: #F46036;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-back {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+
+        .btn-back:hover {
+            background: var(--bg-body);
+            color: var(--primary);
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-container {
+            width: 100%;
+            padding: 40px 32px;
+            flex: 1;
+        }
+
+        .page-header {
+            margin-bottom: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .title-area h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .title-area p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-top: 4px;
+        }
+
+        .search-row {
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+            flex: none;
+            width: 350px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #d0d5dd;
+            font-size: 1.3rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 8px 12px 36px;
+            border: none;
+            border-bottom: 1px solid #eaecf0;
+            border-radius: 0;
+            font-size: 1.25rem;
+            font-weight: 400;
+            font-family: 'Mulish', sans-serif;
+            color: #344054;
+            outline: none;
+            transition: all 0.2s;
+            background: transparent;
+        }
+
+        .search-input::placeholder {
+            color: #98A2B3;
+            font-weight: 400;
+        }
+
+        .search-input:focus {
+            border-bottom-color: var(--primary);
+            box-shadow: none;
+        }
+
+        .filter-select {
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #fff;
+            color: var(--text-secondary);
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* --- POOL TABLE --- */
+        .pool-card {
+            background: #fff;
+            border: 1px solid #eaecf0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #fff;
+            padding: 16px 24px;
+            text-align: left;
+            font-size: 1.05rem;
+            text-transform: uppercase;
+            font-family: 'Mulish', sans-serif;
+            font-weight: 500;
+            color: #344054;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th .fa-sort {
+            color: #d0d5dd;
+            margin-left: 8px;
+            font-size: 0.8rem;
+        }
+
+        td {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+            font-size: 1.25rem;
+            font-family: 'Mulish', sans-serif;
+            font-weight: 400;
+            color: #000;
+        }
+
+        .q-heading {
+            font-weight: 400;
+            color: #DE5B2B;
+            margin-bottom: 0px;
+            font-size: 1.25rem;
+        }
+
+        .q-type {
+            font-weight: 400;
+            font-size: 1.25rem;
+            color: #344054;
+        }
+
+        .q-date {
+            font-size: 1.25rem;
+            color: #344054;
+            text-align: center;
+        }
+
+        .q-marks {
+            font-weight: 400;
+            color: #000;
+            font-size: 1.25rem;
+        }
+
+        .row-action {
+            color: var(--secondary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .row-action:hover {
+            background: var(--primary-soft);
+            color: var(--primary);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 40px;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--border);
+            margin-bottom: 24px;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        /* --- CUSTOM SELECT --- */
+        .custom-select-wrapper {
+            position: relative;
+            width: 150px;
+        }
+
+        .custom-select-input {
+            width: 100%;
+            padding: 8px 36px 8px 16px;
+            border: 1px solid #F46036;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            color: var(--text-main);
+            background: #FAFAFA;
+            outline: none;
+            transition: all 0.2s;
+            height: 42px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .custom-select-input:focus {
+            box-shadow: 0 0 0 3px rgba(244, 96, 54, 0.15);
+            color: var(--text-main);
+            background: #fff;
+        }
+
+        .custom-select-wrapper .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ccc;
+            font-size: 1.1rem;
+            pointer-events: none;
+            transition: transform 0.2s ease;
+        }
+
+        .custom-select-wrapper.open .search-icon {
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        .custom-select-dropdown {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 0;
+            width: 150px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.12);
+            padding: 8px;
+            display: none;
+            z-index: 100;
+        }
+
+        .custom-select-wrapper .custom-select-dropdown.dropdown-down {
+            bottom: auto;
+            top: calc(100% + 8px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-select-wrapper.open .custom-select-dropdown {
+            display: block;
+        }
+
+        .custom-select-option {
+            padding: 12px 16px;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.2s;
+            margin-bottom: 2px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .custom-select-option:last-child {
+            margin-bottom: 0;
+        }
+
+        .custom-select-option:hover,
+        .custom-select-option.selected {
+            background: #FFF5F0;
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 40px;
+            text-align: center;
+            color: var(--text-tertiary);
+            font-size: 0.875rem;
+        }
+
+        /* BOOKMARK MODAL STYLE (FOR DELETE) */
+        .bookmark-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: none;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 15vh;
+            z-index: 20000;
+            background: transparent;
+        }
+
+        .bookmark-modal {
+            background: #fff;
+            padding: 32px 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            font-family: 'Outfit', sans-serif;
+            width: 420px;
+        }
+
+        .bookmark-modal p {
+            font-size: 1.15rem;
+            color: #444;
+            margin-bottom: 24px;
+            font-weight: 400;
+        }
+
+        .bookmark-modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .bookmark-btn-yes {
+            background: #DE6834;
+            color: #fff;
+            border: none;
+            border-radius: 24px;
+            padding: 8px 36px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .bookmark-btn-no {
+            background: #EBD1C5;
+            color: #333;
+            border: none;
+            border-radius: 24px;
+            padding: 8px 36px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+        }
+    </style>
+
+    <style>
+        ::selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+
+        ::-moz-selection {
+            background: rgba(251, 146, 60, 0.3) !important;
+            color: inherit;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="header-left">
+            <div class="logo-container" onclick="location.reload()">
+                <div class="logo-square">
+                    <img src="../TESTPAD_WEBSITE__files/chitkara.png" alt="CHITKARA">
+                </div>
+                <div class="logo-text"></div>
+            </div>
+            <div class="header-nav">
+                <button class="nav-icon-btn" title="Dashboard" onclick="location.href='./teacher-dashboard.html'">
+                    <img src="../TESTPAD_WEBSITE__files/menu-1.svg" style="width: 20px; height: 20px;">
+                </button>
+                <button class="nav-icon-btn" title="Assessments" onclick="location.href='./teacher-dashboard.html'">
+                    <img src="../TESTPAD_WEBSITE__files/quiz.svg" style="width: 20px; height: 20px;">
+                </button>
+                <button class="nav-icon-btn active" title="Question Pool" onclick="location.href='./questionpool.html'">
+                    <img src="../TESTPAD_WEBSITE__files/folder-2.svg" style="width: 20px; height: 20px;">
+                </button>
+                <button class="nav-icon-btn" title="Analytics" onclick="location.href='./livemonitor.html'">
+                    <img src="../TESTPAD_WEBSITE__files/playground-normal.svg" style="width: 20px; height: 20px;">
+                </button>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="search-container" style="width: 240px; margin-right: 16px;">
+                <i class="fas fa-search"></i>
+                <input type="text" class="search-input" placeholder="Quick Search..." id="globalSearch">
+            </div>
+            <button class="plus-btn" onclick="location.href='exam-creator.html'" title="Launch New Assessment">
+                <i class="fas fa-plus"></i>
+            </button>
+            <button class="grid-btn" onclick="alert('View mode updated')"
+                style="display: flex; align-items: center; justify-content: center;">
+                <img src="../Testpad_pra_files_files/icons8-squared-menu-90.png"
+                    style="width: 24px; height: 24px; opacity: 0.75; transition: all 0.2s;"
+                    onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'">
+            </button>
+            <div class="profile-container" style="position: relative; margin-left: 10px;">
+                <div class="profile-bubble" id="profileToggle" onclick="toggleMenu()"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 12px;">
+                    <div class="user-info" style="text-align: right;">
+                        <div class="user-name" id="userName">OM AGGARWAL
+                        </div>
+                        <div class="user-role">
+                            PROFESSOR</div>
+                    </div>
+                    <div class="avatar" id="userInitial"
+                        style="background: transparent; border: none; padding: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                        <img src="../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png"
+                            style="width: 100%; height: 100%; border-radius: 50%;">
+                    </div>
+                </div>
+
+                <div class="profile-menu" id="profileMenu"
+                    style="display: none; position: absolute; right: 0; top: calc(100% + 10px); background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 220px; z-index: 1000; overflow: hidden; border: 1px solid #eee;">
+                    <div class="menu-item" onclick="location.href='./profile.html'"
+                        style="padding: 12px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: background 0.2s;"
+                        onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
+                        <img src="../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png"
+                            style="width: 20px; height: 20px;">
+                        <span style="font-size: 0.95rem; font-weight: 500; color: #475467;">My Profile</span>
+                    </div>
+                    <div class="menu-item" onclick="location.href='./preferences.html'"
+                        style="padding: 12px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: background 0.2s;"
+                        onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
+                        <img src="../TESTPAD_WEBSITE__files/password.svg" style="width: 20px; height: 20px;">
+                        <span style="font-size: 0.95rem; font-weight: 500; color: #475467;">Settings</span>
+                    </div>
+                    <div style="border-top: 1px solid #f0f0f0; margin: 4px 0;"></div>
+                    <div class="menu-item logout" onclick="handleLogout()"
+                        style="padding: 12px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: background 0.2s;"
+                        onmouseover="this.style.background='#fff1f0'" onmouseout="this.style.background='transparent'">
+                        <img src="../TESTPAD_WEBSITE__files/power-button-svgrepo-com.svg"
+                            style="width: 20px; height: 20px;">
+                        <span style="font-size: 0.95rem; font-weight: 600; color: #d92d20;">Logout</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+
+        <div class="search-row">
+            <div style="display: flex; gap: 16px; align-items: center;">
+                <div class="search-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                        stroke="#d0d5dd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                        style="position: absolute; left: 0; top: 50%; transform: translateY(-50%);">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search in Question Bank">
+                </div>
+                <div class="custom-select-wrapper" id="customTypeFilter" style="width: 180px;">
+                    <input type="hidden" id="typeFilter" value="all">
+                    <input type="text" class="custom-select-input" id="typeFilterInput" value="All Types" readonly
+                        style="cursor: pointer; padding-right: 36px;">
+                    <i class="fas fa-chevron-down search-icon"></i>
+                    <div class="custom-select-dropdown dropdown-down" id="typeFilterDropdown" style="width: 180px;">
+                        <div class="custom-select-option selected" data-value="all">All Types</div>
+                        <div class="custom-select-option" data-value="mcq">MCQ</div>
+                        <div class="custom-select-option" data-value="coding">Coding</div>
+                        <div class="custom-select-option" data-value="subjective">Subjective</div>
+                    </div>
+                </div>
+            </div>
+            <div style="font-size: 3.1rem; color: #d1d5db; font-weight: 800; font-family: 'Mulish', sans-serif;">
+                Question Bank
+            </div>
+        </div>
+
+        <div class="pool-card">
+            <table id="poolTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable('title')" style="cursor: pointer; user-select: none;">RESOURCE <i
+                                class="fas fa-sort"></i></th>
+                        <th onclick="sortTable('type')" style="cursor: pointer; user-select: none;">TYPE <i
+                                class="fas fa-sort"></i></th>
+                        <th onclick="sortTable('marks')" style="cursor: pointer; user-select: none;">MARKS <i
+                                class="fas fa-sort"></i></th>
+                        <th onclick="sortTable('section')" style="cursor: pointer; user-select: none;">SECTION <i
+                                class="fas fa-sort"></i></th>
+                        <th onclick="sortTable('date')" style="cursor: pointer; user-select: none; text-align: center;">
+                            CREATED AT <i class="fas fa-sort"></i></th>
+                        <th style="text-align: center;">ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="poolBody">
+                    <!-- Dynamic Content -->
+                </tbody>
+            </table>
+
+            <div
+                style="display: flex; justify-content: center; align-items: center; padding: 20px; gap: 16px; background: #fff;">
+                <button id="prevBtn" onclick="changePage(-1)"
+                    style="border: none; background: transparent; color: #d0d5dd; font-size: 1rem; cursor: pointer; transition: 0.2s;"><i
+                        class="fas fa-chevron-left"></i></button>
+
+                <div id="pageNumbers" style="display: flex; gap: 8px;">
+                    <!-- dynamically injected page numbers -->
+                    <button
+                        style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid var(--primary); background: #fff; color: var(--primary); font-weight: 600; display: flex; align-items: center; justify-content: center; cursor: pointer;">1</button>
+                </div>
+
+                <button id="nextBtn" onclick="changePage(1)"
+                    style="border: none; background: transparent; color: #d0d5dd; font-size: 1rem; cursor: pointer; transition: 0.2s;"><i
+                        class="fas fa-chevron-right"></i></button>
+
+                <div style="margin-left: 16px;">
+                    <div class="custom-select-wrapper" id="customPageSize">
+                        <input type="text" class="custom-select-input" id="pageSizeInput" value="10 / page"
+                            placeholder="Search...">
+                        <i class="fas fa-search search-icon"></i>
+                        <div class="custom-select-dropdown" id="pageSizeDropdown">
+                            <div class="custom-select-option selected" data-value="10">10 / page</div>
+                            <div class="custom-select-option" data-value="20">20 / page</div>
+                            <div class="custom-select-option" data-value="50">50 / page</div>
+                            <div class="custom-select-option" data-value="100">100 / page</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        // Security
+        if (!auth.isLoggedIn() || !auth.isTeacher()) {
+            window.location.href = '../pages/login.html';
+        }
+
+        let fullPool = [];
+        let filteredPool = [];
+        let currentPage = 1;
+        let rowsPerPage = 10;
+
+        function init() {
+            fullPool = db.getQuestionPool();
+            filteredPool = [...fullPool];
+            renderPool();
+
+            document.getElementById('searchInput').addEventListener('input', filterPool);
+
+            initTypeFilterSelect();
+            initCustomSelect();
+        }
+
+        function renderPool() {
+            const body = document.getElementById('poolBody');
+            const totalPages = Math.ceil(filteredPool.length / rowsPerPage);
+
+            if (filteredPool.length === 0) {
+                body.innerHTML = `
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state" style="padding: 40px; color: var(--text-main); font-size: 1.05rem;">
+                                No matching records found
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                updatePaginationControls(0);
+                return;
+            }
+
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const currentQuestions = filteredPool.slice(start, end);
+
+            body.innerHTML = currentQuestions.map((q, index) => {
+                const dateObj = new Date(q.addedAt);
+                const day = String(dateObj.getDate()).padStart(2, '0');
+                const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                const year = dateObj.getFullYear();
+                const formattedDate = `${day}-${month}-${year}`;
+
+                return `
+                    <tr>
+                        <td>
+                            <div style="display: flex; gap: 12px; align-items: flex-start;">
+                                <div class="q-heading">
+                                    ${q.heading}
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="q-type">${q.type === 'mcq' ? 'MCQ' : q.type.charAt(0).toUpperCase() + q.type.slice(1)}</span></td>
+                        <td><span class="q-marks" style="color: #344054;">${q.marks}</span></td>
+                        <td><span style="color: #344054;">${q.section}</span></td>
+                        <td class="q-date">${formattedDate}</td>
+                        <td style="text-align: center;">
+                            <i class="fa-regular fa-circle-xmark row-action" style="font-size: 1.4rem; color: #98A2B3; cursor: pointer;" title="Remove" onclick="openDeleteModal('${q.poolId}')"></i>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            updatePaginationControls(totalPages);
+        }
+
+        function updatePaginationControls(totalPages) {
+            const pageNumbersContainer = document.getElementById('pageNumbers');
+            if (!pageNumbersContainer) return;
+
+            if (totalPages <= 0) {
+                pageNumbersContainer.innerHTML = `<button style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid var(--primary); background: #fff; color: var(--primary); font-weight: 600; display: flex; align-items: center; justify-content: center; cursor: pointer;">1</button>`;
+            } else {
+                const maxVisible = 5;
+                let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+                let endPage = startPage + maxVisible - 1;
+
+                if (endPage > totalPages) {
+                    endPage = totalPages;
+                    startPage = Math.max(1, endPage - maxVisible + 1);
+                }
+
+                let html = '';
+
+                if (startPage > 1) {
+                    html += `<button onclick="goToPage(1)" style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid var(--border); background: #fff; color: var(--text-secondary); font-weight: 500; display: flex; align-items: center; justify-content: center; cursor: pointer;">1</button>`;
+                    if (startPage > 2) {
+                        html += `<span style="padding: 0 4px; color: #98A2B3; font-weight: 700; display: inline-flex; align-items: center;">...</span>`;
+                    }
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    if (i === currentPage) {
+                        html += `<button style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid var(--primary); background: #fff; color: var(--primary); font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer;">${i}</button>`;
+                    } else {
+                        html += `<button onclick="goToPage(${i})" style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid var(--border); background: #fff; color: var(--text-secondary); font-weight: 500; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='#fff'">${i}</button>`;
+                    }
+                }
+
+                if (endPage < totalPages) {
+                    if (endPage < totalPages - 1) {
+                        html += `<span style="padding: 0 4px; color: #98A2B3; font-weight: 700; display: inline-flex; align-items: center;">...</span>`;
+                    }
+                    html += `<button onclick="goToPage(${totalPages})" style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid var(--border); background: #fff; color: var(--text-secondary); font-weight: 500; display: flex; align-items: center; justify-content: center; cursor: pointer;">${totalPages}</button>`;
+                }
+
+                pageNumbersContainer.innerHTML = html;
+            }
+
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            if (prevBtn) {
+                prevBtn.disabled = currentPage <= 1;
+                prevBtn.style.opacity = currentPage <= 1 ? '0.3' : '1';
+                prevBtn.style.cursor = currentPage <= 1 ? 'not-allowed' : 'pointer';
+            }
+            if (nextBtn) {
+                nextBtn.disabled = currentPage >= totalPages;
+                nextBtn.style.opacity = currentPage >= totalPages ? '0.3' : '1';
+                nextBtn.style.cursor = currentPage >= totalPages ? 'not-allowed' : 'pointer';
+            }
+        }
+
+        function changePage(delta) {
+            const totalPages = Math.ceil(filteredPool.length / rowsPerPage);
+            const newPage = currentPage + delta;
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentPage = newPage;
+                renderPool();
+            }
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            renderPool();
+        }
+
+        function filterPool() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const type = document.getElementById('typeFilter').value;
+
+            filteredPool = fullPool.filter(q => {
+                const matchesSearch = q.heading.toLowerCase().includes(query) || q.title.toLowerCase().includes(query);
+                const matchesType = type === 'all' || q.type === type;
+                return matchesSearch && matchesType;
+            });
+
+            // Re-apply sorting if active
+            if (sortColumn) {
+                applySortToFilteredPool();
+            }
+
+            currentPage = 1;
+            renderPool();
+        }
+
+        let sortColumn = '';
+        let sortAscending = true;
+
+        function sortTable(column) {
+            if (sortColumn === column) {
+                sortAscending = !sortAscending;
+            } else {
+                sortColumn = column;
+                sortAscending = true;
+            }
+
+            // Update icons
+            const headers = document.querySelectorAll('th[onclick]');
+            headers.forEach(th => {
+                const icon = th.querySelector('i');
+                if (th.getAttribute('onclick').includes(column)) {
+                    icon.className = sortAscending ? 'fas fa-sort-up' : 'fas fa-sort-down';
+                } else {
+                    icon.className = 'fas fa-sort';
+                }
+            });
+
+            applySortToFilteredPool();
+            currentPage = 1;
+            renderPool();
+        }
+
+        function applySortToFilteredPool() {
+            if (!sortColumn) return;
+
+            filteredPool.sort((a, b) => {
+                let valA, valB;
+
+                switch (sortColumn) {
+                    case 'title':
+                        valA = a.heading.toLowerCase();
+                        valB = b.heading.toLowerCase();
+                        break;
+                    case 'type':
+                        valA = a.type.toLowerCase();
+                        valB = b.type.toLowerCase();
+                        break;
+                    case 'marks':
+                        valA = parseFloat(a.marks) || 0;
+                        valB = parseFloat(b.marks) || 0;
+                        break;
+                    case 'section':
+                        valA = a.section.toLowerCase();
+                        valB = b.section.toLowerCase();
+                        break;
+                    case 'date':
+                        valA = new Date(a.addedAt).getTime();
+                        valB = new Date(b.addedAt).getTime();
+                        break;
+                    default:
+                        return 0;
+                }
+
+                if (valA < valB) return sortAscending ? -1 : 1;
+                if (valA > valB) return sortAscending ? 1 : -1;
+                return 0;
+            });
+        }
+
+        let questionToDelete = null;
+
+        function openDeleteModal(pid) {
+            questionToDelete = pid;
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+
+        function closeDeleteModal() {
+            questionToDelete = null;
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+
+        function confirmDelete() {
+            if (questionToDelete) {
+                // Actually remove it from the arrays
+                fullPool = fullPool.filter(q => q.poolId !== questionToDelete);
+                filteredPool = filteredPool.filter(q => q.poolId !== questionToDelete);
+
+                // Update DB / localStorage
+                localStorage.setItem('TESTPAD_question_pool', JSON.stringify(fullPool));
+
+                renderPool();
+                closeDeleteModal();
+            }
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('profileMenu');
+            menu.style.display = menu.style.display === 'none' || menu.style.display === '' ? 'block' : 'none';
+        }
+
+        document.addEventListener('click', function (event) {
+            const profileToggle = document.getElementById('profileToggle');
+            const profileMenu = document.getElementById('profileMenu');
+            if (profileToggle && profileMenu) {
+                if (!profileToggle.contains(event.target) && !profileMenu.contains(event.target)) {
+                    profileMenu.style.display = 'none';
+                }
+            }
+        });
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to log out?')) {
+                auth.logout();
+                location.href = '../index.html';
+            }
+        }
+
+        function initCustomSelect() {
+            const pageSizeWrapper = document.getElementById('customPageSize');
+            const pageSizeInput = document.getElementById('pageSizeInput');
+            const pageSizeOptions = document.querySelectorAll('.custom-select-option');
+
+            if (!pageSizeWrapper) return;
+
+            pageSizeInput.addEventListener('click', (e) => {
+                pageSizeWrapper.classList.toggle('open');
+                e.stopPropagation();
+            });
+
+            pageSizeInput.addEventListener('input', (e) => {
+                const val = e.target.value.toLowerCase();
+                pageSizeOptions.forEach(opt => {
+                    if (opt.textContent.toLowerCase().includes(val)) {
+                        opt.style.display = 'block';
+                    } else {
+                        opt.style.display = 'none';
+                    }
+                });
+                if (!pageSizeWrapper.classList.contains('open')) {
+                    pageSizeWrapper.classList.add('open');
+                }
+            });
+
+            pageSizeOptions.forEach(option => {
+                option.addEventListener('click', (e) => {
+                    pageSizeOptions.forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    pageSizeInput.value = option.textContent;
+
+                    // Show all options again
+                    pageSizeOptions.forEach(opt => opt.style.display = 'block');
+
+                    rowsPerPage = parseInt(option.dataset.value);
+                    currentPage = 1;
+                    renderPool();
+                    pageSizeWrapper.classList.remove('open');
+                    e.stopPropagation();
+                });
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!pageSizeWrapper.contains(e.target)) {
+                    pageSizeWrapper.classList.remove('open');
+                    // Reset input to current selected if it was changed
+                    const selectedOpt = document.querySelector('.custom-select-option.selected');
+                    if (selectedOpt) {
+                        pageSizeInput.value = selectedOpt.textContent;
+                    }
+                    pageSizeOptions.forEach(opt => opt.style.display = 'block');
+                }
+            });
+        }
+
+        function initTypeFilterSelect() {
+            const wrapper = document.getElementById('customTypeFilter');
+            const input = document.getElementById('typeFilterInput');
+            const hidden = document.getElementById('typeFilter');
+            const options = wrapper ? wrapper.querySelectorAll('.custom-select-option') : [];
+
+            if (!wrapper) return;
+
+            input.addEventListener('click', (e) => {
+                wrapper.classList.toggle('open');
+                e.stopPropagation();
+            });
+
+            options.forEach(option => {
+                option.addEventListener('click', (e) => {
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    input.value = option.textContent;
+                    hidden.value = option.dataset.value;
+
+                    filterPool();
+
+                    wrapper.classList.remove('open');
+                    e.stopPropagation();
+                });
+            });
+
+            document.addEventListener('click', (e) => {
+                if (wrapper && !wrapper.contains(e.target)) {
+                    wrapper.classList.remove('open');
+                }
+            });
+        }
+
+        init();
+    </script>
+    <!-- BOOKMARK CONFIRMATION MODAL STYLE -->
+    <div class="bookmark-modal-overlay" id="deleteModal">
+        <div class="bookmark-modal">
+            <p>do you really want to remove this question from pool?</p>
+            <div class="bookmark-modal-actions">
+                <button class="bookmark-btn-yes" onclick="confirmDelete()">Yes</button>
+                <button class="bookmark-btn-no" onclick="closeDeleteModal()">No</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,2720 @@
+<!DOCTYPE html>
+<!-- saved from url=(0112)https://course.testpad.chitkara.edu.in/attempt/attemptquestion/69968acc7cfd8fe2002d7c40/5d46bcc1695fda3b2cd0a77d -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>
+      
+        Read integer type values
+       | Chitkara
+    </title>
+    <!-- necessary styles and meta -->
+    
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="./Testpad_pra_files_files/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+<link rel="preconnect" href="https://fonts.gstatic.com/">
+<link href="./Testpad_pra_files_files/css2" rel="stylesheet">
+<!-- specific common style -->
+<link rel="stylesheet" href="./Testpad_pra_files_files/bootstrap-select.min.css">
+
+<!-- common styles -->
+<link rel="stylesheet" href="./Testpad_pra_files_files/bootstrap-selectpicker.css">
+<link rel="stylesheet" href="./Testpad_pra_files_files/header.css">
+<link rel="stylesheet" href="./Testpad_pra_files_files/header-new.css">
+
+<!-- initially jquery loaded -->
+<script src="./Testpad_pra_files_files/jquery.min.js.download"></script>
+<script>
+    window.jQuery || document.write('<script src="/common/js/jquery.min.js">\x3C/script>')
+</script>
+
+<!-- include roleResourceConroller -->
+<script>
+    let rolesResource = JSON.parse('{"_id":"65a8ba1596c9fb03dc1504f3","allowedRoleIdsToAdd":[],"name":"Student","roleType":1,"roles":[{"actions":[],"_id":"6669185d0c3760ab826ebe57","resource":1},{"actions":[],"_id":"6669185d0c3760ab826ebe58","resource":2},{"actions":[],"_id":"6669185d0c3760ab826ebe59","resource":3},{"actions":[12],"_id":"6669185d0c3760ab826ebe5a","resource":4},{"actions":[],"_id":"6669185d0c3760ab826ebe5b","resource":5},{"actions":[],"_id":"6669185d0c3760ab826ebe5c","resource":6},{"actions":[3,18,29,30],"_id":"6669185d0c3760ab826ebe5d","resource":9},{"actions":[],"_id":"6669185d0c3760ab826ebe5e","resource":11},{"actions":[],"_id":"6669185d0c3760ab826ebe5f","resource":17},{"actions":[3,18,29,30,47,48,49,50],"_id":"6669185d0c3760ab826ebe60","resource":20},{"actions":[18],"_id":"6669185d0c3760ab826ebe61","resource":21},{"actions":[],"_id":"6669185d0c3760ab826ebe62","resource":26},{"actions":[],"_id":"6669185d0c3760ab826ebe63","resource":29}],"defaultRouteResouce":21,"createdBy":"59f9c87bbace049edfca78cf","createdAt":"2024-01-18T05:41:41.481Z","updatedAt":"2024-06-12T03:39:09.027Z","__v":0}');
+
+    let resourceActionsMap = new Map();
+    if(rolesResource && rolesResource.roles && rolesResource.roles.length) {
+        rolesResource.roles.map((obj)=> {
+          if(obj.resource) resourceActionsMap.set(obj.resource, obj.actions);
+        })
+    }
+
+    function checkResourcePermission(resource, action) {
+        if(resourceActionsMap.has(resource) && resourceActionsMap.get(resource).length) {
+            // if we want to check only resource
+            if(action == undefined){
+                return true;
+            }
+            // if we want to check only resource
+
+           let actions = resourceActionsMap.get(resource) || [];
+           
+           if(actions.includes(action)) return true;
+           return false;
+        }
+        return false;
+    }
+
+    
+</script>
+<!-- include apiRequestConroller -->
+<script>
+    async function apiRequest(url, options = {}) {
+        try{
+            const rawResponse = await fetch( url, {
+                ... options
+            })
+
+            if(rawResponse.redirected) {
+                console.log('Before Get response redirect', rawResponse);
+                if(rawResponse.url && rawResponse.url.indexOf('login') > -1) location.reload();
+                else window.location = `${rawResponse.url}`;
+            }
+
+            const response = await rawResponse.json();
+            
+            return response;
+        }catch(err) {
+            toggleLoader(false);
+            console.error("During api request: ", err);
+            toggleAlertMsgModal('Error: The Request Timed Out.', 2);
+            return false;
+        }
+    }
+</script>
+
+    <!-- fonts -->
+		<link href="./Testpad_pra_files_files/css2(1)" rel="stylesheet">
+    <link href="./Testpad_pra_files_files/css2(2)" rel="stylesheet">
+    <style>
+  @font-face {
+    font-family: 'Avenir';
+    src: url('/common/fonts/Avenir/Avenir-Roman.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Avenir';
+    src: url('/common/fonts/Avenir/Avenir-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Avenir Book';
+    src: url('/common/fonts/Avenir/Avenir-Book.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+  }
+</style>
+    <link href="./Testpad_pra_files_files/icon" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="./Testpad_pra_files_files/css2(3)" rel="stylesheet">
+
+    <!-- common styles -->
+    <link rel="stylesheet" href="./Testpad_pra_files_files/loader.css">
+    <link rel="stylesheet" href="./Testpad_pra_files_files/alert-modal.css">
+    <link rel="stylesheet" href="./Testpad_pra_files_files/confirm-modal.css">
+    <link rel="stylesheet" href="./Testpad_pra_files_files/share-modal.css">
+    <link rel="stylesheet" href="./Testpad_pra_files_files/feedback-balloon.css">
+    <link rel="stylesheet" href="./Testpad_pra_files_files/content-discussion-sidebar.css">
+
+    <!-- page specific styles -->
+    <link rel="stylesheet" href="./Testpad_pra_files_files/default.min.css">
+    <link rel="stylesheet" href="./Testpad_pra_files_files/quill.snow.min.css" integrity="sha512-/FHUK/LsH78K9XTqsR9hbzr21J8B8RwHR/r8Jv9fzry6NVAOVIGFKQCNINsbhK7a1xubVu2r5QZcz2T9cKpubw==" crossorigin="anonymous">
+    <link rel="stylesheet" href="./Testpad_pra_files_files/codemirror.min.css" integrity="sha512-xIf9AdJauwKIVtrVRZ0i4nHP61Ogx9fSRAkCLecmE2dL/U8ioWpDvFCAy4dcfecN72HHB9+7FfQj3aiO68aaaw==" crossorigin="anonymous">
+
+<link rel="stylesheet" href="./Testpad_pra_files_files/foldgutter.min.css" integrity="sha512-YwkMTlTHn8dBnwa47IF+cKsS00HPiiVhQ4DpwT1KF2gUftfFR7aefepabSPLAs6zrMyD89M3w0Ow6mQ5XJEUCw==" crossorigin="anonymous">
+
+<link rel="stylesheet" href="./Testpad_pra_files_files/show-hint.min.css" integrity="sha512-OmcLQEy8iGiD7PSm85s06dnR7G7C9C0VqahIPAj/KHk5RpOCmnC6R2ob1oK4/uwYhWa9BF1GC6tzxsC8TIx7Jg==" crossorigin="anonymous">
+
+<link rel="stylesheet" href="./Testpad_pra_files_files/lint.min.css" integrity="sha512-6Owk90V+dmnBh35Q/OWxqfmLXExGMWDwb7tijRebrz7lLkDxZ7RS+eiNQmpUPrlWtpQulb/BkatkyPwPkMhpUQ==" crossorigin="anonymous">
+    <link rel="stylesheet" href="./Testpad_pra_files_files/question-view.css">
+
+    <!-- fa fa icons (to be removed) -->
+    <link rel="stylesheet" href="./Testpad_pra_files_files/font-awesome.min.css">
+    <link rel="stylesheet" href="./Testpad_pra_files_files/css2(4)">
+    
+    <style>
+      .submit-btn-check:disabled{
+        opacity: 0.65;
+      }
+    </style>
+<script>
+  function decodeBase64JSON(b64) {
+    const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+    const json = new TextDecoder("utf-8").decode(bytes);
+    return JSON.parse(json);
+}
+  ''
+    window.courseObj = decodeBase64JSON('eyJfaWQiOiI2OTk2OGFjYzdjZmQ4ZmUyMDAyZDdjNDAiLCJkaXNhYmxlQ29weVBhc3RlIjpmYWxzZSwidGl0bGUiOiIyNENTRTAxMDctRnVuZGFtZW50YWxzIG9mIEMgUHJvZ3JhbW1pbmctRHIgUmF0dGFuIERlZXAgQW5lamEiLCJhbGxvd0FpVHV0b3IiOmZhbHNlLCJjb3Vyc2VBZG1pbmlzdHJhdG9yIjpbeyJ1c2VySWQiOiI2NjczYjk2OGQ0NGQxNTI3MWUyNTRmMzEiLCJfaWQiOiI2OTk2OGMyMjdjZmQ4ZmUyMDAyZDdjNDUiLCJwZXJtaXNzaW9ucyI6WzM2LDM1LDMsMTMsMTAsMTksMjNdfV0sImFsbG93RGlzY3Vzc2lvbiI6ZmFsc2UsIm1lbnRvcklkIjpbIjY2NzNiOTY4ZDQ0ZDE1MjcxZTI1NGYzMSJdLCJjb21wbGV0ZWRDbGFzc0lkIjpbXSwiYXNzaWdubWVudE1ldGFEYXRhIjpbXSwiY291cnNlU2VnbWVudHMiOlt7Il9pZCI6IjY5OTY4ZTE5N2NmZDhmZTIwMDJkN2U0NyIsImlkIjoiNjk4MWNmZTcyODVmNWI0OTMyYjIyYmQ2Iiwic3RhcnRJbmRleCI6MSwidGl0bGUiOiJHZXR0aW5nIFN0YXJ0ZWQgd2l0aCBDIiwic2tpcEFsbG93ZWQiOmZhbHNlLCJzaGFyZSI6ZmFsc2UsImlzU3VibWlzc2lvbkFsbG93ZWQiOmZhbHNlLCJpc1NhbWVEYXlTdWJtaXNzaW9uIjp0cnVlLCJzaGFyZU1zZyI6IiIsImRlc2MiOiIiLCJzdGFydFRpbWUiOm51bGwsImR1ZURhdGUiOm51bGwsImlzRHVlRGF0ZSI6ZmFsc2UsImVuZEluZGV4IjoyLCJpc0Fzc2lnbm1lbnQiOmZhbHNlLCJjb3VudCI6MiwiZW5kT2ZDb250ZW50IjoyLCJzZWdtZW50Q291bnRJbmRleCI6MH0seyJfaWQiOiI2OTk2OGUxOTdjZmQ4ZmUyMDAyZDdlNDYiLCJpZCI6IjY5ODFjZmU3Mjg1ZjViNDkzMmIyMmJkNyIsInN0YXJ0SW5kZXgiOjMsInRpdGxlIjoiQnVpbGRpbmcgQmxvY2tzIG9mIEMiLCJza2lwQWxsb3dlZCI6ZmFsc2UsInNoYXJlIjpmYWxzZSwiaXNTdWJtaXNzaW9uQWxsb3dlZCI6ZmFsc2UsImlzU2FtZURheVN1Ym1pc3Npb24iOnRydWUsInNoYXJlTXNnIjoiIiwiZGVzYyI6IiIsInN0YXJ0VGltZSI6bnVsbCwiZHVlRGF0ZSI6bnVsbCwiaXNEdWVEYXRlIjpmYWxzZSwiZW5kSW5kZXgiOjksImlzQXNzaWdubWVudCI6ZmFsc2UsImNvdW50Ijo3LCJlbmRPZkNvbnRlbnQiOjksInNlZ21lbnRDb3VudEluZGV4IjoxfSx7Il9pZCI6IjY5OTY4ZTE5N2NmZDhmZTIwMDJkN2U0NSIsImlkIjoiNjk4MWNmZTcyODVmNWI0OTMyYjIyYmQ4Iiwic3RhcnRJbmRleCI6MTAsInRpdGxlIjoiSW5wdXQgIE91dHB1dCIsInNraXBBbGxvd2VkIjpmYWxzZSwic2hhcmUiOmZhbHNlLCJpc1N1Ym1pc3Npb25BbGxvd2VkIjpmYWxzZSwiaXNTYW1lRGF5U3VibWlzc2lvbiI6dHJ1ZSwic2hhcmVNc2ciOiIiLCJkZXNjIjoiIiwic3RhcnRUaW1lIjpudWxsLCJkdWVEYXRlIjpudWxsLCJpc0R1ZURhdGUiOmZhbHNlLCJlbmRJbmRleCI6MTYsImlzQXNzaWdubWVudCI6ZmFsc2UsImNvdW50Ijo3LCJlbmRPZkNvbnRlbnQiOjE2LCJzZWdtZW50Q291bnRJbmRleCI6Mn0seyJfaWQiOiI2OTk2OGUxOTdjZmQ4ZmUyMDAyZDdlNDQiLCJpZCI6IjY5ODFjZmU3Mjg1ZjViNDkzMmIyMmJkOSIsInN0YXJ0SW5kZXgiOjE3LCJ0aXRsZSI6Ik9wZXJhdG9ycyBhbmQgT3BlcmF0aW9ucyIsInNraXBBbGxvd2VkIjpmYWxzZSwic2hhcmUiOmZhbHNlLCJpc1N1Ym1pc3Npb25BbGxvd2VkIjpmYWxzZSwiaXNTYW1lRGF5U3VibWlzc2lvbiI6dHJ1ZSwic2hhcmVNc2ciOiIiLCJkZXNjIjoiIiwic3RhcnRUaW1lIjpudWxsLCJkdWVEYXRlIjpudWxsLCJpc0R1ZURhdGUiOmZhbHNlLCJlbmRJbmRleCI6MzIsImlzQXNzaWdubWVudCI6ZmFsc2UsImNvdW50IjoxNiwiZW5kT2ZDb250ZW50IjozMiwic2VnbWVudENvdW50SW5kZXgiOjN9LHsiX2lkIjoiNjk5NjhlMTk3Y2ZkOGZlMjAwMmQ3ZTQzIiwiaWQiOiI2OTgxY2ZlNzI4NWY1YjQ5MzJiMjJiZGEiLCJzdGFydEluZGV4IjozMywidGl0bGUiOiJDb25kaXRpb25hbCBTdGF0ZW1lbnRzIiwic2tpcEFsbG93ZWQiOmZhbHNlLCJzaGFyZSI6ZmFsc2UsImlzU3VibWlzc2lvbkFsbG93ZWQiOmZhbHNlLCJpc1NhbWVEYXlTdWJtaXNzaW9uIjp0cnVlLCJzaGFyZU1zZyI6IiIsImRlc2MiOiIiLCJzdGFydFRpbWUiOm51bGwsImR1ZURhdGUiOm51bGwsImlzRHVlRGF0ZSI6ZmFsc2UsImVuZEluZGV4Ijo2NSwiaXNBc3NpZ25tZW50IjpmYWxzZSwiY291bnQiOjMzLCJlbmRPZkNvbnRlbnQiOjY1LCJzZWdtZW50Q291bnRJbmRleCI6NH0seyJfaWQiOiI2OTk2OGUxOTdjZmQ4ZmUyMDAyZDdlNDIiLCJpZCI6IjY5ODFjZmU3Mjg1ZjViNDkzMmIyMmJkYiIsInN0YXJ0SW5kZXgiOjY2LCJ0aXRsZSI6Ikxvb3BzIiwic2tpcEFsbG93ZWQiOmZhbHNlLCJzaGFyZSI6ZmFsc2UsImlzU3VibWlzc2lvbkFsbG93ZWQiOmZhbHNlLCJpc1NhbWVEYXlTdWJtaXNzaW9uIjp0cnVlLCJzaGFyZU1zZyI6IiIsImRlc2MiOiIiLCJzdGFydFRpbWUiOm51bGwsImR1ZURhdGUiOm51bGwsImlzRHVlRGF0ZSI6ZmFsc2UsImVuZEluZGV4Ijo5MiwiaXNBc3NpZ25tZW50IjpmYWxzZSwiY291bnQiOjI3LCJlbmRPZkNvbnRlbnQiOjkyLCJzZWdtZW50Q291bnRJbmRleCI6NX0seyJfaWQiOiI2OTk2OGUxOTdjZmQ4ZmUyMDAyZDdlNDEiLCJpZCI6IjY5ODFjZmU3Mjg1ZjViNDkzMmIyMmJkYyIsInN0YXJ0SW5kZXgiOjkzLCJ0aXRsZSI6IkZ1bmN0aW9ucyIsInNraXBBbGxvd2VkIjpmYWxzZSwic2hhcmUiOmZhbHNlLCJpc1N1Ym1pc3Npb25BbGxvd2VkIjpmYWxzZSwiaXNTYW1lRGF5U3VibWlzc2lvbiI6dHJ1ZSwic2hhcmVNc2ciOiIiLCJkZXNjIjoiIiwic3RhcnRUaW1lIjpudWxsLCJkdWVEYXRlIjpudWxsLCJpc0R1ZURhdGUiOmZhbHNlLCJlbmRJbmRleCI6MTE2LCJpc0Fzc2lnbm1lbnQiOmZhbHNlLCJjb3VudCI6MjQsImVuZE9mQ29udGVudCI6MTE2LCJzZWdtZW50Q291bnRJbmRleCI6Nn0seyJfaWQiOiI2OTk2OGUxOTdjZmQ4ZmUyMDAyZDdlNDAiLCJpZCI6IjY5ODFjZmU3Mjg1ZjViNDkzMmIyMmJkZCIsInN0YXJ0SW5kZXgiOjExNywidGl0bGUiOiJSZWN1cnNpb24iLCJza2lwQWxsb3dlZCI6ZmFsc2UsInNoYXJlIjpmYWxzZSwiaXNTdWJtaXNzaW9uQWxsb3dlZCI6ZmFsc2UsImlzU2FtZURheVN1Ym1pc3Npb24iOnRydWUsInNoYXJlTXNnIjoiIiwiZGVzYyI6IiIsInN0YXJ0VGltZSI6bnVsbCwiZHVlRGF0ZSI6bnVsbCwiaXNEdWVEYXRlIjpmYWxzZSwiZW5kSW5kZXgiOjEzNiwiaXNBc3NpZ25tZW50IjpmYWxzZSwiY291bnQiOjIwLCJlbmRPZkNvbnRlbnQiOjEzNiwic2VnbWVudENvdW50SW5kZXgiOjd9LHsiX2lkIjoiNjk5NjhlMTk3Y2ZkOGZlMjAwMmQ3ZTNmIiwiaWQiOiI2OTgxY2ZlNzI4NWY1YjQ5MzJiMjJiZGUiLCJzdGFydEluZGV4IjoxMzcsInRpdGxlIjoiUG9pbnRlcnMgIEZ1bmN0aW9ucyIsInNraXBBbGxvd2VkIjpmYWxzZSwic2hhcmUiOmZhbHNlLCJpc1N1Ym1pc3Npb25BbGxvd2VkIjpmYWxzZSwiaXNTYW1lRGF5U3VibWlzc2lvbiI6dHJ1ZSwic2hhcmVNc2ciOiIiLCJkZXNjIjoiIiwic3RhcnRUaW1lIjpudWxsLCJkdWVEYXRlIjpudWxsLCJpc0R1ZURhdGUiOmZhbHNlLCJlbmRJbmRleCI6MTQ3LCJpc0Fzc2lnbm1lbnQiOmZhbHNlLCJjb3VudCI6MTEsImVuZE9mQ29udGVudCI6MTQ3LCJzZWdtZW50Q291bnRJbmRleCI6OH0seyJfaWQiOiI2OTk2OGUxOTdjZmQ4ZmUyMDAyZDdlM2UiLCJpZCI6IjY5ODFjZmU3Mjg1ZjViNDkzMmIyMmJkZiIsInN0YXJ0SW5kZXgiOjE0OCwidGl0bGUiOiJTdG9yYWdlIGNsYXNzZXMiLCJza2lwQWxsb3dlZCI6ZmFsc2UsInNoYXJlIjpmYWxzZSwiaXNTdWJtaXNzaW9uQWxsb3dlZCI6ZmFsc2UsImlzU2FtZURheVN1Ym1pc3Npb24iOnRydWUsInNoYXJlTXNnIjoiIiwiZGVzYyI6IiIsInN0YXJ0VGltZSI6bnVsbCwiZHVlRGF0ZSI6bnVsbCwiaXNEdWVEYXRlIjpmYWxzZSwiZW5kSW5kZXgiOjE2NCwiaXNBc3NpZ25tZW50IjpmYWxzZSwiY291bnQiOjE3LCJlbmRPZkNvbnRlbnQiOjE2NCwic2VnbWVudENvdW50SW5kZXgiOjl9LHsiX2lkIjoiNjk5NjhlMTk3Y2ZkOGZlMjAwMmQ3ZTNkIiwiaWQiOiI2OTgxY2ZlNzI4NWY1YjQ5MzJiMjJiZTAiLCJzdGFydEluZGV4IjoxNjUsInRpdGxlIjoiQXJyYXkiLCJza2lwQWxsb3dlZCI6ZmFsc2UsInNoYXJlIjpmYWxzZSwiaXNTdWJtaXNzaW9uQWxsb3dlZCI6ZmFsc2UsImlzU2FtZURheVN1Ym1pc3Npb24iOnRydWUsInNoYXJlTXNnIjoiIiwiZGVzYyI6IiIsInN0YXJ0VGltZSI6bnVsbCwiZHVlRGF0ZSI6bnVsbCwiaXNEdWVEYXRlIjpmYWxzZSwiZW5kSW5kZXgiOjIxMCwiaXNBc3NpZ25tZW50IjpmYWxzZSwiY291bnQiOjQ2LCJlbmRPZkNvbnRlbnQiOjIxMCwic2VnbWVudENvdW50SW5kZXgiOjEwfSx7Il9pZCI6IjY5OTY4ZTE5N2NmZDhmZTIwMDJkN2UzYyIsImlkIjoiNjk4MWNmZTcyODVmNWI0OTMyYjIyYmUxIiwic3RhcnRJbmRleCI6MjExLCJ0aXRsZSI6IlBvaW50ZXJzICBBcnJheXMiLCJza2lwQWxsb3dlZCI6ZmFsc2UsInNoYXJlIjpmYWxzZSwiaXNTdWJtaXNzaW9uQWxsb3dlZCI6ZmFsc2UsImlzU2FtZURheVN1Ym1pc3Npb24iOnRydWUsInNoYXJlTXNnIjoiIiwiZGVzYyI6IiIsInN0YXJ0VGltZSI6bnVsbCwiZHVlRGF0ZSI6bnVsbCwiaXNEdWVEYXRlIjpmYWxzZSwiZW5kSW5kZXgiOjI0NiwiaXNBc3NpZ25tZW50IjpmYWxzZSwiY291bnQiOjM2LCJlbmRPZkNvbnRlbnQiOjI0Niwic2VnbWVudENvdW50SW5kZXgiOjExfSx7Il9pZCI6IjY5OTY4ZTE5N2NmZDhmZTIwMDJkN2UzYiIsImlkIjoiNjk4MWNmZTcyODVmNWI0OTMyYjIyYmUyIiwic3RhcnRJbmRleCI6MjQ3LCJ0aXRsZSI6IlNlYXJjaGluZyBTb3J0aW5nIGluIEFycmF5cyIsInNraXBBbGxvd2VkIjpmYWxzZSwic2hhcmUiOmZhbHNlLCJpc1N1Ym1pc3Npb25BbGxvd2VkIjpmYWxzZSwiaXNTYW1lRGF5U3VibWlzc2lvbiI6dHJ1ZSwic2hhcmVNc2ciOiIiLCJkZXNjIjoiIiwic3RhcnRUaW1lIjpudWxsLCJkdWVEYXRlIjpudWxsLCJpc0R1ZURhdGUiOmZhbHNlLCJlbmRJbmRleCI6MjgyLCJpc0Fzc2lnbm1lbnQiOmZhbHNlLCJjb3VudCI6MzYsImVuZE9mQ29udGVudCI6MjgyLCJzZWdtZW50Q291bnRJbmRleCI6MTJ9LHsiX2lkIjoiNjk5NjhlMTk3Y2ZkOGZlMjAwMmQ3ZTNhIiwiaWQiOiI2OTgxY2ZlNzI4NWY1YjQ5MzJiMjJiZTMiLCJzdGFydEluZGV4IjoyODMsInRpdGxlIjoiQ2hhcmFjdGVyIEFycmF5cyAgU3RyaW5ncyIsInNraXBBbGxvd2VkIjpmYWxzZSwic2hhcmUiOmZhbHNlLCJpc1N1Ym1pc3Npb25BbGxvd2VkIjpmYWxzZSwiaXNTYW1lRGF5U3VibWlzc2lvbiI6dHJ1ZSwic2hhcmVNc2ciOiIiLCJkZXNjIjoiIiwic3RhcnRUaW1lIjpudWxsLCJkdWVEYXRlIjpudWxsLCJpc0R1ZURhdGUiOmZhbHNlLCJlbmRJbmRleCI6MzA5LCJpc0Fzc2lnbm1lbnQiOmZhbHNlLCJjb3VudCI6MjcsImVuZE9mQ29udGVudCI6MzA5LCJzZWdtZW50Q291bnRJbmRleCI6MTN9LHsiX2lkIjoiNjk5NjhlMTk3Y2ZkOGZlMjAwMmQ3ZTM5IiwiaWQiOiI2OTgxY2ZlNzI4NWY1YjQ5MzJiMjJiZTQiLCJzdGFydEluZGV4IjozMTAsInRpdGxlIjoiUHJlcHJvY2Vzc2luZyIsInNraXBBbGxvd2VkIjpmYWxzZSwic2hhcmUiOmZhbHNlLCJpc1N1Ym1pc3Npb25BbGxvd2VkIjpmYWxzZSwiaXNTYW1lRGF5U3VibWlzc2lvbiI6dHJ1ZSwic2hhcmVNc2ciOiIiLCJkZXNjIjoiIiwic3RhcnRUaW1lIjpudWxsLCJkdWVEYXRlIjpudWxsLCJpc0R1ZURhdGUiOmZhbHNlLCJlbmRJbmRleCI6MzEwLCJpc0Fzc2lnbm1lbnQiOmZhbHNlLCJjb3VudCI6MSwiZW5kT2ZDb250ZW50IjozMTAsInNlZ21lbnRDb3VudEluZGV4IjoxNH0seyJfaWQiOiI2OTk2OGUxOTdjZmQ4ZmUyMDAyZDdlMzgiLCJpZCI6IjY5ODFjZmU3Mjg1ZjViNDkzMmIyMmJlNSIsInN0YXJ0SW5kZXgiOjMxMSwidGl0bGUiOiJCaXQgTWFuaXB1bGF0aW9uIiwic2tpcEFsbG93ZWQiOmZhbHNlLCJzaGFyZSI6ZmFsc2UsImlzU3VibWlzc2lvbkFsbG93ZWQiOmZhbHNlLCJpc1NhbWVEYXlTdWJtaXNzaW9uIjp0cnVlLCJzaGFyZU1zZyI6IiIsImRlc2MiOiIiLCJzdGFydFRpbWUiOm51bGwsImR1ZURhdGUiOm51bGwsImlzRHVlRGF0ZSI6ZmFsc2UsImVuZEluZGV4IjozMjAsImlzQXNzaWdubWVudCI6ZmFsc2UsImNvdW50IjoxMCwiZW5kT2ZDb250ZW50IjozMjAsInNlZ21lbnRDb3VudEluZGV4IjoxNX0seyJfaWQiOiI2OTk2OGUxOTdjZmQ4ZmUyMDAyZDdlMzciLCJpZCI6IjY5ODFjZmU3Mjg1ZjViNDkzMmIyMmJlNiIsInN0YXJ0SW5kZXgiOjMyMSwidGl0bGUiOiJTdHJ1Y3R1cmVzIiwic2tpcEFsbG93ZWQiOmZhbHNlLCJzaGFyZSI6ZmFsc2UsImlzU3VibWlzc2lvbkFsbG93ZWQiOmZhbHNlLCJpc1NhbWVEYXlTdWJtaXNzaW9uIjp0cnVlLCJzaGFyZU1zZyI6IiIsImRlc2MiOiIiLCJzdGFydFRpbWUiOm51bGwsImR1ZURhdGUiOm51bGwsImlzRHVlRGF0ZSI6ZmFsc2UsImVuZEluZGV4IjozMzAsImlzQXNzaWdubWVudCI6ZmFsc2UsImNvdW50IjoxMCwiZW5kT2ZDb250ZW50IjozMzAsInNlZ21lbnRDb3VudEluZGV4IjoxNn0seyJfaWQiOiI2OTk2OGUxOTdjZmQ4ZmUyMDAyZDdlMzYiLCJpZCI6IjY5ODFjZmU3Mjg1ZjViNDkzMmIyMmJlNyIsInN0YXJ0SW5kZXgiOjMzMSwidGl0bGUiOiJVbmlvbnMiLCJza2lwQWxsb3dlZCI6ZmFsc2UsInNoYXJlIjpmYWxzZSwiaXNTdWJtaXNzaW9uQWxsb3dlZCI6ZmFsc2UsImlzU2FtZURheVN1Ym1pc3Npb24iOnRydWUsInNoYXJlTXNnIjoiIiwiZGVzYyI6IiIsInN0YXJ0VGltZSI6bnVsbCwiZHVlRGF0ZSI6bnVsbCwiaXNEdWVEYXRlIjpmYWxzZSwiZW5kSW5kZXgiOjMzMywiaXNBc3NpZ25tZW50IjpmYWxzZSwiY291bnQiOjMsImVuZE9mQ29udGVudCI6MzMzLCJzZWdtZW50Q291bnRJbmRleCI6MTd9LHsiX2lkIjoiNjk5NjhlMTk3Y2ZkOGZlMjAwMmQ3ZTM1IiwiaWQiOiI2OTgxY2ZlNzI4NWY1YjQ5MzJiMjJiZTgiLCJzdGFydEluZGV4IjozMzQsInRpdGxlIjoiRmlsZSBIYW5kbGluZyIsInNraXBBbGxvd2VkIjpmYWxzZSwic2hhcmUiOmZhbHNlLCJpc1N1Ym1pc3Npb25BbGxvd2VkIjpmYWxzZSwiaXNTYW1lRGF5U3VibWlzc2lvbiI6dHJ1ZSwic2hhcmVNc2ciOiIiLCJkZXNjIjoiIiwic3RhcnRUaW1lIjpudWxsLCJkdWVEYXRlIjpudWxsLCJpc0R1ZURhdGUiOmZhbHNlLCJlbmRJbmRleCI6MzUxLCJpc0Fzc2lnbm1lbnQiOmZhbHNlLCJjb3VudCI6MTgsImVuZE9mQ29udGVudCI6MzUxLCJzZWdtZW50Q291bnRJbmRleCI6MTh9XSwiYXR0ZW1wdEluU2VxdWVuY2UiOmZhbHNlLCJsYW5ndWFnZXNBbGxvd2VkIjpbIjciXSwiY291cnNlQ29udGVudCI6eyJfaWQiOiI2OTk2OGUxOTdjZmQ4ZmUyMDAyZDdlMjciLCJpZCI6IjVkNDZiY2MxNjk1ZmRhM2IyY2QwYTc3ZCIsImV4ZWN1dGlvblR5cGUiOiIzIiwiZGlmZmljdWx0eUxldmVsIjozLCJzaG93SGVhZCI6dHJ1ZSwic2hvd1RhaWwiOnRydWUsInNob3dTb2x1dGlvbiI6ZmFsc2UsInNraXBBbGxvd2VkIjpmYWxzZSwic2hvd0N1c3RvbUlucHV0Ijp0cnVlLCJjb250ZW50VHlwZSI6IjMiLCJpc0Fzc2lnbm1lbnQiOmZhbHNlLCJmaWxlcyI6W119LCJhbGxvd0NvZGVTaGFyaW5nIjpmYWxzZSwiYXNzaWdubWVudFNlZ21lbnRzIjpbXSwiaXNBc3NpZ25tZW50IjpmYWxzZSwic3RhcnRPZkFzc2lnbm1lbnRDb250ZW50IjozNTEsImNvbnRlbnRJbmRleCI6MTMsInNlZ21lbnREYXRhIjp7InNlZ21lbnRJbmRleCI6Miwic2VnbWVudE9iaiI6eyJfaWQiOiI2OTk2OGUxOTdjZmQ4ZmUyMDAyZDdlNDUiLCJpZCI6IjY5ODFjZmU3Mjg1ZjViNDkzMmIyMmJkOCIsInN0YXJ0SW5kZXgiOjEwLCJ0aXRsZSI6IklucHV0ICBPdXRwdXQiLCJza2lwQWxsb3dlZCI6ZmFsc2UsInNoYXJlIjpmYWxzZSwiaXNTdWJtaXNzaW9uQWxsb3dlZCI6ZmFsc2UsImlzU2FtZURheVN1Ym1pc3Npb24iOnRydWUsInNoYXJlTXNnIjoiIiwiZGVzYyI6IiIsInN0YXJ0VGltZSI6bnVsbCwiZHVlRGF0ZSI6bnVsbCwiaXNEdWVEYXRlIjpmYWxzZSwiZW5kSW5kZXgiOjE2LCJpc0Fzc2lnbm1lbnQiOmZhbHNlLCJjb3VudCI6NywiZW5kT2ZDb250ZW50IjoxNiwic2VnbWVudENvdW50SW5kZXgiOjJ9LCJjb250ZW50SW5kZXgiOjEzLCJwcmVTZWdtZW50T2JqIjp7Il9pZCI6IjY5OTY4ZTE5N2NmZDhmZTIwMDJkN2U0NiIsImlkIjoiNjk4MWNmZTcyODVmNWI0OTMyYjIyYmQ3Iiwic3RhcnRJbmRleCI6MywidGl0bGUiOiJCdWlsZGluZyBCbG9ja3Mgb2YgQyIsInNraXBBbGxvd2VkIjpmYWxzZSwic2hhcmUiOmZhbHNlLCJpc1N1Ym1pc3Npb25BbGxvd2VkIjpmYWxzZSwiaXNTYW1lRGF5U3VibWlzc2lvbiI6dHJ1ZSwic2hhcmVNc2ciOiIiLCJkZXNjIjoiIiwic3RhcnRUaW1lIjpudWxsLCJkdWVEYXRlIjpudWxsLCJpc0R1ZURhdGUiOmZhbHNlLCJlbmRJbmRleCI6OSwiaXNBc3NpZ25tZW50IjpmYWxzZSwiY291bnQiOjcsImVuZE9mQ29udGVudCI6OSwic2VnbWVudENvdW50SW5kZXgiOjF9LCJuZXh0U2VnbWVudE9iaiI6eyJfaWQiOiI2OTk2OGUxOTdjZmQ4ZmUyMDAyZDdlNDQiLCJpZCI6IjY5ODFjZmU3Mjg1ZjViNDkzMmIyMmJkOSIsInN0YXJ0SW5kZXgiOjE3LCJ0aXRsZSI6Ik9wZXJhdG9ycyBhbmQgT3BlcmF0aW9ucyIsInNraXBBbGxvd2VkIjpmYWxzZSwic2hhcmUiOmZhbHNlLCJpc1N1Ym1pc3Npb25BbGxvd2VkIjpmYWxzZSwiaXNTYW1lRGF5U3VibWlzc2lvbiI6dHJ1ZSwic2hhcmVNc2ciOiIiLCJkZXNjIjoiIiwic3RhcnRUaW1lIjpudWxsLCJkdWVEYXRlIjpudWxsLCJpc0R1ZURhdGUiOmZhbHNlLCJlbmRJbmRleCI6MzIsImlzQXNzaWdubWVudCI6ZmFsc2UsImNvdW50IjoxNiwiZW5kT2ZDb250ZW50IjozMiwic2VnbWVudENvdW50SW5kZXgiOjN9LCJzZWdtZW50U3RhcnQiOjksImlzTGFzdFF1ZXN0aW9uIjpmYWxzZSwic2VnbWVudEluZGV4U3RhcnQiOjAsInNlZ21lbnRJbmRleEVuZCI6MTgsImlzQXNzaWdubWVudCI6ZmFsc2UsInN0YXJ0T2ZBc3NpZ25tZW50Q29udGVudCI6MzUxfSwicHJldlF1ZXN0aW9uRGF0YSI6eyJpc0N1cnJlbnRTdWJtaXNzaW9uQWxsb3dlZCI6dHJ1ZX0sImlzUXVpeiI6ZmFsc2V9')
+    console.log({ courseObj });
+  ''
+</script>
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+    
+    
+    <!-- To Be Fixed Late -->
+    <div id="loader-container" style="display: none;">
+	<div class="loadingio-spinner-message-hn8fd8qi4q6">
+		<div class="ldio-ij9srawx00g">
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+	</div>
+</div>
+<div id="loader-container-progress" style="display: none;">
+	<div class="upload-progress-container">
+		<div>
+			<div id="progress-bar-container">
+				<div id="progress-bar"></div>
+			</div>
+			<p id="progress-bar-message" style="text-align: center;">Processings</p>
+		</div>
+	</div>
+</div>
+    <script src="./Testpad_pra_files_files/loader.js.download"></script>
+    <!-- To Be Fixed Late -->
+    
+    <!-- The alert Modal -->
+<div class="toast-alert">
+	<div class="toast-alert-body">
+	   <p id="alert-message">This is a success message.</p>
+	</div>
+</div>
+
+    <!-- The Modal -->
+<div id="myModal-confirm" class="modal-input-confirm">
+	<!-- Modal content -->
+	<div class="modal-content-input-confirm">
+		<div class="modal-content-header">
+			<div class="text-right d-none">
+				<span id="close-btn-confirm">×</span>
+			</div>
+			<p id="confirm-text">Are you sure want to delete this.</p>
+		</div>
+		<div class="btns-container">
+			<button type="button" id="yes-btn-modal" class="yes-btn">Yes</button>
+			<button type="button" id="no-btn-modal" class="no-btn">No</button>
+		</div>
+	</div>
+</div>
+    <div class="share-form-container" id="share-modal">
+  <div class="share-div-container">
+      <div class="welcome-share-container">
+          <div class="close-share-container">
+              <img id="close-share-modal" src="./Testpad_pra_files_files/close (4).png" alt="close-icon">
+          </div>
+          <div class="complete-segment-text-container">
+              <p class="hurr-text">HURRAY!</p>
+              <p class="complete-segment-text">This section is complete!</p>
+              <p class="share-this">Share this with your friends?</p>
+          </div>
+      </div>
+      <div class="main-share-content-container">
+          <textarea class="share-content-box" id="shareMsg" readonly="">          </textarea>
+          <div class="share-social-icon-container" id="shareSocialIconsContainer">
+              <div>
+                  <a href="https://web.whatsapp.com/send?text=https://codequotient.com/" id="whatsapp-url">
+                      <img class="social-icon" src="./Testpad_pra_files_files/003-whatsapp.svg" alt="whatsapp">
+                      <p>Whatsapp</p>
+                  </a>
+              </div>
+              <div>
+                  <a href="https://twitter.com/intent/tweet?url=https://codequotient.com&amp;text=Check%20this%20out:" id="twitter-url">
+                  <img class="social-icon" src="./Testpad_pra_files_files/013-twitter.svg" alt="twitter">
+                  <p>Twitter</p>
+              </a>
+              </div>
+              <div>
+                  <a href="http://reddit.com/submit?url=https://codequotient.com&amp;title=Check%20this%20out" id="reddit-url">
+                      <img class="social-icon" src="./Testpad_pra_files_files/015-reddit.svg" alt="reddit">
+                      <p>Reddit</p>
+                  </a>
+              </div>
+              <div>
+                  <a href="https://www.facebook.com/sharer.php?u=https://codequotient.com/" id="fb-url">
+                      <img class="social-icon" src="./Testpad_pra_files_files/001-facebook.svg" alt="fb">
+                      <p>Facebook</p>
+                  </a>
+              </div>
+              <div>
+                  <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://codequotient.com/&amp;title=Check%20this%20out&amp;summary=An%20amazing%20Coding!&amp;source=" id="linkedin-url">
+                  <img class="social-icon" src="./Testpad_pra_files_files/010-linkedin.svg" alt="linkedIN">
+                  <p>LinkedIn</p>
+              </a>
+              </div>
+
+          </div>
+          <div class="copy-link-container">
+              <p>codequotient.com/arvindghosh928397..</p>
+              <img src="./Testpad_pra_files_files/link.svg">
+          </div>
+      </div>
+  </div>
+</div>
+    <!-- header -->
+	  <nav class="navbar navbar-expand-lg navbar-white shadow-sm bg-white fixed-top">
+    <a class="navbar-brand" href="https://course.testpad.chitkara.edu.in/">
+        <img src="./Testpad_pra_files_files/chitkara.png" class="logo cursor-pointer" alt="logo">
+    </a>
+    <!-- left-navbar and rightsidebar-navbar -->
+    <div class="collapse navbar-collapse left-navbar sidebar sidebar-offcanvas" id="navbarSidebar">
+        <ul class="navbar-nav">
+            <!-- Mentor left-navbar -->
+            
+            
+            
+            
+            <!-- Learner left-navbar -->
+            
+            <li class="nav-item">
+                <a class="nav-link mobile-nav-link tooltip-down" href="https://course.testpad.chitkara.edu.in/user-dashboard" data-customtooltip="Dashboard">
+                    <img src="./Testpad_pra_files_files/menu-active.svg" class="active-link-img">
+                    <img src="./Testpad_pra_files_files/menu-1.svg" class="link-img">
+                    <span class="mobile-text" style="display: none;">Dashboard</span>
+                </a>
+            </li>
+            
+            
+            <!-- <li class="nav-item">
+                <a class="nav-link mobile-nav-link tooltip-down" href="/discussion" data-customTooltip='Discussions'>
+                    <div class="unreadMessagesContainer">
+                        <img src="/icons/chat-active.svg" class="active-link-img">
+                        <img src="/icons/chat-nav.svg" class="link-img">
+                        <div class="unreadMsgCount">
+                            <small class="active-link-text" id="unreadMessageCount"></small>
+                        </div>
+                    </div>
+                    <span class="mobile-text" style="display: none;">Discussions</span>
+                </a>
+            </li> -->
+            
+            
+            <li class="nav-item">
+                <a class="nav-link mobile-nav-link attempt-mobile-link tooltip-down" data-customtooltip="Attempts" href="https://course.testpad.chitkara.edu.in/attempts/attemptedQuestion">
+                    <img src="./Testpad_pra_files_files/statistics-active.svg" class="active-link-img mobile-position">
+                    <img src="./Testpad_pra_files_files/statistics.svg" class="link-img mobile-position">
+                    <span class="mobile-text" style="display: none;">Attempts</span>
+                </a>
+            </li>
+            
+            <li class="nav-item mobile-playground" style="display:none">
+                <a class="nav-link mobile-nav-link attempt-mobile-link tooltip-down" data-customtooltip="Attempts" href="https://course.testpad.chitkara.edu.in/playground">
+                    <img src="./Testpad_pra_files_files/playground.svg" class="active-link-img mobile-position">
+                    <img src="./Testpad_pra_files_files/playground-normal.svg" class="link-img mobile-position">
+                    <span class="mobile-text" style="display: none;">Playground</span>
+                </a>
+            </li>
+            <li class="nav-item" style="background: #fff; cursor:default !important">
+                <a class="nav-link d-md-block d-none">
+                    <span id="connection-status-container" style="display: flex;align-items: center;position: relative;top: 1px;"></span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <ul class="navbar-nav ml-auto d-flex align-items-center flex-row">
+        
+        <li class="nav-item mx-md-4 mx-4 plus-nav-section plus-nav-dropdown">
+            <span class="plus-nav-icon">+</span>
+            <!-- plus-nav-dropdown-menu start -->
+            <div class="plus-nav-dropdown-menu">
+                <a href="https://course.testpad.chitkara.edu.in/playground" class="plus-nav-dropdown-item">
+                    <img src="./Testpad_pra_files_files/playground.svg">
+                    <span>Playground</span>
+                </a>
+                
+                <a href="https://course.testpad.chitkara.edu.in/pythonNotebook" class="plus-nav-dropdown-item">
+                    <img src="./Testpad_pra_files_files/playground.svg">
+                    <span>Python Notebook</span>
+                </a>
+            </div>
+            <!-- plus-nav-dropdown-menu end -->
+        </li>
+        
+        
+        <li class="nav-item mr-md-4 mr-4 square-dropdown">
+            <div class="square-dropdown-img">
+                <img src="./Testpad_pra_files_files/icons8-squared-menu-90.png" class="cursor-pointer" width="25px" height="25px">
+            </div>
+            <div class="square-dropdown-menu" style="width:320px !important;max-width:300px !important">
+                <div class="square-dropdown-menu-inner">
+
+                    <!-- Test tab -->
+                    <a href="https://assess.testpad.chitkara.edu.in/" class="square-dropdown-item" id="quizServerRedirect">
+                        <img src="./Testpad_pra_files_files/quiz.svg" width="30px" height="30px">
+                        <span>Test</span>
+                    </a>
+
+                    <!-- course tab -->
+                    
+                    
+                        <a href="https://course.testpad.chitkara.edu.in/learning-modules" class="square-dropdown-item">
+                            <img src="./Testpad_pra_files_files/folder-2.svg" width="30px" height="30px">
+                            <span>Courses</span>
+                        </a>
+                    
+
+                    <!-- Tutorial -->
+                    
+
+
+                    <!-- Question : S.Admin / Content Writer + AddQuestion -->
+                    
+
+                    <!-- Email Templates -->
+                    
+
+                    
+
+                    
+
+                    <!-- workspace -->
+                    
+
+                    
+
+                    <!-- Reports -->
+                    
+
+                    <!-- Timeline -->
+                    
+                     
+                    <!-- Institution -->
+                    
+
+                    <!-- Emails -->
+                    
+
+                    <!-- Add Batch -->
+                    
+
+                    <!-- Email Page  -->
+                    
+
+                    <!-- Form  TODO -->
+                    
+
+                    
+
+                    <!-- Blogs -->
+                    
+                    
+                    
+
+                    <!-- Favourites tab -->
+                    
+                    <a href="https://course.testpad.chitkara.edu.in/favourites/list" class="square-dropdown-item">
+                        <img src="./Testpad_pra_files_files/iconmonstr-star-3.svg" width="30px" height="30px">
+                        <span>Bookmarks</span>
+                    </a>
+                    
+
+                    <!-- Projects tab -->
+                    
+
+                    
+
+                    <!-- mentor Attempts -->
+                    
+
+                     <!-- mentor user-info -->
+                    
+
+                    
+
+                    <!-- Profile tab -->
+                    
+
+                    <!-- Lead management -->
+                    
+                    
+                </div>
+            </div>
+        </li>
+        
+
+        <!-- notification dropdown start -->
+        <!-- <li class="nav-item mr-4 notification-dropdown">
+            <div style="position: relative;cursor: pointer !important;" class="mr-1">
+                <div class="notification-img">
+                    <img src="/icons/notification-bell-svgrepo-com.svg" class="cursor-pointer" width="20px" height="20px"/>
+                </div>
+                <div style="background-color: #de6834;min-width: 22px;height: 22px;border-radius: 50%;position: absolute;top: -1px;right: -10px;display: none;color: white;text-align: center;" id="notification-count-div"><div style="display: flex;justify-content: center;align-items: center;width: 100%;height: 100%;padding-bottom: 2px;"><small id="notification-count">0</small></div></div>
+            </div>
+            <div class="notification-dropdown-menu">
+                <div class="notification-header d-flex justify-content-between align-items-center">
+                    <span>Notifications</span>
+                    <span class="mb-1 reload-notification">
+                      <img src="/icons/refresh.svg" width="23px"/>
+                    </span>
+                </div>
+                <div class="notification-body" style="max-height: 250px;overflow-y: auto;position: relative;">
+                    <ul class="notifications-body-lists">
+                        <div class="notification-load text-center py-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 50 50">
+                                <path fill="#de6834" d="M25,5A20.14,20.14,0,0,1,45,22.88a2.51,2.51,0,0,0,2.49,2.26h0A2.52,2.52,0,0,0,50,22.33a25.14,25.14,0,0,0-50,0,2.52,2.52,0,0,0,2.5,2.81h0A2.51,2.51,0,0,0,5,22.88,20.14,20.14,0,0,1,25,5Z">
+                                  <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.5s" repeatCount="indefinite"/>
+                                </path>
+                            </svg>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </li> -->
+               
+        <!-- notification dropdown end -->
+
+        <!-- profile-dropdown start -->
+        <li class="nav-item mr-md-0 mr-2 profile-dropdown">
+            <!-- desktop-profile-info start -->
+            <a class="nav-link d-flex align-items-center" href="https://course.testpad.chitkara.edu.in/attempt/attemptquestion/69968acc7cfd8fe2002d7c40/5d46bcc1695fda3b2cd0a77d#">
+                <div class="text-right mr-2 profile-info d-md-block d-none">
+                    <p class="profile-display-name">OM AGGARWAL</p>
+                    <p class="profile-role">Student</p>
+                </div>
+
+                    
+                        <div id="user-img" class="project-user-img">O</div>
+                    
+
+            </a>
+            <!-- desktop-profile-info end -->
+
+            <!-- Dropdown-menu start -->
+            <div class="profile-dropdown-menu">
+                <!-- mobile-profile-info start -->
+                <div class="d-md-none d-block">
+                    <div class="profile-dropdown-item mobile-profile-info" style="align-items: flex-start;">
+                        <div style="display: flex; justify-content: center; align-items: center; width: 35px; height: 35px; border-radius: 50%;overflow: hidden;">
+                            <img src="./Testpad_pra_files_files/portrait_placeholder_circle.png" style="width: 35px; height: 35px; margin-right: 0px;" loading="lazy">
+                        </div>
+                        <div class="ml-1 d-flex flex-column">
+                            <span class="mobile-display-name">OM AGGARWAL</span>
+                            <span class="mobile-role">Student</span>
+                        </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                </div>
+                <!-- mobile-profile-info end -->
+                <a href="https://course.testpad.chitkara.edu.in/settings" class="profile-dropdown-item">
+                    <img src="./Testpad_pra_files_files/password.svg">
+                    <span>Settings</span>
+                </a>
+                <a href="https://course.testpad.chitkara.edu.in/logout" class="profile-dropdown-item">
+                    <img src="./Testpad_pra_files_files/logout.svg">
+                    <span>Logout</span>
+                </a>
+            </div>
+            <!-- Dropdown-menu end -->
+        </li>
+    </ul>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSidebar" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="material-icons">menu</span>
+    </button>
+</nav>
+<div class="modal fade" id="createNewProjectModal" tabindex="-1" role="dialog" aria-labelledby="createNewProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width: 450px;">
+        <div class="modal-content">
+            <div class="modal-header modal__header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 0px 25px 15px 25px">
+                <div class="">
+                    <div>
+                        <span class="active-project-header">Create new project</span>
+                    </div>
+
+                    <form id="project-create-new-form" style="margin-top: 15px;">
+                        <div class="form-group">
+                            <label class="mb-0" for="project-form-modal-projectTitle">Project
+                                title*</label>
+                            <input type="text" class="form-control" id="project-form-modal-projectTitle" name="projectName" placeholder="e.g. playlist queue">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="mb-0" for="project-form-modal-projectLanguage">Project
+                                language*</label>
+                            <select class="form-control" id="project-form-modal-projectLanguage" name="language" title="Select project language">
+                                <option value="">Select project language</option>
+                                
+                                
+                                
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="mb-0" for="project-form-modal-remoteAccountType">Project*</label>
+                            <select class="form-control" id="project-form-modal-remoteAccountType" name="remoteAccountType" onchange="remoteAccountTypeChange(event)">
+                                <option value="0" selected="">Chitkara</option>
+                                
+                                
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="github-import-url-field" style="display: none;">
+                            <label class="mb-0" for="project-form-modal-github-url">import with
+                                github</label>
+                            <input type="text" class="form-control" id="project-form-modal-github-url" name="github_URL" placeholder="e.g. https://github.com/username/repo-name">
+                        </div>
+
+                        <div class="text-center" style="margin-top: 25px;">
+                            <button type="button" class="btn" onclick="createProjectFromModal()">create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* calender css */
+    .calendar-sidebar {
+        top: 53px;
+        z-index: 98;
+        width: 440px;
+        right: -440px;
+        position: fixed;
+        transition: 0.5s;
+        background-color: white;
+        height: calc(100vh - 53px);
+        -webkit-transition: all 0.25s ease-out;
+        -o-transition: all 0.25s ease-out;
+        transition: all 0.25s ease-out;
+        box-shadow: 0px 3px 6px #00000029;
+    }
+
+    .calendar-sidebar.show {
+        right: 0 !important;
+    }
+
+    .calender-sidebar-header {
+        display: flex;
+        padding: 15px 18px;
+        border-bottom: 1px solid #D1D1D1;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .calendar-sidebar .calender-sidebar-header .close {
+        font-size: 32px;
+    }
+
+    #calendarModal .calender-header {
+        padding: 10px 18px;
+    }
+
+    #calendarModal .current-dateInCalender {
+        width: 130px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    #calendarModal .goToHomeBtn {
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+    #calendarModal #selectedClass {
+        color: #000;
+        font-size: 15px;
+        font-weight: 500;
+    }
+
+    #calendarModal {
+        font-family: 'Mulish', sans-serif !important;
+    }
+
+    #calendarModal .icons i,
+    .icons i:hover {
+        color: #de6834;
+        font-size: 23px;
+        font-weight: 600;
+        border-radius: 50%;
+        padding: 5px 12px;
+        background-color: #FCEBE2;
+    }
+
+    #calendarModal .calendar ul {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        text-align: center;
+        padding: 0px 8px;
+    }
+
+    #calendarModal .calendar ul.weeks {
+        padding: 8.5px 8px;
+        background-color: #FFEEE5;
+    }
+
+    #calendarModal .calendar .days {
+        padding-bottom: 20px;
+    }
+
+    #calendarModal .calendar li {
+        color: #333;
+        font-size: 15px;
+        width: calc(100% / 7);
+    }
+
+    #calendarModal .calendar .weeks li {
+        cursor: default;
+        color: #de6834;
+        font-weight: 600;
+    }
+
+    #calendarModal .calendar .days li {
+        z-index: 1;
+        cursor: pointer;
+        position: relative;
+        margin-top: 12px;
+    }
+
+    #calendarModal .days li.inactive {
+        color: #aaa;
+        cursor: default;
+        opacity: 0;
+    }
+
+    #calendarModal .days li.active {
+        color: #fff;
+    }
+
+    #calendarModal .days li::before {
+        position: absolute;
+        content: "";
+        left: 50%;
+        top: 50%;
+        height: 40px;
+        width: 40px;
+        z-index: -1;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    #calendarModal .days li.present::after {
+        position: absolute;
+        content: "";
+        left: 50%;
+        bottom: -4px;
+        height: 5px;
+        width: 5px;
+        z-index: 1;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #00C68D;
+    }
+
+    #calendarModal .days li.past::after {
+        position: absolute;
+        content: "";
+        left: 50%;
+        bottom: -4px;
+        height: 5px;
+        width: 5px;
+        z-index: 1;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgb(255, 0, 0);
+    }
+
+    #calendarModal .days li.past.selected::after {
+        background-color: #fff;
+    }
+
+    #calendarModal .days li.active {
+        color: #de6834;
+        font-weight: 600;
+    }
+
+    #calendarModal .days li.active::before {
+        background: transparent;
+    }
+
+    #calendarModal .days li:not(.active):hover::before {
+        background: #f2f2f2;
+    }
+
+    #calendarModal .days li.selected {
+        color: #fff;
+    }
+
+    #calendarModal .days li.selected::before,
+    #calendarModal .days li.selected:hover::before {
+        background: #de6834;
+    }
+
+    #calendarModal .linear-background {
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+        animation-iteration-count: infinite;
+        animation-name: placeHolderShimmer;
+        animation-timing-function: linear;
+        background: #f6f7f8;
+        background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+        background-size: 1000px 104px;
+        height: 115px;
+        margin-bottom: 15px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    @keyframes placeHolderShimmer {
+        0% {
+            background-position: -468px 0
+        }
+
+        100% {
+            background-position: 468px 0
+        }
+    }
+
+    #calendarModal ul.timeline {
+        list-style-type: none;
+        position: relative;
+        margin-left: 15px;
+    }
+
+    #calendarModal ul.timeline:before {
+        left: 5px;
+        width: 2px;
+        top: -20px;
+        height: 100%;
+        z-index: 400;
+        content: ' ';
+        position: absolute;
+        background: #d4d9df;
+        display: inline-block;
+    }
+
+    #calendarModal ul.timeline li {
+        margin: 0px 0px 20px 0px;
+        cursor: default;
+        margin-left: 20px;
+        margin-right: 20px;
+        position: relative;
+    }
+
+    #calendarModal ul.timeline li a,
+    ul.timeline li a:hover {
+        color: #333;
+        text-decoration: none;
+    }
+
+    #calendarModal ul.timeline li:last-child {
+        margin-bottom: 10px !important;
+    }
+
+    #calendarModal ul.timeline li:before {
+        top: 50%;
+        left: -19px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        z-index: 500;
+        content: ' ';
+        cursor: default;
+        position: absolute;
+        background: #898989;
+        display: inline-block;
+    }
+
+    #calendarModal .gap-5 {
+        gap: 5px;
+    }
+
+    #calendarModal .gap-30 {
+        gap: 0px 30px;
+    }
+
+
+
+
+
+
+
+
+
+    #calendarModal .previous {
+        left: unset;
+        min-height: fit-content;
+    }
+
+    #calendarModal .previous a {
+        opacity: .8;
+    }
+
+    #calendarModal .previous .badgeTime small {
+        font-size: 17px;
+        color: #333333;
+        font-weight: 700;
+        width: fit-content;
+        text-transform: lowercase;
+    }
+
+    #calendarModal .previous .class-title,
+    #calendarModal .upcoming .class-title {
+        font-size: 15px;
+        color: #333333;
+        font-weight: 700;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+    }
+
+    #calendarModal .previous small,
+    #calendarModal .upcoming small {
+        color: #333333;
+        font-weight: 600;
+    }
+
+
+    #calendarModal .upcoming {
+        min-height: fit-content;
+    }
+
+    #calendarModal ul.timeline li.upcoming:before {
+        background: #449839;
+    }
+
+    #calendarModal .upcoming .badgeTime small {
+        font-size: 17px;
+        color: #333333;
+        font-weight: 700;
+        width: fit-content;
+        text-transform: lowercase;
+    }
+
+    #calendarModal .filter-radio input {
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
+    }
+
+    #calendarModal .previous .class-content-section {
+        width: 70%;
+        padding: 6px 12px;
+        border-top-left-radius: 5px;
+        background-color: #F7F7F7;
+        border-bottom-left-radius: 5px;
+    }
+
+    #calendarModal .upcoming .class-content-section {
+        width: 70%;
+        padding: 6px 12px;
+        border-radius: 5px;
+        background-color: #DBFFD6;
+    }
+
+    #calendarModal .class-action-icons {
+        gap: 10px;
+        padding: 0px 12px;
+        justify-content: center;
+        border-bottom-right-radius: 5px;
+        border-top-right-radius: 5px;
+        border: 1px solid #D8D8D8;
+        border-left: none !important;
+    }
+
+    #calendarModal .class-action-icon img {
+        width: 30px;
+    }
+
+
+
+
+
+
+
+
+
+    #calendarModal #previousClassRadio {
+        accent-color: red;
+    }
+
+    #calendarModal #upcomingClassRadio {
+        accent-color: green;
+    }
+
+    #calendarModal #allClassRadio {
+        accent-color: black;
+    }
+
+    #calendarModal .dropdown.bootstrap-select {
+        width: unset !important;
+    }
+
+    #calendarModal .dropdown-calender {
+        position: relative;
+    }
+
+    #calendarModal .dropdown-menu-calender {
+        top: 25px;
+        left: 0px;
+        z-index: 10;
+        padding: 15px;
+        position: absolute;
+        background: #fff;
+        box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px;
+    }
+
+    #calendarModal .dropdown-menu-calender .bootstrap-select>.dropdown-toggle {
+        width: 165px !important;
+    }
+
+    #calendarModal .dropdown-menu-calender .dropdown-menu .inner.show,
+    #calendarModal .dropdown-menu-calender .dropdown-menu.show {
+        width: 165px !important;
+    }
+
+    #calendarModal .goToBtn {
+        border: 0;
+        outline: 0;
+        color: white;
+        border-radius: 3px;
+        font-weight: 500;
+        font-family: 'Hind', sans-serif;
+        padding: 8px 25px 6px 25px;
+        background-color: #de6834;
+    }
+</style>
+<!-- Modal -->
+<div class="calendar-sidebar" id="calendarModal" style="display: bloc;">
+    <div class="calender-content">
+        <div class="calender-sidebar-header">
+            <div class="dropdown bootstrap-select"><select id="filterByPresenter" class="selectpicker" data-live-search="true" tabindex="-98"></select><button type="button" class="btn dropdown-toggle btn-light bs-placeholder" data-toggle="dropdown" role="combobox" aria-owns="bs-select-1" aria-haspopup="listbox" aria-expanded="false" data-id="filterByPresenter" title="Nothing selected"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="bs-searchbox"><input type="search" class="form-control" autocomplete="off" role="combobox" aria-label="Search" aria-controls="bs-select-1" aria-autocomplete="list"></div><div class="inner show" role="listbox" id="bs-select-1" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+            <button class="close close-calendar-sidebar"><span class="material-icons close" onclick="$(&#39;#calendarModal&#39;).removeClass(&#39;show&#39;)">close</span></button>
+        </div>
+        <div class="calender-body p-0">
+            <div class="row" style="margin: 0; width: 100%;">
+                <div class="col-12 p-0">
+                    <div class="container-fluid px-0">
+                        <div class="calendar-container">
+                            <div class="calender-header d-flex justify-content-between align-items-center">
+                                <div class="calender-header-left d-flex align-items-center">
+                                    <div class="dropdown-calender">
+                                        <h5 class="current-dateInCalender mb-0" onclick="$(this).parent().find(&#39;.dropdown-menu-calender&#39;).toggleClass(&#39;d-none&#39;);">April 2026</h5>
+                                        <div class="dropdown-menu-calender d-none" style="width: 390px">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="dropdown bootstrap-select"><select id="toSelectYear" class=""><option value="2027">2027</option><option value="2026">2026</option><option value="2025">2025</option><option value="2024">2024</option><option value="2023">2023</option><option value="2022">2022</option><option value="2021">2021</option><option value="2020">2020</option><option value="2019">2019</option><option value="2018">2018</option><option value="2017">2017</option><option value="2016">2016</option><option value="2015">2015</option><option value="2014">2014</option><option value="2013">2013</option><option value="2012">2012</option><option value="2011">2011</option><option value="2010">2010</option><option value="2009">2009</option><option value="2008">2008</option><option value="2007">2007</option><option value="2006">2006</option><option value="2005">2005</option><option value="2004">2004</option><option value="2003">2003</option><option value="2002">2002</option><option value="2001">2001</option><option value="2000">2000</option></select><button type="button" tabindex="-1" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="combobox" aria-owns="bs-select-2" aria-haspopup="listbox" aria-expanded="false" data-id="toSelectYear" title="2026"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">2026</div></div> </div></button><div class="dropdown-menu " style="max-height: 476px; overflow: hidden; min-height: 128px;"><div class="inner show" role="listbox" id="bs-select-2" tabindex="-1" aria-activedescendant="bs-select-2-1" style="max-height: 476px; overflow-y: auto; min-height: 128px;"><ul class="dropdown-menu inner show" role="presentation" style="margin-top: 0px; margin-bottom: 0px;"><li><a role="option" class="dropdown-item" id="bs-select-2-0" tabindex="0"><span class="text">2027</span></a></li><li class="selected active"><a role="option" class="dropdown-item active selected" id="bs-select-2-1" tabindex="0" aria-setsize="28" aria-posinset="2" aria-selected="true"><span class="text">2026</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-2" tabindex="0"><span class="text">2025</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-3" tabindex="0"><span class="text">2024</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-4" tabindex="0"><span class="text">2023</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-5" tabindex="0"><span class="text">2022</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-6" tabindex="0"><span class="text">2021</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-7" tabindex="0"><span class="text">2020</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-8" tabindex="0"><span class="text">2019</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-9" tabindex="0"><span class="text">2018</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-10" tabindex="0"><span class="text">2017</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-11" tabindex="0"><span class="text">2016</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-12" tabindex="0"><span class="text">2015</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-13" tabindex="0"><span class="text">2014</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-14" tabindex="0"><span class="text">2013</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-15" tabindex="0"><span class="text">2012</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-16" tabindex="0"><span class="text">2011</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-17" tabindex="0"><span class="text">2010</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-18" tabindex="0"><span class="text">2009</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-19" tabindex="0"><span class="text">2008</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-20" tabindex="0"><span class="text">2007</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-21" tabindex="0"><span class="text">2006</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-22" tabindex="0"><span class="text">2005</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-23" tabindex="0"><span class="text">2004</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-24" tabindex="0"><span class="text">2003</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-25" tabindex="0"><span class="text">2002</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-26" tabindex="0"><span class="text">2001</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-2-27" tabindex="0"><span class="text">2000</span></a></li></ul></div></div></div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="dropdown bootstrap-select"><select id="toSelectMonth" class="selectpicker">
+                                                        <option value="0">January</option>
+                                                        <option value="1">February</option>
+                                                        <option value="2">March</option>
+                                                        <option value="3">April</option>
+                                                        <option value="4">May</option>
+                                                        <option value="5">June</option>
+                                                        <option value="6">July</option>
+                                                        <option value="7">August</option>
+                                                        <option value="8">September</option>
+                                                        <option value="9">October</option>
+                                                        <option value="10">November</option>
+                                                        <option value="11">December</option>
+                                                    </select><button type="button" tabindex="-1" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="combobox" aria-owns="bs-select-3" aria-haspopup="listbox" aria-expanded="false" data-id="toSelectMonth" title="April"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">April</div></div> </div></button><div class="dropdown-menu " style="max-height: 476px; overflow: hidden; min-height: 128px;"><div class="inner show" role="listbox" id="bs-select-3" tabindex="-1" aria-activedescendant="bs-select-3-3" style="max-height: 476px; overflow-y: auto; min-height: 128px;"><ul class="dropdown-menu inner show" role="presentation" style="margin-top: 0px; margin-bottom: 0px;"><li><a role="option" class="dropdown-item" id="bs-select-3-0" tabindex="0"><span class="text">January</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-3-1" tabindex="0"><span class="text">February</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-3-2" tabindex="0"><span class="text">March</span></a></li><li class="selected active"><a role="option" class="dropdown-item active selected" id="bs-select-3-3" tabindex="0" aria-setsize="12" aria-posinset="4" aria-selected="true"><span class="text">April</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-3-4" tabindex="0"><span class="text">May</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-3-5" tabindex="0"><span class="text">June</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-3-6" tabindex="0"><span class="text">July</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-3-7" tabindex="0"><span class="text">August</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-3-8" tabindex="0"><span class="text">September</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-3-9" tabindex="0"><span class="text">October</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-3-10" tabindex="0"><span class="text">November</span></a></li><li><a role="option" class="dropdown-item" id="bs-select-3-11" tabindex="0"><span class="text">December</span></a></li></ul></div></div></div>
+                                                </div>
+                                            </div>
+                                            <div class="text-center pt-3">
+                                                <button class="btn goToBtn" id="goToBtn">Go To</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="icons d-flex gap-30">
+                                        <img src="./Testpad_pra_files_files/arrow-right-line.svg" style="width: 6px; transform: rotate(180deg); cursor: pointer !important;" id="prev">
+                                        <img src="./Testpad_pra_files_files/arrow-right-line.svg" style="width: 6px; cursor: pointer !important;" id="next">
+                                    </div>
+                                </div>
+
+                                <small style="width: 70px; color: #de6834; font-weight: 600; display: none;" class="loading_dots" id="loadingCalender">Loading</small>
+
+                                <small class="goToHomeBtn" onclick="homeCalender()">Goto Today</small>
+                            </div>
+                            <div class="calendar">
+                                <ul class="weeks">
+                                    <li>Sun</li>
+                                    <li>Mon</li>
+                                    <li>Tue</li>
+                                    <li>Wed</li>
+                                    <li>Thu</li>
+                                    <li>Fri</li>
+                                    <li>Sat</li>
+                                </ul>
+                                <ul class="days"><li class="inactive" id="2026_2_29">29</li><li class="inactive" id="2026_2_30">30</li><li class="inactive" id="2026_2_31">31</li><li class="" id="2026_3_1">1</li><li class="" id="2026_3_2">2</li><li class="" id="2026_3_3">3</li><li class="" id="2026_3_4">4</li><li class="" id="2026_3_5">5</li><li class="" id="2026_3_6">6</li><li class="" id="2026_3_7">7</li><li class="" id="2026_3_8">8</li><li class="" id="2026_3_9">9</li><li class="" id="2026_3_10">10</li><li class="" id="2026_3_11">11</li><li class="" id="2026_3_12">12</li><li class="" id="2026_3_13">13</li><li class="" id="2026_3_14">14</li><li class="" id="2026_3_15">15</li><li class="" id="2026_3_16">16</li><li class="" id="2026_3_17">17</li><li class="" id="2026_3_18">18</li><li class="active" id="2026_3_19">19</li><li class="" id="2026_3_20">20</li><li class="" id="2026_3_21">21</li><li class="" id="2026_3_22">22</li><li class="" id="2026_3_23">23</li><li class="" id="2026_3_24">24</li><li class="" id="2026_3_25">25</li><li class="" id="2026_3_26">26</li><li class="" id="2026_3_27">27</li><li class="" id="2026_3_28">28</li><li class="" id="2026_3_29">29</li><li class="" id="2026_3_30">30</li><li class="inactive" id="2026_4_1">1</li><li class="inactive" id="2026_4_2">2</li></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 p-0">
+                    <div class="container-fluid pb-3">
+                        <div class="d-flex justify-content-between align-items-center" style="padding: 0px 5px;">
+                            <small id="selectedClass"></small>
+                            <div class="dropdown bootstrap-select"><select class="selectpicker" id="filterClassByValue" tabindex="-98">
+                                <option value="2">All classes</option>
+                                <option value="1">Upcoming classes</option>
+                                <option value="0">Previous classes</option>
+                            </select><button type="button" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="combobox" aria-owns="bs-select-2" aria-haspopup="listbox" aria-expanded="false" data-id="filterClassByValue" title="All classes"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">All classes</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-2" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+                        </div>
+                        <div class="sheduledclassesInCalender pt-3" style="height: calc(100vh - 435px); overflow:auto">
+                            <div class="w-100" id="noEvent">
+                                <div class="linear-background"></div>
+                                <div class="linear-background"></div>
+                                <div class="linear-background"></div>
+                            </div>
+                            <div class="w-100 pt-3" id="notFound" style="display: none;">
+                                <p class="text-center">No session available</p>
+                            </div>
+                            <ul class="timeline">
+                                <!-- <li class="rounded py-3 px-3"
+                                        style="min-height: fit-content; background-color: #FFE8E5;">
+                                        <div style="background-color: #FF826C; color:#fff; width: fit-content;"
+                                            class="mb-1 px-1 rounded d-flex align-items-center"><small>11:00 AM</small>
+                                        </div>
+                                        <p class="mb-0 font-weight-bold">Fullstack dev session</p>
+                                        <small class="d-block">Duration: 60 Mins</small>
+                                        <small class="d-block">Presenter: Amandeep Kaur</small>
+                                    </li>
+                                    <li class="rounded py-3 px-3"
+                                        style="min-height: fit-content; background-color: #D8F4EA;">
+                                        <div style="background-color: #00C68D; color:#fff; width: fit-content;"
+                                            class="mb-1 px-1 rounded d-flex align-items-center"><small>12:00 AM</small>
+                                        </div>
+                                        <p class="mb-0 font-weight-bold">Fullstack dev session</p>
+                                        <small class="d-block">Duration: 60 Mins</small>
+                                        <small class="d-block">Presenter: Amandeep Kaur</small>
+                                    </li>
+                                    <li class="rounded py-3 px-3"
+                                        style="min-height: fit-content; background-color: #FDEFE3;">
+                                        <div style="background-color: #F3AD68; color:#fff; width: fit-content;"
+                                            class="mb-1 px-1 rounded d-flex align-items-center"><small>01:00 PM</small>
+                                        </div>
+                                        <p class="mb-0 font-weight-bold">Fullstack dev session</p>
+                                        <small class="d-block">Duration: 60 Mins</small>
+                                        <small class="d-block">Presenter: Amandeep Kaur</small>
+                                    </li> -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal -->
+<script>
+    const daysTagInCalender = document.querySelector("#calendarModal .days"),
+        currentDate = document.querySelector("#calendarModal .current-dateInCalender"),
+        prevNextIconInCalender = document.querySelectorAll("#calendarModal .icons img"),
+        todayTimeInCalender = document.querySelector("#todayTimeInCalender"),
+        todayDateInCalender = document.querySelector("#todayDateInCalender");
+    let classesInCalender = '';
+    let selectedIDInCalender = '';
+    let throttle;
+
+    // getting new dateInCalender, current year and month
+    let dateInCalender = new Date(),
+        currYearInCalender = dateInCalender.getFullYear(),
+        currMonthInCalender = dateInCalender.getMonth();
+
+    // storing full name of all monthsInCalender in array
+    const monthsInCalender = ["January", "February", "March", "April", "May", "June", "July",
+        "August", "September", "October", "November", "December"
+    ];
+    // const days = ["Sun", "Mon", "Tues", "Wed", "Thu", "Fri", "Sat"];
+
+    const getClassOfMonth = async (month, year, isMentorReqired = false) => {
+        $("#loadingCalender").fadeIn();
+        try {
+            rawResponse = await fetch(`/api/class/classofmonth`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "month": month,
+                    "year": year,
+                    "isMentorListReqd": isMentorReqired
+                }),
+            });
+
+            if (rawResponse.redirected) {
+                console.log('Error to Get response', rawResponse);
+                if (rawResponse.url && rawResponse.url.indexOf('login') > -1) location.reload();
+                else window.location = `${rawResponse.url}`;
+            }
+
+            const response = await rawResponse.json();
+            console.log(response);
+            if (isMentorReqired && response.mentorsObjArr && response.mentorsObjArr.length) {
+                $("#filterByPresenter").selectpicker("destroy");
+                $("#filterByPresenter").html('');
+                response.mentorsObjArr.forEach((mentor) => {
+                    $("#filterByPresenter").append(
+                        `<option value='${mentor._id}'>${mentor.displayname}</option>`)
+                })
+                $("#filterByPresenter").selectpicker('refresh');
+                $("#filterByPresenter").val('');
+                $("#filterByPresenter").selectpicker('refresh');
+            }
+
+            $("#loadingCalender").fadeOut();
+
+            if (response.error) {
+                toggleAlertMsgModal(response.error || "Something went wrong!", 2);
+            }
+
+            if (response && response.classes && response.classes.length) {
+                response.classes.sort((a, b) => {
+                    let da = new Date(a.time).getTime();
+                    let db = new Date(b.time).getTime();
+                    return db - da;
+                });
+                classesInCalender = response.classes.reverse();
+                $("#calendarModal .days li").removeClass('present');
+                classesInCalender.forEach(function (data) {
+                    let nowInMilisecond = new Date().getTime();
+                    let classTimeInMiliSecond = new Date(data.time).getTime();
+                    console.log(classTimeInMiliSecond, nowInMilisecond, classTimeInMiliSecond >
+                        nowInMilisecond);
+                    if (classTimeInMiliSecond > nowInMilisecond) {
+                        let id =
+                            `${new Date(data.time).getFullYear()}_${new Date(data.time).getMonth()}_${new Date(data.time).getDate()}`;
+                        console.log(id);
+                        $(`#${id}`).addClass('present');
+                    } else {
+                        let id =
+                            `${new Date(data.time).getFullYear()}_${new Date(data.time).getMonth()}_${new Date(data.time).getDate()}`;
+                        console.log(id);
+                        $(`#${id}`).addClass('past');
+                    }
+                })
+            }
+        } catch (err) {
+            $("#loadingCalender").fadeOut();
+            toggleAlertMsgModal(err.message || "Check your internet connection.", 2);
+        }
+    }
+
+    const homeCalender = async (isMentorReqired = false) => {
+        if (throttle) {
+            clearTimeout(throttle);
+        }
+
+        throttle = setTimeout(async function () {
+            dateInCalender = new Date(), // updating current dateInCalender
+                currYearInCalender = dateInCalender.getFullYear(), // updating current year
+                currMonthInCalender = dateInCalender.getMonth(); // updating current month
+            await renderCalendar();
+            await getClassOfMonth(currMonthInCalender, currYearInCalender, isMentorReqired);
+
+            // todayInCalender class show
+            $("#calendarModal .days li").each(function () {
+                if ($(this).hasClass("active")) $(this).trigger('click');
+            })
+        }, 500);
+    }
+
+    async function toggleClassCalenderModal() {
+        $('#calendarModal').toggleClass('show');
+        if ($('#calendarModal').hasClass('show')) {
+            $(".nav-link[data-target='#calendarModal']").parent().css({
+                'background-color': '#F7F7F7',
+                'border-radius': '5px',
+            })
+            await homeCalender(true);
+        } else {
+            $("#calendarModal .days li").removeClass('selected');
+            selectedIDInCalender = '';
+            $("#calendarModal .timeline").html('');
+            $(".nav-link[data-target='#calendarModal']").parent().css({
+                'background-color': '',
+                'border-radius': '',
+            })
+        }
+    }
+
+    // dropdown go to Date and month sart code here
+    $(document).click(function (e) {
+        if ($(e.target).closest('.dropdown-calender').length > 0 || $(e.target).closest(
+                '.dropdown-menu-calender').length > 0) {
+            // do nothing..........
+        } else {
+            $('.dropdown-menu-calender').addClass('d-none');
+            toGoToRest()
+        }
+    })
+
+    function toGoToRest() {
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth();
+
+        $("#toSelectYear").val(currentYear);
+        $("#toSelectYear").selectpicker('refresh');
+
+        $("#toSelectMonth").val(currentMonth);
+        $("#toSelectMonth").selectpicker('refresh');
+    }
+
+    $(document).ready(function() {
+        $("#toSelectYear").selectpicker('destroy');
+        $("#toSelectYear").html('');
+        let toYear = new Date().getFullYear() + 1;
+        let fromYear = 2000;
+        for (let i = toYear; i >= fromYear; i--) {
+            $("#toSelectYear").append(`<option value="${i}">${i}</option>`)
+        }
+        $("#toSelectYear").selectpicker('refresh');
+        toGoToRest();
+
+        $(".current-dateInCalender").click(function () {
+            toGoToRest();
+        })
+
+        $("#goToBtn").click(async function () {
+            let toSelectYear = +$("#toSelectYear").val();
+            let toSelectMonth = +$("#toSelectMonth").val();
+
+            if (currYearInCalender != toSelectYear || currMonthInCalender !=
+                toSelectMonth) {
+                dateInCalender = new Date(toSelectYear, toSelectMonth);
+                currYearInCalender = dateInCalender
+                    .getFullYear(); // updating current year with new dateInCalender year
+                currMonthInCalender = dateInCalender
+                    .getMonth(); // updating current month with new dateInCalender year
+                await renderCalendar();
+                await getClassOfMonth(currMonthInCalender, currYearInCalender);
+            }
+
+            $(".dropdown-menu-calender").addClass('d-none');
+        })
+    })
+    // dropdown go to Date and month end code here
+    
+    document.addEventListener("DOMContentLoaded", function (event) {
+        // session search...
+        $("#input-search-class").on('input', function () {
+            let value = $(this).val() && $(this).val().toLowerCase().trim();
+            console.log(value);
+            $("#calendarModal .timeline li").filter(function () {
+                $(this).toggle(($(this).find(".class-title").text().toLowerCase().indexOf(
+                    value) > -1) || ($(this).find(".presenterName").text().toLowerCase()
+                    .indexOf(
+                        value) > -1));
+            });
+
+            if ($("#calendarModal .timeline li:visible").length == 0) {
+                $("#notFound").fadeIn();
+            } else {
+                $("#notFound").hide();
+            }
+        })
+
+        $("#filterByPresenter").change(function () {
+            let mentorId = $(this).val();
+            let mentor = $("#filterByPresenter option:selected").text();
+            mentor = mentor && mentor.toLowerCase().trim();
+            console.log("mentor: ", mentor);
+
+            $("#calendarModal .timeline li").filter(function () {
+                $(this).toggle(($(this).find(".presenterName").text().toLowerCase().trim() ==
+                    mentor));
+            });
+
+            if ($("#calendarModal .timeline li:visible").length == 0) {
+                $("#notFound").fadeIn();
+            } else {
+                $("#notFound").hide();
+            }
+        })
+
+        // session filter by radio button
+        $('#filterClassByValue').change(function () {
+            let filterValue = $(this).val();
+            let filter = filterValue == 0 ? "Previous" : filterValue == 1 ? "Upcoming" : ""
+            console.log("filter: ", filter);
+            if (filter) {
+                $("#filterClassText").text(`${filter} sessions`);
+                $("#calendarModal .timeline li").filter(function () {
+                    $(this).toggle($(this).hasClass(`${filter.toLowerCase()}`));
+                });
+
+                if ($("#calendarModal .timeline li:visible").length == 0) {
+                    $("#notFound").fadeIn();
+                } else {
+                    $("#notFound").hide();
+                }
+            } else {
+                $("#filterClassText").text('All sessions');
+                $("#notFound").hide();
+                $("#calendarModal .timeline li").show();
+            }
+        })
+
+        $(document).on("click", "#calendarModal .days li:not(.inactive)", function () {
+            $("#calendarModal .days li").removeClass('selected');
+            selectedIDInCalender = $(this).attr('id');
+            $(this).addClass('selected');
+            $("#input-search-class").val('');
+            let selectedDate = +$(this).text();
+            $("#selectedClass").text(
+                `${selectedDate} ${monthsInCalender[currMonthInCalender]}, ${currYearInCalender}`);
+            selectedDateClass(selectedDate);
+        })
+    })
+
+    const selectedDateClass = (dateInCalender) => {
+        $("#calendarModal .timeline").html('');
+        $("#notFound").hide();
+        $("#filterByPresenter").val('');
+        $("#filterByPresenter").selectpicker('refresh');
+        $('#filterClassByValue').val(2);
+        $('#filterClassByValue').selectpicker('refresh')
+        $("#noEvent").removeClass('d-flex').addClass('d-none');
+        console.log(dateInCalender)
+        if (classesInCalender && classesInCalender.length) {
+            let count = 0;
+            classesInCalender.forEach(function (data) {
+                if (new Date(data.time).getDate() == dateInCalender) {
+                    count++;
+                    let nowInMilisecond = new Date();
+                    let classTimeInMiliSecond = new Date(data.time);
+                    let statusOfClass = 'previous';
+                    if (classTimeInMiliSecond > nowInMilisecond) statusOfClass = 'upcoming';
+                    let classTime = new Date(data.time).toLocaleString('en-US', {
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true
+                    });
+                    let classDiv = `<li class="rounded ${statusOfClass}">
+                        <div class='class-content-container d-flex'>
+                            <div class="class-content-section">
+                                <div class="rounded d-flex align-items-center badgeTime">
+                                    <small>${classTime}</small>
+                                </div>
+                                <p class="mb-0 font-weight-bold class-title">${data.desc || ''}</p>
+                                <small class="d-block">Duration: ${data.duration} Mins</small>
+                                <small class="d-block">Presenter: <span class='presenterName'>${data.presenterId && data.presenterId.displayname || ''}</span></small>
+                            </div>`
+                    if (statusOfClass == 'previous') {
+                        classDiv += `<div class="class-action-icons d-flex flex-column">
+                                <a href="/attempt/classfeedback/${data._id}" target='_blank' class="class-action-icon">
+                                    <img src="/icons/Component 9 – 3.svg" />
+                                </a>
+                                <a href="/class/stats/zoom/${data._id}" target='_blank' class="class-action-icon">
+                                    <img src="/icons/Component 10 – 3.svg" /> 
+                                </a>
+                            </div>`;
+                    }
+                    classDiv += `</div></li>`;
+                    $("#calendarModal .timeline").append(classDiv);
+                }
+            })
+
+            if (count == 0) $("#notFound").show();
+        } else {
+            $("#notFound").show();
+        }
+    }
+
+    const renderCalendar = async () => {
+        let firstDayofMonth = new Date(currYearInCalender, currMonthInCalender, 1)
+            .getDay(), // getting first day of month
+            lastDateofMonth = new Date(currYearInCalender, currMonthInCalender + 1, 0)
+            .getDate(), // getting last dateInCalender of month
+            lastDayofMonth = new Date(currYearInCalender, currMonthInCalender, lastDateofMonth)
+            .getDay(), // getting last day of month
+            lastDateofLastMonth = new Date(currYearInCalender, currMonthInCalender, 0)
+            .getDate(); // getting last dateInCalender of previous month
+        let liTag = "";
+        for (let i = firstDayofMonth; i > 0; i--) { // creating li of previous month last days
+            liTag +=
+                `<li class="inactive" id='${currYearInCalender}_${currMonthInCalender - 1}_${lastDateofLastMonth - i + 1}'>${lastDateofLastMonth - i + 1}</li>`;
+        }
+        for (let i = 1; i <= lastDateofMonth; i++) { // creating li of all days of current month
+            // adding active class to li if the current day, month, and year matched
+            let isToday = i === dateInCalender.getDate() && currMonthInCalender === new Date().getMonth() &&
+                currYearInCalender === new Date().getFullYear() ? "active" : "";
+            liTag += `<li class="${isToday}" id='${currYearInCalender}_${currMonthInCalender}_${i}'>${i}</li>`;
+        }
+        for (let i = lastDayofMonth; i < 6; i++) { // creating li of next month first days
+            liTag +=
+                `<li class="inactive" id='${currYearInCalender}_${currMonthInCalender + 1}_${i - lastDayofMonth + 1}'>${i - lastDayofMonth + 1}</li>`
+        }
+        currentDate.innerText =
+            `${monthsInCalender[currMonthInCalender]} ${currYearInCalender}`; // passing current mon and yr as currentDate text
+        daysTagInCalender.innerHTML = liTag;
+
+        try {
+            if (selectedIDInCalender) $(`#${selectedIDInCalender}:not(.inactive)`).addClass('selected');
+        } catch (err) {}
+    }
+    renderCalendar();
+
+    prevNextIconInCalender.forEach(icon => { // getting prev and next icons
+        icon.addEventListener("click", async () => { // adding click event on both icons
+            // if clicked icon is previous icon then decrement current month by 1 else increment it by 1
+            currMonthInCalender = icon.id === "prev" ? currMonthInCalender - 1 :
+                currMonthInCalender + 1;
+            console.log(icon)
+            if (currMonthInCalender < 0 || currMonthInCalender >
+                11) { // if current month is less than 0 or greater than 11
+                // creating a new dateInCalender of current year & month and pass it as dateInCalender value
+                dateInCalender = new Date(currYearInCalender, currMonthInCalender);
+                currYearInCalender = dateInCalender
+                    .getFullYear(); // updating current year with new dateInCalender year
+                currMonthInCalender = dateInCalender
+                    .getMonth(); // updating current month with new dateInCalender month
+            } else {
+                dateInCalender =
+                    new Date(); // pass the current dateInCalender as dateInCalender value
+            }
+
+            await renderCalendar(); // calling renderCalendar function
+
+            // GET CLASS BY MONTH AND YEAR
+            if (throttle) {
+                clearTimeout(throttle);
+            }
+            throttle = setTimeout(async function () {
+                await getClassOfMonth(currMonthInCalender, currYearInCalender);
+            }, 500);
+        });
+    });
+</script>
+
+
+    <div class="page-layout">
+    <!-- view details modal -->
+    <div id="divDetailsModal" class="modal fade modalPosition" role="dialog">
+      <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content" style="margin-top:65px">
+              <div class="modal-header">
+                  <h5 class="modal-title">
+                        Test Result : <img width="20" height="20" id="imgResult" src="./Testpad_pra_files_files/cross.png" class="correct_result"> 
+                  </h5>
+                  <button id="btnCloseModal" name="btnCloseModal" type="button" class="close" data-dismiss="modal">×</button>
+              </div>
+              <div style="margin-bottom:10px;" class="modal-body ">
+                  
+                  <div>
+                      <label>Input Parameters</label>
+                      <div>
+                          <div style="margin-bottom:5px;" id="qIp"></div> <!--width:85%; float:left-->
+                      </div>
+                  </div>
+                  <div>
+                      <label>Expected Output</label>
+                      <div>
+                          <div style="margin-bottom:5px; " id="qExpectedOp"></div>
+                      </div>
+                  </div>
+                  <div>
+                      <label>Your Output</label>
+                      <div>
+                          <div style="margin-bottom:5px ; " id="qYourOp"></div>
+                      </div>
+                  </div>
+                  
+              </div>
+          </div>
+      </div>
+  </div>
+  <!-- view details modal -->
+
+  <!-- left sidebar -->
+   
+  <div class="main-left-side-bar-container" id="leftBarOptionsContainer">
+  <div class="img-1-container" id="openSideFiles" title="course content">
+    <img src="./Testpad_pra_files_files/noun_menu_4002423.svg" class="">
+  </div>
+  <!-- <div class="img-2-container" id="openSidebarIFrame" title="discussion">
+   
+    <img src="/icons/chat(3).svg" style="padding: 6px;">
+  
+  </div> -->
+</div>
+
+<!-- <div class="left-side-bar-container-iframe" id="iframeDiscussionContainer">
+  <iframe src="https://workspaces.codequotient.com/course/69968acc7cfd8fe2002d7c40?isSidebarEmbed" frameborder="0" allow="clipboard-read; clipboard-write"></iframe>
+</div> -->
+
+<div class="left-side-bar-container" id="fileListContainer">
+  <div class="row" style="margin: 0;">
+
+    <div id="loader-container-1" style="display: none;">
+      <div class="loadingio-spinner-message-hn8fd8qi4q61">
+        <div class="ldio-ij9srawx00g1">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    </div>
+    <div class="left-side-bar-main-content col-12 col-sm-12" style="padding: 0px; height: calc(-116px + 100vh);" id="onlyforscroll">
+      <div class="fix-leftsidebar-main-heading">
+      <a class="left-side-bar-main-content-title" href="https://course.testpad.chitkara.edu.in/user-dashboard/69968acc7cfd8fe2002d7c40">
+        
+          24CSE0107-Fundamentals of C Programming-Dr Rattan Deep Aneja
+          
+          
+      </a>
+      <div class="left-side-bar-change-section-container">
+        <a id="prevSegment" style="cursor: pointer;"><i startindex="0" endindex="18" class="fa fa-caret-left" aria-hidden="true" style="cursor: pointer;"></i></a>
+        <div>
+          <p style="position: relative;">
+            <span style="font-size:10pt" id="segmentName">Input  Output</span>
+            
+          </p>
+        </div>
+        <a id="nextSegment" style="cursor: pointer;"><i startindex="0" endindex="18" class="fa fa-caret-right" aria-hidden="true" style="cursor: pointer;"></i></a>
+      </div>
+    </div>
+
+      <!-- Add Content -->
+      <div id="segmentContent"><div id="question_segment_69968acc7cfd8fe2002d7c40_2" class="course-questions-container">
+       <div style="" id="course-question668e1178773a6814badf4c7d" class="course-question code ">
+           <div id="668e1178773a6814badf4c7d" class="row">
+             <div style="max-width: 5%; margin-left: 15px; margin-top: 19px; position: relative; right: 7px;" class="col-1">
+               <p class="course-question-number">1</p>
+             </div>
+             <div style="padding: 0px;" class="col-9">
+               <p class="course-question-type">Tutorial</p>
+               <p class="course-question-name">
+                 <a style="" id="ancAttempt69968acc7cfd8fe2002d7c40_2_0" href="https://course.testpad.chitkara.edu.in/attempt/attempttutorial/69968acc7cfd8fe2002d7c40/668e1178773a6814badf4c7d">Input and Output in C Programming</a>
+               </p>
+             </div>
+             <div style="max-width: 5%;" class="col-1 course-question-icons" id="questionCompleted69968acc7cfd8fe2002d7c40_2_0"><img style="margin-top: 5px; width: 15px; height: 15px;" src="./Testpad_pra_files_files/foursquare-check-in.png"></div>
+             <div class="col-1 course-question-icons" id="questionStatus69968acc7cfd8fe2002d7c40_2_0"></div>
+           </div>
+       </div>
+       <div style="border: 1px solid #ebebeb; margin: 5px 0;position:relative;"></div>
+     
+       <div style="" id="course-question5a2a88616dc3de029e488750" class="course-question code ">
+           <div id="5a2a88616dc3de029e488750" class="row">
+             <div style="max-width: 5%; margin-left: 15px; margin-top: 19px; position: relative; right: 7px;" class="col-1">
+               <p class="course-question-number">2</p>
+             </div>
+             <div style="padding: 0px;" class="col-9">
+               <p class="course-question-type">MCQ</p>
+               <p class="course-question-name">
+                 <a style="" id="ancAttempt69968acc7cfd8fe2002d7c40_2_1" href="https://course.testpad.chitkara.edu.in/attempt/attemptquestion/69968acc7cfd8fe2002d7c40/5a2a88616dc3de029e488750">Input-Output in C - 1</a>
+               </p>
+             </div>
+             <div style="max-width: 5%;" class="col-1 course-question-icons" id="questionCompleted69968acc7cfd8fe2002d7c40_2_1"><img style="margin-top: 5px; width: 15px; height: 15px;" src="./Testpad_pra_files_files/foursquare-check-in.png"></div>
+             <div class="col-1 course-question-icons" id="questionStatus69968acc7cfd8fe2002d7c40_2_1"></div>
+           </div>
+       </div>
+       <div style="border: 1px solid #ebebeb; margin: 5px 0;position:relative;"></div>
+     
+       <div style="" id="course-question5a2a888c6dc3de029e488751" class="course-question code ">
+           <div id="5a2a888c6dc3de029e488751" class="row">
+             <div style="max-width: 5%; margin-left: 15px; margin-top: 19px; position: relative; right: 7px;" class="col-1">
+               <p class="course-question-number">3</p>
+             </div>
+             <div style="padding: 0px;" class="col-9">
+               <p class="course-question-type">MCQ</p>
+               <p class="course-question-name">
+                 <a style="" id="ancAttempt69968acc7cfd8fe2002d7c40_2_2" href="https://course.testpad.chitkara.edu.in/attempt/attemptquestion/69968acc7cfd8fe2002d7c40/5a2a888c6dc3de029e488751">Input-Output in C - 2</a>
+               </p>
+             </div>
+             <div style="max-width: 5%;" class="col-1 course-question-icons" id="questionCompleted69968acc7cfd8fe2002d7c40_2_2"><img style="margin-top: 5px; width: 15px; height: 15px;" src="./Testpad_pra_files_files/foursquare-check-in.png"></div>
+             <div class="col-1 course-question-icons" id="questionStatus69968acc7cfd8fe2002d7c40_2_2"></div>
+           </div>
+       </div>
+       <div style="border: 1px solid #ebebeb; margin: 5px 0;position:relative;"></div>
+     
+       <div style="" id="course-question5a2a88b06dc3de029e488752" class="course-question code ">
+           <div id="5a2a88b06dc3de029e488752" class="row">
+             <div style="max-width: 5%; margin-left: 15px; margin-top: 19px; position: relative; right: 7px;" class="col-1">
+               <p class="course-question-number">4</p>
+             </div>
+             <div style="padding: 0px;" class="col-9">
+               <p class="course-question-type">MCQ</p>
+               <p class="course-question-name">
+                 <a style="" id="ancAttempt69968acc7cfd8fe2002d7c40_2_3" href="https://course.testpad.chitkara.edu.in/attempt/attemptquestion/69968acc7cfd8fe2002d7c40/5a2a88b06dc3de029e488752">Input-Output in C - 3</a>
+               </p>
+             </div>
+             <div style="max-width: 5%;" class="col-1 course-question-icons" id="questionCompleted69968acc7cfd8fe2002d7c40_2_3"><img style="margin-top: 5px; width: 15px; height: 15px;" src="./Testpad_pra_files_files/foursquare-check-in.png"></div>
+             <div class="col-1 course-question-icons" id="questionStatus69968acc7cfd8fe2002d7c40_2_3"></div>
+           </div>
+       </div>
+       <div style="border: 1px solid #ebebeb; margin: 5px 0;position:relative;"></div>
+     
+       <div style="color: #DE6834" id="course-question5d46bcc1695fda3b2cd0a77d" class="course-question code currentSelectedOpenQues">
+           <div id="5d46bcc1695fda3b2cd0a77d" class="row">
+             <div style="max-width: 5%; margin-left: 15px; margin-top: 19px; position: relative; right: 7px;" class="col-1">
+               <p class="course-question-number">5</p>
+             </div>
+             <div style="padding: 0px;" class="col-9">
+               <p class="course-question-type">Coding</p>
+               <p class="course-question-name">
+                 <a style="color: #DE6834" id="ancAttempt69968acc7cfd8fe2002d7c40_2_4" href="https://course.testpad.chitkara.edu.in/attempt/attemptquestion/69968acc7cfd8fe2002d7c40/5d46bcc1695fda3b2cd0a77d">Read integer type values</a>
+               </p>
+             </div>
+             <div style="max-width: 5%;" class="col-1 course-question-icons" id="questionCompleted69968acc7cfd8fe2002d7c40_2_4"></div>
+             <div class="col-1 course-question-icons" id="questionStatus69968acc7cfd8fe2002d7c40_2_4"></div>
+           </div>
+       </div>
+       <div style="border: 1px solid #ebebeb; margin: 5px 0;position:relative;"></div>
+     
+       <div style="" id="course-question5d46bcd2695fda3b2cd0a783" class="course-question code ">
+           <div id="5d46bcd2695fda3b2cd0a783" class="row">
+             <div style="max-width: 5%; margin-left: 15px; margin-top: 19px; position: relative; right: 7px;" class="col-1">
+               <p class="course-question-number">6</p>
+             </div>
+             <div style="padding: 0px;" class="col-9">
+               <p class="course-question-type">Coding</p>
+               <p class="course-question-name">
+                 <a style="" id="ancAttempt69968acc7cfd8fe2002d7c40_2_5" href="https://course.testpad.chitkara.edu.in/attempt/attemptquestion/69968acc7cfd8fe2002d7c40/5d46bcd2695fda3b2cd0a783">Read character type values</a>
+               </p>
+             </div>
+             <div style="max-width: 5%;" class="col-1 course-question-icons" id="questionCompleted69968acc7cfd8fe2002d7c40_2_5"></div>
+             <div class="col-1 course-question-icons" id="questionStatus69968acc7cfd8fe2002d7c40_2_5"></div>
+           </div>
+       </div>
+       <div style="border: 1px solid #ebebeb; margin: 5px 0;position:relative;"></div>
+     
+       <div style="" id="course-question5d46bdca695fda3b2cd0a7be" class="course-question code ">
+           <div id="5d46bdca695fda3b2cd0a7be" class="row">
+             <div style="max-width: 5%; margin-left: 15px; margin-top: 19px; position: relative; right: 7px;" class="col-1">
+               <p class="course-question-number">7</p>
+             </div>
+             <div style="padding: 0px;" class="col-9">
+               <p class="course-question-type">Coding</p>
+               <p class="course-question-name">
+                 <a style="" id="ancAttempt69968acc7cfd8fe2002d7c40_2_6" href="https://course.testpad.chitkara.edu.in/attempt/attemptquestion/69968acc7cfd8fe2002d7c40/5d46bdca695fda3b2cd0a7be">Read decimal type values</a>
+               </p>
+             </div>
+             <div style="max-width: 5%;" class="col-1 course-question-icons" id="questionCompleted69968acc7cfd8fe2002d7c40_2_6"></div>
+             <div class="col-1 course-question-icons" id="questionStatus69968acc7cfd8fe2002d7c40_2_6"></div>
+           </div>
+       </div>
+       <div style="border: 1px solid #ebebeb; margin: 5px 0;position:relative;"></div>
+     </div></div>
+      <!-- Add Content End -->
+
+    </div>
+    <div class="open-close-icon col-1" style="padding: 0; display: none;">
+      <i onclick="openSideBar()" class="fa fa-angle-right fa-2x" aria-hidden="true"></i>
+    </div>
+  </div>
+  <!-- Progress Bar -->
+  <div id="progress-container" class="progress-container"><p>57% covered</p>
+     <div class="progress">
+       <div class="progress-bar" role="progressbar" style="width: 57%" aria-valuenow="57" aria-valuemin="0" aria-valuemax="100"></div>
+     </div>
+   </div>
+
+  <!-- Progress Bar End -->
+</div>
+
+<script>
+  window.container = {"_id":"69968acc7cfd8fe2002d7c40","disableCopyPaste":false,"title":"24CSE0107-Fundamentals of C Programming-Dr Rattan Deep Aneja","allowAiTutor":false,"courseAdministrator":[{"userId":"6673b968d44d15271e254f31","_id":"69968c227cfd8fe2002d7c45","permissions":[36,35,3,13,10,19,23]}],"allowDiscussion":false,"mentorId":["6673b968d44d15271e254f31"],"completedClassId":[],"assignmentMetaData":[],"courseSegments":[{"_id":"69968e197cfd8fe2002d7e47","id":"6981cfe7285f5b4932b22bd6","startIndex":1,"title":"Getting Started with C","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":2,"isAssignment":false,"count":2,"endOfContent":2,"segmentCountIndex":0},{"_id":"69968e197cfd8fe2002d7e46","id":"6981cfe7285f5b4932b22bd7","startIndex":3,"title":"Building Blocks of C","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":9,"isAssignment":false,"count":7,"endOfContent":9,"segmentCountIndex":1},{"_id":"69968e197cfd8fe2002d7e45","id":"6981cfe7285f5b4932b22bd8","startIndex":10,"title":"Input  Output","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":16,"isAssignment":false,"count":7,"endOfContent":16,"segmentCountIndex":2},{"_id":"69968e197cfd8fe2002d7e44","id":"6981cfe7285f5b4932b22bd9","startIndex":17,"title":"Operators and Operations","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":32,"isAssignment":false,"count":16,"endOfContent":32,"segmentCountIndex":3},{"_id":"69968e197cfd8fe2002d7e43","id":"6981cfe7285f5b4932b22bda","startIndex":33,"title":"Conditional Statements","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":65,"isAssignment":false,"count":33,"endOfContent":65,"segmentCountIndex":4},{"_id":"69968e197cfd8fe2002d7e42","id":"6981cfe7285f5b4932b22bdb","startIndex":66,"title":"Loops","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":92,"isAssignment":false,"count":27,"endOfContent":92,"segmentCountIndex":5},{"_id":"69968e197cfd8fe2002d7e41","id":"6981cfe7285f5b4932b22bdc","startIndex":93,"title":"Functions","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":116,"isAssignment":false,"count":24,"endOfContent":116,"segmentCountIndex":6},{"_id":"69968e197cfd8fe2002d7e40","id":"6981cfe7285f5b4932b22bdd","startIndex":117,"title":"Recursion","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":136,"isAssignment":false,"count":20,"endOfContent":136,"segmentCountIndex":7},{"_id":"69968e197cfd8fe2002d7e3f","id":"6981cfe7285f5b4932b22bde","startIndex":137,"title":"Pointers  Functions","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":147,"isAssignment":false,"count":11,"endOfContent":147,"segmentCountIndex":8},{"_id":"69968e197cfd8fe2002d7e3e","id":"6981cfe7285f5b4932b22bdf","startIndex":148,"title":"Storage classes","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":164,"isAssignment":false,"count":17,"endOfContent":164,"segmentCountIndex":9},{"_id":"69968e197cfd8fe2002d7e3d","id":"6981cfe7285f5b4932b22be0","startIndex":165,"title":"Array","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":210,"isAssignment":false,"count":46,"endOfContent":210,"segmentCountIndex":10},{"_id":"69968e197cfd8fe2002d7e3c","id":"6981cfe7285f5b4932b22be1","startIndex":211,"title":"Pointers  Arrays","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":246,"isAssignment":false,"count":36,"endOfContent":246,"segmentCountIndex":11},{"_id":"69968e197cfd8fe2002d7e3b","id":"6981cfe7285f5b4932b22be2","startIndex":247,"title":"Searching Sorting in Arrays","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":282,"isAssignment":false,"count":36,"endOfContent":282,"segmentCountIndex":12},{"_id":"69968e197cfd8fe2002d7e3a","id":"6981cfe7285f5b4932b22be3","startIndex":283,"title":"Character Arrays  Strings","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":309,"isAssignment":false,"count":27,"endOfContent":309,"segmentCountIndex":13},{"_id":"69968e197cfd8fe2002d7e39","id":"6981cfe7285f5b4932b22be4","startIndex":310,"title":"Preprocessing","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":310,"isAssignment":false,"count":1,"endOfContent":310,"segmentCountIndex":14},{"_id":"69968e197cfd8fe2002d7e38","id":"6981cfe7285f5b4932b22be5","startIndex":311,"title":"Bit Manipulation","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":320,"isAssignment":false,"count":10,"endOfContent":320,"segmentCountIndex":15},{"_id":"69968e197cfd8fe2002d7e37","id":"6981cfe7285f5b4932b22be6","startIndex":321,"title":"Structures","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":330,"isAssignment":false,"count":10,"endOfContent":330,"segmentCountIndex":16},{"_id":"69968e197cfd8fe2002d7e36","id":"6981cfe7285f5b4932b22be7","startIndex":331,"title":"Unions","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":333,"isAssignment":false,"count":3,"endOfContent":333,"segmentCountIndex":17},{"_id":"69968e197cfd8fe2002d7e35","id":"6981cfe7285f5b4932b22be8","startIndex":334,"title":"File Handling","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":351,"isAssignment":false,"count":18,"endOfContent":351,"segmentCountIndex":18}],"attemptInSequence":false,"languagesAllowed":["7"],"courseContent":{"_id":"69968e197cfd8fe2002d7e27","id":"5d46bcc1695fda3b2cd0a77d","executionType":"3","difficultyLevel":3,"showHead":true,"showTail":true,"showSolution":false,"skipAllowed":false,"showCustomInput":true,"contentType":"3","isAssignment":false,"files":[]},"allowCodeSharing":false,"assignmentSegments":[],"isAssignment":false,"startOfAssignmentContent":351,"contentIndex":13,"segmentData":{"segmentIndex":2,"segmentObj":{"_id":"69968e197cfd8fe2002d7e45","id":"6981cfe7285f5b4932b22bd8","startIndex":10,"title":"Input  Output","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":16,"isAssignment":false,"count":7,"endOfContent":16,"segmentCountIndex":2},"contentIndex":13,"preSegmentObj":{"_id":"69968e197cfd8fe2002d7e46","id":"6981cfe7285f5b4932b22bd7","startIndex":3,"title":"Building Blocks of C","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":9,"isAssignment":false,"count":7,"endOfContent":9,"segmentCountIndex":1},"nextSegmentObj":{"_id":"69968e197cfd8fe2002d7e44","id":"6981cfe7285f5b4932b22bd9","startIndex":17,"title":"Operators and Operations","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":32,"isAssignment":false,"count":16,"endOfContent":32,"segmentCountIndex":3},"segmentStart":9,"isLastQuestion":false,"segmentIndexStart":0,"segmentIndexEnd":18,"isAssignment":false,"startOfAssignmentContent":351},"prevQuestionData":{"isCurrentSubmissionAllowed":true},"isQuiz":false}
+</script>
+
+   
+  <!-- left sidebar -->
+
+ <!-- only for coding question and web question resizable -->
+ 
+ <div class="d-none transparent-overlay"></div>
+  
+    
+        <div id="main-outter-body" class="col-md-12 admin_dashboad_tabs-1 resizable-divs-container-coding">
+          <div class="d-flex div-question-body-outter-container">
+            <div class="div-question-container scrollll mobile-view-full" id="scolll" style="border: none; width: 40%;position: relative;">
+              <div class="feedback-ballon-container">
+	<div class="feedback-ballon" id="feedback_ballon_container">
+		<p style="font-weight: 500;">How do you like the content?</p>
+		<p style="color: #333333;">
+			Your feedback is very essential for us to keep improving our content
+		</p>
+		<div class="issue-select-dropdown">
+			<div class="custom-select-2" style="width: 144px;">
+				<select name="selectedOption" id="" class="selecttag1">
+					<option value="0">Result is incorrect</option>
+					<option value="1">Technical Issue</option>
+					<option value="2">Design Issue</option>
+					<option value="3">Suggestion</option>
+					<option value="4">Others</option>
+				</select>
+			<div class="select-selected-2">Result is incorrect</div><div class="select-items-2 select-hide-2"><div>Result is incorrect</div><div>Technical Issue</div><div>Design Issue</div><div>Suggestion</div><div>Others</div></div></div>
+			<!-- <i class="fa fa-caret-down" aria-hidden="true"></i> -->
+		</div>
+		<div class="issue-text-box">
+			<textarea id="textAreaComment" required="" placeholder="enter issue"></textarea>
+		</div>
+		<button id="buttonSubmitReportProblem" class="feedback-ballon-submit">submit</button>
+	</div>
+	<button class="feedback-ballon-button" id="feedback_ballon_button" title="feedback">
+		<img src="./Testpad_pra_files_files/chat-balloon.png" alt="ballon-icon">
+	</button>
+</div>
+
+              
+                <nav class="pl-3" style="background-color: #FAFAFA;width: 100%;margin: 0;">
+                  <div class="nav nav-tabs" id="nav-tab" role="tablist" style="border: none;">
+                    <a onclick="closeIframeSolution()" class="nav-item nav-link active" id="nav-question-tab" data-toggle="tab" href="https://course.testpad.chitkara.edu.in/attempt/attemptquestion/69968acc7cfd8fe2002d7c40/5d46bcc1695fda3b2cd0a77d#nav-question" role="tab" aria-controls="nav-question" aria-selected="true">Question</a>
+                    <a onclick="closeIframeSolution()" class="nav-item nav-link" id="nav-attempts-tab" data-toggle="tab" href="https://course.testpad.chitkara.edu.in/attempt/attemptquestion/69968acc7cfd8fe2002d7c40/5d46bcc1695fda3b2cd0a77d#nav-attempts" role="tab" aria-controls="nav-attempts" aria-selected="false">Attempts</a>
+                    
+                  </div>
+                </nav>
+              
+
+                <div class="container-fluid scrollll" id="question-container" style="height: calc(100vh - 110px); ">
+                  <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-question" role="tabpanel" aria-labelledby="nav-question-tab" style="opacity: 1;">  
+                      <div class="row">
+                          <div class="col-12" style="display: none;">
+                              <span class="badge badge-secondary" id="question-type-badge">
+                                   
+                                   
+                                   
+                                   
+                                      CODE
+                                   
+                                   
+                              </span>
+                              <!-- <span class="badge badge-success" id="question-label-badge-moderate">MODERATE</span> -->
+                          </div>
+                          <div class="col-12 mt-2 d-flex">
+                              <div id="question-title">
+                                  Read integer type values
+                                  
+                                    <span id="removeFromFavourites" class="material-icons" onclick="removeFromFavourites()" style="color: #de6834; position: relative; top: 3px; left: 3px; cursor: pointer; display: none;">
+                                      bookmark
+                                    </span>
+
+                                    <span id="addToFavourites" class="material-icons" onclick="addToFavourites()" style="color: #de6834; position: relative; top: 3px; left: 3px; cursor: pointer; display: unset;">
+                                      bookmark_border
+                                    </span>
+                                  
+                              </div>
+                              
+                          </div>
+                          <div class="col-12">
+                              <div id="div-question-title-underline-container">
+                                  <div id="question-title-underline-1"></div>
+                                  <div id="question-title-underline-2"></div>
+                                  <div id="question-title-underline-3"></div>
+                              </div>
+                          </div>
+                          <div class="col-12 mt-2">
+                              <div id="question-description" class="ql-editor" style="padding-bottom: 20px; white-space: inherit;">
+                                  <p class="describe"></p><p><span style="color: rgb(0, 0, 0); background-color: transparent;">Write a program to show how to read and write integer values from user.</span></p><p><span style="color: rgb(0, 0, 0); background-color: transparent;">﻿</span><strong style="color: rgb(0, 0, 0); background-color: transparent;">Input Format:</strong></p><pre class="ql-syntax" spellcheck="false">Each <span class="hljs-built_in">test</span> <span class="hljs-keyword">case</span> contains 3 integers separated by space.
+</pre><p><strong style="color: rgb(0, 0, 0); background-color: transparent;">Output Format:</strong></p><pre class="ql-syntax" spellcheck="false">Print the <span class="hljs-number">3</span> integers separated <span class="hljs-keyword">by</span> space.
+</pre><p><strong>Sample Input</strong></p><pre class="ql-syntax" spellcheck="false">10 20 30
+</pre><p><strong>Sample Output</strong></p><pre class="ql-syntax" spellcheck="false">10 20 30
+</pre><p><br></p><p></p>
+                              </div>
+                          </div>
+                          
+                      </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-attempts" role="tabpanel" aria-labelledby="nav-attempts-tab" style="opacity: 1;">
+                    
+                    </div>
+                    <div class="tab-pane fade  solution-tab-container" id="nav-solution" role="tabpanel" aria-labelledby="nav-solution-tab" style="opacity: 1;">
+                        <iframe id="solution-iframe" src="./Testpad_pra_files_files/saved_resource.html" title="solution link"></iframe>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="next-prev-container">
+                    
+                         
+                            <a class="prev-question" href="https://course.testpad.chitkara.edu.in/attempt/attemptquestion/69968acc7cfd8fe2002d7c40/5a2a88b06dc3de029e488752"> <i class="fa fa-caret-left" aria-hidden="true"></i> previous</a>
+                         
+                    
+                    <a class="rprt-prblm-btn" onclick="openFeedback()">Report a problem</a>
+                    <a class="next-question" href="https://course.testpad.chitkara.edu.in/attempt/attemptquestion/69968acc7cfd8fe2002d7c40/5d46bcd2695fda3b2cd0a783"> next <i class="fa fa-caret-right" aria-hidden="true"></i></a>
+                </div>
+                 
+              </div>
+             
+              <div id="question-code-separator" class="partition-vertical d-flex align-items-center justify-content-center">
+                <div class="v-ellipsis"></div>
+              </div>
+    
+                <div class="" id="code-area" style="width: 60%;">
+                 
+
+                       
+                      
+                      
+                      
+                      
+                      
+                      
+    
+                      <div style="overflow: auto; height: calc(-110px + 100vh);" id="fullscreen" class="output_code_section">
+    <div id="main-body-header">
+        
+            
+            
+            
+            
+        
+
+        <!-- when question language delete but attempt present for deleted question lang-->
+        
+        <div class="select-code-question-language-wrapper">
+            <div style="width: 100px; float: right;">
+				<div class="dropdown bootstrap-select form-control form-control-sm select-tag-for-lang-change"><select name="progLang" id="progLang" class="selectpicker form-control form-control-sm select-tag-for-lang-change" data-size="5" tabindex="-98">
+                    
+                        
+                            
+                            
+                                <option value="7"> C </option>
+                            
+                        
+                            
+                            
+                        
+                            
+                            
+                        
+                            
+                            
+                        
+                            
+                            
+                        
+                            
+                            
+                        
+                            
+                            
+                        
+                            
+                            
+                        
+                            
+                            
+                        
+                            
+                            
+                        
+                            
+                            
+                        
+                            
+                            
+                        
+                            
+                            
+                        
+                            
+                            
+                        
+                            
+                            
+                        
+                            
+                            
+                        
+                            
+                            
+                        
+                            
+                            
+                        
+                            
+                            
+                        
+                            
+                            
+                        
+                    
+                </select><button type="button" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="combobox" aria-owns="bs-select-3" aria-haspopup="listbox" aria-expanded="false" data-id="progLang" title="C"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">C</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-3" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+            </div>
+        </div>
+
+        <div class="float-right mr-3" style="display: flex;align-items: center;height: 90%;">
+            
+            
+             
+            <span id="openInIDE" class="mr-3 tooltip-bottom-left" data-customtooltip="open in playground" onclick="openInPlayground()">
+                <img src="./Testpad_pra_files_files/Component3–3.svg" alt="open in playground">
+            </span>
+             
+            <span class="tooltip-bottom-left" data-customtooltip="full screen" id="doFullScreen">
+                <img id="fullscreenbtn" src="./Testpad_pra_files_files/expand(2).png" width="15">
+            </span>
+        </div>
+        
+    </div>
+    <!-- Code Editor -->
+    <div class="attempted_code_area" style="height: calc(-150px + 100vh);">
+            
+            <textarea style="display:none" readonly="" id="txtCodeHead" name="txtCodeHead" class="area_for_text"></textarea><div class="CodeMirror cm-s-black" style="height: auto; margin-left: 29px; background: rgb(239, 239, 239);"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 4px; left: 15px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" readonly="" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-vscrollbar" tabindex="-1" cm-not-content="true"><div style="min-width: 1px; height: 0px;"></div></div><div class="CodeMirror-hscrollbar" tabindex="-1" cm-not-content="true"><div style="height: 100%; min-height: 1px; width: 0px;"></div></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 11px; margin-bottom: -7px; border-right-width: 43px; min-height: 32px; min-width: 58.2px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre class="CodeMirror-line-like"><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-cursors"><div class="CodeMirror-cursor" style="left: 4px; top: 0px; height: 24px;">&nbsp;</div></div><div class="CodeMirror-code" role="presentation"><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" aria-hidden="true" style="left: -11px;"><div class="CodeMirror-gutter-elt" style="left: 0px; width: 11px;"><div class="CodeMirror-foldgutter-folded CodeMirror-guttermarker-subtle"></div></div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment">/*</span><span class="CodeMirror-widget" role="presentation" cm-ignore-events="true"><span class="CodeMirror-foldmarker">↔</span></span><span class="cm-comment">*/</span></span></pre></div></div></div></div></div></div><div style="position: absolute; height: 43px; width: 1px; border-bottom: 0px solid transparent; top: 32px;"></div><div class="CodeMirror-gutters" style="height: 75px; left: 0px;"><div class="CodeMirror-gutter CodeMirror-foldgutter"></div></div></div></div>
+        
+        <textarea id="txtCodeAt" name="txtCodeAt" class="area_for_text" style="display: none;"></textarea><div class="CodeMirror cm-s-default" style="height: auto;"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 3.99999px; left: 44px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-vscrollbar" tabindex="-1" cm-not-content="true"><div style="min-width: 1px; height: 0px;"></div></div><div class="CodeMirror-hscrollbar" tabindex="-1" cm-not-content="true"><div style="height: 100%; min-height: 1px; width: 0px;"></div></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1" style="min-height: calc(-222px + 100vh); padding-bottom: 70px;"><div class="CodeMirror-sizer" style="margin-left: 40px; margin-bottom: -6px; border-right-width: 44px; min-height: 152px; min-width: 165.35px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre class="CodeMirror-line-like"><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-cursors"><div class="CodeMirror-cursor" style="left: 4px; top: 0px; height: 24px;">&nbsp;</div></div><div class="CodeMirror-code" role="presentation" style=""><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" aria-hidden="true" style="left: -40px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">1</div><div class="CodeMirror-gutter-elt" style="left: 29px; width: 11px;"><div class="CodeMirror-foldgutter-open CodeMirror-guttermarker-subtle"></div></div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-meta">#include &lt;stdio.h&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" aria-hidden="true" style="left: -40px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">2</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-type">int</span> <span class="cm-def">main</span>()</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" aria-hidden="true" style="left: -40px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">3</div><div class="CodeMirror-gutter-elt" style="left: 29px; width: 11px;"><div class="CodeMirror-foldgutter-open CodeMirror-guttermarker-subtle"></div></div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" aria-hidden="true" style="left: -40px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">4</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" aria-hidden="true" style="left: -40px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">5</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">return</span> <span class="cm-number">0</span>;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" aria-hidden="true" style="left: -40px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">6</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre></div></div></div></div></div></div><div style="position: absolute; height: 44px; width: 1px; border-bottom: 0px solid transparent; top: 152px;"></div><div class="CodeMirror-gutters" style="height: 196px; left: 0px;"><div class="CodeMirror-gutter CodeMirror-linenumbers" style="width: 29px;"></div><div class="CodeMirror-gutter CodeMirror-foldgutter"></div></div></div></div>
+        
+            <textarea style="display:none" readonly="" id="txtCodeTail" name="txtCodeTail" class="area_for_text"></textarea><div class="CodeMirror cm-s-black" style="height: auto; margin-left: 29px; background: rgb(239, 239, 239);"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 4px; left: 15px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" readonly="" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-vscrollbar" tabindex="-1" cm-not-content="true"><div style="min-width: 1px; height: 0px;"></div></div><div class="CodeMirror-hscrollbar" tabindex="-1" cm-not-content="true"><div style="height: 100%; min-height: 1px; width: 0px;"></div></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 11px; margin-bottom: -7px; border-right-width: 43px; min-height: 32px; min-width: 58.2px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre class="CodeMirror-line-like"><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-cursors"><div class="CodeMirror-cursor" style="left: 4px; top: 0px; height: 24px;">&nbsp;</div></div><div class="CodeMirror-code" role="presentation"><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" aria-hidden="true" style="left: -11px;"><div class="CodeMirror-gutter-elt" style="left: 0px; width: 11px;"><div class="CodeMirror-foldgutter-folded CodeMirror-guttermarker-subtle"></div></div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment">/*</span><span class="CodeMirror-widget" role="presentation" cm-ignore-events="true"><span class="CodeMirror-foldmarker">↔</span></span><span class="cm-comment">*/</span></span></pre></div></div></div></div></div></div><div style="position: absolute; height: 43px; width: 1px; border-bottom: 0px solid transparent; top: 32px;"></div><div class="CodeMirror-gutters" style="height: 75px; left: 0px;"><div class="CodeMirror-gutter CodeMirror-foldgutter"></div></div></div></div>
+        
+    </div>
+</div>
+
+<div id="console-option" style="width: 60%;">
+    <div class="row">
+        <div class="col-12">
+            <input type="button" class="btn-console-menu" id="btn-console-menu" value="console" onclick="toggleConsoleBox()">
+                <i onclick="toggleConsoleBox()" class="fa fa-caret-down" id="fa-toggle-down-console"></i>
+                <i onclick="toggleConsoleBox()" class="fa fa-caret-up d-none" id="fa-toggle-up-console"></i>
+        
+            <!-- <button class="btn-code-submit">submit</button> -->
+            <input type="button" class="btn execute_button btn-code-submit submit-btn-check" value="run" id="executeProgram">
+            <!-- <input type="button" class= " btn-code-run" id="btn-code-run" value="run code"/> -->
+            <img src="./Testpad_pra_files_files/refresh(3).png" id="resetButton" width="25" class="float-right" style="margin-top: 16px;" alt="">
+            <!-- <p class="reset-code-btn" id="resetButton">reset code</p> -->
+            
+            <label class="container-radio cstm-input-checkbox">custom input
+                <input type="checkbox" id="customInput">
+                <span class="checkmark"></span>
+            </label>
+             
+        </div>
+    </div>
+</div> 
+    
+                      
+                     
+                  
+              </div>
+          </div>
+          <div class="w-100 shadow-lg bg-white switch_container">
+            <div class="d-flex justify-content-around">
+               <button class="btn p-4 ml-4 code_btn active">question</button>
+               <div style="width: 1px;background-color:#ccc;"></div>
+               <button class="btn p-4 mr-4 output_btn">code</button>
+            </div>
+        </div>
+      </div>
+         <!-- only for coding question resizable -->
+        
+
+
+<input id="askconf" type="text" hidden="" value="1">
+
+</div>
+<script type="text/javascript">
+
+  
+  let {
+    attemptLinks,
+    canAddTestCase,
+    container,
+    contentTypeString,
+    emailHash,
+    endOfSegmentOrCourse,
+    isCompleted,
+    ques: question,
+    session,
+    stringifyFiles: courseContentFiles = [],
+    userIdStudent,
+    courseId,
+    readOnly,
+    userAttempt,
+    stringifyQues,
+    userAnswerId,
+    isFavourite,
+    codeSnippetObj
+  } = JSON.parse(JSON.stringify({"ques":{"_id":"5d46bcc1695fda3b2cd0a77d","updatedAt":"2025-08-04T04:47:03.611Z","createdAt":"2019-08-04T11:08:49.283Z","type":"4","text":"<p><span style=\"color: rgb(0, 0, 0); background-color: transparent;\">Write a program to show how to read and write integer values from user.</span></p><p><span style=\"color: rgb(0, 0, 0); background-color: transparent;\">﻿</span><strong style=\"color: rgb(0, 0, 0); background-color: transparent;\">Input Format:</strong></p><pre class=\"ql-syntax\" spellcheck=\"false\">Each <span class=\"hljs-built_in\">test</span> <span class=\"hljs-keyword\">case</span> contains 3 integers separated by space.\n</pre><p><strong style=\"color: rgb(0, 0, 0); background-color: transparent;\">Output Format:</strong></p><pre class=\"ql-syntax\" spellcheck=\"false\">Print the <span class=\"hljs-number\">3</span> integers separated <span class=\"hljs-keyword\">by</span> space.\n</pre><p><strong>Sample Input</strong></p><pre class=\"ql-syntax\" spellcheck=\"false\">10 20 30\n</pre><p><strong>Sample Output</strong></p><pre class=\"ql-syntax\" spellcheck=\"false\">10 20 30\n</pre><p><br></p>","title":"Read integer type values","tags":"c-programming,c,datatypes,input-output","isCqDocument":true,"askconf":false,"difficultyLevel":"0","executionTime":"15","createdBy":"59f9c87bbace049edfca78cf","__v":0,"explanation":null,"hint":null,"showhint":false,"tutorialLink":"","updatedBy":"59f9c87bbace049edfca78cf","orgId":"59f9c87bbace049edfca78cf","activityIds":[],"isPublic":false,"referenceLinks":[""],"files":[],"questionTypeWeb":{"testCase":[]},"questionTypeCoding":{"testCase":[{"codeproginputparams":"10 20 30","codeprogexpectedoutput":"10 20 30","attemptInMultiLine":false,"sampleTest":true,"_id":"5d46bcc1695fda3b2cd0a781","scoreip":0,"testCaseDifficultyLevel":1},{"codeproginputparams":"1 2 3","codeprogexpectedoutput":"1 2 3","attemptInMultiLine":false,"sampleTest":false,"_id":"5d46bcc1695fda3b2cd0a780","scoreip":1,"testCaseDifficultyLevel":1},{"codeproginputparams":"100 500 1000","codeprogexpectedoutput":"100 500 1000","attemptInMultiLine":false,"sampleTest":false,"_id":"5d46bcc1695fda3b2cd0a77f","scoreip":2,"testCaseDifficultyLevel":1},{"codeproginputparams":"5678 8910 32768","codeprogexpectedoutput":"5678 8910 32768","attemptInMultiLine":false,"sampleTest":false,"_id":"5d46bcc1695fda3b2cd0a77e","scoreip":2,"testCaseDifficultyLevel":1}],"codeproglang":[{"_id":"6128ca744988fa877c834660","language":"7","defaultTrimmedCode":"/* add c headers if necessary*/\n#include <stdio.h>\nint main()\n{\n    return 0;\n}\n/* add tail for c if necessary*/","executionTimePerTestCaseInSec":1,"codeComponents":{"head":"/* add c headers if necessary*/","body":"#include <stdio.h>\nint main()\n{\n\n    return 0;\n}","tail":"/* add tail for c if necessary*/","solution":""},"defaultCompileResult":{"errors":"","output":"\nOUTPUT:\n\nOUTPUT:\n\nOUTPUT:\n\nOUTPUT:\n"}}],"multipleTestCases":false,"encryptedOutput":false,"executionType":"3"},"questionTypeMCQ":{"correctAnswers":[],"options":[]},"importedby":[],"displaystatus":1,"score":5,"minCompletionTimeInSec":0,"showHead":true,"showTail":true,"showSolution":false,"showCustomInput":true},"courseId":"69968acc7cfd8fe2002d7c40","container":{"_id":"69968acc7cfd8fe2002d7c40","disableCopyPaste":false,"title":"24CSE0107-Fundamentals of C Programming-Dr Rattan Deep Aneja","allowAiTutor":false,"courseAdministrator":[{"userId":"6673b968d44d15271e254f31","_id":"69968c227cfd8fe2002d7c45","permissions":[36,35,3,13,10,19,23]}],"allowDiscussion":false,"mentorId":["6673b968d44d15271e254f31"],"completedClassId":[],"assignmentMetaData":[],"courseSegments":[{"_id":"69968e197cfd8fe2002d7e47","id":"6981cfe7285f5b4932b22bd6","startIndex":1,"title":"Getting Started with C","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":2,"isAssignment":false,"count":2,"endOfContent":2,"segmentCountIndex":0},{"_id":"69968e197cfd8fe2002d7e46","id":"6981cfe7285f5b4932b22bd7","startIndex":3,"title":"Building Blocks of C","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":9,"isAssignment":false,"count":7,"endOfContent":9,"segmentCountIndex":1},{"_id":"69968e197cfd8fe2002d7e45","id":"6981cfe7285f5b4932b22bd8","startIndex":10,"title":"Input  Output","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":16,"isAssignment":false,"count":7,"endOfContent":16,"segmentCountIndex":2},{"_id":"69968e197cfd8fe2002d7e44","id":"6981cfe7285f5b4932b22bd9","startIndex":17,"title":"Operators and Operations","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":32,"isAssignment":false,"count":16,"endOfContent":32,"segmentCountIndex":3},{"_id":"69968e197cfd8fe2002d7e43","id":"6981cfe7285f5b4932b22bda","startIndex":33,"title":"Conditional Statements","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":65,"isAssignment":false,"count":33,"endOfContent":65,"segmentCountIndex":4},{"_id":"69968e197cfd8fe2002d7e42","id":"6981cfe7285f5b4932b22bdb","startIndex":66,"title":"Loops","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":92,"isAssignment":false,"count":27,"endOfContent":92,"segmentCountIndex":5},{"_id":"69968e197cfd8fe2002d7e41","id":"6981cfe7285f5b4932b22bdc","startIndex":93,"title":"Functions","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":116,"isAssignment":false,"count":24,"endOfContent":116,"segmentCountIndex":6},{"_id":"69968e197cfd8fe2002d7e40","id":"6981cfe7285f5b4932b22bdd","startIndex":117,"title":"Recursion","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":136,"isAssignment":false,"count":20,"endOfContent":136,"segmentCountIndex":7},{"_id":"69968e197cfd8fe2002d7e3f","id":"6981cfe7285f5b4932b22bde","startIndex":137,"title":"Pointers  Functions","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":147,"isAssignment":false,"count":11,"endOfContent":147,"segmentCountIndex":8},{"_id":"69968e197cfd8fe2002d7e3e","id":"6981cfe7285f5b4932b22bdf","startIndex":148,"title":"Storage classes","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":164,"isAssignment":false,"count":17,"endOfContent":164,"segmentCountIndex":9},{"_id":"69968e197cfd8fe2002d7e3d","id":"6981cfe7285f5b4932b22be0","startIndex":165,"title":"Array","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":210,"isAssignment":false,"count":46,"endOfContent":210,"segmentCountIndex":10},{"_id":"69968e197cfd8fe2002d7e3c","id":"6981cfe7285f5b4932b22be1","startIndex":211,"title":"Pointers  Arrays","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":246,"isAssignment":false,"count":36,"endOfContent":246,"segmentCountIndex":11},{"_id":"69968e197cfd8fe2002d7e3b","id":"6981cfe7285f5b4932b22be2","startIndex":247,"title":"Searching Sorting in Arrays","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":282,"isAssignment":false,"count":36,"endOfContent":282,"segmentCountIndex":12},{"_id":"69968e197cfd8fe2002d7e3a","id":"6981cfe7285f5b4932b22be3","startIndex":283,"title":"Character Arrays  Strings","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":309,"isAssignment":false,"count":27,"endOfContent":309,"segmentCountIndex":13},{"_id":"69968e197cfd8fe2002d7e39","id":"6981cfe7285f5b4932b22be4","startIndex":310,"title":"Preprocessing","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":310,"isAssignment":false,"count":1,"endOfContent":310,"segmentCountIndex":14},{"_id":"69968e197cfd8fe2002d7e38","id":"6981cfe7285f5b4932b22be5","startIndex":311,"title":"Bit Manipulation","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":320,"isAssignment":false,"count":10,"endOfContent":320,"segmentCountIndex":15},{"_id":"69968e197cfd8fe2002d7e37","id":"6981cfe7285f5b4932b22be6","startIndex":321,"title":"Structures","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":330,"isAssignment":false,"count":10,"endOfContent":330,"segmentCountIndex":16},{"_id":"69968e197cfd8fe2002d7e36","id":"6981cfe7285f5b4932b22be7","startIndex":331,"title":"Unions","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":333,"isAssignment":false,"count":3,"endOfContent":333,"segmentCountIndex":17},{"_id":"69968e197cfd8fe2002d7e35","id":"6981cfe7285f5b4932b22be8","startIndex":334,"title":"File Handling","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":351,"isAssignment":false,"count":18,"endOfContent":351,"segmentCountIndex":18}],"attemptInSequence":false,"languagesAllowed":["7"],"courseContent":{"_id":"69968e197cfd8fe2002d7e27","id":"5d46bcc1695fda3b2cd0a77d","executionType":"3","difficultyLevel":3,"showHead":true,"showTail":true,"showSolution":false,"skipAllowed":false,"showCustomInput":true,"contentType":"3","isAssignment":false,"files":[]},"allowCodeSharing":false,"assignmentSegments":[],"isAssignment":false,"startOfAssignmentContent":351,"contentIndex":13,"segmentData":{"segmentIndex":2,"segmentObj":{"_id":"69968e197cfd8fe2002d7e45","id":"6981cfe7285f5b4932b22bd8","startIndex":10,"title":"Input  Output","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":16,"isAssignment":false,"count":7,"endOfContent":16,"segmentCountIndex":2},"contentIndex":13,"preSegmentObj":{"_id":"69968e197cfd8fe2002d7e46","id":"6981cfe7285f5b4932b22bd7","startIndex":3,"title":"Building Blocks of C","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":9,"isAssignment":false,"count":7,"endOfContent":9,"segmentCountIndex":1},"nextSegmentObj":{"_id":"69968e197cfd8fe2002d7e44","id":"6981cfe7285f5b4932b22bd9","startIndex":17,"title":"Operators and Operations","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":32,"isAssignment":false,"count":16,"endOfContent":32,"segmentCountIndex":3},"segmentStart":9,"isLastQuestion":false,"segmentIndexStart":0,"segmentIndexEnd":18,"isAssignment":false,"startOfAssignmentContent":351},"prevQuestionData":{"isCurrentSubmissionAllowed":true},"isQuiz":false},"userAnswerId":"b6f0ff9c-bb96-48a6-830c-57ea573faec8","isCompleted":false,"stringifyQues":"[{\"_id\":\"6128ca744988fa877c834660\",\"language\":\"7\",\"defaultTrimmedCode\":\"/* add c headers if necessary*/\\n#include <stdio.h>\\nint main()\\n{\\n    return 0;\\n}\\n/* add tail for c if necessary*/\",\"executionTimePerTestCaseInSec\":1,\"codeComponents\":{\"head\":\"/* add c headers if necessary*/\",\"body\":\"#include <stdio.h>\\nint main()\\n{\\n\\n    return 0;\\n}\",\"tail\":\"/* add tail for c if necessary*/\",\"solution\":\"\"},\"defaultCompileResult\":{\"errors\":\"\",\"output\":\"\\nOUTPUT:\\n\\nOUTPUT:\\n\\nOUTPUT:\\n\\nOUTPUT:\\n\"}}]","attemptLinks":{"nextLink":"/attempt/attemptquestion/69968acc7cfd8fe2002d7c40/5d46bcd2695fda3b2cd0a783","previousLink":"/attempt/attemptquestion/69968acc7cfd8fe2002d7c40/5a2a88b06dc3de029e488752","contentObj":{"_id":"69968e197cfd8fe2002d7e27","id":"5d46bcc1695fda3b2cd0a77d","executionType":"3","difficultyLevel":3,"showHead":true,"showTail":true,"showSolution":false,"skipAllowed":false,"showCustomInput":true,"contentType":"3","isAssignment":false,"files":[]},"segmentData":{"segmentIndex":2,"segmentObj":{"_id":"69968e197cfd8fe2002d7e45","id":"6981cfe7285f5b4932b22bd8","startIndex":10,"title":"Input  Output","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":16,"isAssignment":false,"count":7,"endOfContent":16,"segmentCountIndex":2},"contentIndex":13,"preSegmentObj":{"_id":"69968e197cfd8fe2002d7e46","id":"6981cfe7285f5b4932b22bd7","startIndex":3,"title":"Building Blocks of C","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":9,"isAssignment":false,"count":7,"endOfContent":9,"segmentCountIndex":1},"nextSegmentObj":{"_id":"69968e197cfd8fe2002d7e44","id":"6981cfe7285f5b4932b22bd9","startIndex":17,"title":"Operators and Operations","skipAllowed":false,"share":false,"isSubmissionAllowed":false,"isSameDaySubmission":true,"shareMsg":"","desc":"","startTime":null,"dueDate":null,"isDueDate":false,"endIndex":32,"isAssignment":false,"count":16,"endOfContent":32,"segmentCountIndex":3},"segmentStart":9,"isLastQuestion":false,"segmentIndexStart":0,"segmentIndexEnd":18,"isAssignment":false,"startOfAssignmentContent":351},"nextTitle":"Read character type values","nextType":"3","previousTitle":"Input-Output in C - 3","previousType":"1"},"endOfSegmentOrCourse":0,"session":{"ssnid":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmVlNjcyMDI2ODZjZWYwYTI0N2Q4ZjYiLCJkaXNwbGF5bmFtZSI6Ik9NIEFHR0FSV0FMIiwiaWF0IjoxNzc2NTY5NDE2fQ.b-v0XwOoiwgH36vuaipJjYNlLRosiwE4cuElVehmVDA","userId":"66ee67202686cef0a247d8f6","email":"om0653.becse24@chitkara.edu.in","orgId":"66a72f7af7e27a93aa853478","parentId":"66a72f7af7e27a93aa853478","role":"1","roleId":"65a8ba1596c9fb03dc1504f3","orgIdsAssigned":["6625e4fbe70f03868ea7f64e","6625e4fbe70f03868ea7f64f","6625e4fbe70f03868ea7f650","6625e4fbe70f03868ea7f651","6625e4fbe70f03868ea7f652","6625e4fbe70f03868ea7f653","6625e4fbe70f03868ea7f654","6625e55de70f03868ea7f68f","6625e55de70f03868ea7f690","6625e55de70f03868ea7f691","6625e5bee70f03868ea7f6d3","6625e6b3e70f03868ea7f724","6625e864e70f03868ea7f764","6625e864e70f03868ea7f765","6625e864e70f03868ea7f766","6625ee7fe70f03868ea7f8af","6625ee7fe70f03868ea7f8b0","6625ee7fe70f03868ea7f8b1","6625ee7fe70f03868ea7f8b2","6625ee7fe70f03868ea7f8b3","6625eeade70f03868ea7f8e2","6625eeade70f03868ea7f8e3","6625eeade70f03868ea7f8e4","6625eeade70f03868ea7f8e5","6625eeade70f03868ea7f8e6","6625eeeae70f03868ea7f908","6625eeeae70f03868ea7f909","6625eeeae70f03868ea7f90a","6625eeeae70f03868ea7f90b","6625eeeae70f03868ea7f90c","6625eeeae70f03868ea7f90d","6625f025e70f03868ea7f9dd","6625f025e70f03868ea7f9de","6625f025e70f03868ea7f9df","6625f1efe70f03868ea7fa71","6625f24ce70f03868ea7fa9f","667f8ed0b6f2dffee0a780fb","668249e9dbdcc767eb34f993","6683ce61dbdcc767eb35106d","66a319018295768caa848cd4","66a33935ca753c93c03bfdde","662365e3e70f03868ea7d1f0","66238f95e70f03868ea7d5d1","66239024e70f03868ea7d5dd","6625e472e70f03868ea7f638","6625e549e70f03868ea7f679","6625e577e70f03868ea7f6a8","6625e5b6e70f03868ea7f6c7","6625e5e4e70f03868ea7f6e8","6625e663e70f03868ea7f708","6625e6bde70f03868ea7f730","6625e7c6e70f03868ea7f747","6625ece8e70f03868ea7f827","6625ece8e70f03868ea7f828","6625ece8e70f03868ea7f829","6625ed09e70f03868ea7f857","6625ed09e70f03868ea7f858","6625ed09e70f03868ea7f859","6625ef80e70f03868ea7f976","6625f294e70f03868ea7fad1","6625f303e70f03868ea7fae0","6625f359e70f03868ea7faf0","6625f396e70f03868ea7fafc","6625f3e9e70f03868ea7fb08","66260697e70f03868ea7fc94","66555afd42924ac0d5c12eaa","6676619e53911a3ea2490a14","668bb1431c670165dc9a489a","669f2cef9322a84f57bc1fce","669f2ee284f2f04f6dd8933e","669f342a84f2f04f6dd893f5","669f342a84f2f04f6dd893f6","66a1ec1784f2f04f6dd8c158","66a21b8184f2f04f6dd8c6de","66a9d0bb6293e76a7d159a19","66ab60b43d0cba45714d3131","66c2cf4119d5ea457e6c1b29","66c43a173d0cba45714e9367","66c43a4619d5ea457e6c313a","66ced30567dea20d07e4eb36","66d837493035f405d76bfcb0","66e26da53035f405d76ce35c","66e2b13d892ef105d4b41b64","66f144dcd2e339c4d10c65e9","670f85703d264387f7559cbd","67162c899d1b7fd8b36eed69","674fe8a5d25046cfa8cc6431","67a9c0c2db1086ede68e6c3f","6895a7b541a33b8168843b4e","6895a7e141a33b8168843b64"],"enrollmentId":"2410990653","hostAllowed":[3],"roleName":"Student","roleObj":{"_id":"65a8ba1596c9fb03dc1504f3","allowedRoleIdsToAdd":[],"name":"Student","roleType":1,"roles":[{"actions":[],"_id":"6669185d0c3760ab826ebe57","resource":1},{"actions":[],"_id":"6669185d0c3760ab826ebe58","resource":2},{"actions":[],"_id":"6669185d0c3760ab826ebe59","resource":3},{"actions":[12],"_id":"6669185d0c3760ab826ebe5a","resource":4},{"actions":[],"_id":"6669185d0c3760ab826ebe5b","resource":5},{"actions":[],"_id":"6669185d0c3760ab826ebe5c","resource":6},{"actions":[3,18,29,30],"_id":"6669185d0c3760ab826ebe5d","resource":9},{"actions":[],"_id":"6669185d0c3760ab826ebe5e","resource":11},{"actions":[],"_id":"6669185d0c3760ab826ebe5f","resource":17},{"actions":[3,18,29,30,47,48,49,50],"_id":"6669185d0c3760ab826ebe60","resource":20},{"actions":[18],"_id":"6669185d0c3760ab826ebe61","resource":21},{"actions":[],"_id":"6669185d0c3760ab826ebe62","resource":26},{"actions":[],"_id":"6669185d0c3760ab826ebe63","resource":29}],"defaultRouteResouce":21,"createdBy":"59f9c87bbace049edfca78cf","createdAt":"2024-01-18T05:41:41.481Z","updatedAt":"2024-06-12T03:39:09.027Z","__v":0},"exceptionRoleIds":[],"isCq":false,"isClassAllowed":false,"userQuota":"20M","displayname":"OM AGGARWAL","profilePic":"/icons/portrait_placeholder_circle.png","canAddTestCase":false,"allowAdminContent":true,"isSuperOrg":true,"parentIdOfCreator":"66a72f7af7e27a93aa853478","languagesAllowed":["7","17","77","8","4","11","0","20","5","1","10","3","23"],"institutions":[],"id":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmVlNjcyMDI2ODZjZWYwYTI0N2Q4ZjYiLCJkaXNwbGF5bmFtZSI6Ik9NIEFHR0FSV0FMIiwiaWF0IjoxNzc2NTY5NDE2fQ.b-v0XwOoiwgH36vuaipJjYNlLRosiwE4cuElVehmVDA","courseLogin":true,"isQuizServer":false},"canAddTestCase":false,"contentTypeString":{"contentTypeMCQ":"1","contentTypeSubjective":"2","contentTypeCoding":"3","contentTypeStepwise":"4","contentTypeTutorial":"5","contentTypeQuiz":"6","contentTypeClass":"8","contentTypeWeb":"9","contentTypeProject":"10","question":"question","course":"course","quiz":"quiz","tutorial":"tutorial"},"emailHash":"e6433dc9c1e095a7995822ce5372d46ef3351ec20fcdd2630830b67f34e1","isFavourite":false}));
+
+  if(question.type == 4) {
+    stringifyQues = JSON.parse(stringifyQues);
+  }
+  
+  const disableCopyPaste = container.disableCopyPaste ? container.disableCopyPaste : false;
+  const isReactQuestion = question.questionTypeWeb && question.questionTypeWeb.isReactQuestion;
+  let skipAllowed = attemptLinks && attemptLinks.contentObj && attemptLinks.contentObj.skipAllowed || 0;
+
+  var zoomsize = false;
+  let correctMCQResult = null;
+  
+</script>
+
+<!-- necessary scripts -->
+<script src="./Testpad_pra_files_files/bootstrap.bundle.min.js.download" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/socket.io.min.js.download" integrity="sha512-eVL5Lb9al9FzgR63gDs1MxcDS2wFu3loYAgjIH0+Hg38tCS8Ag62dwKyH+wzDb+QauDpEZjXbMn11blw8cbTJQ==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/bootstrap-select.min.js.download"></script>
+
+<script>
+  let attachLearningModuleSearch = false;
+  const discussionUrl = `https://discussions.codequotient.com`;
+  const PROJECTS_APP_HOST = `https://projects.codequotient.com`;
+  const WORKSPACES_API_HOST = `https://ws-backend.codequotient.com`;
+  const WORKSPACES_APP_HOST = `https://workspaces.codequotient.com`;
+  var sessionRole = 1;
+  ""
+  sessionRole = `1`;
+  ""
+
+  ""
+  attachLearningModuleSearch = true;
+  ""
+</script>
+
+<script src="./Testpad_pra_files_files/header.js.download"></script>
+<script src="./Testpad_pra_files_files/header-new.js.download"></script>
+
+<!-- common scripts -->
+
+<script src="./Testpad_pra_files_files/alert-modal.js.download"></script>
+<script src="./Testpad_pra_files_files/confirm-modal.js.download"></script>
+<script src="./Testpad_pra_files_files/share-modal.js.download"></script>
+<script src="./Testpad_pra_files_files/feedback-balloon.js.download"></script>
+<script src="./Testpad_pra_files_files/socket-events.js.download"></script>
+ 
+<script src="./Testpad_pra_files_files/content-discussion-sidebar.js.download"></script>
+ 
+
+<!-- page specific scripts -->
+<script src="./Testpad_pra_files_files/highlight.min.js.download"></script>
+<script src="./Testpad_pra_files_files/quill.min.js.download" integrity="sha512-P2W2rr8ikUPfa31PLBo5bcBQrsa+TNj8jiKadtaIrHQGMo6hQM6RdPjQYxlNguwHz8AwSQ28VkBK6kHBLgd/8g==" crossorigin="anonymous"></script>
+<!-- CodeMirror linter dependencies -->
+<script src="./Testpad_pra_files_files/jshint.min.js.download" integrity="sha512-qcoitUjhkmNyPmbIOlUV/zd8MJvrVcKrNqnveMWS3C6MYOl5+HLwliRKUm/Ae/dfIok6+E54hjgVrAeS+sBAGA==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/csslint.min.js.download" integrity="sha512-BAbuXVDTbD5uuP8kZ0bj68d565+xOkx/wHGIRicQdWSfMhtdMn4IrdtqLRFzxThMPD1SE6d0/+PjobZpOCkuHg==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/jsonlint.min.js.download" integrity="sha512-6qbnCNQe7wVcBDvhNJT6lZsbDKHCQQBk7yOBQg4s/9GG812CknK0EEIqG2IS10XuNxIQNWjMJd6VLwwezICz6w==" crossorigin="anonymous"></script>
+
+
+<!-- CodeMirror scripts -->
+<script src="./Testpad_pra_files_files/codemirror.min.js.download" integrity="sha512-LwxFyHyqmDdcint8dhTSHeJuI+uH5r/vrcGkxH4QhHGP8SpNaS9MVa1BxZRNTb1GPyLBAWrjbWpZTPGgtDgJOw==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/clike.min.js.download" integrity="sha512-m3ghu/xpRyZKDD9RVnxZIT8+lYTjrh7tAz7xbj94du1+3voHC2llSKQQOywnxkYzPcjexBUwf2nhGV9caxlEZw==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/xml.min.js.download" integrity="sha512-XPih7uxiYsO+igRn/NA2A56REKF3igCp5t0W1yYhddwHsk70rN1bbbMzYkxrvjQ6uk+W3m+qExHIJlFzE6m5eg==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/css.min.js.download" integrity="sha512-rsFXL+3jYau54xgkx2FtVPo+yRM4vLMEU9VBWl8hZX+t8MEYzGBHeHh5ELv04uthHqix7Dhw2o4KgQ1c+s6dEQ==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/javascript.min.js.download" integrity="sha512-vjRTsZb6KBcNtLlBmtWZhjcctZRmUI/G2kYJLDJIzE6EoDdruleHFjF4gzKXf5fsLD0oMEIW7Ol3dcpWdL98Tg==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/shell.min.js.download" integrity="sha512-XgDqDL1gXdiG/pLBnn7W+08Ajap6ycB3jVD0db1oBwtQevc1DIRvU3fotxsr58GvfzH2pi64roId2YkocyAPzQ==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/python.min.js.download" integrity="sha512-Wv4mIFQ1bvlZvECHd67MPInlh4OitUjmKXyjOOsGUcUCSL8KYgRG7WIgp7Px2xq02fPMyJD3/L6UNCAer9Pa3Q==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/sql.min.js.download" integrity="sha512-dfObApt1XdGl62IJLrjbIOc9QtnRORA5TCwdnJkSj6C/KjwMz2L/Sc4WlcrgAuWoY+n5xTf6NMMojoUOlgwjug==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/ruby.min.js.download" integrity="sha512-0//lpj6tfH5BqYDhJTqFRdn91SO9jj4O94Vq85it+Vzve7iH0qPl144csWVPJPkLx8NDeqodokDzRZTiFveXxw==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/php.min.js.download" integrity="sha512-VYPUSn3XJTii+yEASLCfsbt/mM4I1dHCDdCUKlzXE2uXccT9c8MvqtUvvV3+HnJgVtkKGH6qS63FscTYbXmcmw==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/htmlmixed.min.js.download" integrity="sha512-IC+qg9ITjo2CLFOTQcO6fBbvisTeJmiT5D5FnXsCptqY8t7/UxWhOorn2X+GHkoD1FNkyfnMJujt5PcB7qutyA==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/xml-fold.min.js.download" integrity="sha512-UWevuuTs1/TWFZfIvCUtPfoiL4sIt14BmDftB8GAYEtT3DnYCwR1qqD9YQJw8ckcu/YV0zgE+IEIKsffcpYBGA==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/closebrackets.min.js.download" integrity="sha512-+xi2SgGCBFIGog8JZv+X1dte+mhaJ6i73ZV2icqQk+onxz+ZkrSgtXdNfvqX2YYzwMsGAqpcjyIxvC9ytAXXPw==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/closetag.min.js.download" integrity="sha512-Ucx7SiWLXI3R93HwP/eGb5d764kMmqR3MpEwehvTyhQfQS+bSDKsKktyqV2Uk717zlbGdcTtkFKTQH41O+hyDw==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/matchbrackets.min.js.download" integrity="sha512-rjbQerijlYZoHtP8XJGb7xkwnSRUHiydD8NE9fpe01feRM5RDZSZ9Tia+a9hV2cFHMilO4hZaeeTc9ESiik9wQ==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/matchtags.min.js.download" integrity="sha512-RhFcU90dzfpVCAfiAAFCqH/UESr9/ZzrwX9gW1ZjRh9kPu2CTqvWuk85U6ECWis/M9/yZemU+sheJspFobQOag==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/foldcode.min.js.download" integrity="sha512-IjSd8OJ9rx/3rtJvCpNXNMYMup2xlV8WdxLFzMw747Zbs2oFBYollKnJXBSGOySjxg/ef7tkKAra5GdytefQEg==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/foldgutter.min.js.download" integrity="sha512-Yhrn0zU9jQBETdu3RUw6Rl+pSPWNl8xDxjiJkds2xNQapiaCiBX0et1ecl8VqUM421uWRwoa0ynzZ5knY8zt9w==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/indent-fold.min.js.download" integrity="sha512-Q6g5qQfa6ko+Y+0BwAciUAq01qxgfScTPFP2Fsrr+zIrTe5Yq3tN5xaA919MmBs/1RMz/jyctknYavjc3k+/xg==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/comment-fold.min.js.download" integrity="sha512-UKU458xnHR+JuKmlgf/jsYBq4/JJVipuY9wJ0CzS4E2xe5lETTWothmsd9afiH2i114eEKupsFP7Zer+CqWEWg==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/brace-fold.min.js.download" integrity="sha512-WCphQsYuTAGZGrVk8mgk97HYNOohaWeWeTHeCl2hbJZrppzQUXtvf8B7577DNnoBsy0Du7cSKf6mT/j6TmMxuQ==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/active-line.min.js.download" integrity="sha512-UNVAZmixdjeBtJVQcH5eSKXuVdzbSV6rzfTfNVyYWUIIDCdI9/G8/Z/nWplnSHXXxz9U8TA1BiJ1trK7abL/dg==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/lint.min.js.download" integrity="sha512-j9BDtxolKho+l9Ho53zTy9T4XGNUJ4gokZHTm2WNsug5kscxvy32T/buQRq7jVkCQ5PlUrKU7X5WQqmVNOxwfA==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/css-lint.min.js.download" integrity="sha512-XKdBNfb1L3q1HxIEGvkAW0z+ycwjj4GsDzK5FJbPTZMKJnrbjwmWTYaTlpn3sCXjmcJK4bAwQD4B81GdvpPKzg==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/html-lint.min.js.download" integrity="sha512-NG4kugClhatqr4Gk18fSBbV343Mr8GAPnAadvfevvY0CkTLpoB2pqCsfRr+O6FrHU8NIQh+9K34TPfvb3tfcww==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/javascript-lint.min.js.download" integrity="sha512-zwusqVz1qn+JyCHc09C0naAEMMZKn3K8deUOpDMnC4WCM59kfg8rmF+dJNyNW9AmfIELag6MeALrEBD33rJVpA==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/json-lint.min.js.download" integrity="sha512-40xVcCik6TlUiZadnRc6ZM0BN65s7F+C3K7eBqGRf8dmjKApjzoiT/GB1GJmdICOZbXjJCiTBbVlsIvFs8A/+Q==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/show-hint.min.js.download" integrity="sha512-W2KjarJZRLrf5nVOcH+FK1Ou4EXg69ku7L9Rlaq3glCV+yZDiHYMIv3YhgJnCzlxDIDLYJq3zxETymz7xfNUIQ==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/css-hint.min.js.download" integrity="sha512-U1bPO4poiFpeOpwVxiNkLdG4QbNPObr0cT8e+vrpf0yodnNHE0qGjQTw16fvQIeXNs9n7lqZO7XlTIkvqKKkLQ==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/html-hint.min.js.download" integrity="sha512-oxBKDzXElkyh3mQC/bKA/se1Stg1Q6fm7jz7PPY2kL01jRHQ64IwjpZVsuZojcaj5g8eKSMY9UJamtB1QR7Dmw==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/javascript-hint.min.js.download" integrity="sha512-2zi+0HSB5MXoy+BenDX/EKjqN6eUnsG2Lh9cpx+Ckua3Yi2XupO8ife9VELSg8iR7AT98yHQNyyaAL4ImVHcoQ==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/sql-hint.min.js.download" integrity="sha512-OHVTwNN/yLMJj0zf2/pdkr/My9znB4byN7ibdXW+ha61wsKgAPyUZXAkgoQipu0MDQMfNmE17mFhNs9wLbK5QA==" crossorigin="anonymous"></script>
+
+<script src="./Testpad_pra_files_files/xml-hint.min.js.download" integrity="sha512-7gbntN2jehWpF75D6bhVh+x/eKAGMLp0XbVG7PmVG/GQmMFmTTRVm56MpEbWxSTxvWb2LIQsnseCveyqILdDAw==" crossorigin="anonymous"></script>
+<script src="./Testpad_pra_files_files/bootstrap-select.min(1).js.download" integrity="sha512-yDlE7vpGDP7o2eftkCiPZ+yuUyEcaBwoJoIhdXv71KZWugFqEphIS3PU60lEkFaz8RxaVsMpSvQxMBaKVwA5xg==" crossorigin="anonymous"></script>
+<script src="./Testpad_pra_files_files/notie.js.download"></script><div id="notie-alert-outer" style="position: fixed; top: 0px; left: 0px; z-index: 999999999; height: auto; width: 100%; display: none; text-align: center; cursor: pointer;"><div id="notie-alert-inner" style="padding: 15px; display: table-cell; vertical-align: middle;"><span id="notie-alert-text" style="color: rgb(255, 255, 255); font-weight: 600;"></span></div></div><div id="notie-confirm-outer" style="position: fixed; top: 0px; left: 0px; z-index: 999999998; height: auto; width: 100%; display: none; text-align: center;"><div id="notie-confirm-inner" style="box-sizing: border-box; width: 100%; padding: 15px; display: block; cursor: default; background-color: rgb(0, 168, 255);"><span id="notie-confirm-text" style="color: rgb(255, 255, 255); font-weight: 600;"></span></div><div id="notie-confirm-yes" style="float: left; height: 50px; line-height: 50px; width: 50%; cursor: pointer; background-color: rgb(70, 195, 95);"><span id="notie-confirm-yes-text" style="color: rgb(255, 255, 255); font-weight: 600;"></span></div><div id="notie-confirm-no" style="float: right; height: 50px; line-height: 50px; width: 50%; cursor: pointer; background-color: rgb(250, 66, 74);"><span id="notie-confirm-no-text" style="color: rgb(255, 255, 255); font-weight: 600;"></span></div></div><div id="notie-confirm-background" style="position: fixed; top: 0px; left: 0px; z-index: 999999997; height: 100%; width: 100%; display: none; background-color: white; transition: 0.3s; opacity: 0;"></div><div id="notie-input-outer" style="position: fixed; top: 0px; left: 0px; z-index: 999999998; height: auto; width: 100%; display: none; text-align: center;"><div id="notie-input-inner" style="box-sizing: border-box; width: 100%; padding: 20px; display: block; cursor: default; background-color: rgb(0, 168, 255);"><span id="notie-input-text" style="color: rgb(255, 255, 255); font-weight: 600;"></span></div><div id="notie-input-div" style="box-sizing: border-box; height: 55px; width: 100%; display: block; cursor: default; background-color: rgb(255, 255, 255);"><input id="notie-input-field" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="box-sizing: border-box; height: 55px; width: 100%; text-align: center; text-indent: 10px; padding-right: 10px; outline: 0px; border: 0px; font-family: inherit;"></div><div id="notie-input-yes" style="float: left; height: 50px; line-height: 50px; width: 50%; cursor: pointer; font-weight: 600; background-color: rgb(70, 195, 95);"><span id="notie-input-yes-text" style="color: rgb(255, 255, 255);"></span></div><div id="notie-input-no" style="float: right; height: 50px; line-height: 50px; width: 50%; cursor: pointer; font-weight: 600; background-color: rgb(250, 66, 74);"><span id="notie-input-no-text" style="color: rgb(255, 255, 255);"></span></div></div><div id="notie-input-background" style="position: fixed; top: 0px; left: 0px; z-index: 999999997; height: 100%; width: 100%; display: none; background-color: white; transition: 0.3s; opacity: 0;"></div>
+<script src="./Testpad_pra_files_files/code-mirror-scripts.js.download"></script>
+<script src="./Testpad_pra_files_files/question-view.js.download"></script>
+<script>
+  function downloadTestCase(downloadButton) {
+    const testCaseId = $(downloadButton).attr('testCaseId');
+    console.log(testCaseId);
+    if (testCaseId) {
+      window.open(`/quest/downloadTestCase/${'5d46bcc1695fda3b2cd0a77d'}/${testCaseId}`, '_blank');
+    }
+  }
+</script>
+
+
+ 
+ 
+ 
+ 
+ 
+
+<!-- console box -->
+<!-- width according to center divider -->
+ 
+<div class="console-box-container d-none" id="consoleBox">
+  <div class="console-box-navbar">
+    <div style="width: 90%;display: inline-block;"> 
+       
+      <div class="console-tabs selected tooltip-up" onclick="changeConsole(1)" id="testCaseBtn">Test cases</div>
+       
+      
+        <div style="display: none;" class="console-tabs" onclick="changeConsole(2)" id="customInputBtn">Custom input</div>
+       
+       
+        <div class="console-tabs" onclick="changeConsole(3)" id="consoleBtn">Console</div>
+       
+    </div>
+    <div class="close-option-container" style="width: 9%;text-align: right;">
+      <i onclick="hideConsoleBox()" style="color: #9b9b9b;cursor: pointer;" class="material-icons">arrow_drop_down</i>
+    </div>
+  </div>
+  <div class="test-case-box-container" id="testCaseBox">
+    <div class="test-case-container">
+    <!-- test case array condition -->
+       
+      
+        <!-- coding question array -->
+         
+       
+    <!-- test case array condition -->
+    
+
+       
+                
+        
+        <div class="test-cases" id="test-case-1">
+           
+             
+              <img src="./Testpad_pra_files_files/warning.png" alt="fail">
+             
+           
+
+            <!-- if show test case -->
+             
+            <a id="5d46bcc1695fda3b2cd0a781" onclick="showTestCase(this)" class="showTestCase">Test case 1</a>
+            <input type="checkbox" disabled="" class="onCloud d-none">
+            <div class="input-params d-none">10 20 30 </div>
+            <div class="expected-params d-none">10 20 30</div>
+            <div class="yOutput d-none"></div>
+          <!-- if web test case -->
+           
+          <!-- if web test case -->
+           
+          <!-- if show test case -->
+
+          <!-- if test case hide -->
+           
+            <!-- if test case hide -->
+  
+        </div>
+       
+                
+        
+        <div class="test-cases" id="test-case-2">
+           
+             
+              <img src="./Testpad_pra_files_files/warning.png" alt="fail">
+             
+           
+
+            <!-- if show test case -->
+             
+            <a id="5d46bcc1695fda3b2cd0a780" onclick="showTestCase(this)" class="showTestCase">Test case 2</a>
+            <input type="checkbox" disabled="" class="onCloud d-none">
+            <div class="input-params d-none">1 2 3 </div>
+            <div class="expected-params d-none">1 2 3</div>
+            <div class="yOutput d-none"></div>
+          <!-- if web test case -->
+           
+          <!-- if web test case -->
+           
+          <!-- if show test case -->
+
+          <!-- if test case hide -->
+           
+            <!-- if test case hide -->
+  
+        </div>
+       
+                
+        
+        <div class="test-cases" id="test-case-3">
+           
+             
+              <img src="./Testpad_pra_files_files/warning.png" alt="fail">
+             
+           
+
+            <!-- if show test case -->
+             
+            <a id="5d46bcc1695fda3b2cd0a77f" onclick="showTestCase(this)" class="showTestCase">Test case 3</a>
+            <input type="checkbox" disabled="" class="onCloud d-none">
+            <div class="input-params d-none">100 500 1000 </div>
+            <div class="expected-params d-none">100 500 1000</div>
+            <div class="yOutput d-none"></div>
+          <!-- if web test case -->
+           
+          <!-- if web test case -->
+           
+          <!-- if show test case -->
+
+          <!-- if test case hide -->
+           
+            <!-- if test case hide -->
+  
+        </div>
+       
+                
+        
+        <div class="test-cases" id="test-case-4">
+           
+             
+              <img src="./Testpad_pra_files_files/warning.png" alt="fail">
+             
+           
+
+            <!-- if show test case -->
+             
+            <a id="5d46bcc1695fda3b2cd0a77e" onclick="showTestCase(this)" class="showTestCase">Test case 4</a>
+            <input type="checkbox" disabled="" class="onCloud d-none">
+            <div class="input-params d-none">5678 8910 32768 </div>
+            <div class="expected-params d-none">5678 8910 32768</div>
+            <div class="yOutput d-none"></div>
+          <!-- if web test case -->
+           
+          <!-- if web test case -->
+           
+          <!-- if show test case -->
+
+          <!-- if test case hide -->
+           
+            <!-- if test case hide -->
+  
+        </div>
+       
+     
+     
+    <div class="total-test-case-result-container" id="totalTestCaseResultContainer">
+      <p>Test case passed 
+        0/4</p>
+    </div>
+     
+    </div>
+    <div class="result-test-case-container">
+       
+      <!-- input params -->
+      <div>
+        <div class="w-100 d-flex justify-content-between">
+          <label>Input</label>
+          <div id="cloud-download" onclick="downloadTestCase(this)">
+            <img src="./Testpad_pra_files_files/download.svg" width="20">
+          </div>
+        </div>
+        <div id="inputParams" class="result-test-case">
+          <pre></pre>
+        </div>
+      </div>
+      <!-- input params -->
+      <!-- expected output -->
+      <div style="margin-top: 15px;">
+        <label>Expected Output</label>
+        <div id="expectedParams" class="result-test-case">
+          <pre></pre>
+        </div>
+      </div>
+      <!-- expected output -->
+      <!-- your output -->
+      <div style="margin-top: 15px;">
+        <label>Your Output</label>
+        <div id="yOutputParams" class="result-test-case">
+          <pre></pre>
+        </div>
+      </div>
+      <!-- your output -->
+       
+    </div>
+  </div>
+  <div class="custom-input-box-container d-none" id="customInputBox">
+    
+      
+      <textarea style="margin-top:10px;width:90%" class="cstum-input-box" id="stdin" name="stdin">10 20 30</textarea>
+     
+  </div>
+  <div class="console-error-box d-none" id="errorBox">
+     
+    <textarea id="txtError" name="txtError" readonly="" style="background: #000; color:#fff; resize:none; width: 100%;height: 100% !important; padding:9px">      
+    </textarea>
+     
+  </div>
+</div>
+ 
+
+  <style>
+    .modal-title {
+      color: #DE1E1E;
+    }
+    .modal-body{
+      max-height: 400px;
+      overflow: auto;
+    }
+    .btn-secondary-default {
+      color: #de6834;
+      background-color: white;
+      border: 0;
+      outline: 0;
+      box-shadow: none !important;
+    }
+  </style>
+  <div class="modal fade" id="custom-error-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content border-0">
+        <div class="modal-header px-4 pt-3 pb-2"><h5 class="modal-title">Verification Failed</h5></div>
+        <div class="modal-body px-4 py-2"></div>
+        <div class="modal-footer px-4 py-1 border-0">
+          <button type="button" class="btn btn-secondary-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <style>
+      dialog {
+        border: none;
+        border-radius: 8px;
+        padding: 20px;
+        width: 500px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        background: white;
+      }
+
+      dialog::backdrop {
+        backdrop-filter: blur(8px);
+      }
+      
+      dialog:focus {
+        outline: none;
+      }
+
+      .stepper {
+        display: flex;
+        flex-direction: column;
+        padding: 0.5rem;
+        margin-bottom: 16px;
+      }
+      
+      .circle {
+        width: 39px;
+        height: 39px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        border: 2px solid #d2d3d3;
+        flex-shrink: 0;
+      }
+
+      .step {
+        display: flex;
+        flex-direction: column;
+        opacity: 0.6;
+      }
+
+      .step .label {
+        margin-left: 10px;
+        flex-grow: 1;
+      }
+      .activeVerificationStep {
+        opacity: 1;
+      }
+
+      .step.activeVerificationStep.circle {
+        background-color: #de6834;
+        animation: spin 1s linear infinite;
+        color: white;
+      }
+
+      .label {
+        font-size: 1rem;
+        color: #333;
+      }
+
+      .spinner-active {
+        border: 3px solid #ccc;
+        border-top: 3px solid #ffffff;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin-left: auto;
+      }
+
+      .progressTitle{
+        display: flex;
+        align-items: center;
+      }
+
+      .description {
+        width: 100%;
+        border-left: 2px solid #ccc;
+        margin-left: 19px;
+        padding: 0 15px 10px 30px;
+        font-weight: 200; 
+        color: #6a6d71
+      }
+
+      .step .description{
+        min-height: 60px;
+      }
+      .step:last-child .description {
+        border-left-color: transparent;
+        min-height: unset;
+      }
+
+      .spin{
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+  </style>
+
+  <dialog id="progressDialog" closedby="none">
+      <div class="stepper" id="progressDialogStages">
+        <div class="step" id="stage1" style="opacity: 1;">
+          <div class="progressTitle">
+              <div class="circle progressDialogStageIcon"></div>
+              <div class="label"><span>Initializing</span></div>
+          </div>
+          <div class="description"></div>
+        </div>
+        <div class="step" id="stage2">
+          <div class="progressTitle">
+              <div class="circle progressDialogStageIcon"></div>
+              <div class="label"><span>Processing</span></div>
+          </div>
+          <div class="description"></div>
+        </div>
+        <div class="step" id="stage3">
+          <div class="progressTitle">
+              <div class="circle progressDialogStageIcon"></div>
+              <div class="label"><span>Finalizing</span></div>
+          </div>
+          <div class="description"></div>
+        </div>
+      </div>
+      <form method="dialog">
+      <button id="closeProgressDialog" type="submit" class="btn btn-code-verify" disabled="">Close</button>
+      </form>
+  </dialog>
+
+<script>
+  const stepper = document.getElementById("progressDialogStages");
+  const closeBtn = document.getElementById("closeProgressDialog");
+  const codingQuestionSteps = [ 
+      { label: "Verifying Description and other fields" },
+      { label: "Language Support check" },
+      { label: "Testing Custom Input" },
+      { label: "Review Test Cases" },
+      { label: "Verify Solutions" }
+  ];
+  const mcqQuestionSteps = [
+      { label: "Verifying Description and other fields" },
+      { label: "Verifying Options" },
+      { label: "Verifying Correct Option" }
+  ];
+
+  const mqQuestionSteps = [
+      { label: "Verifying Description and other fields" },
+      { label: "Verifying Questions" },
+      { label: "Verifying Answers" }
+  ];
+
+  const webQuestionSteps = [
+      { label: "Verifying Description and other fields" },
+      { label: "Verifying Correct Option" }
+  ];
+
+  const subjectiveQuestionSteps = [
+      { label: "Verifying Description and other fields" },
+      {label: "Verifying Solution"}
+  ];
+
+  const validateQuestionWithAI = async () => {
+    generateSteps();
+    try {
+      closeBtn.disabled = true;
+      const quesId = '5d46bcc1695fda3b2cd0a77d';
+      const dialog = document.getElementById("progressDialog");
+      dialog.showModal();
+      const eventSource = new EventSource(`/api/quest/validateQuestionWithAI/${quesId}`, {withCredentials: true,});
+      setStageData(1, "processing");
+      let currentStage = 1;
+      eventSource.onmessage = (event) => {
+          const data = JSON.parse(event.data);
+          if(!data.isValid){
+            eventSource.close();
+            setStageData(data.stage, "error", data.reason);
+            closeBtn.disabled = false;
+            return;
+          }
+          setStageData(data.stage + 1, "processing");
+          setStageData(data.stage, "completed");
+          currentStage = data.stage +1;
+          if(data.lastStage){
+            eventSource.close();
+            document.getElementById("validateQuestionWithAI").style.display = 'none';
+            document.getElementById("isQuestionVerified").style.display = 'block';
+            closeBtn.disabled = false;
+          }
+      }
+      eventSource.addEventListener(
+        'err',
+        (event) => {
+          console.log(event);
+          eventSource.close();
+          setStageData(currentStage, "error", "Something went wrong. Please try again later.");
+          closeBtn.disabled = false;
+        }
+      )
+      eventSource.onerror = (event) => {
+          console.log(event);
+          eventSource.close();
+          setStageData(currentStage, "error", "Something went wrong. Please try again later.");
+          closeBtn.disabled = false;
+      }
+    } catch (error) {
+      console.log(error);
+      toggleLoader(false);
+    }
+  }
+
+  function generateSteps() {
+    if(!stepper) return;
+    stepper.innerHTML = '';
+    const quesType = '4';
+    let steps;
+    if(quesType == 4){
+      steps = codingQuestionSteps;
+    } else if (quesType == 1) {
+      steps = mcqQuestionSteps;
+    } else if (quesType == 2) {
+      steps = subjectiveQuestionSteps;
+    } else if (quesType == 9) {
+      steps = webQuestionSteps;
+    } else if (quesType == 5) {
+      steps = mqQuestionSteps;
+    }
+    if (!steps) return;
+    steps.forEach((step, index) => {
+      const stepElement = document.createElement("div");
+      stepElement.className = "step";
+      stepElement.id = `stage${index + 1}`;
+      stepElement.style.opacity = 0.6;
+
+      stepElement.innerHTML = `
+      <div class="progressTitle">
+        <div class="circle progressDialogStageIcon"></div>
+        <div class="label"><span>${step.label}</span></div>
+      </div>
+      <div class="description"></div>
+    `;
+
+      stepper.appendChild(stepElement);
+    });
+  }
+
+  function setStageData(stage, status, description){
+    const childIndex = stage - 1;
+    const stageElement = stepper?.children.item(childIndex) ?? null;
+    if(!stageElement) return;
+    stageElement.style.opacity = 1;
+    const icon = stageElement.getElementsByClassName("progressDialogStageIcon")[0];
+    
+    if(status === 'error'){
+      icon.innerHTML = `<span class="material-symbols-rounded" style="color: #cb2013">error</span>`;
+    } else if(status === 'completed'){
+      icon.innerHTML = `<span class="material-symbols-rounded" style="color: #28a745">check_circle</span>`;
+      stageElement.classList.add("completed");
+    } else{
+      icon.innerHTML = `<span class="material-symbols-rounded spin" style="color: #4444;">progress_activity</span>`;
+    }
+    if(description){
+      const descriptionElement = stageElement.getElementsByClassName("description")[0];
+      descriptionElement.innerHTML = description;
+    }
+  }
+</script>
+<script>
+  ''
+
+  ''
+    if (socket) {
+      socket.on('connect', () => {
+        console.info('question view socket connected!');
+        let object = {
+          courseId: '69968acc7cfd8fe2002d7c40',
+          questionId: '5d46bcc1695fda3b2cd0a77d'
+        }
+        if (object.courseId && object.questionId) {
+          socket.emit('joinUserQuestionRoom', object, ()=>{});
+        }
+      })
+    }
+  ''
+</script>
+
+  <script src="./Testpad_pra_files_files/es-module-shims.js.download"></script>
+  <script type="importmap-shim">
+  {
+    "imports": {
+      "@module-federation/runtime": "https://esm.sh/@module-federation/runtime@0.17.1?bundle"
+    }
+  }
+  </script>
+  
+
+
+</body></html>

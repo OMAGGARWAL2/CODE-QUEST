@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        :root {
+            --sbi-blue: #004A99;
+            --sbi-light-blue: #00ADEF;
+            --sbi-orange: #F37021;
+            --bg-gray: #f2f2f2;
+            --border-gray: #ccc;
+            --text-dark: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', 'Arial', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gray);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        /* ERP TOP INFO ROW */
+        .erp-info-row {
+            background: #e9ecef;
+            border-bottom: 1px solid #dee2e6;
+            padding: 4px 40px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: #495057;
+            font-weight: 500;
+        }
+
+        /* SBI TOP BAR */
+        .top-banner {
+            background: #fff;
+            border-bottom: 3px solid var(--sbi-blue);
+            padding: 8px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sbi-logo {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .mops-title {
+            font-weight: 700;
+            color: var(--sbi-blue);
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        /* WARNING STRIP */
+        .warning-strip {
+            background: #fff3cd;
+            border-bottom: 1px solid #ffeeba;
+            padding: 8px 40px;
+            font-size: 12px;
+            color: #856404;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* SESSION TIMER */
+        .timer-strip {
+            background: #fff;
+            border-bottom: 1px solid var(--border-gray);
+            padding: 8px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: #444;
+        }
+
+        .timer-val {
+            font-family: 'JetBrains Mono', monospace;
+            color: #cc0000;
+            font-size: 13px;
+        }
+
+        /* MAIN PORTAL */
+        .portal-layout {
+            max-width: 1100px;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: 200px 1fr 300px;
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        /* STEP TRACKER */
+        .step-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            border-left: 2px solid #dee2e6;
+            padding-left: 20px;
+            margin-top: 20px;
+        }
+
+        .step-item {
+            position: relative;
+            padding-bottom: 30px;
+            font-size: 12px;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .step-item::before {
+            content: '';
+            position: absolute;
+            left: -27px;
+            top: 2px;
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border: 2px solid #dee2e6;
+            border-radius: 50%;
+        }
+
+        .step-item.active {
+            color: var(--sbi-blue);
+            font-weight: 700;
+        }
+
+        .step-item.active::before {
+            background: var(--sbi-blue);
+            border-color: var(--sbi-blue);
+        }
+
+        .step-item.done {
+            color: #28a745;
+        }
+
+        .step-item.done::before {
+            background: #28a745;
+            border-color: #28a745;
+            content: '✓';
+            color: #fff;
+            font-size: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-card {
+            background: #fff;
+            border: 1px solid var(--border-gray);
+            border-radius: 2px;
+        }
+
+        .card-header {
+            background: #f8f9fa;
+            border-bottom: 1px solid var(--border-gray);
+            padding: 12px 20px;
+            font-weight: 700;
+            color: #444;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        .card-body {
+            padding: 22px;
+        }
+
+        .form-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+            background: #fdfdfd;
+            border: 1px solid #eee;
+            padding: 15px;
+        }
+
+        .info-cell {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #888;
+            text-transform: uppercase;
+        }
+
+        .info-value {
+            font-size: 12px;
+            font-weight: 700;
+            color: #111;
+        }
+
+        /* PAYMENT OPTIONS (BANK STYLE) */
+        .option-list {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #eee;
+        }
+
+        .payment-option {
+            border-bottom: 1px solid #eee;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .payment-option:last-child {
+            border-bottom: none;
+        }
+
+        .payment-option:hover {
+            background: #fafafa;
+        }
+
+        .payment-option::before {
+            content: '';
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border-gray);
+            border-radius: 50%;
+            background: #fff;
+            flex-shrink: 0;
+        }
+
+        .payment-option.active::before {
+            border-color: var(--sbi-blue);
+            background: radial-gradient(var(--sbi-blue) 40%, #fff 50%);
+        }
+
+        .payment-option.active {
+            background: #f0f7ff;
+        }
+
+        .opt-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--sbi-blue);
+        }
+
+        .opt-text {
+            flex: 1;
+        }
+
+        .opt-title {
+            font-weight: 700;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .opt-desc {
+            font-size: 11px;
+            color: #777;
+        }
+
+        .recommended-tag {
+            font-size: 9px;
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* SUMMARY SIDEBAR */
+        .summary-card {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .summary-box {
+            background: #fff;
+            border: 1px solid var(--border-gray);
+            border-radius: 2px;
+            padding: 20px;
+        }
+
+        .ledger-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+        }
+
+        .ledger-table td {
+            padding: 8px 0;
+        }
+
+        .ledger-label {
+            color: #666;
+            text-align: left;
+        }
+
+        .ledger-val {
+            text-align: right;
+            font-weight: 700;
+        }
+
+        .ledger-total {
+            border-top: 1px solid #000;
+            font-size: 18px;
+            color: var(--sbi-blue);
+        }
+
+        .btn-pay {
+            width: 100%;
+            background: var(--sbi-orange);
+            color: #fff;
+            border: none;
+            padding: 15px;
+            border-radius: 2px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #b34a10;
+        }
+
+        .btn-pay:active {
+            box-shadow: none;
+            margin-top: 3px;
+        }
+
+        /* SECURITY SIGNALS */
+        .security-info {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .trust-badge {
+            font-size: 10px;
+            color: #666;
+            font-weight: 500;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .session-id {
+            background: #f1f1f1;
+            padding: 5px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            color: #888;
+            border: 1px dashed #ccc;
+        }
+
+        /* PROCESSING OVERLAY */
+        #processingOverlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--sbi-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 25px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* QR OVERLAY */
+        #qrOverlay {
+            position: fixed;
+            inset: 0;
+            background: #fff;
+            z-index: 2100;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .qr-box {
+            border: 1px solid #eee;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .secure-footer {
+            background: #fff;
+            border-top: 1px solid var(--border-gray);
+            color: #666;
+            padding: 20px 40px;
+            text-align: center;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            height: 25px;
+            width: auto;
+            object-fit: contain;
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+    <div class="erp-info-row">
+        <div id="srvTime">SERVER TIME: ---</div>
+        <div id="cliIp">IP ADDRESS: ---</div>
+        <div>TXN CHANNEL: WEB/CHROME</div>
+    </div>
+
+    <div class="top-banner">
+        <img src="data:image/png;base64,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"
+            alt="SBI" class="sbi-logo">
+        <div class="mops-title">M O P S</div>
+    </div>
+
+    <div class="warning-strip">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span><b>CAUTION:</b> Do NOT press REFRESH or BACK button. This may cause duplicate debits or transaction
+            failure.</span>
+    </div>
+
+    <div class="timer-strip">
+        <span><i class="fas fa-lock"></i> SECURE 256-BIT ENCRYPTED SESSION</span>
+        <span>SESSION EXPIRES IN: <span class="timer-val" id="countdown">05:00</span></span>
+    </div>
+
+    <div class="portal-layout">
+        <!-- LEFT VERTICAL TRACKER -->
+        <div class="step-flow">
+            <div class="step-item done">1 Review Details</div>
+            <div class="step-item active">2 Select Payment Mode</div>
+            <div class="step-item">3 Bank Authentication</div>
+            <div class="step-item">4 Confirmation</div>
+        </div>
+
+        <div class="main-card">
+            <div class="card-header">Select Payment Option</div>
+            <div class="card-body">
+                <div class="form-info-grid">
+                    <div class="info-cell">
+                        <span class="info-label">Payment Purpose</span>
+                        <span class="info-value" id="dispPurpose">Academic Processing Fee</span>
+                    </div>
+                    <div class="info-cell">
+                        <span class="info-label">Transaction Ref</span>
+                        <span class="info-value" id="dispRef">REF_990122</span>
+                    </div>
+                    <div class="info-cell">
+                        <span class="info-label">Merchant Name</span>
+                        <span class="info-value">TESTPAD REGISTRY SERVICES</span>
+                    </div>
+                    <div class="info-cell">
+                        <span class="info-label">Merchant Code</span>
+                        <span class="info-value">TESTPAD_SBI_001</span>
+                    </div>
+                </div>
+
+                <div class="option-list">
+                    <div class="payment-option active" onclick="selectOpt(this)">
+                        <div class="opt-icon"><i class="fas fa-university"></i></div>
+                        <div class="opt-text">
+                            <span class="opt-title">SBI Net Banking</span> <span
+                                class="recommended-tag">Recommended</span>
+                            <div class="opt-desc">Transaction charges: ₹ 0.00 | Instant Approval</div>
+                        </div>
+                    </div>
+                    <div class="payment-option" onclick="selectOpt(this)">
+                        <div class="opt-icon"><i class="fas fa-qrcode"></i></div>
+                        <div class="opt-text">
+                            <span class="opt-title">UPI (VPA / QR Code)</span>
+                            <div class="opt-desc">Transaction charges: ₹ 0.00 | Settlement: T+0</div>
+                        </div>
+                    </div>
+                    <div class="payment-option" onclick="selectOpt(this)">
+                        <div class="opt-icon"><i class="fas fa-credit-card"></i></div>
+                        <div class="opt-text">
+                            <span class="opt-title">Debit / Credit Card</span>
+                            <div class="opt-desc">Transaction charges: ₹ 11.50 | 3D Secure Verification</div>
+                        </div>
+                    </div>
+                    <div class="payment-option" onclick="selectOpt(this)">
+                        <div class="opt-icon"><i class="fas fa-building"></i></div>
+                        <div class="opt-text">
+                            <span class="opt-title">Other Bank Net Banking</span>
+                            <div class="opt-desc">Transaction charges: ₹ 15.00 | 50+ Major Banks Supported</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-box">
+                <table class="ledger-table">
+                    <tr>
+                        <td class="ledger-label">Fee Amount</td>
+                        <td class="ledger-val">₹ <span id="amtBase">0.00</span></td>
+                    </tr>
+                    <tr>
+                        <td class="ledger-label">Gateway GST</td>
+                        <td class="ledger-val">₹ 0.00</td>
+                    </tr>
+                    <tr class="ledger-total">
+                        <td class="ledger-label" style="padding-top:15px; border-top:1px solid #eee;">TOTAL</td>
+                        <td class="ledger-val" style="padding-top:15px; border-top:1px solid #eee;">₹ <span
+                                id="amtTotal">0.00</span></td>
+                    </tr>
+                </table>
+
+                <button class="btn-pay" onclick="processPayment()">PROCEED TO PAY</button>
+
+                <div class="security-info">
+                    <div class="trust-badge"><i class="fas fa-check-circle" style="color:#2e7d32"></i> RBI Approved
+                        Aggregator</div>
+                    <div class="trust-badge"><i class="fas fa-shield-alt" style="color:var(--sbi-blue)"></i> PCI DSS
+                        V3.2.1 Compliant</div>
+                    <div class="session-id" id="dispSession">SESSION_ID: ---</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR OVERLAY -->
+    <div id="qrOverlay">
+        <div style="margin-bottom:20px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Google_Pay_Logo.svg/1024px-Google_Pay_Logo.svg.png"
+                style="height:30px;">
+        </div>
+        <div class="qr-box">
+            <p style="font-size:10px; font-weight:700; color:#888; margin-bottom:10px;">SCAN TO PAY VIA ANY UPI APP</p>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=TESTPAD@sbi%26am=500%26tr=MOPS${Math.floor(Math.random()*999999)}"
+                style="width:180px; height:180px;">
+            <p style="font-size:12px; font-weight:700; margin-top:10px; color:var(--sbi-blue);">AMOUNT: ₹ <span
+                    id="qrAmt">0.00</span></p>
+        </div>
+        <p style="font-size:11px; color:#666;">Waiting for payment confirmation from bank...</p>
+        <div class="spinner" style="width:30px; height:30px; border-width:3px; margin-top:20px;"></div>
+    </div>
+
+    <!-- PROCESSING OVERLAY -->
+    <div id="processingOverlay">
+        <div class="spinner"></div>
+        <h1 style="color: var(--sbi-blue); font-weight: 700; font-size: 1.5rem; margin-bottom: 5px;">PROCESSING REQUEST
+        </h1>
+        <p style="color: #666; font-size: 13px; font-weight: 500;" id="stageText">Establishing secure tunnel to bank
+            host...</p>
+        <p style="margin-top: 30px; font-family: 'JetBrains Mono'; background: #f8f9fa; padding: 10px 20px; border: 1px solid #eee; font-size: 11px; color:#444;"
+            id="logStage">
+            [LOG]: Init hand-shake protocol 1.0.4
+        </p>
+    </div>
+
+    <footer class="secure-footer">
+        <div>&copy; 2026 State Bank of India. MOPS V4.2 Registry</div>
+        <div style="display:flex; gap:20px; align-items:center;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Rupay-Logo.png/640px-Rupay-Logo.png"
+                alt="Rupay" class="footer-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d6/Visa_2021.svg" alt="Visa" class="footer-logo">
+            <img src="data:image/png;base64,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"
+                alt="SBI" class="footer-logo">
+        </div>
+        <div>VeriSign Trusted Signature Verified</div>
+        <div>VeriSign Trusted Signature Verified</div>
+    </footer>
+
+    <script>
+        // Init Session Details
+        const urlParams = new URLSearchParams(window.location.search);
+        const amt = urlParams.get('amount') || '500';
+        const purpose = urlParams.get('purpose') || 'Academic Fee';
+        const ref = urlParams.get('ref') || 'TXN_' + Math.floor(Math.random() * 900000 + 100000);
+        const session = 'SBI-MOPS-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+
+        document.getElementById('amtBase').textContent = parseFloat(amt).toFixed(2);
+        document.getElementById('amtTotal').textContent = parseFloat(amt).toFixed(2);
+        document.getElementById('dispPurpose').textContent = purpose;
+        document.getElementById('dispRef').textContent = ref;
+        document.getElementById('dispSession').textContent = 'SESSION_ID: ' + session;
+        document.getElementById('cliIp').textContent = 'IP ADDRESS: 103.' + Math.floor(Math.random() * 255) + '.' + Math.floor(Math.random() * 255) + '.' + Math.floor(Math.random() * 255);
+
+        // Server Time Update
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('srvTime').textContent = `SERVER TIME: ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')} IST`;
+        }, 1000);
+
+        // Timer Logic
+        let timeLeft = 300;
+        const timerEl = document.getElementById('countdown');
+        const countdownTimer = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            if (timeLeft <= 0) {
+                clearInterval(countdownTimer);
+                window.location.href = './student-dashboard.html?status=session_expired';
+            }
+            timeLeft--;
+        }, 1000);
+
+        function selectOpt(el) {
+            document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        const stages = [
+            { t: "Securing channel with bank host...", l: "[LOG]: TLS 1.3 encryption handshake successful." },
+            { t: "Transmitting billing metadata...", l: "[LOG]: Payload parity check confirmed (CRC32)." },
+            { t: "Awaiting Bank Authentication...", l: "[LOG]: Routing through merchant node: TESTPAD_REG" },
+            { t: "Processing internal ledger updates...", l: "[LOG]: Transaction authorized by SBI-CORE." }
+        ];
+
+        function processPayment() {
+            const btn = document.querySelector('.btn-pay');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PREPARING GATEWAY...';
+            btn.disabled = true;
+
+            document.getElementById('processingOverlay').style.display = 'flex';
+            document.getElementById('stageText').textContent = "Initializing secure Razorpay session...";
+            document.getElementById('logStage').textContent = "[LOG]: RSA Key Handshake initiated.";
+
+            const options = {
+                "key": "rzp_test_TESTPAD_demo", // Standard Razorpay Test Key Placeholder
+                "amount": parseFloat(amt) * 100, // paise
+                "currency": "INR",
+                "name": "TESTPAD REGISTRY",
+                "description": purpose,
+                "image": "../logo.jpg",
+                "handler": function (response) {
+                    document.getElementById('stageText').textContent = "Payment Verified. Updating Registry...";
+                    document.getElementById('logStage').textContent = "[LOG]: RZP_ID: " + response.razorpay_payment_id;
+                    finalizeTransaction(response.razorpay_payment_id);
+                },
+                "prefill": {
+                    "name": "Student User",
+                    "email": "student@TESTPAD.edu"
+                },
+                "notes": {
+                    "roll": urlParams.get('roll'),
+                    "ref": ref
+                },
+                "theme": { "color": "#004A99" },
+                "modal": {
+                    "ondismiss": function () {
+                        document.getElementById('processingOverlay').style.display = 'none';
+                        btn.innerHTML = 'PROCEED TO PAY';
+                        btn.disabled = false;
+                    }
+                }
+            };
+
+            const rzp1 = new Razorpay(options);
+            setTimeout(() => {
+                rzp1.open();
+                document.getElementById('stageText').textContent = "Awaiting bank response...";
+            }, 1000);
+        }
+
+        function finalizeTransaction(payId) {
+            const txs = JSON.parse(localStorage.getItem('TESTPAD_tx_history') || '[]');
+            txs.push({
+                ref: ref,
+                desc: purpose + (payId ? " [RZP: " + payId + "]" : ""),
+                amt: parseFloat(amt),
+                roll: urlParams.get('roll') || 'GUEST',
+                subject: urlParams.get('subject') || 'N/A',
+                type: urlParams.get('type') === 'reappear' ? 'Backlog' :
+                    urlParams.get('type') === 'reeval' ? 'Re-eval' :
+                        urlParams.get('type') === 'query' ? 'Query' : 'Service',
+                date: new Date().toLocaleString(),
+                status: 'PAID',
+                gateway_id: payId
+            });
+            localStorage.setItem('TESTPAD_tx_history', JSON.stringify(txs));
+
+            setTimeout(() => {
+                if (urlParams.get('type') === 'reappear') {
+                    window.location.href = `./admit-card.html?status=paid&ref=${ref}&roll=${urlParams.get('roll') || ''}&name=${urlParams.get('name') || ''}&course=${urlParams.get('course') || ''}`;
+                } else {
+                    window.location.href = './offline-results.html?status=paid&ref=' + ref;
+                }
+            }, 800);
+        }
+    </script>
+</body>
+
+</html>

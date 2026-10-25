@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="../js/ui-auth.js"></script>
+    <style>
+        :root {
+            --erp-maroon: #800000;
+            --erp-bg: #f5f6f8;
+            --erp-border: #d1d5db;
+            --erp-text: #1e293b;
+            --success-green: #15803d;
+            --sidebar-width: 400px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--erp-bg);
+            color: var(--erp-text);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            font-size: 13px;
+        }
+
+        /* TOP NAVIGATION */
+        .erp-header {
+            height: 50px;
+            background: #ffffff;
+            border-bottom: 2px solid var(--erp-maroon);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            flex-shrink: 0;
+            z-index: 1000;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .system-title {
+            font-weight: 800;
+            font-size: 14px;
+            color: var(--erp-maroon);
+            text-transform: uppercase;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-erp {
+            padding: 6px 12px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            border: 1px solid var(--erp-border);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #fff;
+            color: var(--erp-text);
+        }
+
+        .btn-primary {
+            background: var(--erp-maroon);
+            color: #fff;
+            border: none;
+        }
+
+        .btn-erp:hover {
+            opacity: 0.9;
+        }
+
+        .app-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* LEFT PANEL - SETTINGS */
+        .settings-panel {
+            width: var(--sidebar-width);
+            background: #fff;
+            border-right: 1px solid var(--erp-border);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .panel-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--erp-border);
+            background: #f8fafc;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 12px;
+            color: var(--erp-maroon);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .panel-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+
+        .erp-input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid var(--erp-border);
+            border-radius: 3px;
+            font-family: inherit;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .erp-input:focus {
+            border-color: var(--erp-maroon);
+        }
+
+        .difficulty-toggles {
+            display: flex;
+            border: 1px solid var(--erp-border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .diff-toggle {
+            flex: 1;
+            padding: 8px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            border-right: 1px solid var(--erp-border);
+            background: #f8fafc;
+            color: #64748b;
+        }
+
+        .diff-toggle:last-child {
+            border-right: none;
+        }
+
+        .diff-toggle.active {
+            background: var(--erp-maroon);
+            color: #fff;
+        }
+
+        .section-builder {
+            border: 1px solid var(--erp-border);
+            border-radius: 3px;
+        }
+
+        .section-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 30px;
+            gap: 8px;
+            padding: 10px;
+            border-bottom: 1px solid var(--erp-border);
+            align-items: center;
+        }
+
+        .section-row:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            background: #f1f5f9;
+            font-weight: 700;
+            font-size: 10px;
+            color: #475569;
+        }
+
+        .tags-input-container {
+            border: 1px solid var(--erp-border);
+            padding: 5px;
+            min-height: 35px;
+            border-radius: 3px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .tag {
+            background: var(--erp-maroon);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tag span {
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        .tags-input {
+            border: none;
+            outline: none;
+            flex: 1;
+            min-width: 100px;
+            font-size: 12px;
+            background: transparent;
+        }
+
+        /* RIGHT PANEL - PREVIEW */
+        .preview-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #e2e8f0;
+            position: relative;
+        }
+
+        .preview-toolbar {
+            height: 48px;
+            background: #fff;
+            border-bottom: 1px solid var(--erp-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .paper-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .a4-paper {
+            width: 210mm;
+            min-height: 297mm;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 20mm;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 11pt;
+            line-height: 1.5;
+            position: relative;
+            outline: none;
+        }
+
+        .paper-header {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .qp-section {
+            margin-top: 20px;
+        }
+
+        .qp-section-title {
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .qp-question {
+            display: flex;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+
+        .qp-qnum {
+            font-weight: bold;
+        }
+
+        .qp-qtext {
+            flex: 1;
+        }
+
+        .qp-qmarks {
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .qp-options {
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+
+        .loader-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+
+        .ai-pulse {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--erp-maroon);
+            animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes ping {
+
+            75%,
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        /* STATS OVERLAY */
+        .stats-overlay {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            width: 250px;
+            background: #fff;
+            border: 1px solid var(--erp-border);
+            border-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            display: none;
+        }
+
+        .stat-bar {
+            height: 6px;
+            background: #eee;
+            border-radius: 3px;
+            margin-top: 4px;
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* MODAL */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 25px;
+            border-radius: 4px;
+            width: 400px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+
+    <header class="erp-header">
+        <div class="brand">
+            <img src="https://api.learntechww.com/college_icon/logo1733989968823.jpg" alt="Logo" style="height: 35px;">
+            <div class="system-title">TESTPAD | Smart QP Architect</div>
+        </div>
+        <div class="nav-actions">
+            <button class="btn-erp btn-primary" onclick="generateAIQP()"><i class="fas fa-brain"></i> GENERATE
+                PAPER</button>
+            <button class="btn-erp" onclick="window.close()"><i class="fas fa-times"></i> EXIT</button>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <!-- LEFT PANEL -->
+        <div class="settings-panel">
+            <div class="panel-header">
+                System Parameters
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="form-label">Exam Title</label>
+                    <input type="text" id="inpTitle" class="erp-input" value="End Semester Examination - June 2026">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Subject Domain</label>
+                    <input type="text" id="inpSubject" class="erp-input" value="Data Structures & Algorithms">
+                </div>
+
+                <div style="display: flex; gap: 15px;">
+                    <div class="form-group" style="flex:1;">
+                        <label class="form-label">Duration</label>
+                        <input type="text" id="inpDuration" class="erp-input" value="3 Hours">
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label class="form-label">Total Marks</label>
+                        <input type="number" id="inpTotalMarks" class="erp-input" value="50">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Syllabus Topics (Press Enter)</label>
+                    <div class="tags-input-container" id="tagsContainer">
+                        <input type="text" class="tags-input" id="inpTopic" placeholder="e.g. Arrays, Linked List...">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Complexity Target</label>
+                    <div class="difficulty-toggles">
+                        <div class="diff-toggle" onclick="setDiff(this, 'Foundation')">Foundation</div>
+                        <div class="diff-toggle active" onclick="setDiff(this, 'Standard')">Standard</div>
+                        <div class="diff-toggle" onclick="setDiff(this, 'Advanced')">Advanced</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Bloom's Taxonomy Focus</label>
+                    <select id="inpBlooms" class="erp-input">
+                        <option value="Balanced mix of all levels">Balanced Mix</option>
+                        <option value="Focus on Remember & Understand">Remember & Understand (L1-L2)</option>
+                        <option value="Focus on Apply & Analyze">Apply & Analyze (L3-L4)</option>
+                        <option value="Focus on Evaluate & Create">Evaluate & Create (L5-L6)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" style="display:flex; justify-content:space-between;">
+                        Blueprint Structure
+                        <a href="#" style="color:var(--erp-maroon); text-decoration:none;" onclick="addSection()">+ Add
+                            Sec</a>
+                    </label>
+                    <div class="section-builder" id="secBuilder">
+                        <div class="section-row section-header">
+                            <div>Section / Type</div>
+                            <div>Count</div>
+                            <div>Marks</div>
+                            <div></div>
+                        </div>
+                        <div class="section-row item-row">
+                            <input type="text" class="erp-input sec-name" value="Sec A (MCQs)">
+                            <input type="number" class="erp-input sec-count" value="10">
+                            <input type="number" class="erp-input sec-marks" value="1">
+                            <i class="fas fa-trash" style="color:#ef4444; cursor:pointer;"
+                                onclick="this.parentElement.remove()"></i>
+                        </div>
+                        <div class="section-row item-row">
+                            <input type="text" class="erp-input sec-name" value="Sec B (Short)">
+                            <input type="number" class="erp-input sec-count" value="5">
+                            <input type="number" class="erp-input sec-marks" value="4">
+                            <i class="fas fa-trash" style="color:#ef4444; cursor:pointer;"
+                                onclick="this.parentElement.remove()"></i>
+                        </div>
+                        <div class="section-row item-row">
+                            <input type="text" class="erp-input sec-name" value="Sec C (Long)">
+                            <input type="number" class="erp-input sec-count" value="2">
+                            <input type="number" class="erp-input sec-marks" value="10">
+                            <i class="fas fa-trash" style="color:#ef4444; cursor:pointer;"
+                                onclick="this.parentElement.remove()"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL -->
+        <div class="preview-panel">
+            <div class="preview-toolbar">
+                <div style="font-size: 11px; font-weight: 700; color: #64748b;">
+                    <i class="fas fa-file-alt"></i> DOCUMENT PREVIEW
+                </div>
+                <div class="nav-actions">
+                    <button class="btn-erp" onclick="toggleStats()" id="btnStats" style="display:none;"><i
+                            class="fas fa-chart-pie"></i> BALANCER</button>
+                    <button class="btn-erp" onclick="exportPDF()"><i class="fas fa-file-pdf"></i> EXPORT TO PDF</button>
+                    <button class="btn-erp" onclick="saveToPool()" style="background:#0f172a; color:#fff;"><i
+                            class="fas fa-database"></i> SAVE TO POOL</button>
+                </div>
+            </div>
+
+            <!-- Stats Overlay -->
+            <div class="stats-overlay" id="statsOverlay">
+                <div
+                    style="font-size: 10px; font-weight: 800; color: var(--erp-maroon); text-transform: uppercase; margin-bottom: 10px;">
+                    Predicted Complexity</div>
+
+                <div style="display:flex; justify-content:space-between; font-size:10px; margin-top:5px;"><span>L1-L2
+                        (Recall/Understand)</span><span id="stL1">40%</span></div>
+                <div class="stat-bar">
+                    <div id="barL1" style="width:40%; background:#3b82f6;"></div>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; font-size:10px; margin-top:10px;"><span>L3-L4
+                        (Apply/Analyze)</span><span id="stL2">40%</span></div>
+                <div class="stat-bar">
+                    <div id="barL2" style="width:40%; background:#f59e0b;"></div>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; font-size:10px; margin-top:10px;"><span>L5-L6
+                        (Evaluate/Create)</span><span id="stL3">20%</span></div>
+                <div class="stat-bar">
+                    <div id="barL3" style="width:20%; background:#ef4444;"></div>
+                </div>
+
+                <button class="btn-erp" style="width:100%; justify-content:center; margin-top:15px;"
+                    onclick="regenerateSelection()">Regenerate Selected Text</button>
+            </div>
+
+            <div class="paper-container" id="printableArea">
+                <div class="a4-paper" id="paperEditor" contenteditable="true">
+                    <div style="text-align:center; color:#94a3b8; margin-top: 100px; font-family:'Inter'; font-size:14px;"
+                        contenteditable="false">
+                        <i class="fas fa-magic" style="font-size: 30px; margin-bottom:15px;"></i><br>
+                        Configure parameters and click "Generate Paper"<br>to invoke the Smart Architect.
+                    </div>
+                </div>
+            </div>
+
+            <div class="loader-overlay" id="aiLoader">
+                <div class="ai-pulse"></div>
+                <div style="font-weight: 800; font-size: 14px; color: var(--erp-maroon);">LLM ARCHITECT INFERENCE
+                    RUNNING...</div>
+                <div style="font-size: 11px; color: #64748b; margin-top: 5px;">Formulating taxonomy-compliant
+                    questions...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Modal -->
+    <div class="modal" id="alertModal">
+        <div class="modal-content" style="text-align:center;">
+            <i id="alertIcon" class="fas fa-check-circle"
+                style="font-size:40px; color:var(--success-green); margin-bottom:15px;"></i>
+            <h3 id="alertTitle" style="font-weight:800; margin-bottom:10px;">SUCCESS</h3>
+            <p id="alertMsg" style="font-size:12px; color:#64748b; margin-bottom:20px;">Operation completed.</p>
+            <button class="btn-erp btn-primary" style="margin: 0 auto;"
+                onclick="document.getElementById('alertModal').style.display='none'">ACKNOWLEDGE</button>
+        </div>
+    </div>
+
+    <script>
+        let topics = [];
+        let difficulty = 'Standard';
+
+        // Tag Input Logic
+        const topicInp = document.getElementById('inpTopic');
+        const tagsContainer = document.getElementById('tagsContainer');
+
+        topicInp.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter' && this.value.trim() !== '') {
+                const vals = this.value.split(',').map(s => s.trim()).filter(s => s);
+                vals.forEach(v => {
+                    if (!topics.includes(v)) {
+                        topics.push(v);
+                        renderTags();
+                    }
+                });
+                this.value = '';
+            }
+        });
+
+        function renderTags() {
+            tagsContainer.innerHTML = '';
+            topics.forEach((t, i) => {
+                const tag = document.createElement('div');
+                tag.className = 'tag';
+                tag.innerHTML = `${t} <span onclick="removeTag(${i})">×</span>`;
+                tagsContainer.appendChild(tag);
+            });
+            tagsContainer.appendChild(topicInp);
+        }
+
+        function removeTag(idx) {
+            topics.splice(idx, 1);
+            renderTags();
+        }
+
+        function setDiff(el, diff) {
+            document.querySelectorAll('.diff-toggle').forEach(d => d.classList.remove('active'));
+            el.classList.add('active');
+            difficulty = diff;
+        }
+
+        function addSection() {
+            const html = `
+                <div class="section-row item-row">
+                    <input type="text" class="erp-input sec-name" placeholder="Sec Name">
+                    <input type="number" class="erp-input sec-count" value="1">
+                    <input type="number" class="erp-input sec-marks" value="1">
+                    <i class="fas fa-trash" style="color:#ef4444; cursor:pointer;" onclick="this.parentElement.remove()"></i>
+                </div>
+            `;
+            document.getElementById('secBuilder').insertAdjacentHTML('beforeend', html);
+        }
+
+        function showAlert(title, msg, isSuccess) {
+            document.getElementById('alertTitle').innerText = title;
+            document.getElementById('alertMsg').innerText = msg;
+            document.getElementById('alertIcon').className = isSuccess ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+            document.getElementById('alertIcon').style.color = isSuccess ? 'var(--success-green)' : '#ef4444';
+            document.getElementById('alertModal').style.display = 'flex';
+        }
+
+        function toggleStats() {
+            const over = document.getElementById('statsOverlay');
+            over.style.display = over.style.display === 'block' ? 'none' : 'block';
+        }
+
+        async function generateAIQP() {
+            if (topics.length === 0) {
+                showAlert("INPUT REQUIRED", "Please specify at least one syllabus topic.", false);
+                return;
+            }
+
+            // Build blueprint string
+            const rows = document.querySelectorAll('.item-row');
+            let blueprint = '';
+            rows.forEach(r => {
+                blueprint += `- ${r.querySelector('.sec-name').value}: ${r.querySelector('.sec-count').value} questions, ${r.querySelector('.sec-marks').value} marks each\n`;
+            });
+
+            const prompt = `
+Generate a professional, university-level examination paper with the following exact specifications.
+
+Exam Title: ${document.getElementById('inpTitle').value}
+Subject: ${document.getElementById('inpSubject').value}
+Duration: ${document.getElementById('inpDuration').value}
+Total Marks: ${document.getElementById('inpTotalMarks').value}
+
+Topics to Cover: ${topics.join(', ')}
+Target Difficulty: ${difficulty}
+Cognitive Level (Bloom's): ${document.getElementById('inpBlooms').value}
+
+Structure / Blueprint:
+${blueprint}
+
+STRICT FORMATTING RULES:
+1. Provide the output in clean HTML format suitable to be placed directly inside a contenteditable div. 
+2. Use standard tags like <h2>, <h3>, <b>, <ol>, <li>. 
+3. Create a beautiful header with the Exam Title, Subject, Duration and Max Marks.
+4. Format sections clearly.
+5. Provide a detailed ANSWER KEY at the bottom of the output, separated by an <h2> labeled "ANSWER KEY".
+6. Do NOT wrap the HTML in markdown code blocks like \`\`\`html. Just return the raw HTML string.
+`;
+
+            document.getElementById('aiLoader').style.display = 'flex';
+
+            try {
+                let rawHtml = await askAI(prompt);
+
+                // Clean markdown wrappers if hallucinated
+                rawHtml = rawHtml.replace(/```html/gi, '').replace(/```/g, '');
+
+                if (rawHtml.includes("ERROR:")) {
+                    throw new Error(rawHtml);
+                }
+
+                document.getElementById('paperEditor').innerHTML = rawHtml;
+                document.getElementById('btnStats').style.display = 'block';
+
+                // Randomize Balancer slightly based on difficulty
+                simulateBalancer(difficulty);
+
+            } catch (error) {
+                showAlert("INFERENCE FAILED", error.message, false);
+            } finally {
+                document.getElementById('aiLoader').style.display = 'none';
+            }
+        }
+
+        function simulateBalancer(diff) {
+            let l1 = 40, l2 = 40, l3 = 20; // Default
+            if (diff === 'Advanced') { l1 = 15; l2 = 35; l3 = 50; }
+            if (diff === 'Foundation') { l1 = 60; l2 = 30; l3 = 10; }
+
+            document.getElementById('stL1').innerText = l1 + '%';
+            document.getElementById('barL1').style.width = l1 + '%';
+
+            document.getElementById('stL2').innerText = l2 + '%';
+            document.getElementById('barL2').style.width = l2 + '%';
+
+            document.getElementById('stL3').innerText = l3 + '%';
+            document.getElementById('barL3').style.width = l3 + '%';
+
+            document.getElementById('statsOverlay').style.display = 'block';
+        }
+
+        async function regenerateSelection() {
+            const sel = window.getSelection();
+            if (sel.toString().trim() === "") {
+                showAlert("NARROW FOCUS", "Please highlight/select a specific question or text in the editor to regenerate it.", false);
+                return;
+            }
+
+            document.getElementById('aiLoader').style.display = 'flex';
+
+            try {
+                const prompt = `Rewrite the following exam question to be completely different, but testing the same general topic. Ensure it fits a university level. Return ONLY the new text, no markdown. Original: ${sel.toString()}`;
+
+                const newText = await askAI(prompt);
+
+                if (newText.includes("ERROR:")) {
+                    throw new Error(newText);
+                }
+
+                // Replace selected text natively
+                document.execCommand('insertText', false, newText.trim());
+
+                showAlert("MODULE REWRITTEN", "Selected node has been dynamically updated by the architect.", true);
+            } catch (err) {
+                showAlert("INFERENCE FAILED", err.message, false);
+            } finally {
+                document.getElementById('aiLoader').style.display = 'none';
+            }
+        }
+
+        function exportPDF() {
+            const element = document.getElementById('paperEditor');
+            if (!element || element.innerText.includes("Configure parameters")) {
+                showAlert("EMPTY RECORD", "Please generate an architecture before exporting.", false);
+                return;
+            }
+
+            const clone = element.cloneNode(true);
+            clone.style.position = 'fixed';
+            clone.style.left = '0px';
+            clone.style.top = '0px';
+            clone.style.width = '794px';
+            clone.style.minHeight = '1123px';
+            clone.style.padding = '30px';
+            clone.style.background = '#ffffff';
+            clone.style.color = '#000000';
+            clone.style.zIndex = '-99999';
+            clone.style.opacity = '1';
+            clone.style.pointerEvents = 'none';
+            clone.style.boxSizing = 'border-box';
+            document.body.appendChild(clone);
+
+            const opt = {
+                margin: 10,
+                filename: 'TESTPAD_Generated_QP.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0, windowWidth: 794 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            showAlert("EXPORT SPOOLING", "Question Paper PDF is being generated locally.", true);
+
+            setTimeout(() => {
+                html2pdf().set(opt).from(clone).save().then(() => {
+                    showAlert("EXPORT READY", "PDF downloaded successfully.", true);
+                }).catch(err => {
+                    console.error('PDF export error:', err);
+                    showAlert("EXPORT FAILED", "Could not generate PDF.", false);
+                }).finally(() => {
+                    if (clone && clone.parentNode) {
+                        clone.parentNode.removeChild(clone);
+                    }
+                });
+            }, 250);
+        }
+
+        function saveToPool() {
+            showAlert("REPOSITORY COMMIT", "The generated structural schema has been appended to the Institutional Question Pool.", true);
+        }
+
+    </script>
+</body>
+
+</html>

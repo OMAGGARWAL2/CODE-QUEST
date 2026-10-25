@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Create Batches</title>
+    <!-- Google Fonts: Hind, Mulish -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Mulish:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+
+    <style>
+        :root {
+            --primary: #D92D20;
+            --primary-hover: #B42318;
+            --primary-soft: #FEF3F2;
+            --secondary: #667085;
+            --text-main: #101828;
+            --text-secondary: #475467;
+            --text-tertiary: #667085;
+            --bg-body: #FFFFFF;
+            --border: #EAECF0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1, h2, h3, .logo-text { font-family: 'Mulish', sans-serif; }
+
+        /* --- HEADER --- */
+        .site-header {
+            height: 72px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 32px; }
+
+        .logo-container {
+            display: flex; align-items: center; gap: 16px;
+            cursor: pointer; text-decoration: none; transition: opacity 0.2s;
+        }
+        .logo-container:hover { opacity: 0.8; }
+        .logo-square { width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .logo-square img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text { font-size: 1.4rem; font-weight: 700; color: var(--text-main); letter-spacing: -0.5px; }
+        .logo-text small { display: block; font-size: 0.72rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .header-nav { display: flex; align-items: center; gap: 10px; }
+        .nav-icon-btn {
+            width: 44px; height: 44px; border-radius: 14px; border: none; background: transparent;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;
+        }
+        .nav-icon-btn img { width: 24px; height: 24px; opacity: 0.75; }
+        .nav-icon-btn:hover, .nav-icon-btn.active { background: var(--primary-soft); }
+        .nav-icon-btn.active img { opacity: 1; }
+
+        .back-top-btn {
+            display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px;
+            border: 1px solid var(--border); border-radius: 8px; background: #fff; color: var(--text-main);
+            text-decoration: none; font-weight: 700; font-family: 'Mulish', sans-serif; font-size: 0.95rem; transition: all 0.2s;
+        }
+        .back-top-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+
+        /* --- LAYOUT --- */
+        .wrap { max-width: 1160px; margin: 0 auto; width: 100%; padding: 34px 28px 100px; }
+        .page-head { margin-bottom: 26px; }
+        .page-head h1 { font-size: 2rem; font-weight: 800; color: #111; }
+        .page-head p { color: var(--text-tertiary); font-size: 1.05rem; margin-top: 4px; }
+
+        .block { margin-bottom: 34px; }
+        .block-title {
+            display: flex; align-items: center; gap: 12px; font-family: 'Mulish', sans-serif;
+            font-size: 1.25rem; font-weight: 800; color: #111; margin-bottom: 16px;
+        }
+        .block-title .num {
+            width: 28px; height: 28px; border-radius: 6px; background: var(--primary); color: #fff;
+            display: inline-flex; align-items: center; justify-content: center; font-size: 0.95rem;
+        }
+
+        /* --- FORM --- */
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 16px; }
+        .form-group { display: flex; flex-direction: column; gap: 7px; }
+        label.field-label { font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 1rem; color: #111; }
+        label.field-label span.req { color: var(--primary); margin-left: 3px; }
+        .input-text, .select-field {
+            width: 100%; padding: 11px 14px; font-size: 1.02rem; font-family: 'Hind', sans-serif;
+            border: 1px solid #d0d5dd; border-radius: 8px; background: #fff; color: #111; outline: none; transition: border-color 0.15s;
+        }
+        .input-text:focus, .select-field:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+
+        /* --- POOL TABLE (questionpool style) --- */
+        .pool-card { background: #fff; border: 1px solid #eaecf0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .table-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+        .table-toolbar .tt-left { font-family: 'Mulish', sans-serif; font-weight: 700; color: #344054; }
+        .table-toolbar .tt-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        .btn {
+            border: 1px solid var(--border); background: #fff; color: #344054; padding: 9px 16px; border-radius: 8px;
+            font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 0.92rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.15s;
+        }
+        .btn:hover { background: #f9fafb; border-color: #d0d5dd; }
+        .btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .btn.primary:hover { background: var(--primary-hover); }
+        .btn.ghost { background: var(--primary-soft); color: var(--primary); border-color: #fecdca; }
+
+        table { width: 100%; border-collapse: collapse; }
+        th {
+            background: #fff; padding: 14px 18px; text-align: left; font-size: 0.82rem; text-transform: uppercase;
+            font-family: 'Mulish', sans-serif; font-weight: 700; color: #344054; border-bottom: 1px solid var(--border); letter-spacing: 0.4px;
+        }
+        td { padding: 10px 18px; border-bottom: 1px solid var(--border); vertical-align: middle; font-family: 'Mulish', sans-serif; font-size: 1.02rem; color: #000; }
+        td .cell-input { width: 100%; padding: 8px 10px; border: 1px solid transparent; border-radius: 6px; font-family: 'Mulish', sans-serif; font-size: 1rem; color: #000; background: transparent; outline: none; }
+        td .cell-input:hover { border-color: #eaecf0; background: #fcfcfd; }
+        td .cell-input:focus { border-color: var(--primary); background: #fff; }
+        .row-index { color: var(--text-tertiary); font-weight: 700; width: 46px; text-align: center; }
+        .row-action { color: var(--secondary); cursor: pointer; padding: 8px; border-radius: 6px; transition: all 0.2s; }
+        .row-action:hover { background: var(--primary-soft); color: var(--primary); }
+        .empty-row td { text-align: center; color: #98a2b3; padding: 40px; font-size: 1rem; }
+
+        /* --- BATCH LIST CARDS --- */
+        .batch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+        .batch-card { background: #fff; border: 1px solid #eaecf0; border-radius: 12px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: all 0.2s; cursor: pointer; }
+        .batch-card:hover { border-color: var(--primary); box-shadow: 0 10px 24px rgba(217,45,32,0.10); transform: translateY(-2px); }
+        .batch-card h4 { font-family: 'Mulish', sans-serif; font-size: 1.12rem; font-weight: 800; color: #111; margin-bottom: 4px; }
+        .batch-card .bc-sub { color: var(--text-tertiary); font-size: 0.92rem; margin-bottom: 12px; }
+        .batch-card .bc-meta { display: flex; align-items: center; gap: 14px; font-family: 'Mulish', sans-serif; font-size: 0.88rem; color: #475467; }
+        .batch-card .bc-meta i { color: var(--primary); margin-right: 5px; }
+        .batch-card .bc-actions { display: flex; gap: 8px; margin-top: 14px; }
+        .batch-card .bc-actions .btn { padding: 6px 12px; font-size: 0.82rem; }
+        .batch-empty { color: #98a2b3; font-family: 'Mulish', sans-serif; padding: 20px 0; }
+
+        .save-bar { display: flex; justify-content: flex-end; gap: 14px; margin-top: 8px; }
+
+        /* --- MODAL --- */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(16,24,40,0.5); z-index: 5000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-card { background: #fff; border-radius: 14px; width: 100%; max-width: 460px; padding: 26px 28px; box-shadow: 0 20px 50px rgba(0,0,0,0.25); }
+        .modal-card h3 { font-family: 'Mulish', sans-serif; font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; }
+        .modal-card p { color: var(--text-tertiary); margin-bottom: 18px; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 12px; }
+
+        .toast-box { position: fixed; bottom: 24px; right: 24px; background: #101828; color: #fff; padding: 14px 24px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; z-index: 100000; font-weight: 600; font-family: 'Mulish', sans-serif; }
+
+        @media (max-width: 720px) {
+            .header-nav { display: none; }
+            th, td { padding: 8px 10px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="header-left">
+        <a href="teacherindex.html" class="logo-container">
+            <div class="logo-square"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest"></div>
+            <div class="logo-text">CodeQuest<small>Teacher &amp; Faculty Portal</small></div>
+        </a>
+        <nav class="header-nav">
+            <button class="nav-icon-btn" title="Dashboard" onclick="location.href='teacherindex.html'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/menu-1.svg" alt="Dashboard"></button>
+            <button class="nav-icon-btn" title="Tests" onclick="location.href='teacherindex.html#testsSection'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/quiz.svg" alt="Tests"></button>
+            <button class="nav-icon-btn" title="Courses" onclick="location.href='teacherindex.html#coursesSection'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/folder-2.svg" alt="Courses"></button>
+            <button class="nav-icon-btn active" title="Batches" onclick="location.href='createBatch.html'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/statistics.svg" alt="Batches"></button>
+        </nav>
+    </div>
+    <div class="header-right">
+        <a href="teacherindex.html" class="back-top-btn"><i class="fas fa-arrow-left"></i> Return to Dashboard</a>
+    </div>
+</header>
+
+<div class="wrap">
+    <div class="page-head">
+        <h1>Create &amp; Manage Batches</h1>
+        <p>Group your students into batches. Add roll numbers, registration numbers and login credentials. Batches power chat groups and batch-only publishing.</p>
+    </div>
+
+    <!-- EXISTING BATCHES -->
+    <div class="block">
+        <div class="block-title"><span class="num"><i class="fas fa-layer-group" style="font-size:0.85rem;"></i></span> Your Batches</div>
+        <div class="batch-grid" id="batchGrid"></div>
+    </div>
+
+    <!-- BATCH EDITOR -->
+    <div class="block">
+        <div class="block-title"><span class="num" id="editorNum">+</span> <span id="editorTitle">New Batch</span></div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="field-label">Batch Name <span class="req">*</span></label>
+                <input type="text" id="batchName" class="input-text" placeholder="e.g. CSE Sem-6 · Section A · Data Structures">
+            </div>
+            <div class="form-group">
+                <label class="field-label">Subject / Course</label>
+                <input type="text" id="batchSubject" class="input-text" placeholder="e.g. Data Structures &amp; Algorithms">
+            </div>
+            <div class="form-group">
+                <label class="field-label">Academic Year</label>
+                <input type="text" id="batchYear" class="input-text" placeholder="e.g. 2025-26" value="2025-26">
+            </div>
+        </div>
+
+        <div class="pool-card">
+            <div class="table-toolbar">
+                <div class="tt-left"><i class="fas fa-users" style="color:var(--primary); margin-right:8px;"></i>Students in this batch <span id="studentCount" style="color:#98a2b3;">(0)</span></div>
+                <div class="tt-actions">
+                    <button class="btn ghost" onclick="addStudentRow()"><i class="fas fa-plus"></i> Add Student</button>
+                    <button class="btn primary" onclick="openRangeFill()" title="Generate rows from a roll-number range"><i class="fas fa-wand-magic-sparkles"></i> Fill by Range</button>
+                    <button class="btn" onclick="bulkPasteStudents()" title="Paste many at once"><i class="fas fa-paste"></i> Bulk Add</button>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table id="studentTable">
+                    <thead>
+                        <tr>
+                            <th style="width:46px; text-align:center;">#</th>
+                            <th>Student Name</th>
+                            <th style="width:220px;">Roll No / Registration No</th>
+                            <th style="width:190px;">Username</th>
+                            <th style="width:170px;">Password</th>
+                            <th style="width:60px; text-align:center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="save-bar">
+            <button class="btn" id="cancelEditBtn" style="display:none;" onclick="resetEditor()"><i class="fas fa-times"></i> Cancel Edit</button>
+            <button class="btn primary" onclick="saveBatch()"><i class="fas fa-check-circle"></i> Save Batch</button>
+        </div>
+    </div>
+</div>
+
+<!-- BULK ADD MODAL -->
+<div class="modal-overlay" id="bulkModal">
+    <div class="modal-card">
+        <h3>Bulk Add Students</h3>
+        <p>One student per line, fields separated by commas:<br><code style="background:#f2f4f7; padding:2px 6px; border-radius:4px;">Name, Roll/Reg No, Username, Password</code></p>
+        <textarea id="bulkText" class="input-text" style="min-height:180px; resize:vertical; font-family:'Hind',monospace;" placeholder="Om Aggarwal, 2410990651, om.aggarwal, pass123&#10;Riya Sharma, 2410990652, riya.sharma, pass456"></textarea>
+        <div class="modal-actions">
+            <button class="btn" onclick="closeBulk()">Cancel</button>
+            <button class="btn primary" onclick="applyBulk()">Add to Table</button>
+        </div>
+    </div>
+</div>
+
+<!-- RANGE FILL MODAL -->
+<div class="modal-overlay" id="rangeModal">
+    <div class="modal-card">
+        <h3>Fill Students by Roll Range</h3>
+        <p>Give a start and end roll number — rows are generated automatically. Roll No is also used as the Registration No.</p>
+        <div class="form-group">
+            <label class="field-label">Start Roll No</label>
+            <input type="text" id="rangeStart" class="input-text" placeholder="e.g. 2410990651" oninput="updateRangePreview()">
+        </div>
+        <div class="form-group">
+            <label class="field-label">End Roll No</label>
+            <input type="text" id="rangeEnd" class="input-text" placeholder="e.g. 2410990663" oninput="updateRangePreview()">
+        </div>
+        <div class="form-group">
+            <label class="field-label">Common Password <span style="color:#98a2b3;font-weight:400;">(optional — same for all)</span></label>
+            <input type="text" id="rangePass" class="input-text" placeholder="e.g. codequest (leave blank to fill later)">
+        </div>
+        <div id="rangePreview" style="color:var(--primary);font-family:'Mulish',sans-serif;font-weight:700;margin-bottom:6px;"></div>
+        <div class="modal-actions">
+            <button class="btn" onclick="closeModal('rangeModal')">Cancel</button>
+            <button class="btn primary" onclick="applyRange()"><i class="fas fa-wand-magic-sparkles"></i> Generate Rows</button>
+        </div>
+    </div>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-overlay" id="confirmModal">
+    <div class="modal-card">
+        <h3>Delete Batch?</h3>
+        <p id="confirmText">This will permanently remove the batch and its students.</p>
+        <div class="modal-actions">
+            <button class="btn" onclick="closeConfirm()">Cancel</button>
+            <button class="btn primary" id="confirmYes">Delete</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast-box" id="cqToast">Saved</div>
+
+<script>
+    const BATCHES_KEY = 'CodeQuest_batches';
+
+    let editingBatchId = null;
+
+    function readBatches() {
+        try { return JSON.parse(localStorage.getItem(BATCHES_KEY)) || []; }
+        catch (e) { return []; }
+    }
+    function writeBatches(list) { localStorage.setItem(BATCHES_KEY, JSON.stringify(list)); }
+
+    function getSession() {
+        try { return JSON.parse(localStorage.getItem('CodeQuest_active_session')) || JSON.parse(localStorage.getItem('TESTPAD_current_user')) || {}; }
+        catch (e) { return {}; }
+    }
+
+    // ===== RENDER EXISTING BATCHES =====
+    function renderBatchList() {
+        const list = readBatches();
+        const grid = document.getElementById('batchGrid');
+        if (!list.length) { grid.innerHTML = `<div class="batch-empty">No batches yet. Create your first batch below.</div>`; return; }
+        grid.innerHTML = list.map(b => {
+            const safeName = escapeHtml(b.name || 'Untitled Batch');
+            const count = (b.students || []).length;
+            return `
+            <div class="batch-card">
+                <h4>${safeName}</h4>
+                <div class="bc-sub">${escapeHtml(b.subject || 'General')}</div>
+                <div class="bc-meta">
+                    <span><i class="fas fa-user-graduate"></i>${count} students</span>
+                    <span><i class="fas fa-calendar"></i>${escapeHtml(b.year || '')}</span>
+                </div>
+                <div class="bc-actions">
+                    <button class="btn ghost" onclick="editBatch('${b.id}')"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="btn" onclick="openChatForBatch('${b.id}')"><i class="fas fa-comments"></i> Chat</button>
+                    <button class="btn" style="color:#d32f2f;border-color:#fecdca;" onclick="askDeleteBatch('${b.id}')"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    // ===== STUDENT TABLE =====
+    function addStudentRow(data) {
+        data = data || {};
+        const tbody = document.getElementById('studentBody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="row-index"></td>
+            <td><input class="cell-input f-name" type="text" placeholder="Full name" value="${escapeAttr(data.name)}"></td>
+            <td><input class="cell-input f-roll" type="text" placeholder="Roll / Registration no" value="${escapeAttr(data.roll || data.regNo)}"></td>
+            <td><input class="cell-input f-user" type="text" placeholder="Username / email" value="${escapeAttr(data.username)}"></td>
+            <td><input class="cell-input f-pass" type="text" placeholder="Password" value="${escapeAttr(data.password)}"></td>
+            <td style="text-align:center;"><i class="fas fa-trash row-action" onclick="removeRow(this)" title="Remove"></i></td>`;
+        tbody.appendChild(tr);
+        renumberRows();
+    }
+
+    function removeRow(el) { el.closest('tr').remove(); renumberRows(); }
+
+    function renumberRows() {
+        const rows = document.querySelectorAll('#studentBody tr');
+        rows.forEach((r, i) => { const c = r.querySelector('.row-index'); if (c) c.textContent = i + 1; });
+        document.getElementById('studentCount').textContent = `(${rows.length})`;
+    }
+
+    function autoSequentialRolls() {
+        const rows = document.querySelectorAll('#studentBody tr');
+        if (!rows.length) { toast('Add students first'); return; }
+        rows.forEach((r, i) => { const el = r.querySelector('.f-roll'); if (el && !el.value.trim()) el.value = String(i + 1); });
+        toast('Roll numbers filled sequentially');
+    }
+
+    function collectStudents() {
+        const rows = document.querySelectorAll('#studentBody tr');
+        const out = [];
+        rows.forEach(r => {
+            const name = r.querySelector('.f-name').value.trim();
+            const roll = r.querySelector('.f-roll').value.trim();
+            const username = r.querySelector('.f-user').value.trim();
+            const password = r.querySelector('.f-pass').value.trim();
+            if (name || roll || username) out.push({ name, roll, regNo: roll, username, password });
+        });
+        return out;
+    }
+
+    // ===== FILL BY RANGE (roll numbers = registration numbers) =====
+    function openRangeFill() {
+        document.getElementById('rangeStart').value = '';
+        document.getElementById('rangeEnd').value = '';
+        document.getElementById('rangePass').value = '';
+        document.getElementById('rangePreview').textContent = '';
+        openModal('rangeModal');
+        updateRangePreview();
+    }
+    function updateRangePreview() {
+        const s = document.getElementById('rangeStart').value.trim();
+        const e = document.getElementById('rangeEnd').value.trim();
+        const el = document.getElementById('rangePreview');
+        const sn = Number(s), en = Number(e);
+        if (s && e && isFinite(sn) && isFinite(en) && en >= sn) {
+            const c = en - sn + 1;
+            el.textContent = `This will create ${c} row${c === 1 ? '' : 's'}.`;
+        } else { el.textContent = ''; }
+    }
+    function applyRange() {
+        const s = document.getElementById('rangeStart').value.trim();
+        const e = document.getElementById('rangeEnd').value.trim();
+        const pass = document.getElementById('rangePass').value;
+        if (!s || !e) { toast('Enter start and end roll numbers'); return; }
+        const sn = Number(s), en = Number(e);
+        if (!isFinite(sn) || !isFinite(en) || en < sn) { toast('End must be ≥ start (numbers only)'); return; }
+        const count = en - sn + 1;
+        if (count > 1000) { toast('Too many — max 1000 at a time'); return; }
+        pruneEmptyRows();
+        const pad = s.length; // preserve leading zeros / width
+        for (let n = sn; n <= en; n++) {
+            const roll = String(n).padStart(pad, '0');
+            addStudentRow({ name: '', roll: roll, regNo: roll, username: '', password: pass });
+        }
+        closeModal('rangeModal');
+        toast(count + ' rows generated');
+    }
+    function pruneEmptyRows() {
+        document.querySelectorAll('#studentBody tr').forEach(r => {
+            const any = ['f-name', 'f-roll', 'f-user', 'f-pass'].some(c => (r.querySelector('.' + c) ? r.querySelector('.' + c).value.trim() : ''));
+            if (!any) r.remove();
+        });
+        renumberRows();
+    }
+
+    // ===== BULK =====
+    function bulkPasteStudents() { document.getElementById('bulkText').value = ''; openModal('bulkModal'); }
+    function closeBulk() { closeModal('bulkModal'); }
+    function applyBulk() {
+        const raw = document.getElementById('bulkText').value;
+        const lines = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+        pruneEmptyRows();
+        lines.forEach(line => {
+            const parts = line.split(',').map(p => p.trim());
+            const roll = parts[1] || '';
+            addStudentRow({ name: parts[0] || '', roll: roll, regNo: roll, username: parts[2] || '', password: parts[3] || '' });
+        });
+        closeBulk();
+        toast(lines.length + ' students added');
+    }
+
+    // ===== SAVE / EDIT =====
+    function saveBatch() {
+        const name = document.getElementById('batchName').value.trim();
+        if (!name) { toast('Batch name is required'); return; }
+        const students = collectStudents();
+        if (!students.length) { toast('Add at least one student'); return; }
+
+        const list = readBatches();
+        const session = getSession();
+        if (editingBatchId) {
+            const idx = list.findIndex(b => b.id === editingBatchId);
+            if (idx >= 0) {
+                list[idx] = { ...list[idx], name, subject: document.getElementById('batchSubject').value.trim(), year: document.getElementById('batchYear').value.trim(), students };
+            }
+            toast('Batch updated');
+        } else {
+            list.unshift({
+                id: 'BATCH' + Date.now(),
+                name, subject: document.getElementById('batchSubject').value.trim(), year: document.getElementById('batchYear').value.trim(),
+                teacherEmail: session.email || '', teacherName: session.name || '', createdAt: new Date().toISOString(), students
+            });
+            toast('Batch created');
+        }
+        writeBatches(list);
+        resetEditor();
+        renderBatchList();
+    }
+
+    function editBatch(id) {
+        const b = readBatches().find(x => x.id === id);
+        if (!b) return;
+        editingBatchId = id;
+        document.getElementById('batchName').value = b.name || '';
+        document.getElementById('batchSubject').value = b.subject || '';
+        document.getElementById('batchYear').value = b.year || '';
+        document.getElementById('editorTitle').textContent = 'Edit Batch';
+        document.getElementById('editorNum').innerHTML = '<i class="fas fa-pen" style="font-size:0.8rem;"></i>';
+        document.getElementById('cancelEditBtn').style.display = 'inline-flex';
+        const tbody = document.getElementById('studentBody');
+        tbody.innerHTML = '';
+        (b.students || []).forEach(s => addStudentRow(s));
+        window.scrollTo({ top: document.querySelector('.wrap').offsetHeight - 400, behavior: 'smooth' });
+    }
+
+    function resetEditor() {
+        editingBatchId = null;
+        document.getElementById('batchName').value = '';
+        document.getElementById('batchSubject').value = '';
+        document.getElementById('batchYear').value = '2025-26';
+        document.getElementById('studentBody').innerHTML = '';
+        document.getElementById('editorTitle').textContent = 'New Batch';
+        document.getElementById('editorNum').textContent = '+';
+        document.getElementById('cancelEditBtn').style.display = 'none';
+        renumberRows();
+    }
+
+    // ===== DELETE =====
+    function askDeleteBatch(id) {
+        const b = readBatches().find(x => x.id === id);
+        openModal('confirmModal');
+        document.getElementById('confirmYes').onclick = function () {
+            writeBatches(readBatches().filter(x => x.id !== id));
+            if (editingBatchId === id) resetEditor();
+            renderBatchList();
+            closeConfirm();
+            toast('Batch deleted');
+        };
+    }
+    function closeConfirm() { closeModal('confirmModal'); }
+
+    function openChatForBatch(id) { location.href = 'createchat.html?batchId=' + encodeURIComponent(id); }
+
+    // ===== MODAL / TOAST / UTIL =====
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    function toast(msg) { const t = document.getElementById('cqToast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(toast._h); toast._h = setTimeout(() => t.style.display = 'none', 2600); }
+    function escapeHtml(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+    function escapeAttr(s) { return String(s == null ? '' : s).replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        renderBatchList();
+        addStudentRow(); // start with one empty row
+        const params = new URLSearchParams(location.search);
+        if (params.get('id')) editBatch(params.get('id'));
+    });
+</script>
+</body>
+
+</html>

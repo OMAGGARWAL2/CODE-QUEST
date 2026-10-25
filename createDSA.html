@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Create DSA Problem</title>
+    <!-- Google Fonts: Hind, Mulish, JetBrains Mono (Bigger Hind typography like questionpool.html) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Mulish:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+
+    <!-- Ace Code Editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.7/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.7/ext-language_tools.js"></script>
+
+    <!-- Quill Rich Text Editor for Problem Statement (Bold, Italic, Code, Code Box) -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    <style>
+        :root {
+            --primary: #df5a22;
+            --primary-hover: #c54814;
+            --primary-soft: #fff5f0;
+            --secondary: #667085;
+            --text-main: #111111;
+            --text-muted: #444444;
+            --border: #d1d5db;
+            --border-light: #e5e7eb;
+            --easy: #00b8a3;
+            --medium: #d97706;
+            --hard: #dc2626;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind', sans-serif;
+            color: #111111;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #111111;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            font-size: 17px;
+            line-height: 1.55;
+        }
+
+        /* ===== SITE HEADER ===== */
+        .site-header {
+            height: 74px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 36px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .logo-box:hover {
+            opacity: 0.85;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-family: 'Hind', sans-serif;
+            font-size: 1.45rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+
+        .brand-sub {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-top: 2px;
+            letter-spacing: 0.5px;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: 8px;
+        }
+
+        .nav-icon-link {
+            width: 44px;
+            height: 44px;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            border: none;
+            text-decoration: none;
+        }
+
+        .nav-icon-link img {
+            width: 24px;
+            height: 24px;
+            opacity: 0.75;
+        }
+
+        .nav-icon-link:hover,
+        .nav-icon-link.active {
+            background: var(--primary-soft);
+        }
+
+        .nav-icon-link.active img {
+            opacity: 1;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-top-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            background: #ffffff;
+            color: #111111;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s;
+        }
+
+        .back-top-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        /* ===== ON-PAGE WHITE CANVAS (NO CARDS, LESS CURVY BORDERS) ===== */
+        .canvas-container {
+            width: 100%;
+            max-width: 1020px;
+            margin: 0 auto;
+            padding: 36px 28px 100px 28px;
+            background: #ffffff;
+        }
+
+        .page-header-row {
+            margin-bottom: 32px;
+            padding-bottom: 18px;
+            border-bottom: 2px solid #111111;
+        }
+
+        .page-headline {
+            font-family: 'Hind', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #111111;
+            letter-spacing: -0.3px;
+            line-height: 1.2;
+        }
+
+        /* Section Blocks without cards or boxes */
+        .section-block {
+            margin-bottom: 40px;
+            padding-bottom: 36px;
+            border-bottom: 1px solid var(--border-light);
+            background: transparent;
+        }
+
+        .section-block:last-of-type {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 24px;
+        }
+
+        .section-tagline {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Hind', sans-serif;
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: #111111;
+            margin-bottom: 20px;
+        }
+
+        .section-num {
+            width: 28px;
+            height: 28px;
+            border-radius: 2px;
+            background: var(--primary);
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        /* Form Controls with less curvy (rectangular) borders */
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label.field-label {
+            font-family: 'Hind', sans-serif;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #111111;
+        }
+
+        label.field-label span.req {
+            color: var(--primary);
+            margin-left: 3px;
+        }
+
+        .input-text,
+        .select-field,
+        .textarea-field {
+            width: 100%;
+            padding: 11px 14px;
+            font-size: 1.05rem;
+            font-family: 'Hind', sans-serif;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            background: #ffffff;
+            color: #111111;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .input-text:focus,
+        .select-field:focus,
+        .textarea-field:focus {
+            border-color: var(--primary);
+        }
+
+        .textarea-field {
+            resize: vertical;
+            min-height: 140px;
+            line-height: 1.6;
+        }
+
+        /* ===== PROBLEM STATEMENT RICH FORMATTING TOOLBAR & EDITOR ===== */
+        .prob-editor-container {
+            width: 100%;
+            margin-top: 6px;
+        }
+
+        /* ===== PROBLEM STATEMENT RICH FORMATTING TOOLBAR & EDITOR ===== */
+        .prob-editor-container {
+            width: 100%;
+            margin-top: 6px;
+        }
+
+        .prob-toolbar-container {
+            background: #fafafa !important;
+            border: 1px solid var(--border) !important;
+            border-bottom: none !important;
+            border-radius: 2px 2px 0 0 !important;
+            padding: 8px 12px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            flex-wrap: wrap !important;
+        }
+
+        .p-fmt-btn {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 7px !important;
+            height: 36px !important;
+            width: auto !important;
+            padding: 0 13px !important;
+            background: #ffffff !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 2px !important;
+            cursor: pointer !important;
+            color: #111111 !important;
+            font-family: 'Hind', sans-serif !important;
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+            transition: all 0.15s ease !important;
+            user-select: none !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+        }
+
+        .p-fmt-btn:hover {
+            background: var(--primary-soft) !important;
+            border-color: var(--primary) !important;
+            color: var(--primary) !important;
+        }
+
+        .p-fmt-btn.active {
+            background: #e2e8f0 !important;
+            border-color: #64748b !important;
+            color: var(--primary) !important;
+            font-weight: 700 !important;
+        }
+
+        .p-fmt-btn i {
+            font-size: 14px !important;
+            color: inherit !important;
+        }
+
+        .p-fmt-btn span {
+            font-family: 'Hind', sans-serif !important;
+            font-size: 0.98rem !important;
+            font-weight: 600 !important;
+            color: inherit !important;
+        }
+
+        .toolbar-v-separator {
+            width: 1px;
+            height: 24px;
+            background: #d1d5db;
+            margin: 0 4px;
+        }
+
+        /* Quill Problem Statement Box (Clean, hind text & consolas code) */
+        #probQuillEditor.ql-container.ql-snow {
+            border: 1px solid var(--border) !important;
+            border-radius: 0 0 2px 2px !important;
+            background: #ffffff !important;
+            min-height: 220px !important;
+        }
+
+        #probQuillEditor .ql-editor {
+            min-height: 220px !important;
+            font-family: 'Hind', sans-serif !important;
+            font-size: 1.15rem !important;
+            line-height: 1.6 !important;
+            color: #111111 !important;
+            padding: 16px 18px !important;
+        }
+
+        #probQuillEditor .ql-editor.ql-blank::before {
+            font-family: 'Hind', sans-serif !important;
+            font-size: 1.15rem !important;
+            font-style: normal !important;
+            color: #9ca3af !important;
+            left: 18px !important;
+            right: 18px !important;
+        }
+
+        #probQuillEditor .ql-editor strong,
+        #probQuillEditor .ql-editor b {
+            font-weight: 700 !important;
+            color: #000000 !important;
+        }
+
+        #probQuillEditor .ql-editor em,
+        #probQuillEditor .ql-editor i {
+            font-style: italic !important;
+        }
+
+        #probQuillEditor .ql-editor u {
+            text-decoration: underline !important;
+        }
+
+        #probQuillEditor .ql-editor code {
+            font-family: Consolas, 'Courier New', monospace !important;
+            background: #ebebeb !important;
+            padding: 2px 7px !important;
+            border-radius: 2px !important;
+            font-size: 0.95em !important;
+            color: #000000 !important;
+            font-weight: 600 !important;
+        }
+
+        #probQuillEditor .ql-editor pre.ql-syntax,
+        #probQuillEditor .ql-editor pre.code-box,
+        #probQuillEditor .ql-editor pre {
+            background-color: #ebebeb !important;
+            border: 1px solid #dcdcdc !important;
+            border-radius: 2px !important;
+            padding: 14px 18px !important;
+            font-family: Consolas, 'Courier New', monospace !important;
+            font-size: 15px !important;
+            line-height: 1.55 !important;
+            color: #000000 !important;
+            margin: 14px 0 !important;
+            white-space: pre-wrap !important;
+            word-wrap: break-word !important;
+        }
+
+        /* View mode switch (Visual vs HTML) */
+        .editor-mode-switch {
+            display: inline-flex;
+            gap: 4px;
+            background: #f3f4f6;
+            padding: 2px;
+            border-radius: 2px;
+            border: 1px solid var(--border-light);
+        }
+
+        .mode-toggle-btn {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 2px;
+            background: transparent;
+            font-family: 'Hind', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #4b5563;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s;
+        }
+
+        .mode-toggle-btn:hover {
+            color: #111111;
+        }
+
+        .mode-toggle-btn.active {
+            background: #ffffff;
+            color: var(--primary);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Difficulty Selector (Less curvy) */
+        .diff-selector-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .diff-btn {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            background: #ffffff;
+            font-family: 'Hind', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-align: center;
+        }
+
+        .diff-btn:hover {
+            border-color: #777777;
+        }
+
+        .diff-btn.active[data-diff="Easy"] {
+            background: #ecfdf5;
+            color: var(--easy);
+            border-color: var(--easy);
+            font-weight: 700;
+        }
+
+        .diff-btn.active[data-diff="Medium"] {
+            background: #fffbeb;
+            color: var(--medium);
+            border-color: var(--medium);
+            font-weight: 700;
+        }
+
+        .diff-btn.active[data-diff="Hard"] {
+            background: #fef2f2;
+            color: var(--hard);
+            border-color: var(--hard);
+            font-weight: 700;
+        }
+
+        /* Examples List on White Page */
+        .examples-list {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-bottom: 16px;
+        }
+
+        .example-item-box {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 18px 20px;
+            position: relative;
+        }
+
+        .example-box-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .example-box-title {
+            font-family: 'Hind', sans-serif;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #111111;
+        }
+
+        .btn-remove-ex {
+            background: transparent;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 2px;
+            transition: all 0.15s;
+        }
+
+        .btn-remove-ex:hover {
+            background: #fef2f2;
+        }
+
+        .btn-add-example {
+            background: #ffffff;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            border-radius: 2px;
+            padding: 10px 20px;
+            font-family: 'Hind', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.15s;
+            margin-top: 4px;
+        }
+
+        .btn-add-example:hover {
+            background: var(--primary-soft);
+        }
+
+        /* Language Selector: All 22 Languages */
+        .lang-control-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding: 14px 16px;
+            background: #fafafa;
+            border: 1px solid var(--border-light);
+            border-radius: 2px;
+            flex-wrap: wrap;
+        }
+
+        .lang-select-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .lang-select-box select {
+            padding: 8px 14px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            background: #ffffff;
+            cursor: pointer;
+            outline: none;
+            min-width: 220px;
+        }
+
+        /* Skeleton Editors: Upper, Mid, Lower */
+        .skeleton-block {
+            margin-bottom: 24px;
+        }
+
+        .skeleton-block-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .skeleton-title {
+            font-family: 'Hind', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #111111;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skeleton-badge {
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+
+        .skeleton-badge.readonly {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .skeleton-badge.editable {
+            background: #ecfdf5;
+            color: #047857;
+        }
+
+        .ace-editor-box {
+            width: 100%;
+            height: 180px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            font-size: 16px;
+        }
+
+        /* Enforce Consolas font only for ace editor */
+        body .ace_editor,
+        body .ace_editor * {
+            font-family: Consolas, 'Monaco', 'Courier New', monospace !important;
+            font-size: 16px !important;
+            line-height: 1.45 !important;
+        }
+
+        /* ===== ACE CODE EDITOR THEME (matches CodeQuestattempt.html: blue keywords / black text) ===== */
+        body .ace_editor {
+            background: #ffffff !important;
+        }
+
+        body .ace_gutter {
+            background: #f9f9f9 !important;
+            color: #444444 !important;
+            border-right: 1px solid #f0f0f0 !important;
+            width: 48px !important;
+        }
+
+        .ace_gutter-cell {
+            color: #000000 !important;
+            opacity: 1 !important;
+        }
+
+        .ace_active-line,
+        .ace_gutter-active-line {
+            background: transparent !important;
+        }
+
+        /* CUSTOM SYNTAX COLORS: BLUE KEYWORDS, GREEN COMMENTS, SHARP BLACK IDENTIFIERS */
+        .ace_keyword,
+        .ace_meta,
+        .ace_storage,
+        .ace_storage.ace_type,
+        .ace_support.ace_function,
+        .ace_support.ace_class,
+        .ace_support.ace_type {
+            color: #0000FF !important;
+        }
+
+        .ace_comment {
+            color: #008000 !important;
+            font-style: normal !important;
+        }
+
+        .ace_identifier,
+        .ace_punctuation,
+        .ace_operator,
+        .ace_constant.ace_numeric,
+        .ace_string {
+            color: #000000 !important;
+        }
+
+        /* Auto-complete popup */
+        .ace_autocomplete {
+            border: 1px solid #D1D5DB !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+            background: #ffffff !important;
+            border-radius: 4px !important;
+            font-family: Consolas, monospace !important;
+            font-size: 16px !important;
+            z-index: 99999 !important;
+        }
+
+        /* Bottom Action Bar */
+        .page-actions-bottom {
+            margin-top: 36px;
+            padding-top: 24px;
+            border-top: 2px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 16px;
+        }
+
+        .btn-action-cancel {
+            padding: 11px 26px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            background: #ffffff;
+            color: #111111;
+            font-family: 'Hind', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-action-cancel:hover {
+            background: #f9fafb;
+            border-color: #777777;
+        }
+
+        .btn-action-publish {
+            padding: 11px 36px;
+            border: 1px solid var(--primary);
+            border-radius: 2px;
+            background: var(--primary);
+            color: #ffffff;
+            font-family: 'Hind', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-action-publish:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Toast */
+        .toast-msg {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(30px);
+            background: #111111;
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 2px;
+            font-family: 'Hind', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s ease;
+            z-index: 99999;
+        }
+
+        .toast-msg.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOP HEADER -->
+    <header class="site-header">
+        <div class="header-left">
+            <a href="teacherindex.html" class="logo-box" title="Back to Dashboard">
+                <div class="logo-icon"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest"></div>
+                <div class="brand-text">
+                    <span class="brand-name">CodeQuest</span>
+                    <span class="brand-sub">Teacher &amp; Faculty Portal</span>
+                </div>
+            </a>
+            <nav class="header-nav">
+                <a href="teacherindex.html" class="nav-icon-link" title="Dashboard">
+                    <img src="EXAMPAD/TESTPAD_WEBSITE__files/menu-1.svg" alt="Dashboard">
+                </a>
+                <a href="teacherindex.html#testsSection" class="nav-icon-link" title="Interview Tests">
+                    <img src="EXAMPAD/TESTPAD_WEBSITE__files/quiz.svg" alt="Tests">
+                </a>
+                <a href="teacherindex.html#coursesSection" class="nav-icon-link" title="Courses">
+                    <img src="EXAMPAD/TESTPAD_WEBSITE__files/folder-2.svg" alt="Courses">
+                </a>
+                <a href="teacherindex.html#dsaSection" class="nav-icon-link active" title="DSA Problem Pool">
+                    <img src="EXAMPAD/TESTPAD_WEBSITE__files/statistics.svg" alt="DSA Pool">
+                </a>
+            </nav>
+        </div>
+
+        <div class="header-right">
+            <a href="teacherindex.html#dsaSection" class="back-top-btn">
+                <i class="fas fa-arrow-left"></i> Return to Problem Pool
+            </a>
+        </div>
+    </header>
+
+    <!-- SIMPLE ON-PAGE WHITE CANVAS -->
+    <main class="canvas-container">
+
+        <div class="page-header-row">
+            <h1 class="page-headline">Create DSA Problem</h1>
+        </div>
+
+        <form id="dsaCreateForm" onsubmit="handlePublishProblem(event)">
+
+            <!-- 1. PROBLEM INFORMATION -->
+            <div class="section-block">
+                <div class="section-tagline">
+                    <span class="section-num">1</span>
+                    <span>Problem Information</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="field-label" for="probTitle">Problem Title <span class="req">*</span></label>
+                    <input type="text" id="probTitle" class="input-text" placeholder="e.g. 6. Valid Parentheses" required>
+                </div>
+
+                <div class="form-row" style="margin-top: 14px;">
+                    <div class="form-group">
+                        <label class="field-label">Difficulty Level</label>
+                        <div class="diff-selector-row">
+                            <button type="button" class="diff-btn active" data-diff="Easy" onclick="setDifficulty('Easy')">Easy</button>
+                            <button type="button" class="diff-btn" data-diff="Medium" onclick="setDifficulty('Medium')">Medium</button>
+                            <button type="button" class="diff-btn" data-diff="Hard" onclick="setDifficulty('Hard')">Hard</button>
+                        </div>
+                        <input type="hidden" id="probDiff" value="Easy">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="field-label" for="probAcceptance">Estimated Acceptance Rate</label>
+                        <input type="text" id="probAcceptance" class="input-text" placeholder="e.g. 55.0%">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="field-label" for="probPoints">Problem Score / Points</label>
+                        <input type="number" id="probPoints" class="input-text" placeholder="e.g. 10" min="1" max="100">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. TOPICS & COMPLEXITY -->
+            <div class="section-block">
+                <div class="section-tagline">
+                    <span class="section-num">2</span>
+                    <span>Topics &amp; Complexity</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="field-label" for="probTopics">Topic Tags (comma-separated) <span class="req">*</span></label>
+                    <input type="text" id="probTopics" class="input-text" placeholder="e.g. Array, Hash Table, Stack, Dynamic Programming" required>
+                </div>
+
+                <div class="form-row" style="margin-top: 14px;">
+                    <div class="form-group">
+                        <label class="field-label" for="probTimeComplexity">Expected Time Complexity</label>
+                        <input type="text" id="probTimeComplexity" class="input-text" placeholder="e.g. O(n)">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="field-label" for="probSpaceComplexity">Space Complexity</label>
+                        <input type="text" id="probSpaceComplexity" class="input-text" placeholder="e.g. O(1)">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="field-label" for="probTimeLimit">Execution Time Limit</label>
+                        <input type="text" id="probTimeLimit" class="input-text" placeholder="e.g. 2.0s">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. PROBLEM STATEMENT & CONSTRAINTS -->
+            <div class="section-block">
+                <div class="section-tagline">
+                    <span class="section-num">3</span>
+                    <span>Problem Statement &amp; Constraints</span>
+                </div>
+
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <label class="field-label" style="margin-bottom: 0;">Problem Statement <span class="req">*</span></label>
+                        <div class="editor-mode-switch">
+                            <button type="button" class="mode-toggle-btn active" id="btnVisualMode" onclick="setEditorMode('visual')">
+                                <i class="fas fa-edit"></i> Visual Editor
+                            </button>
+                            <button type="button" class="mode-toggle-btn" id="btnSourceMode" onclick="setEditorMode('source')">
+                                <i class="fas fa-code"></i> HTML Source
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Problem Statement Toolbar (Bold, Italic, Underline, Inline Code, Code Box) -->
+                    <div class="prob-editor-container">
+                        <div id="probToolbar" class="prob-toolbar-container">
+                            <!-- BOLD -->
+                            <button type="button" class="p-fmt-btn" id="fmtBoldBtn" onclick="applyFormat('bold')" title="Bold (Ctrl+B)">
+                                <i class="fas fa-bold"></i> <span>Bold</span>
+                            </button>
+
+                            <!-- ITALIC -->
+                            <button type="button" class="p-fmt-btn" id="fmtItalicBtn" onclick="applyFormat('italic')" title="Italic (Ctrl+I)">
+                                <i class="fas fa-italic"></i> <span>Italic</span>
+                            </button>
+
+                            <!-- UNDERLINE -->
+                            <button type="button" class="p-fmt-btn" id="fmtUnderlineBtn" onclick="applyFormat('underline')" title="Underline (Ctrl+U)">
+                                <i class="fas fa-underline"></i> <span>Underline</span>
+                            </button>
+
+                            <div class="toolbar-v-separator"></div>
+
+                            <!-- INLINE CODE -->
+                            <button type="button" class="p-fmt-btn" id="fmtCodeBtn" onclick="applyFormat('code')" title="Inline Code">
+                                <i class="fas fa-code"></i> <span>Inline Code</span>
+                            </button>
+
+                            <!-- CODE BOX -->
+                            <button type="button" class="p-fmt-btn" id="fmtCodeBlockBtn" onclick="applyFormat('code-block')" title="Code Box (Preformatted block)">
+                                <i class="fas fa-terminal"></i> <span>Code Box</span>
+                            </button>
+
+                            <div class="toolbar-v-separator"></div>
+
+                            <!-- LISTS & CLEAN -->
+                            <button type="button" class="p-fmt-btn" id="fmtBulletBtn" onclick="applyFormat('list', 'bullet')" title="Bullet List">
+                                <i class="fas fa-list-ul"></i> <span>Bullets</span>
+                            </button>
+                            <button type="button" class="p-fmt-btn" id="fmtOrderedBtn" onclick="applyFormat('list', 'ordered')" title="Numbered List">
+                                <i class="fas fa-list-ol"></i> <span>Numbered</span>
+                            </button>
+                            <button type="button" class="p-fmt-btn" onclick="clearFormat()" title="Clear Formatting">
+                                <i class="fas fa-eraser"></i> <span>Clear</span>
+                            </button>
+
+                            <div class="toolbar-v-separator"></div>
+
+                            <!-- QUICK INSERT CODE BOX BUTTON -->
+                            <button type="button" class="p-fmt-btn" onclick="insertCodeBoxSnippet()" title="Insert formatted Code Box snippet" style="margin-left: auto;">
+                                <i class="fas fa-plus"></i> <span>+ Insert Sample Code Box</span>
+                            </button>
+                        </div>
+
+                        <!-- Quill Editor -->
+                        <div id="probQuillEditor"></div>
+
+                        <!-- Synced Textarea (for Source Mode & fallback) -->
+                        <textarea id="probDescription" class="textarea-field" style="min-height: 220px; display: none; font-family: Consolas, monospace; font-size: 15px; border-radius: 2px;" placeholder="Enter problem statement HTML or text..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 18px;">
+                    <label class="field-label" for="probConstraints">Constraints (one per line)</label>
+                    <textarea id="probConstraints" class="textarea-field" style="min-height: 90px;" placeholder="e.g. 1 <= nums.length <= 10^5&#10;Time Limit: 2.0s"></textarea>
+                </div>
+            </div>
+
+            <!-- 4. SAMPLE EXAMPLES -->
+            <div class="section-block">
+                <div class="section-tagline">
+                    <span class="section-num">4</span>
+                    <span>Sample Test Cases &amp; Examples</span>
+                </div>
+
+                <div class="examples-list" id="examplesContainer">
+                    <!-- Example 1 -->
+                    <div class="example-item-box">
+                        <div class="example-box-header">
+                            <span class="example-box-title">Example 1</span>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="field-label">Sample Input <span class="req">*</span></label>
+                                <input type="text" class="input-text ex-input" placeholder="e.g. nums = [2,7,11,15], target = 9" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="field-label">Expected Output <span class="req">*</span></label>
+                                <input type="text" class="input-text ex-output" placeholder="e.g. [0,1]" required>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top: 8px;">
+                            <label class="field-label">Explanation (optional)</label>
+                            <input type="text" class="input-text ex-explain" placeholder="e.g. Because nums[0] + nums[1] == 9, we return [0, 1].">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-add-example" onclick="addNewExampleField()">
+                    <i class="fas fa-plus"></i> Add Another Example
+                </button>
+            </div>
+
+            <!-- 5. HIDDEN TEST CASES -->
+            <div class="section-block">
+                <div class="section-tagline">
+                    <span class="section-num">5</span>
+                    <span>Hidden Test Cases</span>
+                </div>
+                <p style="font-family:'Hind', sans-serif; color:#667085; font-size:0.95rem; margin-bottom:16px;">
+                    <i class="fas fa-eye-slash" style="color:var(--primary);"></i> These cases are <strong>never shown to students</strong>. They run only during final judging / scoring.
+                </p>
+
+                <div class="examples-list" id="hiddenTestsContainer"></div>
+
+                <button type="button" class="btn-add-example" onclick="addNewHiddenField()">
+                    <i class="fas fa-plus"></i> Add Hidden Test Case
+                </button>
+            </div>
+
+            <!-- 6. CODE SKELETON: ALL 22 LANGUAGES (UPPER, MID, LOWER) -->
+            <div class="section-block">
+                <div class="section-tagline">
+                    <span class="section-num">6</span>
+                    <span>Code Skeleton (Upper, Mid &amp; Lower)</span>
+                </div>
+
+                <!-- 22 Languages Selector -->
+                <div class="lang-control-bar">
+                    <div class="lang-select-box">
+                        <label class="field-label" for="langSelector" style="margin-bottom:0;">Select Language (22 Available):</label>
+                        <select id="langSelector" onchange="handleLanguageChange(this.value)">
+                            <!-- Populated with all 22 languages dynamically -->
+                        </select>
+                    </div>
+                    <div style="font-size: 0.95rem; color: #555555; font-weight: 500;">
+                        Editor Font: <strong style="font-family: Consolas, monospace;">Consolas (Ace.js)</strong>
+                    </div>
+                </div>
+
+                <!-- Upper Code (Header / Imports / Declarations) -->
+                <div class="skeleton-block">
+                    <div class="skeleton-block-header">
+                        <div class="skeleton-title">
+                            <span>Upper Code</span>
+                            <span class="skeleton-badge readonly">Read-Only Prefix / Imports</span>
+                        </div>
+                    </div>
+                    <div id="edUpper" class="ace-editor-box" style="height: 140px;"></div>
+                </div>
+
+                <!-- Mid Code (Student Solution Template / Editable) -->
+                <div class="skeleton-block">
+                    <div class="skeleton-block-header">
+                        <div class="skeleton-title">
+                            <span>Mid Code</span>
+                            <span class="skeleton-badge editable">Candidate Solution Template</span>
+                        </div>
+                    </div>
+                    <div id="edMid" class="ace-editor-box" style="height: 200px;"></div>
+                </div>
+
+                <!-- Lower Code (Driver Code / Test Harness) -->
+                <div class="skeleton-block">
+                    <div class="skeleton-block-header">
+                        <div class="skeleton-title">
+                            <span>Lower Code</span>
+                            <span class="skeleton-badge readonly">Driver Code / Test Runner</span>
+                        </div>
+                    </div>
+                    <div id="edLower" class="ace-editor-box" style="height: 140px;"></div>
+                </div>
+            </div>
+
+            <!-- 6. SEND TO CHAT GROUP -->
+            <div class="section-block">
+                <div class="section-tagline">
+                    <span class="section-num">7</span>
+                    <span>Send to Chat Group</span>
+                </div>
+                <div class="form-group" style="flex-direction: row; align-items: center;">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-family: 'Hind', sans-serif; font-weight: 600; color: #344054;">
+                        <input type="checkbox" id="dsaSendToGroup" onchange="toggleSendGroupWrap()" style="width: 18px; height: 18px; accent-color: var(--primary);">
+                        <i class="fas fa-comments" style="color: var(--primary);"></i> Also send this problem to a chat group when published
+                    </label>
+                </div>
+                <div class="form-group" id="dsaSendGroupWrap" style="margin-top: 12px; display: none;">
+                    <label class="field-label" for="dsaSendGroup">Choose group</label>
+                    <select id="dsaSendGroup" class="input-text"></select>
+                    <div style="font-size: 0.85rem; color: #777; margin-top: 6px;">It will appear in that group as a card with a "Tap to solve" link.</div>
+                </div>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="page-actions-bottom">
+                <a href="teacherindex.html#dsaSection" class="btn-action-cancel">Cancel</a>
+                <button type="submit" class="btn-action-publish">
+                    <i class="fas fa-check-circle"></i> Publish Problem to Arena
+                </button>
+            </div>
+
+        </form>
+    </main>
+
+    <!-- TOAST -->
+    <div id="toastAlert" class="toast-msg">Problem published successfully!</div>
+
+    <script>
+        const STORAGE_KEY = 'CodeQuest_dsa_problems';
+
+        // ALL 22 LANGUAGES FOR DSA SOLVING
+        const ALL_22_LANGUAGES = [
+            { id: "python", name: "Python 3", mode: "ace/mode/python" },
+            { id: "java", name: "Java", mode: "ace/mode/java" },
+            { id: "cpp", name: "C++", mode: "ace/mode/c_cpp" },
+            { id: "c", name: "C", mode: "ace/mode/c_cpp" },
+            { id: "javascript", name: "JavaScript", mode: "ace/mode/javascript" },
+            { id: "typescript", name: "TypeScript", mode: "ace/mode/typescript" },
+            { id: "csharp", name: "C#", mode: "ace/mode/csharp" },
+            { id: "golang", name: "Go", mode: "ace/mode/golang" },
+            { id: "rust", name: "Rust", mode: "ace/mode/rust" },
+            { id: "kotlin", name: "Kotlin", mode: "ace/mode/kotlin" },
+            { id: "ruby", name: "Ruby", mode: "ace/mode/ruby" },
+            { id: "php", name: "PHP", mode: "ace/mode/php" },
+            { id: "swift", name: "Swift", mode: "ace/mode/swift" },
+            { id: "scala", name: "Scala", mode: "ace/mode/scala" },
+            { id: "perl", name: "Perl", mode: "ace/mode/perl" },
+            { id: "r", name: "R", mode: "ace/mode/r" },
+            { id: "dart", name: "Dart", mode: "ace/mode/dart" },
+            { id: "haskell", name: "Haskell", mode: "ace/mode/haskell" },
+            { id: "lua", name: "Lua", mode: "ace/mode/lua" },
+            { id: "elixir", name: "Elixir", mode: "ace/mode/elixir" },
+            { id: "clojure", name: "Clojure", mode: "ace/mode/clojure" },
+            { id: "sql", name: "SQL", mode: "ace/mode/sql" }
+        ];
+
+        // SKELETON CODE STORE FOR ALL 22 LANGUAGES (UPPER, MID, LOWER)
+        const CODE_STORE = {};
+
+        // Default template generator for all 22 languages
+        ALL_22_LANGUAGES.forEach(l => {
+            if (l.id === 'python') {
+                CODE_STORE[l.id] = {
+                    upper: `import sys\nfrom typing import List, Dict, Optional\n`,
+                    mid: `class Solution:\n    def solve(self, *args):\n        # Write your code here\n        pass\n`,
+                    lower: `if __name__ == '__main__':\n    # Testcase runner driver code\n    pass\n`
+                };
+            } else if (l.id === 'java') {
+                CODE_STORE[l.id] = {
+                    upper: `import java.util.*;\nimport java.io.*;\n`,
+                    mid: `class Solution {\n    public void solve() {\n        // Write your code here\n    }\n}\n`,
+                    lower: `public class Main {\n    public static void main(String[] args) {\n        // Test runner driver code\n    }\n}\n`
+                };
+            } else if (l.id === 'cpp') {
+                CODE_STORE[l.id] = {
+                    upper: `#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n`,
+                    mid: `class Solution {\npublic:\n    void solve() {\n        // Write your code here\n    }\n};\n`,
+                    lower: `int main() {\n    // Test runner driver code\n    return 0;\n}\n`
+                };
+            } else if (l.id === 'c') {
+                CODE_STORE[l.id] = {
+                    upper: `#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n`,
+                    mid: `void solve() {\n    // Write your code here\n}\n`,
+                    lower: `int main() {\n    // Test runner driver code\n    return 0;\n}\n`
+                };
+            } else if (l.id === 'javascript') {
+                CODE_STORE[l.id] = {
+                    upper: `// Global helper definitions\n`,
+                    mid: `var solve = function() {\n    // Write your code here\n};\n`,
+                    lower: `// Driver execution\n`
+                };
+            } else if (l.id === 'typescript') {
+                CODE_STORE[l.id] = {
+                    upper: `// TypeScript definitions\n`,
+                    mid: `function solve(): void {\n    // Write your code here\n}\n`,
+                    lower: `// Driver execution\n`
+                };
+            } else if (l.id === 'csharp') {
+                CODE_STORE[l.id] = {
+                    upper: `using System;\nusing System.Collections.Generic;\n`,
+                    mid: `public class Solution {\n    public void Solve() {\n        // Write your code here\n    }\n}\n`,
+                    lower: `class Program {\n    static void Main(string[] args) {\n        // Test runner\n    }\n}\n`
+                };
+            } else if (l.id === 'golang') {
+                CODE_STORE[l.id] = {
+                    upper: `package main\nimport "fmt"\n`,
+                    mid: `func solve() {\n    // Write your code here\n}\n`,
+                    lower: `func main() {\n    // Driver execution\n}\n`
+                };
+            } else if (l.id === 'rust') {
+                CODE_STORE[l.id] = {
+                    upper: `use std::io;\n`,
+                    mid: `impl Solution {\n    pub fn solve() {\n        // Write your code here\n    }\n}\n`,
+                    lower: `fn main() {\n    // Driver code\n}\n`
+                };
+            } else if (l.id === 'kotlin') {
+                CODE_STORE[l.id] = {
+                    upper: `import java.util.Scanner\n`,
+                    mid: `class Solution {\n    fun solve() {\n        // Write your code here\n    }\n}\n`,
+                    lower: `fun main() {\n    // Driver code\n}\n`
+                };
+            } else if (l.id === 'ruby') {
+                CODE_STORE[l.id] = {
+                    upper: `# Ruby dependencies\n`,
+                    mid: `def solve()\n    # Write your code here\nend\n`,
+                    lower: `# Driver code\n`
+                };
+            } else if (l.id === 'php') {
+                CODE_STORE[l.id] = {
+                    upper: `<?php\n`,
+                    mid: `class Solution {\n    function solve() {\n        // Write your code here\n    }\n}\n`,
+                    lower: `// Driver code\n`
+                };
+            } else if (l.id === 'swift') {
+                CODE_STORE[l.id] = {
+                    upper: `import Foundation\n`,
+                    mid: `class Solution {\n    func solve() {\n        // Write your code here\n    }\n}\n`,
+                    lower: `// Driver code\n`
+                };
+            } else if (l.id === 'scala') {
+                CODE_STORE[l.id] = {
+                    upper: `import scala.io.StdIn\n`,
+                    mid: `object Solution {\n    def solve(): Unit = {\n        // Write your code here\n    }\n}\n`,
+                    lower: `// Driver execution\n`
+                };
+            } else if (l.id === 'sql') {
+                CODE_STORE[l.id] = {
+                    upper: `-- Schema Setup\n`,
+                    mid: `-- Write your SQL Query here\nSELECT * FROM solution_table;\n`,
+                    lower: `-- Verification assertions\n`
+                };
+            } else {
+                CODE_STORE[l.id] = {
+                    upper: `// ${l.name} Header / Imports\n`,
+                    mid: `// Candidate ${l.name} Solution\n`,
+                    lower: `// Driver Harness\n`
+                };
+            }
+        });
+
+        let currentLang = 'python';
+        const editors = {};
+
+        // Initialize Ace Editors for Upper, Mid, Lower and Quill for Problem Statement
+        window.addEventListener('DOMContentLoaded', () => {
+            populateLanguageSelector();
+            initAceSkeletonEditors();
+            initProblemQuillEditor();
+            checkUrlEditId();
+            populateGroupSelector();
+        });
+
+        function populateGroupSelector() {
+            const sel = document.getElementById('dsaSendGroup');
+            if (!sel) return;
+            let groups = [];
+            try { groups = JSON.parse(localStorage.getItem('CodeQuest_chat_groups')) || []; } catch (e) { groups = []; }
+            if (!groups.length) {
+                sel.innerHTML = '<option value="">No chat groups yet — create one in Chat first</option>';
+                const cb = document.getElementById('dsaSendToGroup'); if (cb) cb.disabled = true;
+                return;
+            }
+            sel.innerHTML = groups.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
+        }
+        function toggleSendGroupWrap() {
+            const cb = document.getElementById('dsaSendToGroup');
+            const wrap = document.getElementById('dsaSendGroupWrap');
+            if (wrap) wrap.style.display = (cb && cb.checked) ? 'flex' : 'none';
+        }
+        function sendProblemToGroup(groupId, prob) {
+            let all = {};
+            try { all = JSON.parse(localStorage.getItem('CodeQuest_chat_messages')) || {}; } catch (e) { all = {}; }
+            if (all === null || typeof all !== 'object') all = {};
+            let session = {};
+            try { session = JSON.parse(localStorage.getItem('CodeQuest_active_session')) || JSON.parse(localStorage.getItem('TESTPAD_current_user')) || {}; } catch (e) { session = {}; }
+            const arr = all[groupId] = all[groupId] || [];
+            arr.push({
+                sender: session.email || session.name || 'teacher',
+                senderName: session.name || 'Teacher',
+                role: 'teacher',
+                text: '',
+                time: Date.now(),
+                problem: { id: prob.id, title: prob.title, diff: prob.diff, points: prob.points, topics: prob.topics, url: 'CodeQuestattempt.html?id=' + encodeURIComponent(prob.id) }
+            });
+            try { localStorage.setItem('CodeQuest_chat_messages', JSON.stringify(all)); } catch (e) { console.warn('Could not send to group', e); }
+        }
+
+        function populateLanguageSelector() {
+            const select = document.getElementById('langSelector');
+            select.innerHTML = '';
+            ALL_22_LANGUAGES.forEach(l => {
+                const opt = document.createElement('option');
+                opt.value = l.id;
+                opt.textContent = l.name;
+                select.appendChild(opt);
+            });
+            select.value = currentLang;
+        }
+
+        function initAceSkeletonEditors() {
+            const commonConfig = {
+                fontSize: "16px",
+                fontFamily: "Consolas, 'Monaco', 'Courier New', monospace",
+                showPrintMargin: false,
+                highlightActiveLine: false,
+                wrap: true,
+                tabSize: 4,
+                useSoftTabs: true
+            };
+
+            ['Upper', 'Mid', 'Lower'].forEach(section => {
+                try {
+                    const ed = ace.edit('ed' + section);
+                    ed.setTheme("ace/theme/chrome");
+                    ed.session.setMode("ace/mode/python");
+                    ed.setOptions(commonConfig);
+                    editors[section] = ed;
+                } catch (err) {
+                    console.warn(`Error initializing Ace for ${section}:`, err);
+                }
+            });
+
+            loadSkeletonForLang(currentLang);
+        }
+
+        function loadSkeletonForLang(lang) {
+            const langConfig = ALL_22_LANGUAGES.find(l => l.id === lang) || ALL_22_LANGUAGES[0];
+            const data = CODE_STORE[lang] || { upper: '', mid: '// Write code here\n', lower: '' };
+
+            ['Upper', 'Mid', 'Lower'].forEach(sec => {
+                if (editors[sec]) {
+                    editors[sec].session.setMode(langConfig.mode);
+                    editors[sec].setValue(data[sec.toLowerCase()] || '', -1);
+                }
+            });
+        }
+
+        function saveCurrentSkeletonState() {
+            if (!CODE_STORE[currentLang]) CODE_STORE[currentLang] = {};
+            ['Upper', 'Mid', 'Lower'].forEach(sec => {
+                if (editors[sec]) {
+                    CODE_STORE[currentLang][sec.toLowerCase()] = editors[sec].getValue();
+                }
+            });
+        }
+
+        function handleLanguageChange(newLang) {
+            saveCurrentSkeletonState();
+            currentLang = newLang;
+            loadSkeletonForLang(currentLang);
+            const langObj = ALL_22_LANGUAGES.find(l => l.id === newLang);
+            showToast(`Switched to ${langObj ? langObj.name : newLang}`);
+        }
+
+        function setDifficulty(diff) {
+            document.getElementById('probDiff').value = diff;
+            document.querySelectorAll('.diff-btn').forEach(btn => {
+                if (btn.getAttribute('data-diff') === diff) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        function addNewExampleField() {
+            const container = document.getElementById('examplesContainer');
+            const count = container.querySelectorAll('.example-item-box').length + 1;
+
+            const box = document.createElement('div');
+            box.className = 'example-item-box';
+            box.innerHTML = `
+                <div class="example-box-header">
+                    <span class="example-box-title">Example ${count}</span>
+                    <button type="button" class="btn-remove-ex" onclick="this.closest('.example-item-box').remove()">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="field-label">Sample Input</label>
+                        <input type="text" class="input-text ex-input" placeholder="e.g. s = '()'">
+                    </div>
+                    <div class="form-group">
+                        <label class="field-label">Expected Output</label>
+                        <input type="text" class="input-text ex-output" placeholder="e.g. true">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 8px;">
+                    <label class="field-label">Explanation (optional)</label>
+                    <input type="text" class="input-text ex-explain" placeholder="Explanation for this case...">
+                </div>
+            `;
+            container.appendChild(box);
+        }
+
+        function addNewHiddenField() {
+            const container = document.getElementById('hiddenTestsContainer');
+            if (!container) return;
+            const count = container.querySelectorAll('.example-item-box').length + 1;
+            const box = document.createElement('div');
+            box.className = 'example-item-box';
+            box.innerHTML = `
+                <div class="example-box-header">
+                    <span class="example-box-title"><i class="fas fa-eye-slash" style="color:var(--primary);"></i> Hidden Case ${count}</span>
+                    <button type="button" class="btn-remove-ex" onclick="this.closest('.example-item-box').remove()">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="field-label">Input</label>
+                        <input type="text" class="input-text ht-input" placeholder="e.g. s = '(){}[]'">
+                    </div>
+                    <div class="form-group">
+                        <label class="field-label">Expected Output</label>
+                        <input type="text" class="input-text ht-output" placeholder="e.g. true">
+                    </div>
+                </div>`;
+            container.appendChild(box);
+        }
+
+        function loadHiddenTests(list) {
+            const container = document.getElementById('hiddenTestsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            (list || []).forEach(tc => {
+                addNewHiddenField();
+                const boxes = container.querySelectorAll('.example-item-box');
+                const last = boxes[boxes.length - 1];
+                if (last) {
+                    last.querySelector('.ht-input').value = tc.input || '';
+                    last.querySelector('.ht-output').value = tc.output || '';
+                }
+            });
+        }
+
+        let quillDesc = null;
+        let isSourceMode = false;
+
+        function initProblemQuillEditor() {
+            try {
+                if (typeof Quill === 'undefined') {
+                    console.warn("Quill library still loading, retrying in 200ms...");
+                    setTimeout(initProblemQuillEditor, 200);
+                    return;
+                }
+
+                quillDesc = new Quill('#probQuillEditor', {
+                    modules: {
+                        toolbar: false // Custom independent toolbar so icons and text are never wiped
+                    },
+                    theme: 'snow',
+                    placeholder: "Write the problem statement here. Use Bold, Italic, Underline, Inline Code, or Code Box formatting..."
+                });
+
+                // Start completely empty unless editing an existing problem
+                const initialVal = document.getElementById('probDescription').value.trim();
+                quillDesc.root.innerHTML = initialVal || '';
+
+                // Sync Quill changes to hidden textarea and update active states
+                quillDesc.on('text-change', () => {
+                    if (!isSourceMode) {
+                        document.getElementById('probDescription').value = quillDesc.root.innerHTML;
+                    }
+                    updateToolbarActiveStates();
+                });
+
+                quillDesc.on('selection-change', (range) => {
+                    if (range) {
+                        updateToolbarActiveStates();
+                    }
+                });
+            } catch (err) {
+                console.error("Quill init error:", err);
+            }
+        }
+
+        function applyFormat(name, value) {
+            if (!quillDesc) return;
+            quillDesc.focus();
+            const range = quillDesc.getSelection(true);
+            if (!range) return;
+
+            const formats = quillDesc.getFormat(range);
+            if (name === 'list') {
+                const current = formats.list;
+                quillDesc.format('list', current === value ? false : value);
+            } else if (name === 'code-block') {
+                const current = formats['code-block'];
+                quillDesc.format('code-block', !current);
+            } else {
+                const current = formats[name];
+                quillDesc.format(name, !current);
+            }
+            updateToolbarActiveStates();
+        }
+
+        function clearFormat() {
+            if (!quillDesc) return;
+            quillDesc.focus();
+            const range = quillDesc.getSelection(true);
+            if (range && range.length > 0) {
+                quillDesc.removeFormat(range.index, range.length);
+            }
+            updateToolbarActiveStates();
+        }
+
+        function updateToolbarActiveStates() {
+            if (!quillDesc) return;
+            const formats = quillDesc.getFormat() || {};
+
+            toggleBtnActive('fmtBoldBtn', !!formats.bold);
+            toggleBtnActive('fmtItalicBtn', !!formats.italic);
+            toggleBtnActive('fmtUnderlineBtn', !!formats.underline);
+            toggleBtnActive('fmtCodeBtn', !!formats.code);
+            toggleBtnActive('fmtCodeBlockBtn', !!formats['code-block']);
+            toggleBtnActive('fmtBulletBtn', formats.list === 'bullet');
+            toggleBtnActive('fmtOrderedBtn', formats.list === 'ordered');
+        }
+
+        function toggleBtnActive(id, isActive) {
+            const el = document.getElementById(id);
+            if (el) {
+                if (isActive) el.classList.add('active');
+                else el.classList.remove('active');
+            }
+        }
+
+        function insertCodeBoxSnippet() {
+            if (!quillDesc) return;
+            quillDesc.focus();
+            const range = quillDesc.getSelection(true) || { index: quillDesc.getLength(), length: 0 };
+            const snippet = "\n// Code Box snippet\nfunction solve(s) {\n    // Enter logic here\n}\n";
+            quillDesc.insertText(range.index, snippet, 'code-block', true);
+            quillDesc.setSelection(range.index + snippet.length, 0);
+            updateToolbarActiveStates();
+        }
+
+        function setEditorMode(mode) {
+            const visualEl = document.getElementById('probQuillEditor');
+            const sourceEl = document.getElementById('probDescription');
+            const toolbarEl = document.getElementById('probToolbar');
+            const btnVisual = document.getElementById('btnVisualMode');
+            const btnSource = document.getElementById('btnSourceMode');
+
+            if (mode === 'source') {
+                isSourceMode = true;
+                if (quillDesc) {
+                    sourceEl.value = quillDesc.root.innerHTML;
+                }
+                visualEl.style.display = 'none';
+                toolbarEl.style.display = 'none';
+                sourceEl.style.display = 'block';
+                sourceEl.focus();
+                btnVisual.classList.remove('active');
+                btnSource.classList.add('active');
+            } else {
+                isSourceMode = false;
+                if (quillDesc) {
+                    quillDesc.root.innerHTML = sourceEl.value;
+                }
+                sourceEl.style.display = 'none';
+                toolbarEl.style.display = 'flex';
+                visualEl.style.display = 'block';
+                if (quillDesc) quillDesc.focus();
+                btnSource.classList.remove('active');
+                btnVisual.classList.add('active');
+            }
+        }
+
+        function checkUrlEditId() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            if (!id) return;
+
+            try {
+                const problems = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                const prob = problems.find(p => p.id === id);
+                if (prob) {
+                    document.getElementById('probTitle').value = prob.title || '';
+                    if (prob.diff) setDifficulty(prob.diff);
+                    if (prob.acceptance) document.getElementById('probAcceptance').value = prob.acceptance;
+                    if (prob.points) document.getElementById('probPoints').value = prob.points;
+                    if (prob.topics) document.getElementById('probTopics').value = prob.topics;
+                    if (prob.maxTimeComplexity) document.getElementById('probTimeComplexity').value = prob.maxTimeComplexity;
+                    if (prob.spaceComplexity) document.getElementById('probSpaceComplexity').value = prob.spaceComplexity;
+                    if (prob.desc) {
+                        document.getElementById('probDescription').value = prob.desc;
+                        if (quillDesc) quillDesc.root.innerHTML = prob.desc;
+                    }
+                    if (prob.constraints && Array.isArray(prob.constraints)) {
+                        document.getElementById('probConstraints').value = prob.constraints.join('\n');
+                    }
+                    if (prob.hiddenTests && Array.isArray(prob.hiddenTests)) {
+                        loadHiddenTests(prob.hiddenTests);
+                    }
+                    if (prob.upperCode && editors.Upper) editors.Upper.setValue(prob.upperCode, -1);
+                    if (prob.midBoiler && editors.Mid) editors.Mid.setValue(prob.midBoiler, -1);
+                    if (prob.lowerCode && editors.Lower) editors.Lower.setValue(prob.lowerCode, -1);
+                }
+            } catch (e) {
+                console.warn("Edit problem lookup notice:", e);
+            }
+        }
+
+        function handlePublishProblem(e) {
+            e.preventDefault();
+
+            const title = document.getElementById('probTitle').value.trim();
+            const diff = document.getElementById('probDiff').value;
+            const acceptance = document.getElementById('probAcceptance').value.trim() || '50.0%';
+            const points = document.getElementById('probPoints').value.trim() || '10';
+            const topics = document.getElementById('probTopics').value.trim();
+            const maxTimeComplexity = document.getElementById('probTimeComplexity').value.trim() || 'O(n)';
+            const spaceComplexity = document.getElementById('probSpaceComplexity').value.trim() || 'O(n)';
+            const timeLimit = document.getElementById('probTimeLimit').value.trim() || '2.0s';
+            
+            let desc = '';
+            if (isSourceMode) {
+                desc = document.getElementById('probDescription').value.trim();
+            } else if (quillDesc) {
+                desc = quillDesc.root.innerHTML.trim();
+                if (desc === '<p><br></p>' || desc === '<p></p>') desc = '';
+            }
+            if (!desc) {
+                desc = document.getElementById('probDescription').value.trim();
+            }
+
+            if (!desc || desc === '<p><br></p>') {
+                showToast("Please enter a problem statement.");
+                const scrollTarget = document.getElementById('probQuillEditor') || document.getElementById('probDescription');
+                if (scrollTarget) scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            const constraintsRaw = document.getElementById('probConstraints').value.trim();
+            const constraints = constraintsRaw ? constraintsRaw.split('\n').map(c => c.trim()).filter(Boolean) : [
+                "1 <= input.length <= 10^5",
+                "Time Limit: " + timeLimit
+            ];
+
+            // Extract examples
+            const examples = [];
+            document.querySelectorAll('#examplesContainer .example-item-box').forEach(box => {
+                const input = box.querySelector('.ex-input').value.trim();
+                const output = box.querySelector('.ex-output').value.trim();
+                const explanation = box.querySelector('.ex-explain').value.trim();
+                if (input || output) {
+                    examples.push({ input, output, explanation });
+                }
+            });
+
+            if (!examples.length) {
+                examples.push({ input: "input = standard", output: "output = result", explanation: "" });
+            }
+
+            // Extract hidden test cases (never shown to students)
+            const hiddenTests = [];
+            document.querySelectorAll('#hiddenTestsContainer .example-item-box').forEach(box => {
+                const input = box.querySelector('.ht-input').value.trim();
+                const output = box.querySelector('.ht-output').value.trim();
+                if (input || output) hiddenTests.push({ input, output });
+            });
+
+            // Save active editor states
+            saveCurrentSkeletonState();
+
+            const upper = editors.Upper ? editors.Upper.getValue() : (CODE_STORE[currentLang]?.upper || '');
+            const mid = editors.Mid ? editors.Mid.getValue() : (CODE_STORE[currentLang]?.mid || '');
+            const lower = editors.Lower ? editors.Lower.getValue() : (CODE_STORE[currentLang]?.lower || '');
+
+            let composed = '';
+            if (upper.trim()) composed += upper + (upper.endsWith('\n') ? '' : '\n');
+            composed += (mid || '// solution');
+            if (!composed.endsWith('\n')) composed += '\n';
+            if (lower.trim()) composed += lower;
+
+            // Build starter code map for languages
+            const starterCodeMap = {};
+            ALL_22_LANGUAGES.forEach(l => {
+                starterCodeMap[l.id] = (CODE_STORE[l.id] && CODE_STORE[l.id].mid) ? CODE_STORE[l.id].mid : `// ${l.name} solution\n`;
+            });
+
+            let problems = [];
+            try {
+                problems = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                if (!Array.isArray(problems)) problems = [];
+            } catch (err) {
+                problems = [];
+            }
+
+            const params = new URLSearchParams(window.location.search);
+            const editId = params.get('id');
+
+            const newId = editId || ('PQ9RJ' + String(problems.length + 1).padStart(3, '0'));
+            const num = editId ? ((problems.find(p => p.id === editId) || {}).num || problems.length) : (problems.length + 1);
+
+            const newProblem = {
+                id: newId,
+                num: num,
+                title: title,
+                diff: diff,
+                difficulty: diff,
+                acceptance: acceptance,
+                points: points,
+                topics: topics,
+                maxTimeComplexity: maxTimeComplexity,
+                spaceComplexity: spaceComplexity,
+                timeLimit: timeLimit,
+                desc: desc,
+                constraints: constraints,
+                examples: examples,
+                hiddenTests: hiddenTests,
+                language: currentLang,
+                upperCode: upper,
+                midBoiler: mid,
+                lowerCode: lower,
+                code: composed,
+                starterCode: starterCodeMap,
+                createdAt: new Date().toISOString()
+            };
+
+            if (editId) {
+                const idx = problems.findIndex(p => p.id === editId);
+                if (idx >= 0) problems[idx] = newProblem;
+                else problems.push(newProblem);
+            } else {
+                problems.push(newProblem);
+            }
+
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(problems));
+            } catch (err) {
+                alert("Storage is full, could not save problem.");
+                return;
+            }
+
+            // Optionally broadcast this problem to a chat group
+            try {
+                const sendCb = document.getElementById('dsaSendToGroup');
+                if (sendCb && sendCb.checked) {
+                    const gid = document.getElementById('dsaSendGroup').value;
+                    if (gid) sendProblemToGroup(gid, newProblem);
+                }
+            } catch (err) { console.warn('Send to group failed:', err); }
+
+            showToast("Problem published to arena successfully! Redirecting...");
+
+            setTimeout(() => {
+                window.location.href = 'teacherindex.html#dsaSection';
+            }, 850);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toastAlert');
+            if (!toast) return;
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2600);
+        }
+    </script>
+</body>
+
+</html>

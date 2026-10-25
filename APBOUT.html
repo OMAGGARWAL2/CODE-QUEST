@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - App Usage</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Mulish:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+    <style>
+        :root {
+            --primary: #df5a22;
+            --border: #f0f0f0;
+            --text-main: #222;
+            --text-muted: #777;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind', 'Mulish', sans-serif;
+            color: #000;
+        }
+
+        body { background: #fff; min-height: 100vh; font-size: 15px; }
+
+        /* Header (same simple style) */
+        .site-header {
+            height: 84px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 50px; }
+
+        .logo-box { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-icon { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
+        .brand-text-block { display: flex; flex-direction: column; line-height: 1.15; }
+        .brand-title { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.5px; color: #1a1a1a; text-transform: uppercase; }
+        .brand-subtitle { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; color: var(--primary); text-transform: uppercase; }
+
+        .nav-icons { display: flex; align-items: center; gap: 28px; }
+        .icon-btn-box { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; border-radius: 8px; cursor: pointer; transition: all 0.15s; }
+        .icon-btn-box:hover { background: #f7f7f7; }
+        .icon-btn-box.active { background: #fff5f0; }
+        .icon-btn-box img { width: 28px; height: 28px; }
+
+        .header-right { display: flex; align-items: center; gap: 12px; }
+        .profile-text { text-align: right; line-height: 1.25; }
+        .profile-name { display: block; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 1.05rem; text-transform: uppercase; color: #333; }
+        .profile-role { display: block; font-size: 0.72rem; font-weight: 800; color: var(--primary); text-transform: uppercase; }
+        .avatar-circle { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); overflow: hidden; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Content */
+        .main { max-width: 760px; margin: 0 auto; padding: 40px 24px 80px; }
+
+        h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 6px; }
+        .desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 28px; }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 4px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stat-label { font-size: 1.1rem; color: #111; }
+        .stat-value { font-size: 1.4rem; font-weight: 700; color: #111; }
+
+        .section-title { font-size: 1.1rem; font-weight: 700; margin: 34px 0 8px; }
+
+        .usage-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 4px;
+            border-bottom: 1px solid var(--border);
+            font-size: 1rem;
+        }
+        .usage-item .when { color: var(--text-muted); font-size: 0.9rem; }
+        .empty { color: var(--text-muted); padding: 14px 4px; font-size: 0.95rem; }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="header-left">
+        <a href="ONLALP.html" class="logo-box">
+            <div class="logo-icon"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest Logo"></div>
+            <div class="brand-text-block">
+                <span class="brand-title">CodeQuest</span>
+                <span class="brand-subtitle">Admin Portal</span>
+            </div>
+        </a>
+        <nav class="nav-icons">
+            <div class="icon-btn-box" onclick="window.location.href='ONLALP.html'" title="Applications">
+                <img src="EXAMPAD/TESTPAD_WEBSITE__files/menu-1.svg" alt="Applications">
+            </div>
+            <div class="icon-btn-box" onclick="window.location.href='teacherindex.html'" title="Teacher Portal">
+                <img src="EXAMPAD/TESTPAD_WEBSITE__files/folder-2.svg" alt="Teacher Portal">
+            </div>
+            <div class="icon-btn-box active" title="App Usage &amp; Stats">
+                <img src="EXAMPAD/TESTPAD_WEBSITE__files/statistics.svg" alt="App Usage & Stats">
+            </div>
+        </nav>
+    </div>
+    <div class="header-right">
+        <div class="profile-text">
+            <span class="profile-name">ALPHAWINNERS</span>
+            <span class="profile-role">Administrator</span>
+        </div>
+        <div class="avatar-circle"><img src="EXAMPAD/LINUX_TEST_CHITKARA_files/user-icon.3d6e2547.svg" alt="Profile"></div>
+    </div>
+</header>
+
+<main class="main">
+    <h1>App Usage Overview</h1>
+    <p class="desc">Simple summary of CodeQuest activity across the platform.</p>
+
+    <div class="stat-row">
+        <span class="stat-label">Total Users</span>
+        <span class="stat-value" id="statUsers">0</span>
+    </div>
+    <div class="stat-row">
+        <span class="stat-label">Companies Coming In</span>
+        <span class="stat-value" id="statCompanies">0</span>
+    </div>
+    <div class="stat-row">
+        <span class="stat-label">Total Tests Made</span>
+        <span class="stat-value" id="statTests">0</span>
+    </div>
+    <div class="stat-row">
+        <span class="stat-label">Total Courses</span>
+        <span class="stat-value" id="statCourses">0</span>
+    </div>
+    <div class="stat-row">
+        <span class="stat-label">Total Hours Used (Global)</span>
+        <span class="stat-value" id="statHours">0</span>
+    </div>
+
+    <div class="section-title">Recent App Usage</div>
+    <div id="recentList"></div>
+</main>
+
+<script>
+    // Auth gate: admin only (same as ONLALP.html)
+    if (sessionStorage.getItem('ONLALP_admin_auth') !== 'true') {
+        window.location.replace('loginforcomp.html');
+    }
+
+    function readJSON(key) {
+        try { return JSON.parse(localStorage.getItem(key)) || []; }
+        catch (e) { return []; }
+    }
+
+    function render() {
+        const users = readJSON('TESTPAD_users');
+        const apps = readJSON('CodeQuest_official_applications');
+
+        // Companies / officials that applied
+        const companies = apps.filter(a =>
+            /company|recruiter|hr|placement|coordinator|official|faculty|teacher/i
+                .test((a.role || '') + ' ' + (a.company || '')));
+
+        // Real counts where a data source exists, otherwise 0 (no fake numbers)
+        const tests = countKey('CodeQuest_tests') || countKey('TESTPAD_tests') || 0;
+        const courses = countKey('CodeQuest_courses') || countKey('TESTPAD_courses') || 0;
+        const hours = countKey('CodeQuest_hours') || 0;
+
+        document.getElementById('statUsers').textContent = users.length;
+        document.getElementById('statCompanies').textContent = companies.length;
+        document.getElementById('statTests').textContent = tests;
+        document.getElementById('statCourses').textContent = courses;
+        document.getElementById('statHours').textContent = hours;
+
+        // Recent usage = latest applications by submittedAt
+        const recent = apps.slice().sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt)).slice(0, 6);
+        const list = document.getElementById('recentList');
+
+        if (recent.length === 0) {
+            list.innerHTML = '<div class="empty">No recent activity yet.</div>';
+            return;
+        }
+
+        list.innerHTML = recent.map(a => `
+            <div class="usage-item">
+                <span>${esc(a.fullName)} &middot; ${esc(a.role || 'Official')}</span>
+                <span class="when">${esc(a.submittedAt || '')}</span>
+            </div>
+        `).join('');
+    }
+
+    function countKey(key) {
+        try {
+            const v = JSON.parse(localStorage.getItem(key));
+            if (Array.isArray(v)) return v.length;
+            if (v && typeof v === 'object') return Object.keys(v).length;
+        } catch (e) {}
+        return 0;
+    }
+
+    function esc(s) {
+        return (s == null ? '' : String(s))
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    window.addEventListener('DOMContentLoaded', render);
+</script>
+</body>
+</html>

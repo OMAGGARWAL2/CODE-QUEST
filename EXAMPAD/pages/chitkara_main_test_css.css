@@ -1,0 +1,2300 @@
+:root {
+    --primary-color: #de6834;
+    --hue: 18.4;
+    --lightness: 53.7%;
+    --secondary-color: hsl(var(--hue), 81%, calc(var(--lightness) + 42%));
+    --primary-border: hsl(var(--hue), 72%, calc(var(--lightness) + 18%));
+    --primary-lighter: hsl(var(--hue), 36%, calc(var(--lightness) + 42%));
+    --primary-light: hsl(var(--hue), 100%, calc(var(--lightness) + 40%));
+    --primary-medium: hsl(var(--hue), 58%, calc(var(--lightness) + 27%));
+    --primary-medium-dark: hsl(var(--hue), 55%, calc(var(--lightness) + 10%));
+    --primary-medium-light: hsl(var(--hue), 45%, calc(var(--lightness) + 20%));
+    --primary-dark: hsl(var(--hue), 79%, calc(var(--lightness) - 17%));
+    --input-border: hsl(var(--hue), 93%, calc(var(--lightness) + 10%));
+    --primary-hover: hsl(var(--hue), 66%, calc(var(--lightness) - 3%));
+    --loading-1: hsl(var(--hue), 67%, calc(var(--lightness) - 7%));
+    --loading-2: hsl(var(--hue), 53%, calc(var(--lightness) + 7%));
+    --loading-3: hsl(var(--hue), 80%, calc(var(--lightness) - 18%));
+    --slider-bg: hsl(var(--hue), 69%, calc(var(--lightness) + 37%));
+    --slider-fg: hsl(var(--hue), 96%, calc(var(--lightness) + 17%));
+    --primary-bg: #fff;
+    --primary-bg-1: #ededed;
+    --primary-text: #000;
+    --select-bg: #d1d1d1
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box
+}
+
+html,
+body,
+#root {
+    width: 100%;
+    height: 100%
+}
+
+body {
+    background-color: #fbfbfb
+}
+
+.quill {
+    border: 1px solid #e0e0e0;
+    border-radius: .5rem;
+    background-color: #fbfbfb;
+    transition: all .2s
+}
+
+.quill:hover {
+    border-color: #de6834
+}
+
+.quill:focus-within {
+    border-color: #de6834;
+    box-shadow: 0 0 0 2px #fff7efe3
+}
+
+.ql-toolbar.ql-snow,
+.ql-container.ql-snow {
+    border-color: #e0e0e0 !important;
+    border-width: 0px !important;
+    border-bottom-width: 1px !important
+}
+
+.ant-tabs {
+    height: 100%
+}
+
+.ant-tabs-content-holder {
+    display: flex
+}
+
+.ant-table-placeholder {
+    z-index: 0 !important
+}
+
+.solution .ace_gutter,
+.solution .ace_gutter-layer {
+    width: 63px !important
+}
+
+.solution .ace_scroller {
+    left: 63px !important
+}
+
+.solution .ace_gutter-cell {
+    padding-left: 0
+}
+
+.read-only-ace .ace_cursor {
+    opacity: 0
+}
+
+.read-only-ace .ace_content,
+.read-only-ace .ace_scroller {
+    background-color: #f7f7f7
+}
+
+.expanded-row-no-z-index {
+    z-index: unset !important
+}
+
+div.fancy-divider {
+    display: flex
+}
+
+div.fancy-divider>div:nth-child(1) {
+    flex: 1 1 20%;
+    background-color: var(--primary-lighter)
+}
+
+div.fancy-divider>div:nth-child(2) {
+    flex: 1 1 30%;
+    background-color: var(--primary-medium)
+}
+
+div.fancy-divider>div:nth-child(3) {
+    flex: 1 1 50%;
+    background-color: var(--primary-color)
+}
+
+/*!
+ * Quill Editor v1.3.7
+ * https://quilljs.com/
+ * Copyright (c) 2014, Jason Chen
+ * Copyright (c) 2013, salesforce.com
+ */
+.ql-container {
+    box-sizing: border-box;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    height: 100%;
+    margin: 0;
+    position: relative
+}
+
+.ql-container.ql-disabled .ql-tooltip {
+    visibility: hidden
+}
+
+.ql-container.ql-disabled .ql-editor ul[data-checked]>li:before {
+    pointer-events: none
+}
+
+.ql-clipboard {
+    left: -100000px;
+    height: 1px;
+    overflow-y: hidden;
+    position: absolute;
+    top: 50%
+}
+
+.ql-clipboard p {
+    margin: 0;
+    padding: 0
+}
+
+.ql-editor {
+    box-sizing: border-box;
+    line-height: 1.42;
+    height: 100%;
+    outline: none;
+    overflow-y: auto;
+    padding: 12px 15px;
+    -o-tab-size: 4;
+    tab-size: 4;
+    -moz-tab-size: 4;
+    text-align: left;
+    white-space: pre-wrap;
+    word-wrap: break-word
+}
+
+.ql-editor>* {
+    cursor: text
+}
+
+.ql-editor p,
+.ql-editor ol,
+.ql-editor ul,
+.ql-editor pre,
+.ql-editor blockquote,
+.ql-editor h1,
+.ql-editor h2,
+.ql-editor h3,
+.ql-editor h4,
+.ql-editor h5,
+.ql-editor h6 {
+    margin: 0;
+    padding: 0;
+    counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9
+}
+
+.ql-editor ol,
+.ql-editor ul {
+    padding-left: 1.5em
+}
+
+.ql-editor ol>li,
+.ql-editor ul>li {
+    list-style-type: none
+}
+
+.ql-editor ul>li:before {
+    content: "â€¢"
+}
+
+.ql-editor ul[data-checked=true],
+.ql-editor ul[data-checked=false] {
+    pointer-events: none
+}
+
+.ql-editor ul[data-checked=true]>li *,
+.ql-editor ul[data-checked=false]>li * {
+    pointer-events: all
+}
+
+.ql-editor ul[data-checked=true]>li:before,
+.ql-editor ul[data-checked=false]>li:before {
+    color: #777;
+    cursor: pointer;
+    pointer-events: all
+}
+
+.ql-editor ul[data-checked=true]>li:before {
+    content: "â˜‘"
+}
+
+.ql-editor ul[data-checked=false]>li:before {
+    content: "â˜"
+}
+
+.ql-editor li:before {
+    display: inline-block;
+    white-space: nowrap;
+    width: 1.2em
+}
+
+.ql-editor li:not(.ql-direction-rtl):before {
+    margin-left: -1.5em;
+    margin-right: .3em;
+    text-align: right
+}
+
+.ql-editor li.ql-direction-rtl:before {
+    margin-left: .3em;
+    margin-right: -1.5em
+}
+
+.ql-editor ol li:not(.ql-direction-rtl),
+.ql-editor ul li:not(.ql-direction-rtl) {
+    padding-left: 1.5em
+}
+
+.ql-editor ol li.ql-direction-rtl,
+.ql-editor ul li.ql-direction-rtl {
+    padding-right: 1.5em
+}
+
+.ql-editor ol li {
+    counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+    counter-increment: list-0
+}
+
+.ql-editor ol li:before {
+    content: counter(list-0, decimal) ". "
+}
+
+.ql-editor ol li.ql-indent-1 {
+    counter-increment: list-1
+}
+
+.ql-editor ol li.ql-indent-1:before {
+    content: counter(list-1, lower-alpha) ". "
+}
+
+.ql-editor ol li.ql-indent-1 {
+    counter-reset: list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9
+}
+
+.ql-editor ol li.ql-indent-2 {
+    counter-increment: list-2
+}
+
+.ql-editor ol li.ql-indent-2:before {
+    content: counter(list-2, lower-roman) ". "
+}
+
+.ql-editor ol li.ql-indent-2 {
+    counter-reset: list-3 list-4 list-5 list-6 list-7 list-8 list-9
+}
+
+.ql-editor ol li.ql-indent-3 {
+    counter-increment: list-3
+}
+
+.ql-editor ol li.ql-indent-3:before {
+    content: counter(list-3, decimal) ". "
+}
+
+.ql-editor ol li.ql-indent-3 {
+    counter-reset: list-4 list-5 list-6 list-7 list-8 list-9
+}
+
+.ql-editor ol li.ql-indent-4 {
+    counter-increment: list-4
+}
+
+.ql-editor ol li.ql-indent-4:before {
+    content: counter(list-4, lower-alpha) ". "
+}
+
+.ql-editor ol li.ql-indent-4 {
+    counter-reset: list-5 list-6 list-7 list-8 list-9
+}
+
+.ql-editor ol li.ql-indent-5 {
+    counter-increment: list-5
+}
+
+.ql-editor ol li.ql-indent-5:before {
+    content: counter(list-5, lower-roman) ". "
+}
+
+.ql-editor ol li.ql-indent-5 {
+    counter-reset: list-6 list-7 list-8 list-9
+}
+
+.ql-editor ol li.ql-indent-6 {
+    counter-increment: list-6
+}
+
+.ql-editor ol li.ql-indent-6:before {
+    content: counter(list-6, decimal) ". "
+}
+
+.ql-editor ol li.ql-indent-6 {
+    counter-reset: list-7 list-8 list-9
+}
+
+.ql-editor ol li.ql-indent-7 {
+    counter-increment: list-7
+}
+
+.ql-editor ol li.ql-indent-7:before {
+    content: counter(list-7, lower-alpha) ". "
+}
+
+.ql-editor ol li.ql-indent-7 {
+    counter-reset: list-8 list-9
+}
+
+.ql-editor ol li.ql-indent-8 {
+    counter-increment: list-8
+}
+
+.ql-editor ol li.ql-indent-8:before {
+    content: counter(list-8, lower-roman) ". "
+}
+
+.ql-editor ol li.ql-indent-8 {
+    counter-reset: list-9
+}
+
+.ql-editor ol li.ql-indent-9 {
+    counter-increment: list-9
+}
+
+.ql-editor ol li.ql-indent-9:before {
+    content: counter(list-9, decimal) ". "
+}
+
+.ql-editor .ql-indent-1:not(.ql-direction-rtl) {
+    padding-left: 3em
+}
+
+.ql-editor li.ql-indent-1:not(.ql-direction-rtl) {
+    padding-left: 4.5em
+}
+
+.ql-editor .ql-indent-1.ql-direction-rtl.ql-align-right {
+    padding-right: 3em
+}
+
+.ql-editor li.ql-indent-1.ql-direction-rtl.ql-align-right {
+    padding-right: 4.5em
+}
+
+.ql-editor .ql-indent-2:not(.ql-direction-rtl) {
+    padding-left: 6em
+}
+
+.ql-editor li.ql-indent-2:not(.ql-direction-rtl) {
+    padding-left: 7.5em
+}
+
+.ql-editor .ql-indent-2.ql-direction-rtl.ql-align-right {
+    padding-right: 6em
+}
+
+.ql-editor li.ql-indent-2.ql-direction-rtl.ql-align-right {
+    padding-right: 7.5em
+}
+
+.ql-editor .ql-indent-3:not(.ql-direction-rtl) {
+    padding-left: 9em
+}
+
+.ql-editor li.ql-indent-3:not(.ql-direction-rtl) {
+    padding-left: 10.5em
+}
+
+.ql-editor .ql-indent-3.ql-direction-rtl.ql-align-right {
+    padding-right: 9em
+}
+
+.ql-editor li.ql-indent-3.ql-direction-rtl.ql-align-right {
+    padding-right: 10.5em
+}
+
+.ql-editor .ql-indent-4:not(.ql-direction-rtl) {
+    padding-left: 12em
+}
+
+.ql-editor li.ql-indent-4:not(.ql-direction-rtl) {
+    padding-left: 13.5em
+}
+
+.ql-editor .ql-indent-4.ql-direction-rtl.ql-align-right {
+    padding-right: 12em
+}
+
+.ql-editor li.ql-indent-4.ql-direction-rtl.ql-align-right {
+    padding-right: 13.5em
+}
+
+.ql-editor .ql-indent-5:not(.ql-direction-rtl) {
+    padding-left: 15em
+}
+
+.ql-editor li.ql-indent-5:not(.ql-direction-rtl) {
+    padding-left: 16.5em
+}
+
+.ql-editor .ql-indent-5.ql-direction-rtl.ql-align-right {
+    padding-right: 15em
+}
+
+.ql-editor li.ql-indent-5.ql-direction-rtl.ql-align-right {
+    padding-right: 16.5em
+}
+
+.ql-editor .ql-indent-6:not(.ql-direction-rtl) {
+    padding-left: 18em
+}
+
+.ql-editor li.ql-indent-6:not(.ql-direction-rtl) {
+    padding-left: 19.5em
+}
+
+.ql-editor .ql-indent-6.ql-direction-rtl.ql-align-right {
+    padding-right: 18em
+}
+
+.ql-editor li.ql-indent-6.ql-direction-rtl.ql-align-right {
+    padding-right: 19.5em
+}
+
+.ql-editor .ql-indent-7:not(.ql-direction-rtl) {
+    padding-left: 21em
+}
+
+.ql-editor li.ql-indent-7:not(.ql-direction-rtl) {
+    padding-left: 22.5em
+}
+
+.ql-editor .ql-indent-7.ql-direction-rtl.ql-align-right {
+    padding-right: 21em
+}
+
+.ql-editor li.ql-indent-7.ql-direction-rtl.ql-align-right {
+    padding-right: 22.5em
+}
+
+.ql-editor .ql-indent-8:not(.ql-direction-rtl) {
+    padding-left: 24em
+}
+
+.ql-editor li.ql-indent-8:not(.ql-direction-rtl) {
+    padding-left: 25.5em
+}
+
+.ql-editor .ql-indent-8.ql-direction-rtl.ql-align-right {
+    padding-right: 24em
+}
+
+.ql-editor li.ql-indent-8.ql-direction-rtl.ql-align-right {
+    padding-right: 25.5em
+}
+
+.ql-editor .ql-indent-9:not(.ql-direction-rtl) {
+    padding-left: 27em
+}
+
+.ql-editor li.ql-indent-9:not(.ql-direction-rtl) {
+    padding-left: 28.5em
+}
+
+.ql-editor .ql-indent-9.ql-direction-rtl.ql-align-right {
+    padding-right: 27em
+}
+
+.ql-editor li.ql-indent-9.ql-direction-rtl.ql-align-right {
+    padding-right: 28.5em
+}
+
+.ql-editor .ql-video {
+    display: block;
+    max-width: 100%
+}
+
+.ql-editor .ql-video.ql-align-center {
+    margin: 0 auto
+}
+
+.ql-editor .ql-video.ql-align-right {
+    margin: 0 0 0 auto
+}
+
+.ql-editor .ql-bg-black {
+    background-color: #000
+}
+
+.ql-editor .ql-bg-red {
+    background-color: #e60000
+}
+
+.ql-editor .ql-bg-orange {
+    background-color: #f90
+}
+
+.ql-editor .ql-bg-yellow {
+    background-color: #ff0
+}
+
+.ql-editor .ql-bg-green {
+    background-color: #008a00
+}
+
+.ql-editor .ql-bg-blue {
+    background-color: #06c
+}
+
+.ql-editor .ql-bg-purple {
+    background-color: #93f
+}
+
+.ql-editor .ql-color-white {
+    color: #fff
+}
+
+.ql-editor .ql-color-red {
+    color: #e60000
+}
+
+.ql-editor .ql-color-orange {
+    color: #f90
+}
+
+.ql-editor .ql-color-yellow {
+    color: #ff0
+}
+
+.ql-editor .ql-color-green {
+    color: #008a00
+}
+
+.ql-editor .ql-color-blue {
+    color: #06c
+}
+
+.ql-editor .ql-color-purple {
+    color: #93f
+}
+
+.ql-editor .ql-font-serif {
+    font-family: Georgia, Times New Roman, serif
+}
+
+.ql-editor .ql-font-monospace {
+    font-family: Monaco, Courier New, monospace
+}
+
+.ql-editor .ql-size-small {
+    font-size: .75em
+}
+
+.ql-editor .ql-size-large {
+    font-size: 1.5em
+}
+
+.ql-editor .ql-size-huge {
+    font-size: 2.5em
+}
+
+.ql-editor .ql-direction-rtl {
+    direction: rtl;
+    text-align: inherit
+}
+
+.ql-editor .ql-align-center {
+    text-align: center
+}
+
+.ql-editor .ql-align-justify {
+    text-align: justify
+}
+
+.ql-editor .ql-align-right {
+    text-align: right
+}
+
+.ql-editor.ql-blank:before {
+    color: #0009;
+    content: attr(data-placeholder);
+    font-style: italic;
+    left: 15px;
+    pointer-events: none;
+    position: absolute;
+    right: 15px
+}
+
+.ql-snow.ql-toolbar:after,
+.ql-snow .ql-toolbar:after {
+    clear: both;
+    content: "";
+    display: table
+}
+
+.ql-snow.ql-toolbar button,
+.ql-snow .ql-toolbar button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    float: left;
+    height: 24px;
+    padding: 3px 5px;
+    width: 28px
+}
+
+.ql-snow.ql-toolbar button svg,
+.ql-snow .ql-toolbar button svg {
+    float: left;
+    height: 100%
+}
+
+.ql-snow.ql-toolbar button:active:hover,
+.ql-snow .ql-toolbar button:active:hover {
+    outline: none
+}
+
+.ql-snow.ql-toolbar input.ql-image[type=file],
+.ql-snow .ql-toolbar input.ql-image[type=file] {
+    display: none
+}
+
+.ql-snow.ql-toolbar button:hover,
+.ql-snow .ql-toolbar button:hover,
+.ql-snow.ql-toolbar button:focus,
+.ql-snow .ql-toolbar button:focus,
+.ql-snow.ql-toolbar button.ql-active,
+.ql-snow .ql-toolbar button.ql-active,
+.ql-snow.ql-toolbar .ql-picker-label:hover,
+.ql-snow .ql-toolbar .ql-picker-label:hover,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active,
+.ql-snow.ql-toolbar .ql-picker-item:hover,
+.ql-snow .ql-toolbar .ql-picker-item:hover,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected {
+    color: #06c
+}
+
+.ql-snow.ql-toolbar button:hover .ql-fill,
+.ql-snow .ql-toolbar button:hover .ql-fill,
+.ql-snow.ql-toolbar button:focus .ql-fill,
+.ql-snow .ql-toolbar button:focus .ql-fill,
+.ql-snow.ql-toolbar button.ql-active .ql-fill,
+.ql-snow .ql-toolbar button.ql-active .ql-fill,
+.ql-snow.ql-toolbar .ql-picker-label:hover .ql-fill,
+.ql-snow .ql-toolbar .ql-picker-label:hover .ql-fill,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-fill,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-fill,
+.ql-snow.ql-toolbar .ql-picker-item:hover .ql-fill,
+.ql-snow .ql-toolbar .ql-picker-item:hover .ql-fill,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-fill,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-fill,
+.ql-snow.ql-toolbar button:hover .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar button:hover .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar button:focus .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar button:focus .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar button.ql-active .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar button.ql-active .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill {
+    fill: #06c
+}
+
+.ql-snow.ql-toolbar button:hover .ql-stroke,
+.ql-snow .ql-toolbar button:hover .ql-stroke,
+.ql-snow.ql-toolbar button:focus .ql-stroke,
+.ql-snow .ql-toolbar button:focus .ql-stroke,
+.ql-snow.ql-toolbar button.ql-active .ql-stroke,
+.ql-snow .ql-toolbar button.ql-active .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke,
+.ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke,
+.ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
+.ql-snow.ql-toolbar button:hover .ql-stroke-miter,
+.ql-snow .ql-toolbar button:hover .ql-stroke-miter,
+.ql-snow.ql-toolbar button:focus .ql-stroke-miter,
+.ql-snow .ql-toolbar button:focus .ql-stroke-miter,
+.ql-snow.ql-toolbar button.ql-active .ql-stroke-miter,
+.ql-snow .ql-toolbar button.ql-active .ql-stroke-miter,
+.ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke-miter,
+.ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke-miter,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter,
+.ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke-miter,
+.ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke-miter,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter {
+    stroke: #06c
+}
+
+@media(pointer:coarse) {
+
+    .ql-snow.ql-toolbar button:hover:not(.ql-active),
+    .ql-snow .ql-toolbar button:hover:not(.ql-active) {
+        color: #444
+    }
+
+    .ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-fill,
+    .ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-fill,
+    .ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-stroke.ql-fill,
+    .ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-stroke.ql-fill {
+        fill: #444
+    }
+
+    .ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-stroke,
+    .ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-stroke,
+    .ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-stroke-miter,
+    .ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-stroke-miter {
+        stroke: #444
+    }
+}
+
+.ql-snow,
+.ql-snow * {
+    box-sizing: border-box
+}
+
+.ql-snow .ql-hidden {
+    display: none
+}
+
+.ql-snow .ql-out-bottom,
+.ql-snow .ql-out-top {
+    visibility: hidden
+}
+
+.ql-snow .ql-tooltip {
+    position: absolute;
+    transform: translateY(10px)
+}
+
+.ql-snow .ql-tooltip a {
+    cursor: pointer;
+    text-decoration: none
+}
+
+.ql-snow .ql-tooltip.ql-flip {
+    transform: translateY(-10px)
+}
+
+.ql-snow .ql-formats {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.ql-snow .ql-formats:after {
+    clear: both;
+    content: "";
+    display: table
+}
+
+.ql-snow .ql-stroke {
+    fill: none;
+    stroke: #444;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2
+}
+
+.ql-snow .ql-stroke-miter {
+    fill: none;
+    stroke: #444;
+    stroke-miterlimit: 10;
+    stroke-width: 2
+}
+
+.ql-snow .ql-fill,
+.ql-snow .ql-stroke.ql-fill {
+    fill: #444
+}
+
+.ql-snow .ql-empty {
+    fill: none
+}
+
+.ql-snow .ql-even {
+    fill-rule: evenodd
+}
+
+.ql-snow .ql-thin,
+.ql-snow .ql-stroke.ql-thin {
+    stroke-width: 1
+}
+
+.ql-snow .ql-transparent {
+    opacity: .4
+}
+
+.ql-snow .ql-direction svg:last-child {
+    display: none
+}
+
+.ql-snow .ql-direction.ql-active svg:last-child {
+    display: inline
+}
+
+.ql-snow .ql-direction.ql-active svg:first-child {
+    display: none
+}
+
+.ql-snow .ql-editor h1 {
+    font-size: 2em
+}
+
+.ql-snow .ql-editor h2 {
+    font-size: 1.5em
+}
+
+.ql-snow .ql-editor h3 {
+    font-size: 1.17em
+}
+
+.ql-snow .ql-editor h4 {
+    font-size: 1em
+}
+
+.ql-snow .ql-editor h5 {
+    font-size: .83em
+}
+
+.ql-snow .ql-editor h6 {
+    font-size: .67em
+}
+
+.ql-snow .ql-editor a {
+    text-decoration: underline
+}
+
+.ql-snow .ql-editor blockquote {
+    border-left: 4px solid #ccc;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    padding-left: 16px
+}
+
+.ql-snow .ql-editor code,
+.ql-snow .ql-editor pre {
+    background-color: #f0f0f0;
+    border-radius: 3px
+}
+
+.ql-snow .ql-editor pre {
+    white-space: pre-wrap;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    padding: 5px 10px
+}
+
+.ql-snow .ql-editor code {
+    font-size: 85%;
+    padding: 2px 4px
+}
+
+.ql-snow .ql-editor pre.ql-syntax {
+    background-color: #23241f;
+    color: #f8f8f2;
+    overflow: visible
+}
+
+.ql-snow .ql-editor img {
+    max-width: 100%
+}
+
+.ql-snow .ql-picker {
+    color: #444;
+    display: inline-block;
+    float: left;
+    font-size: 14px;
+    font-weight: 500;
+    height: 24px;
+    position: relative;
+    vertical-align: middle
+}
+
+.ql-snow .ql-picker-label {
+    cursor: pointer;
+    display: inline-block;
+    height: 100%;
+    padding-left: 8px;
+    padding-right: 2px;
+    position: relative;
+    width: 100%
+}
+
+.ql-snow .ql-picker-label:before {
+    display: inline-block;
+    line-height: 22px
+}
+
+.ql-snow .ql-picker-options {
+    background-color: #fff;
+    display: none;
+    min-width: 100%;
+    padding: 4px 8px;
+    position: absolute;
+    white-space: nowrap
+}
+
+.ql-snow .ql-picker-options .ql-picker-item {
+    cursor: pointer;
+    display: block;
+    padding-bottom: 5px;
+    padding-top: 5px
+}
+
+.ql-snow .ql-picker.ql-expanded .ql-picker-label {
+    color: #ccc;
+    z-index: 2
+}
+
+.ql-snow .ql-picker.ql-expanded .ql-picker-label .ql-fill {
+    fill: #ccc
+}
+
+.ql-snow .ql-picker.ql-expanded .ql-picker-label .ql-stroke {
+    stroke: #ccc
+}
+
+.ql-snow .ql-picker.ql-expanded .ql-picker-options {
+    display: block;
+    margin-top: -1px;
+    top: 100%;
+    z-index: 1
+}
+
+.ql-snow .ql-color-picker,
+.ql-snow .ql-icon-picker {
+    width: 28px
+}
+
+.ql-snow .ql-color-picker .ql-picker-label,
+.ql-snow .ql-icon-picker .ql-picker-label {
+    padding: 2px 4px
+}
+
+.ql-snow .ql-color-picker .ql-picker-label svg,
+.ql-snow .ql-icon-picker .ql-picker-label svg {
+    right: 4px
+}
+
+.ql-snow .ql-icon-picker .ql-picker-options {
+    padding: 4px 0
+}
+
+.ql-snow .ql-icon-picker .ql-picker-item {
+    height: 24px;
+    width: 24px;
+    padding: 2px 4px
+}
+
+.ql-snow .ql-color-picker .ql-picker-options {
+    padding: 3px 5px;
+    width: 152px
+}
+
+.ql-snow .ql-color-picker .ql-picker-item {
+    border: 1px solid transparent;
+    float: left;
+    height: 16px;
+    margin: 2px;
+    padding: 0;
+    width: 16px
+}
+
+.ql-snow .ql-picker:not(.ql-color-picker):not(.ql-icon-picker) svg {
+    position: absolute;
+    margin-top: -9px;
+    right: 0;
+    top: 50%;
+    width: 18px
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-label]:not([data-label=""]):before,
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-label]:not([data-label=""]):before,
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-label]:not([data-label=""]):before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-label]:not([data-label=""]):before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-label]:not([data-label=""]):before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-label]:not([data-label=""]):before {
+    content: attr(data-label)
+}
+
+.ql-snow .ql-picker.ql-header {
+    width: 98px
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-label:before,
+.ql-snow .ql-picker.ql-header .ql-picker-item:before {
+    content: "Normal"
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="1"]:before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="1"]:before {
+    content: "Heading 1"
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]:before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]:before {
+    content: "Heading 2"
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]:before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]:before {
+    content: "Heading 3"
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="4"]:before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="4"]:before {
+    content: "Heading 4"
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="5"]:before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="5"]:before {
+    content: "Heading 5"
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="6"]:before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="6"]:before {
+    content: "Heading 6"
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="1"]:before {
+    font-size: 2em
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]:before {
+    font-size: 1.5em
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]:before {
+    font-size: 1.17em
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="4"]:before {
+    font-size: 1em
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="5"]:before {
+    font-size: .83em
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="6"]:before {
+    font-size: .67em
+}
+
+.ql-snow .ql-picker.ql-font {
+    width: 108px
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label:before,
+.ql-snow .ql-picker.ql-font .ql-picker-item:before {
+    content: "Sans Serif"
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=serif]:before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=serif]:before {
+    content: "Serif"
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=monospace]:before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=monospace]:before {
+    content: "Monospace"
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=serif]:before {
+    font-family: Georgia, Times New Roman, serif
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=monospace]:before {
+    font-family: Monaco, Courier New, monospace
+}
+
+.ql-snow .ql-picker.ql-size {
+    width: 98px
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-label:before,
+.ql-snow .ql-picker.ql-size .ql-picker-item:before {
+    content: "Normal"
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value=small]:before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value=small]:before {
+    content: "Small"
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value=large]:before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value=large]:before {
+    content: "Large"
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value=huge]:before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value=huge]:before {
+    content: "Huge"
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value=small]:before {
+    font-size: 10px
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value=large]:before {
+    font-size: 18px
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value=huge]:before {
+    font-size: 32px
+}
+
+.ql-snow .ql-color-picker.ql-background .ql-picker-item {
+    background-color: #fff
+}
+
+.ql-snow .ql-color-picker.ql-color .ql-picker-item {
+    background-color: #000
+}
+
+.ql-toolbar.ql-snow {
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    padding: 8px
+}
+
+.ql-toolbar.ql-snow .ql-formats {
+    margin-right: 15px
+}
+
+.ql-toolbar.ql-snow .ql-picker-label {
+    border: 1px solid transparent
+}
+
+.ql-toolbar.ql-snow .ql-picker-options {
+    border: 1px solid transparent;
+    box-shadow: #0003 0 2px 8px
+}
+
+.ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-label,
+.ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-options {
+    border-color: #ccc
+}
+
+.ql-toolbar.ql-snow .ql-color-picker .ql-picker-item.ql-selected,
+.ql-toolbar.ql-snow .ql-color-picker .ql-picker-item:hover {
+    border-color: #000
+}
+
+.ql-toolbar.ql-snow+.ql-container.ql-snow {
+    border-top: 0px
+}
+
+.ql-snow .ql-tooltip {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 5px #ddd;
+    color: #444;
+    padding: 5px 12px;
+    white-space: nowrap
+}
+
+.ql-snow .ql-tooltip:before {
+    content: "Visit URL:";
+    line-height: 26px;
+    margin-right: 8px
+}
+
+.ql-snow .ql-tooltip input[type=text] {
+    display: none;
+    border: 1px solid #ccc;
+    font-size: 13px;
+    height: 26px;
+    margin: 0;
+    padding: 3px 5px;
+    width: 170px
+}
+
+.ql-snow .ql-tooltip a.ql-preview {
+    display: inline-block;
+    max-width: 200px;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top
+}
+
+.ql-snow .ql-tooltip a.ql-action:after {
+    border-right: 1px solid #ccc;
+    content: "Edit";
+    margin-left: 16px;
+    padding-right: 8px
+}
+
+.ql-snow .ql-tooltip a.ql-remove:before {
+    content: "Remove";
+    margin-left: 8px
+}
+
+.ql-snow .ql-tooltip a {
+    line-height: 26px
+}
+
+.ql-snow .ql-tooltip.ql-editing a.ql-preview,
+.ql-snow .ql-tooltip.ql-editing a.ql-remove {
+    display: none
+}
+
+.ql-snow .ql-tooltip.ql-editing input[type=text] {
+    display: inline-block
+}
+
+.ql-snow .ql-tooltip.ql-editing a.ql-action:after {
+    border-right: 0px;
+    content: "Save";
+    padding-right: 0
+}
+
+.ql-snow .ql-tooltip[data-mode=link]:before {
+    content: "Enter link:"
+}
+
+.ql-snow .ql-tooltip[data-mode=formula]:before {
+    content: "Enter formula:"
+}
+
+.ql-snow .ql-tooltip[data-mode=video]:before {
+    content: "Enter video:"
+}
+
+.ql-snow a {
+    color: #06c
+}
+
+.ql-container.ql-snow {
+    border: 1px solid #ccc
+}
+
+._form_1sjis_1 {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    width: 100%;
+    max-width: 720px;
+    scroll-behavior: smooth
+}
+
+div.attempt-mcq-container {
+    height: 100%;
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative
+}
+
+div.attempt-mcq-container>div.submit-mcq-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+    border-top: 1px solid #ccc;
+    width: 100%;
+    padding: .5rem;
+    background-color: #fff
+}
+
+div.submit-mcq-container>button {
+    border-radius: 5px;
+    font-family: Hind, sans-serif;
+    padding: .5rem 2rem
+}
+
+div.submit-mcq-container>span.error-message {
+    color: #ff4d4f;
+    margin-right: 1rem
+}
+
+div.attempt-mcq-container /deep/ form>div:not(:last-child) * {
+    font-family: Hind, sans-serif;
+    font-size: 15px;
+    white-space: pre-wrap
+}
+
+div.attempt-mcq-container /deep/ form>div:first-child span.ant-radio-inner {
+    border: none;
+    background-color: var(--primary-light)
+}
+
+div.attempt-mcq-container /deep/ form>div:last-child button {
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: 15px;
+    padding: 0;
+    font-family: Hind, sans-serif
+}
+
+div.attempt-mcq-container /deep/ form>div:last-child button:focus:not(:focus-visible) {
+    background-color: transparent
+}
+
+div.attempt-mcq-container /deep/ form div.ant-row.ant-form-item {
+    margin-bottom: 0
+}
+
+div.attempt-mcq-container /deep/ form div.ant-form-item-explain {
+    display: none
+}
+
+.mcqOptions .ant-radio {
+    align-self: flex-start !important;
+    line-height: 50px;
+    margin-top: .25em;
+    position: sticky;
+    left: 0
+}
+
+div.question-attempt-wrapper {
+    flex: auto;
+    display: flex;
+    overflow: hidden
+}
+
+div.question-attempt-wrapper.invalidated {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center
+}
+
+div.question-attempt-wrapper>div.sidebar-container {
+    flex: 0 0 65px;
+    overflow-y: hidden
+}
+
+div.question-attempt-wrapper>div.sidebar-container:hover {
+    overflow-y: auto
+}
+
+div.question-attempt-wrapper>div.sidebar-toggler {
+    flex: 0 0 12px;
+    display: flex;
+    background-color: var(--primary-light);
+    align-items: center;
+    justify-content: center
+}
+
+div.sidebar-toggler>button {
+    height: 100%;
+    padding: 0;
+    width: 16px
+}
+
+div.sidebar-toggler>button:focus:not(:focus-visible) {
+    background-color: transparent
+}
+
+div.question-attempt-wrapper>div.question-attempt-container {
+    flex: auto;
+    display: flex
+}
+
+div.question-attempt-container>div>div.question-details-pane {
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    position: relative
+}
+
+div.question-details-pane>div.details-pane-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .53rem 1rem;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 -2px 2px #00000020
+}
+
+div.details-pane-footer>button {
+    font-family: Hind, "sans-serif";
+    font-weight: 500;
+    position: relative
+}
+
+div.details-pane-footer button>span.anticon {
+    position: relative;
+    top: 1px
+}
+
+div.question-attempt-container>div>div.question-attempt-pane {
+    display: flex
+}
+
+div.question-attempt-container>div>div.question-attempt-pane-scroll {
+    display: flex;
+    overflow: auto
+}
+
+div.question-attempt-container>div.question-details-attempt-divider {
+    background-color: #ddd
+}
+
+div.question-details-pane>div.question-details-container {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    margin-bottom: 3.1rem;
+    min-height: 100%;
+    overflow-y: auto
+}
+
+div.question-details-pane>div.question-details-container::-webkit-scrollbar-thumb {
+    background: #fff
+}
+
+div.question-details-pane>div.question-details-container:hover::-webkit-scrollbar-thumb {
+    background: #e5e5e5;
+    border-radius: 0
+}
+
+div.question-details-pane>div.question-details-container:hover::-webkit-scrollbar-thumb:hover {
+    background: #8e8e8e
+}
+
+div.question-details-container>div.question-type {
+    font-family: Montserrat, sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+
+div.question-details-container>div.question-type>span {
+    background-color: #f7f7f7;
+    padding: .2rem;
+    border-radius: 3px
+}
+
+div.question-details-container>div.question-title {
+    font-size: 22px;
+    font-weight: 500;
+    font-family: Hind, sans-serif
+}
+
+div.question-details-container div.question-description * {
+    font-family: Hind, sans-serif
+}
+
+div.question-details-container div.question-description p,
+div.question-details-container div.question-description li {
+    font-size: 14px;
+    margin-bottom: 1em
+}
+
+div.question-details-container div.question-description img {
+    max-width: 100%
+}
+
+div.question-details-container div.question-description pre,
+div.question-details-container div.question-description code,
+div.question-details-container div.question-description kbd,
+div.question-details-container div.question-description samp,
+div.question-details-container div.question-description pre * {
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+    font-size: 13px
+}
+
+div.question-details-container div.question-description pre.ql-syntax {
+    background: #ebebeb;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    overflow: auto
+}
+
+h1.no-lang-text {
+    width: 90%;
+    margin: 10% auto auto;
+    font-weight: 700
+}
+
+.question-details-pane {
+    height: 100%;
+    overflow-wrap: break-word
+}
+
+.ql-container.ql-snow {
+    border: none !important
+}
+
+div.attempt-coding-container {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 100%
+}
+
+div.attempt-coding-container>div.footer {
+    flex: 0 0 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #d0d0d0;
+    padding: 0 1rem;
+    background-color: #fff;
+    z-index: 1
+}
+
+.ace_editor.no-bg-editor,
+.ace_editor.no-bg-editor .ace_scroller,
+.ace_editor.no-bg-editor .ace_content {
+    background: transparent !important
+}
+
+div.footer button {
+    border-radius: 4px;
+    font-family: Hind, "sans-serif";
+    font-weight: 500
+}
+
+div.attempt-coding-container>div.main {
+    flex: auto;
+    display: flex;
+    flex-direction: column
+}
+
+div.main>div.code-editor-wrapper:fullscreen {
+    background-color: #fff
+}
+
+div.main>div.code-editor-wrapper,
+div.code-editor-wrapper>div.code-editor-container {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    z-index: 0
+}
+
+div.code-editor-wrapper>div.editor-header {
+    flex: 0 0 40px;
+    display: flex;
+    background-color: #fafafa;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    height: 40px
+}
+
+div.code-editor-container>div.editor-head,
+div.code-editor-container>div.editor-tail {
+    position: relative;
+    cursor: not-allowed
+}
+
+div.code-editor-container /deep/ div.editor-head div.ace_content,
+div.code-editor-container /deep/ div.editor-tail div.ace_content {
+    background-color: #fafafa;
+    opacity: .7
+}
+
+div.code-editor-container /deep/ div.editor-head div.ace_gutter,
+div.code-editor-container /deep/ div.editor-tail div.ace_gutter {
+    min-width: 42px
+}
+
+div.code-editor-container /deep/ div.editor-head div.ace_scroller,
+div.code-editor-container /deep/ div.editor-tail div.ace_scroller {
+    left: 42px !important
+}
+
+div.code-editor-container /deep/ div.editor-main div.ace_scroller.ace_scroll-left {
+    box-shadow: 17px 0 16px -16px #0000001f inset !important
+}
+
+div.code-editor-container>div.editor-main {
+    flex: auto;
+    display: flex
+}
+
+div.code-editor-container /deep/ div.editor-main>div#main {
+    flex: auto !important
+}
+
+div.console-container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-height: 350px
+}
+
+div.main /deep/ div.console-container div.ant-tabs,
+div.main /deep/ div.console-container div.ant-tabs-content {
+    flex: auto;
+    height: 100%
+}
+
+div.main /deep/ div.console-container div.ant-tabs-content div.ant-tabs-tabpane-hidden {
+    display: none
+}
+
+div.main /deep/ div.console-container div.ant-tabs-content-holder {
+    display: flex
+}
+
+div.main /deep/ div.console-container div.ant-tabs-nav {
+    margin: 0;
+    padding: .25rem .75rem 0;
+    background-color: var(--primary-light)
+}
+
+div.main /deep/ div.console-container div.ant-tabs-tab {
+    background-color: var(--primary-light);
+    font-family: Hind, sans-serif;
+    border: none
+}
+
+div.main /deep/ div.console-container div.ant-tabs-tab>div {
+    color: #818181;
+    font-weight: 500
+}
+
+div.main /deep/ div.console-container div.ant-tabs-tab-active {
+    background-color: #fff;
+    border-radius: 10px 10px 0 0
+}
+
+div.main /deep/ div.console-container div.ant-tabs-tab-active>div {
+    color: #3339;
+    font-weight: 500
+}
+
+div.main /deep/ div.console-container div.ant-tabs-tabpane {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    height: 100%
+}
+
+div.custom-input-container {
+    display: flex;
+    padding: .25rem .75rem;
+    height: 100%;
+    overflow: auto
+}
+
+div.console-screen {
+    display: flex;
+    padding: .25rem .75rem;
+    background-color: #000;
+    color: #fff;
+    height: 100%;
+    overflow: hidden
+}
+
+div.console-screen>pre {
+    flex: auto;
+    overflow: auto;
+    margin: 0
+}
+
+div.test-cases-message-container {
+    flex: auto;
+    display: flex;
+    padding: 1rem;
+    overflow: auto
+}
+
+div.test-cases-wrapper {
+    padding: 1rem;
+    display: flex
+}
+
+div.test-cases-wrapper div.test-cases-container {
+    flex: 0 0 150px;
+    display: flex;
+    flex-direction: column;
+    overflow: auto
+}
+
+.test-case-details-container {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 0 1rem;
+    overflow: auto
+}
+
+div.test-case-details-container>div>span {
+    font-family: Hind, "sans-serif";
+    font-size: 14px;
+    font-weight: 500;
+    color: #818181
+}
+
+div.test-case-details-container>div>pre {
+    background-color: #f8f8f8;
+    padding: .5rem;
+    overflow: auto
+}
+
+div.hidden-test-cases-wrapper {
+    padding: 1rem 2rem;
+    flex: auto;
+    display: flex;
+    overflow-y: scroll;
+    flex-direction: column
+}
+
+div.hidden-test-cases-wrapper .hidden-test-case-btn {
+    cursor: default
+}
+
+div.hidden-test-cases-wrapper * {
+    font-family: Hind, "sans-serif"
+}
+
+div.hidden-test-cases-wrapper>div:first-child {
+    margin-bottom: 1.25rem
+}
+
+div.hidden-test-cases-wrapper>div:first-child>button {
+    padding: .5rem .75rem;
+    border-radius: 5px;
+    background-color: #f7f7f7;
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: 15px;
+    margin-right: .75rem;
+    height: unset
+}
+
+div.hidden-test-cases-wrapper>div:first-child>span:nth-child(2) {
+    padding: .5rem .75rem;
+    font-weight: 500;
+    font-size: 15px;
+    margin-right: 1rem
+}
+
+div.hidden-test-cases-wrapper>div:last-child {
+    background-color: var(--primary-light);
+    padding: .75rem;
+    border-radius: 5px;
+    font-size: 13px
+}
+
+.console-container .ant-tabs-content,
+.console-container .ant-tabs-tabpane {
+    height: 100%
+}
+
+.ace-tm .ace_gutter {
+    background: transparent
+}
+
+div.attempt-mq-container {
+    height: 100%;
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative
+}
+
+div.attempt-mq-container>div {
+    padding: 1.5rem
+}
+
+div.attempt-mq-container>div.submit-mq-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+    border-top: 1px solid #ccc;
+    width: 100%;
+    padding: .5rem;
+    background-color: #fff
+}
+
+div.submit-mq-container>button {
+    border-radius: 5px;
+    font-family: Hind, sans-serif;
+    padding: .5rem 2rem
+}
+
+span.info-text {
+    font-size: 20px;
+    font-family: Hind, sans-serif;
+    font-weight: 500
+}
+
+div.attempt-mq-container /deep/ form>div * {
+    font-family: Hind, sans-serif
+}
+
+div.attempt-mq-container form /deep/ label::before {
+    display: none !important
+}
+
+div.attempt-mq-container form /deep/ textarea {
+    border: 1px solid #d1d1d1
+}
+
+div.attempt-mq-container form /deep/ div.ant-form-item-control-input {
+    max-width: 60%;
+    margin-left: 35px
+}
+
+div.attempt-mq-container form /deep/ div.ant-form-item-explain.ant-form-item-explain-error {
+    margin-left: 35px
+}
+
+div.attempt-mq-container /deep/ form div.mq-details-container {
+    display: flex
+}
+
+div.mq-details-container>div.mq-index {
+    flex: 0 0 35px;
+    display: flex
+}
+
+div.mq-index>span {
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+    padding: .25rem;
+    border-radius: 20px;
+    height: 20px;
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600
+}
+
+div.attempt-web-container {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 100%;
+    height: 100%
+}
+
+div.attempt-web-container>div.footer {
+    flex: 0 0 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #d0d0d0;
+    padding: 0 1rem;
+    background-color: #fff;
+    z-index: 1
+}
+
+div.footer button {
+    border-radius: 4px;
+    font-weight: 500
+}
+
+div.footer>div:first-child>button {
+    padding: 4px 10px
+}
+
+div.footer>div:first-child>button span.anticon {
+    position: relative;
+    top: 1px
+}
+
+div.footer>div:nth-child(2)>button {
+    margin: 0 .5rem
+}
+
+div.attempt-web-container>div.main {
+    flex: auto
+}
+
+div.main>div.attempt-area-container {
+    display: flex;
+    overflow: hidden
+}
+
+div.attempt-area-container>div>div.code-editors-container,
+div.attempt-area-container>div>div.preview-browser-container {
+    display: flex;
+    flex-direction: column
+}
+
+div.code-editors-container>div.ant-tabs,
+div.code-editors-container>div.ant-tabs>div.ant-tabs-content-holder,
+div.code-editors-container>div.ant-tabs>div.ant-tabs-content-holder div.ant-tabs-tabpane {
+    flex: auto;
+    display: flex;
+    flex-basis: 100%
+}
+
+div.code-editors-container>div.ant-tabs>div.ant-tabs-content-holder>div.ant-tabs-content {
+    display: flex;
+    flex-basis: 100%
+}
+
+div.code-editors-container>div.ant-tabs>div.ant-tabs-content-holder>div.ant-tabs-content>div.ant-tabs-tabpane-hidden {
+    display: none
+}
+
+div.main>div.ant-tabs div.ant-tabs-content-holder div.ant-tabs-content {
+    display: flex
+}
+
+div.code-editors-container>div.ant-tabs div.ant-tabs-tab {
+    margin: 0 !important;
+    font-size: 14px;
+    border-bottom: none;
+    border-top: 3px solid #fff
+}
+
+div.code-editors-container>div.ant-tabs div.ant-tabs-tab>div {
+    color: #333
+}
+
+div.code-editors-container>div.ant-tabs div.ant-tabs-tab.ant-tabs-tab-active {
+    border-top: 3px solid var(--primary-color) !important
+}
+
+div.code-editors-container>div.ant-tabs>div.ant-tabs-nav {
+    margin: 0;
+    box-shadow: 0 1px 2px 1px #00000010;
+    z-index: 1;
+    background-color: #ededed
+}
+
+div.code-editors-container div.html-editor,
+div.code-editors-container div.css-editor,
+div.code-editors-container div.js-editor {
+    flex: auto;
+    display: grid;
+    overflow: auto
+}
+
+div.attempt-area-container>div.editors-browser-divider {
+    flex: 0 0 8px;
+    background-color: #ddd
+}
+
+div.preview-browser-container>div.preview-browser-header {
+    display: flex;
+    flex: 0 0 40px;
+    padding: 2px 10px;
+    box-shadow: 0 1px 2px 1px #00000029;
+    align-items: center;
+    background-color: #ededed
+}
+
+div.preview-browser-header>div.address-bar {
+    flex: 1 1 auto;
+    margin: 0 5px
+}
+
+div.preview-browser-header>div.address-bar>input {
+    border-radius: 20px;
+    color: #333
+}
+
+div.preview-browser-header>div.action-icon button>span {
+    position: relative;
+    top: 2px
+}
+
+div.main>div.console-container {
+    display: flex;
+    flex-direction: column;
+    overflow: auto
+}
+
+div.main>div.console-container div.ant-tabs {
+    flex: auto
+}
+
+div.main>div.console-container div.ant-tabs-content-holder {
+    display: flex
+}
+
+div.main>div.console-container div.ant-tabs-tabpane {
+    display: flex;
+    flex: auto;
+    flex-direction: column
+}
+
+div.main>div.console-container div.ant-tabs-nav {
+    margin: 0;
+    padding: .25rem .75rem 0;
+    background-color: var(--primary-light)
+}
+
+div.main>div.console-container div.ant-tabs-nav>div.ant-tabs-extra-content {
+    position: relative;
+    top: -1.5px
+}
+
+div.main>div.console-container div.ant-tabs-tab {
+    background-color: var(--primary-light);
+    border: none
+}
+
+div.main>div.console-container div.ant-tabs-tab>div {
+    color: #818181;
+    font-weight: 500
+}
+
+div.main>div.console-container div.ant-tabs-tab-active {
+    background-color: #fff;
+    border-radius: 10px 10px 0 0
+}
+
+div.main>div.console-container div.ant-tabs-tab-active>div {
+    color: #3339;
+    font-weight: 500
+}
+
+div.test-cases-wrapper {
+    padding: 1rem;
+    flex: auto;
+    display: flex;
+    overflow: hidden
+}
+
+div.test-cases-wrapper>div.test-cases-container {
+    flex: 0 0 150px;
+    display: flex;
+    flex-direction: column;
+    overflow: auto
+}
+
+div.test-cases-wrapper>div.test-cases-container>button {
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--primary-color)
+}
+
+div.test-cases-wrapper>div.test-cases-container>button.active {
+    background-color: #f7f7f7
+}
+
+div.test-cases-wrapper>div.test-case-details-container {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 0 1rem;
+    overflow: auto
+}
+
+div.test-case-details-container>span:first-child {
+    font-size: 14px;
+    font-weight: 500;
+    color: #818181
+}
+
+div.test-case-details-container>pre {
+    flex: auto;
+    display: flex;
+    overflow: auto;
+    background-color: #f8f8f8;
+    padding: .5rem;
+    overflow: unset;
+    overflow-x: auto
+}
+
+.consoleBtn:active,
+.consoleBtn:focus,
+.consoleBtn:hover {
+    color: #000000d9;
+    border-color: #d9d9d9;
+    background: transparent
+}
+
+.consoleBtn.consoleOpened {
+    color: #eb8b5b;
+    border-color: #eb8b5b;
+    background: transparent
+}
+
+div.browser-iframe-container {
+    display: flex;
+    flex: auto;
+    height: 100%;
+    width: 100%;
+    position: relative
+}
+
+iframe.browser-iframe {
+    height: 100%;
+    width: 100%;
+    border: none
+}
+
+div.browser-iframe-loading-container {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: #fff
+}
+
+div.browser-iframe-loading-container>img.loader-logo {
+    width: 50px
+}
+
+.blink {
+    animation: blinker 2s linear infinite
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0
+    }
+}
+
+._rootElement_1tbph_1 {
+    width: 100% !important
+}
+
+.error-page-container {
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    position: relative
+}
+
+.error-page-background {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none
+}
+
+.error-page-bg-circle-1 {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 256px;
+    height: 256px;
+    border-radius: 50%;
+    background-color: #de64380d;
+    filter: blur(80px)
+}
+
+.error-page-bg-circle-2 {
+    position: absolute;
+    bottom: 25%;
+    right: 25%;
+    width: 384px;
+    height: 384px;
+    border-radius: 50%;
+    background-color: #de64381a;
+    filter: blur(80px)
+}
+
+.error-page-bg-circle-3 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background-color: #de643808;
+    filter: blur(80px)
+}
+
+.error-page-content {
+    position: relative;
+    text-align: center;
+    max-width: 512px
+}
+
+.error-page-large-text {
+    font-size: 180px;
+    font-weight: 700;
+    line-height: 1;
+    color: #de64381a;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    margin: 0
+}
+
+.error-page-large-icon {
+    font-size: 180px;
+    line-height: 1;
+    color: #de64381a;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    margin-bottom: 0
+}
+
+.error-page-content-overlay {
+    margin-top: -80px;
+    position: relative;
+    z-index: 10
+}
+
+.error-page-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 16px
+}
+
+.error-page-description {
+    font-size: 18px;
+    color: #666;
+    line-height: 1.6;
+    display: block;
+    max-width: 448px;
+    margin: 0 auto 32px
+}
+
+.error-page-button {
+    display: flex;
+    align-items: center;
+    gap: 8px
+}
+
+.error-page-primary-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #de6438;
+    border-color: #de6438
+}
+
+.error-page-support-text {
+    font-size: 14px;
+    color: #999;
+    margin-top: 16px;
+    display: block
+}
+
+.error-page-icon {
+    font-size: 16px
+}

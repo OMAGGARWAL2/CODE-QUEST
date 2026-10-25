@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Hind:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.js"></script>
+    <script src="../js/db.js"></script>
+    <style>
+        :root {
+            --primary: #1E40AF; /* Government Blue */
+            --primary-light: #EFF6FF;
+            --text-main: #111827;
+            --text-secondary: #4B5563;
+            --border: #D1D5DB;
+            --bg: #F3F4F6;
+            --white: #FFFFFF;
+            --success: #059669;
+            --error: #DC2626;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind', sans-serif;
+            scrollbar-width: thin !important;
+            scrollbar-color: #64748B #F1F5F9 !important;
+        }
+
+        /* Custom Sleek Grey Scrollbars - Globally Applied */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+            border-left: 1px solid #CBD5E1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #64748B;
+            border-radius: 6px;
+            border: 2px solid #F1F5F9;
+            min-height: 40px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Header */
+        header {
+            height: 72px;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .logo-box {
+            background: var(--primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        /* CUSTOM ACE SYNTAX: BLUE, BLACK, GREEN */
+        .ace_keyword, .ace_meta, .ace_storage, .ace_storage.ace_type, .ace_support.ace_function, .ace_support.ace_class, .ace_support.ace_type {
+            color: #0000FF !important;
+        }
+        .ace_comment {
+            color: #008000 !important;
+            font-style: normal !important;
+        }
+        .ace_identifier, .ace_punctuation, .ace_operator, .ace_constant.ace_numeric, .ace_string {
+            color: #000000 !important;
+        }
+        .ace_selection {
+            background: rgba(0, 120, 215, 0.2) !important;
+        }
+        .ace_gutter-cell {
+            color: #666 !important;
+            font-weight: 500 !important;
+        }
+
+        .nav-links {
+            display: flex;
+            height: 72px;
+        }
+
+        .nav-link {
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            color: #1E40AF;
+            font-weight: 500;
+            font-size: 1rem;
+            border-bottom: 3px solid var(--primary);
+            text-decoration: none;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-meta {
+            text-align: right;
+        }
+
+        .user-meta .name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            text-transform: uppercase;
+        }
+
+        .user-meta .role {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            background: #D0D5DD;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* Layout Main */
+        .dashboard-container {
+            display: flex;
+            flex: 1;
+            padding: 32px;
+            gap: 32px;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 340px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .profile-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 40px 32px;
+            text-align: center;
+            border: 1px solid var(--border);
+            position: sticky;
+            top: 104px;
+        }
+
+        .large-avatar {
+            width: 120px;
+            height: 120px;
+            width: 110px;
+            height: 110px;
+            background: #D9622D;
+            color: #ffffff;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.3rem;
+            font-weight: 700;
+            font-family: 'Hind', sans-serif;
+            border: none;
+            box-shadow: 0 4px 14px rgba(217, 98, 45, 0.25);
+        }
+
+        .profile-name {
+            font-family: 'Hind', sans-serif;
+            font-size: 1.55rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            letter-spacing: 0.02em;
+        }
+
+        .sidebar-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #EAECF0;
+            text-align: left;
+        }
+
+        .sidebar-section h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #101828;
+            margin-bottom: 16px;
+            padding-bottom: 0;
+            border-bottom: none;
+            font-family: 'Hind', sans-serif;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .sidebar-item label {
+            font-size: 1.05rem;
+            color: #667085;
+            font-weight: 500;
+            width: 130px;
+            flex-shrink: 0;
+            font-family: 'Hind', sans-serif;
+        }
+
+        .sidebar-item span {
+            font-size: 1.05rem;
+            color: #101828;
+            font-weight: 600;
+            font-family: 'Hind', sans-serif;
+            word-break: break-all;
+        }
+
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .stats-item span:first-child {
+            color: #98A2B3;
+            font-weight: 500;
+        }
+
+        .stats-item span:last-child {
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .section-card {
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .section-header {
+            padding: 16px 24px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--text-main);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .section-header:hover {
+            background: #fcfcfc;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-score {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #F9FAFB;
+            padding: 12px 24px;
+            text-align: left;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 16px 24px;
+            font-size: 0.95rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .q-name {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: lowercase;
+            border: 1px solid transparent;
+        }
+
+        .badge-success {
+            background: #ECFDF3;
+            color: #027A48;
+            border-color: #ABEFC6;
+        }
+
+        .badge-error {
+            background: #FEF3F2;
+            color: #B42318;
+            border-color: #FECDCA;
+        }
+
+        .badge-warning {
+            background: #FFF9F2;
+            color: #B45118;
+            border-color: #FEDFCA;
+        }
+
+        /* Inner Attempt Table */
+        .attempts-sub-row {
+            background: #fff;
+        }
+
+        .inner-table-container {
+            padding: 24px 80px;
+        }
+
+        .inner-table {
+            background: #F9FAFB;
+            border-radius: 12px;
+            border: 1px solid #E5E7EB;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .inner-th {
+            background: transparent;
+            padding: 20px;
+            text-align: center;
+            font-weight: 700;
+            color: #475467;
+            font-size: 1.1rem;
+        }
+
+        .inner-td {
+            padding: 16px 20px;
+            text-align: center;
+            background: #fff;
+            border: none;
+            border-top: 1px solid #eee;
+        }
+
+        /* Modal Preview */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--white);
+            width: 95%;
+            max-width: 1200px;
+            height: 90vh;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .preview-left {
+            flex: 1;
+            padding: 40px;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+        }
+
+        .preview-right {
+            flex: 1;
+            padding: 40px;
+            background: #fff;
+            overflow-y: auto;
+        }
+
+        .q-type-label {
+            background: #f2f4f7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #667085;
+            text-transform: uppercase;
+        }
+
+        .mcq-option-preview {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+        }
+
+        .radio-btn {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #D0D5DD;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .radio-btn.checked {
+            border-color: #1E40AF;
+        }
+
+        .radio-btn.checked::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: #1E40AF;
+            border-radius: 50%;
+        }
+
+        .correct-tag {
+            color: var(--success);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 20px;
+        }
+
+        pre {
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .btn-solution {
+            background: #1E40AF;
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .console-tab {
+            margin-top: 24px;
+            background: #000;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            min-height: 100px;
+        }
+
+        .btn-action {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .btn-view-attempt {
+            background: #fff;
+            border: 1px dashed #D0D5DD;
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            display: flex;
+        /* Inner Attempt Table */
+        .attempts-sub-row {
+            background: #fff;
+        }
+
+        .inner-table-container {
+            padding: 24px 80px;
+        }
+
+        .inner-table {
+            background: #F9FAFB;
+            border-radius: 12px;
+            border: 1px solid #E5E7EB;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .inner-th {
+            background: transparent;
+            padding: 20px;
+            text-align: center;
+            font-weight: 700;
+            color: #475467;
+            font-size: 1.1rem;
+        }
+
+        .inner-td {
+            padding: 16px 20px;
+            text-align: center;
+            background: #fff;
+            border: none;
+            border-top: 1px solid #eee;
+        }
+
+        /* Modal Preview */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--white);
+            width: 95%;
+            max-width: 1200px;
+            height: 90vh;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .preview-left {
+            flex: 1;
+            padding: 40px;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+        }
+
+        .preview-right {
+            flex: 1;
+            padding: 40px;
+            background: #fff;
+            overflow-y: auto;
+        }
+
+        .q-type-label {
+            background: #f2f4f7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #667085;
+            text-transform: uppercase;
+        }
+
+        .mcq-option-preview {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+        }
+
+        .radio-btn {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #D0D5DD;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .radio-btn.checked {
+            border-color: #1E40AF;
+        }
+
+        .radio-btn.checked::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: #1E40AF;
+            border-radius: 50%;
+        }
+
+        .correct-tag {
+            color: var(--success);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 20px;
+        }
+
+        pre {
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .btn-solution {
+            background: #1E40AF;
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .console-tab {
+            margin-top: 24px;
+            background: #000;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            min-height: 100px;
+        }
+
+        .btn-action {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .btn-view-attempt {
+            background: #fff;
+            border: 1px dashed #D0D5DD;
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #475467;
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <div class="logo-box" style="background:transparent; width:auto; height:auto;">
+                <img src="../logo.jpg" alt="Logo" style="height:50px; object-fit:contain;">
+            </div>
+            <div class="nav-links">
+                <a href="#" class="nav-link">Competitive Analysis</a>
+            </div>
+        </div>
+        <div class="header-right">
+            <div id="headerScoreBox" style="background:#EFF6FF; border:1px solid #BFDBFE; padding:8px 16px; border-radius:6px; margin-right:16px; display:flex; flex-direction:column; align-items:flex-end;">
+                <label style="font-size:0.75rem; color:#1E40AF; font-weight:700; text-transform:uppercase; margin-bottom:2px;">Total Marks</label>
+                <span id="finalScoreVal" style="font-size:1.1rem; color:#1E40AF; font-weight:800; font-family:'Outfit';">0 / 0</span>
+            </div>
+            <button onclick="window.location.href='./student-dashboard.html'" style="background:var(--primary); color:white; border:none; padding:10px 24px; border-radius:6px; font-weight:600; cursor:pointer; margin-right:20px; font-size:0.95rem; box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+                Exit to Dashboard
+            </button>
+            <div class="user-meta">
+                <div class="name" id="topUserName">OM AGGARWAL</div>
+                <div class="role">Student</div>
+            </div>
+            <div class="user-avatar" id="topAvatar">O</div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <aside>
+            <div class="profile-card">
+                <div class="large-avatar" id="sideAvatar">O</div>
+                <div class="profile-name" id="sideName">OM AGGARWAL</div>
+                
+                <div class="sidebar-section">
+                    <h3>About</h3>
+                    <div class="sidebar-item">
+                        <label>Email:</label>
+                        <span id="sideEmail">om0653.becse24@chitkara.edu.in</span>
+                    </div>
+                    <div class="sidebar-item">
+                        <label>Roll Number:</label>
+                        <span id="sideRoll">2410990653</span>
+                    </div>
+                    <div class="sidebar-item">
+                        <label>ID:</label>
+                        <span id="sideId">2410990653</span>
+                    </div>
+                    <div class="sidebar-item">
+                        <label>Select Group:</label>
+                        <span id="sideGroup">G9</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>General Info</h3>
+                    <div class="sidebar-item">
+                        <label style="width: 175px;">Marks Obtained:</label>
+                        <span id="sideMarks">0 / 0</span>
+                    </div>
+                    <div class="sidebar-item">
+                        <label style="width: 175px;">Questions Attempted:</label>
+                        <span id="sideAttempted">0 / 0</span>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+        <main class="main-content" id="sectionsContainer">
+            <!-- Sections and Questions will be injected here -->
+        </main>
+    </div>
+
+    <!-- Modal for Preview -->
+    <div class="modal" id="previewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Question Attempt Preview</h2>
+                <button onclick="closePreview()" style="background:none; border:none; cursor:pointer; font-size:1.5rem; color:#667085;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Preview content injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const attemptId = urlParams.get('attemptId');
+        let currentAttempt = db.getAttempt(attemptId);
+        let exam = currentAttempt ? db.getExamById(currentAttempt.examId) : null;
+        let currentUser = db.getActiveSession() ? db.getUserById(db.getActiveSession().userId) : null;
+        let allExamAttempts = [];
+
+        function extractResponse(resp) {
+            if (resp === null || resp === undefined) return null;
+            let val = resp;
+            if (typeof val === 'object' && val !== null) {
+                if (val.hasOwnProperty('selectedOption')) val = val.selectedOption;
+                else if (val.hasOwnProperty('response')) val = val.response;
+                else if (val.hasOwnProperty('value')) val = val.value;
+            }
+            while (val !== null && typeof val === 'object' && val.hasOwnProperty('value')) {
+                val = val.value;
+            }
+            if (typeof val === 'object' && val !== null) return null;
+            return val;
+        }
+
+        function init() {
+            if (!currentAttempt || !exam) {
+                alert("Attempt or Exam not found.");
+                window.location.href = './student-dashboard.html';
+                return;
+            }
+
+            // Check if results are published or auto-publish is enabled
+            const isAutoPublish = exam.security?.autoPublishResults !== false; // Default true if not set
+            const isManualReleased = exam.resultsPublished === true;
+            
+            // If results are held by teacher and current user is student
+            if (!isAutoPublish && !isManualReleased && currentUser && currentUser.role === 'student') {
+                document.body.innerHTML = `
+                    <div style="height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#F9FAFB; font-family:'Outfit', sans-serif;">
+                        <img src="https://api.learntechww.com/college_icon/logo1733989968823.jpg" style="height:60px; margin-bottom:40px;">
+                        <div style="background:white; padding:48px; border-radius:24px; border:1px solid #EAECF0; box-shadow:0 12px 32px rgba(0,0,0,0.05); text-align:center; max-width:500px;">
+                            <div style="width:64px; height:64px; background:#EFF6FF; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 24px;">
+                                <i class="fas fa-clock" style="color:#1E40AF; font-size:1.5rem;"></i>
+                            </div>
+                            <h1 style="font-size:1.8rem; font-weight:700; color:#101828; margin-bottom:12px;">Results Pending</h1>
+                            <p style="color:#667085; line-height:1.6; font-size:1.1rem; margin-bottom:32px;">
+                                The results for <strong>${exam.title}</strong> have not been published yet. Please check back later once the evaluation is complete.
+                            </p>
+                            <button onclick="window.location.href='./student-dashboard.html'" style="width:100%; height:48px; background:#1E40AF; color:white; border:none; border-radius:10px; font-weight:700; cursor:pointer;">
+                                Return to Dashboard
+                            </button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            allExamAttempts = (currentUser && exam) ? db.getAttemptHistory(currentUser.id, exam.id) : [];
+
+            // Sync Header & Sidebar with first letter only for avatar
+            const studentName = currentUser ? currentUser.name : 'Student';
+            const firstLetter = studentName.trim().charAt(0).toUpperCase();
+            document.getElementById('topUserName').textContent = studentName;
+            document.getElementById('topAvatar').textContent = firstLetter;
+            document.getElementById('sideName').textContent = studentName.toUpperCase();
+            document.getElementById('sideAvatar').textContent = firstLetter;
+            
+            const identity = currentAttempt.identityResponses || {};
+            
+            // Strictly use attempt-based data: roll number, id = roll number, group (if filled in mandatory questions else N.A.)
+            const rollNo = identity['Roll Number'] || identity['roll number'] || identity['roll_number'] || identity['RollNo'] || currentAttempt.studentRollNo || (currentUser?.rollNo) || 'N.A.';
+            const studentId = rollNo;
+            const group = identity['Select Group'] || identity['select group'] || identity['Group'] || identity['group'] || identity['Section'] || identity['section'] || 'N.A.';
+            const email = identity['Email'] || identity['email'] || (currentUser ? currentUser.email : 'N.A.');
+
+            document.getElementById('sideEmail').textContent = email;
+            document.getElementById('sideRoll').textContent = rollNo;
+            document.getElementById('sideId').textContent = studentId;
+            document.getElementById('sideGroup').textContent = group;
+
+            const scoreObj = db.calculateScore(currentAttempt);
+            document.getElementById('finalScoreVal').textContent = `${scoreObj.score} / ${scoreObj.totalMarks}`;
+            if (document.getElementById('sideMarks')) {
+                document.getElementById('sideMarks').textContent = `${scoreObj.score} / ${scoreObj.totalMarks}`;
+            }
+
+            const assignedQuestions = db.getAttemptQuestions ? db.getAttemptQuestions(currentAttempt, exam) : (exam?.questions || []);
+            if (document.getElementById('sideAttempted')) {
+                let attemptedCount = 0;
+                if (currentAttempt.responses) {
+                    assignedQuestions.forEach(q => {
+                        const resp = Array.isArray(currentAttempt.responses) ? currentAttempt.responses.find(r => r && (r.questionId === q.id || r.id === q.id)) : currentAttempt.responses[q.id];
+                        if (resp && ((typeof resp === 'string' && resp.trim() !== '') || (typeof resp === 'object' && (resp.value || resp.selectedOption !== undefined || resp.manualMark !== undefined)))) {
+                            attemptedCount++;
+                        }
+                    });
+                }
+                document.getElementById('sideAttempted').textContent = `${attemptedCount} / ${assignedQuestions.length}`;
+            }
+
+            renderSections();
+        }
+
+        function renderSections() {
+            const container = document.getElementById('sectionsContainer');
+            container.innerHTML = '';
+
+            const assignedQuestions = db.getAttemptQuestions ? db.getAttemptQuestions(currentAttempt, exam) : (exam?.questions || []);
+
+            // Group questions by section
+            const sections = exam.sections?.length > 0 ? exam.sections : ['General'];
+            sections.forEach((s, sIdx) => {
+                const sQuestions = assignedQuestions.filter(q => (q.section || 'General') === s);
+                if (sQuestions.length === 0) return;
+
+                const sectionScore = sQuestions.reduce((sum, q) => {
+                    const resp = Array.isArray(currentAttempt.responses) ? currentAttempt.responses.find(r => r && (r.questionId === q.id || r.id === q.id)) : (currentAttempt.responses ? currentAttempt.responses[q.id] : null);
+                    if (!resp) return sum;
+                    let mark = 0;
+                    const extractedVal = extractResponse(resp);
+                    const qMarks = (parseFloat(q.marks) !== undefined && !isNaN(parseFloat(q.marks))) ? parseFloat(q.marks) : 1;
+                    if (resp.manualMark !== undefined && resp.manualMark !== null && resp.manualMark !== '') mark = parseFloat(resp.manualMark) || 0;
+                    else if (q.type === 'coding' && resp.results) {
+                        const passed = resp.results.filter(r => r.status === 'pass').length;
+                        const total = resp.results.length;
+                        if (total > 0) mark = parseFloat(((passed / total) * qMarks).toFixed(1));
+                    } else if (q.type !== 'coding' && q.type !== 'subjective' && q.type !== 'file_upload') {
+                        if (db.checkAnswer(q, extractedVal)) mark = qMarks;
+                    }
+                    return sum + mark;
+                }, 0);
+                
+                const sectionTotal = sQuestions.reduce((sum, q) => sum + ((parseFloat(q.marks) !== undefined && !isNaN(parseFloat(q.marks))) ? parseFloat(q.marks) : 1), 0);
+
+                const card = document.createElement('div');
+                card.className = 'section-card';
+                card.innerHTML = `
+                    <div class="section-header" onclick="toggleSection(${sIdx})">
+                        <div class="section-title">
+                            <i class="fas fa-chevron-down" id="chevron-${sIdx}"></i>
+                            ${sIdx + 1}. ${s}
+                        </div>
+                        <div class="section-score">Score: ${sectionScore} / ${sectionTotal}</div>
+                    </div>
+                    <div class="section-body" id="body-${sIdx}">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:50px;"></th>
+                                    <th>Question</th>
+                                    <th>Type</th>
+                                    <th>Score</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${sQuestions.map((q, qIdx) => renderQuestionRow(q, qIdx)).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderQuestionRow(q, idx) {
+            const qStrId = String(q.id).toLowerCase();
+            
+            // DEEP RECOVERY: Find the best response across all known attempts for this exam
+            let resp = null;
+            let bestAttempt = currentAttempt;
+            
+            const findInAttempt = (att) => {
+                if (!att || !att.responses) return null;
+                const keys = Object.keys(att.responses);
+                const matchKey = keys.find(k => String(k).toLowerCase() === qStrId || String(k) === String(q.id));
+                if (matchKey) return att.responses[matchKey];
+                const fuzzyMatch = keys.find(k => String(k).toLowerCase().includes(qStrId) || qStrId.includes(String(k).toLowerCase()));
+                return fuzzyMatch ? att.responses[fuzzyMatch] : null;
+            };
+
+            // Start with the specific attempt from URL
+            resp = findInAttempt(currentAttempt);
+
+            // If empty or missing, search ALL historical attempts (including practice)
+            if (!resp || Object.keys(resp).length === 0) {
+                for (const att of allExamAttempts) {
+                    const r = findInAttempt(att);
+                    if (r && (Object.keys(r).length > (resp ? Object.keys(resp).length : 0))) {
+                        resp = r;
+                        bestAttempt = att;
+                    }
+                }
+            }
+
+            let mark = 0;
+            if (resp) {
+                if (resp.manualMark !== undefined && resp.manualMark !== null && resp.manualMark !== '') mark = parseFloat(resp.manualMark) || 0;
+                else if (q.type === 'coding' && resp.results) {
+                    mark = (Array.isArray(resp.results)) ? resp.results.filter(r => r.status === 'pass').reduce((s, r) => s + ((parseFloat(r.marks) !== undefined && !isNaN(parseFloat(r.marks))) ? parseFloat(r.marks) : 0), 0) : 0;
+                } else {
+                    mark = db.checkAnswer(q, resp) ? ((parseFloat(q.marks) !== undefined && !isNaN(parseFloat(q.marks))) ? parseFloat(q.marks) : 1) : 0;
+                }
+            }
+            
+            const isManual = (q.type === 'subjective' || q.type === 'file_upload') && resp?.manualMark === undefined;
+            const extractedVal = extractResponse(resp);
+            
+            // Extreme broad definition of "attempted"
+            const isAttempted = !!resp && (
+                (extractedVal !== null && extractedVal !== undefined && extractedVal !== '') || 
+                !!resp.code || 
+                !!resp.submitted || 
+                !!resp.runCount || 
+                (Array.isArray(resp.results) && resp.results.length > 0) || 
+                (Object.keys(resp).length > 0 && (resp.hasOwnProperty('value') || resp.hasOwnProperty('selectedOption')))
+            );
+            
+            const statusLabel = isManual ? 'pending' : (isAttempted ? 'submitted' : 'not attempted');
+            const statusClass = isManual ? 'badge-warning' : (isAttempted ? 'badge-success' : 'badge-error');
+
+            return `
+                <tr>
+                    <td>${idx + 1}.</td>
+                    <td class="q-name">${q.heading || q.text?.substring(0, 30) || 'Question'}</td>
+                    <td>${q.type.toUpperCase()}</td>
+                    <td>${mark} / ${q.marks || 0}</td>
+                    <td>
+                        <div style="display:flex; align-items:center; gap:12px; justify-content:space-between;">
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <span class="badge ${statusClass}">${statusLabel}</span>
+                                <div class="btn-view-attempt" style="width:28px; height:28px; font-size:0.8rem;" onclick="previewQuestion('${q.id}')" title="View Question"><i class="far fa-file-alt"></i></div>
+                            </div>
+                            <div class="btn-action" onclick="toggleAttempts('${q.id}', event)">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="attempts-${q.id}" class="attempts-sub-row" style="display:none;">
+                    <td colspan="5">
+                        <div class="inner-table-container">
+                            <table class="inner-table">
+                                <thead>
+                                    <tr>
+                                        <th class="inner-th">Attempt Time</th>
+                                        <th class="inner-th">Attempt Status</th>
+                                        ${q.type === 'coding' ? '<th class="inner-th">TestCases</th>' : ''}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${allExamAttempts.map(a => {
+                                        const r = a.responses ? (Array.isArray(a.responses) ? a.responses.find(item => item && (item.questionId === q.id || item.id === q.id)) : a.responses[q.id]) : null;
+                                        if(!r) return '';
+                                        const results = r.results || [];
+                                        return `
+                                            <tr>
+                                                <td class="inner-td">${new Date(a.endTime || a.startTime).toLocaleString('en-GB', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }).replace(',', '')}</td>
+                                                <td class="inner-td">
+                                                    <div style="display:flex; align-items:center; justify-content:center; gap:12px;">
+                                                        <span class="badge ${r.submitted ? 'badge-success' : 'badge-error'}">${r.submitted ? 'Submitted' : 'Error'}</span>
+                                                        <div class="btn-view-attempt" onclick="previewQuestion('${q.id}', '${a.id}')">
+                                                            <i class="far fa-file-alt"></i>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                ${q.type === 'coding' ? `
+                                                    <td class="inner-td">
+                                                        ${results.filter(tc => tc.status === 'pass').length} / ${results.length}
+                                                    </td>
+                                                ` : ''}
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
+
+        function toggleSection(idx) {
+            const body = document.getElementById(`body-${idx}`);
+            const chevron = document.getElementById(`chevron-${idx}`);
+            if (body.style.display === 'none') {
+                body.style.display = 'block';
+                chevron.className = 'fas fa-chevron-down';
+            } else {
+                body.style.display = 'none';
+                chevron.className = 'fas fa-chevron-right';
+            }
+        }
+
+        function toggleAttempts(qid, event) {
+            event.stopPropagation();
+            const row = document.getElementById(`attempts-${qid}`);
+            const icon = event.currentTarget.querySelector('i');
+            if (row.style.display === 'none') {
+                row.style.display = 'table-row';
+                icon.className = 'fas fa-minus';
+            } else {
+                row.style.display = 'none';
+                icon.className = 'fas fa-plus';
+            }
+        }
+
+        function previewQuestion(qid, specificAttemptId) {
+            const aid = specificAttemptId || attemptId;
+            let a = db.getAttempt(aid);
+            const q = exam.questions.find(x => x.id === qid);
+            if (!q) return;
+
+            window.currentPreviewQuestionMarks = q.marks;
+            
+            // Search logic...
+            const qStrId = String(qid).toLowerCase();
+            const findInAttempt = (att) => {
+                if (!att || !att.responses) return null;
+                const keys = Object.keys(att.responses);
+                const matchKey = keys.find(k => String(k).toLowerCase() === qStrId || String(k) === String(qid));
+                if (matchKey) return att.responses[matchKey];
+                const fuzzyMatch = keys.find(k => String(k).toLowerCase().includes(qStrId) || qStrId.includes(String(k).toLowerCase()));
+                return fuzzyMatch ? att.responses[fuzzyMatch] : null;
+            };
+
+            let resp = findInAttempt(a);
+            
+            if (!specificAttemptId && (!resp || Object.keys(resp).length === 0)) {
+                for (const att of allExamAttempts) {
+                    const r = findInAttempt(att);
+                    if (r && (Object.keys(r).length > (resp ? Object.keys(resp).length : 0))) {
+                        resp = r; a = att;
+                    }
+                }
+            }
+
+            // Build a unified results array from the question's master test cases
+            const masterTests = q.testCases || [];
+            const results = masterTests.map((mt, mi) => {
+                const recorded = (resp?.results && resp.results[mi]) ? resp.results[mi] : null;
+                return {
+                    ...mt,
+                    status: recorded ? recorded.status : 'not_run',
+                    actual: recorded ? recorded.actual : null,
+                    error: recorded ? recorded.error : null
+                };
+            });
+            window.currentPreviewResults = results;
+            
+            document.getElementById('modalTitle').textContent = "Question Attempt Preview";
+            const body = document.getElementById('modalBody');
+            body.innerHTML = '';
+            const left = document.createElement('div');
+            left.className = 'preview-left';
+            left.innerHTML = `
+                <div style="margin-bottom:20px;"><span class="q-type-label">${q.type}</span></div>
+                <h1 style="font-size:1.8rem; margin-bottom:12px;">${q.heading || q.text?.substring(0, 30) || 'Question'}</h1>
+                <div style="width:100%; height:8px; background:#F2F4F7; border-radius:4px; margin-bottom:32px; overflow:hidden;">
+                    <div style="width:70%; height:100%; background:linear-gradient(90deg, #93C5FD 0%, #1E40AF 100%);"></div>
+                </div>
+                <div style="font-size:1.1rem; line-height:1.6; color:var(--text-secondary);">
+                    ${q.title || q.text || q.problem || 'No description available.'}
+                </div>
+            `;
+
+            const right = document.createElement('div');
+            right.className = 'preview-right';
+
+            if (q.type === 'mcq' || q.type === 'true_false' || q.type === 'assertion_reason') {
+                let options = q.options || [];
+                if (q.type === 'true_false') options = ['True', 'False'];
+                if (q.type === 'assertion_reason') options = ["A & R are true; R is correct explanation of A", "A & R are true; R is NOT correct explanation of A", "A is true; R is false", "A is false; R is true", "Both A & R are false"];
+
+                const studentAnswer = extractResponse(resp);
+                const correctAnswer = q.correctAnswer;
+
+                const studentAnswerStr = studentAnswer !== null && studentAnswer !== undefined ? String(studentAnswer).trim() : '';
+                const correctAnswerStr = correctAnswer !== null && correctAnswer !== undefined ? String(correctAnswer).trim() : '';
+
+                right.innerHTML = `
+                    <h3 style="margin-bottom:20px; font-size:1.4rem;">Choose any one</h3>
+                    <div style="margin-bottom: 24px; padding: 16px; background: #F9FAFB; border-radius: 8px; border: 1px solid #EAECF0;">
+                        <div style="margin-bottom: 8px;"><strong style="color:var(--text-main);">Your Answer:</strong> <span style="color:${studentAnswerStr === correctAnswerStr && studentAnswerStr ? 'var(--success)' : (studentAnswerStr ? 'var(--error)' : 'var(--text-secondary)')}; font-weight: 600;">${studentAnswerStr || 'Not Attempted'}</span></div>
+                        <div><strong style="color:var(--text-main);">Correct Answer:</strong> <span style="color:var(--success); font-weight: 600;">${correctAnswerStr || 'N/A'}</span></div>
+                    </div>
+                    ${options.map(opt => {
+                        const optStr = String(opt).trim();
+                        const isStudent = studentAnswerStr === optStr;
+                        const isCorrect = correctAnswerStr === optStr;
+                        return `
+                            <div class="mcq-option-preview" style="background: ${isStudent ? (isCorrect ? '#ECFDF3' : '#FEF3F2') : 'transparent'}; border: 1px solid ${isStudent ? (isCorrect ? '#ABEFC6' : '#FECDCA') : 'transparent'};">
+                                <div class="radio-btn ${isStudent ? 'checked' : ''}"></div>
+                                <span style="font-size:1.1rem; color:${isStudent ? 'var(--text-main)' : '#667085'};"> ${opt} </span>
+                                ${isCorrect ? '<span class="correct-tag"><i class="fas fa-check"></i> Correct Answer</span>' : ''}
+                                ${isStudent && !isCorrect ? '<span style="color: var(--error); font-weight: 600; display: flex; align-items: center; gap: 8px; margin-left: 20px;"><i class="fas fa-times"></i> Your Answer</span>' : ''}
+                            </div>
+                        `;
+                    }).join('')}
+                `;
+            } else if (q.type === 'coding') {
+                const results = resp?.results || [];
+                const lang = resp?.lang || (q.languages ? q.languages[0] : 'java');
+                
+                // Construct Full Source Code (Prefix + Student Code + Suffix)
+                const qCode = (q.code && q.code[lang]) ? q.code[lang] : { prefix: '', middle: '', suffix: '' };
+                const studentImplementation = resp?.code || extractResponse(resp) || qCode.middle || '// No implementation found';
+                
+                let fullSource = '';
+                if (qCode.prefix) fullSource += `// --- HEADER (PRE-WRITTEN) ---\n${qCode.prefix}\n\n`;
+                fullSource += `// --- YOUR IMPLEMENTATION ---\n${studentImplementation}\n\n`;
+                if (qCode.suffix) fullSource += `// --- FOOTER (READ-ONLY) ---\n${qCode.suffix}`;
+
+                // Separate containers for Head, Middle, Tail to match exam experience
+                right.innerHTML = `
+                    <div class="code-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            <div style="background:#F9FAFB; padding:8px 16px; border-radius:8px; border:1px solid #EAECF0;">
+                                <span style="color:#667085; font-weight:700; text-transform:uppercase; font-size:0.8rem; letter-spacing:0.5px;">${lang}</span>
+                            </div>
+                            <div style="background:#ECFDF3; padding:8px 16px; border-radius:8px; border:1px solid #ABEFC6; color:#067647; font-size:0.8rem; font-weight:700;">
+                                <i class="fas fa-play" style="margin-right:6px; font-size:0.7rem;"></i> Run Count: ${resp?.runCount || 0}
+                            </div>
+                        </div>
+                        <button class="btn-solution" style="background:var(--primary); color:white; border:none; padding:8px 24px; border-radius:8px; font-weight:700; box-shadow:0 2px 4px rgba(222,91,43,0.2);">Solution</button>
+                    </div>
+
+                    <div class="proper-editor-container" style="border:1.5px solid #EAECF0; border-radius:12px; overflow:hidden; background:#fff;">
+                        ${qCode.prefix ? `<div id="ace-head" style="height:80px; border-bottom:1px solid #f0f0f0; background:rgba(0,0,0,0.02);"></div>` : ''}
+                        <div id="ace-main" style="height:320px; border-bottom:1px solid #f0f0f0;"></div>
+                        ${qCode.suffix ? `<div id="ace-tail" style="height:120px; background:rgba(0,0,0,0.02);"></div>` : ''}
+                    </div>
+                    
+                    <div style="display:flex; gap:24px; border-bottom:1px solid var(--border); margin-top:24px;">
+                        <div id="tab-testcases" style="padding:10px 0; border-bottom:2.5px solid var(--primary); font-weight:800; color:var(--text-main); cursor:pointer; font-size:0.9rem;" onclick="switchPreviewTab('testcases')">Test Cases</div>
+                        <div id="tab-console" style="padding:10px 0; color:#667085; cursor:pointer; font-weight:600; font-size:0.9rem;" onclick="switchPreviewTab('console')">Console Output</div>
+                    </div>
+
+                    <div id="preview-testcases" style="margin-top:20px; display:flex; gap:0; height:350px; background:#fff; border:1px solid #EAECF0; border-radius:12px; overflow:hidden;">
+                        <!-- Sidebar: Test Case List -->
+                        <div style="width:240px; border-right:1px solid #EAECF0; background:#F9FAFB; overflow-y:auto; padding:12px;">
+                            ${results.length === 0 ? `
+                                <div style="padding:20px; text-align:center; color:#667085; font-size:0.85rem;">No results</div>
+                            ` : results.map((r, ri) => {
+                                const isPass = r.status === 'pass';
+                                const isNotRun = r.status === 'not_run';
+                                return `
+                                    <div onclick="showTestCaseDetailsInPreview(${ri})" style="display:flex; align-items:center; gap:12px; padding:12px 16px; margin-bottom:8px; border-radius:8px; cursor:pointer; transition:all 0.2s; background:${ri === 0 ? '#fff' : 'transparent'}; box-shadow:${ri === 0 ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'}; border:1px solid ${ri === 0 ? '#1E40AF' : 'transparent'}; opacity:${isNotRun ? 0.7 : 1};">
+                                        <i class="fas fa-${isPass ? 'check' : (isNotRun ? 'clock' : 'times')}" style="color:${isPass ? '#12B76A' : (isNotRun ? '#98A2B3' : '#F04438')}; font-size:1.1rem;"></i>
+                                        <span style="font-weight:700; color:${ri === 0 ? '#1E40AF' : '#475467'}; font-size:1.05rem;">Test Case ${ri + 1}</span>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+
+                        <!-- Content: Score and Details -->
+                        <div id="preview-tc-details" style="flex:1; padding:24px; overflow-y:auto;">
+                            ${results.length > 0 ? `
+                                <div style="margin-bottom:24px;">
+                                    <label style="color:#98A2B3; font-weight:700; font-size:0.85rem; display:block; margin-bottom:8px; letter-spacing:0.5px;">SCORE</label>
+                                    <div style="background:#F9FAFB; padding:20px 24px; border-radius:4px; font-size:1.8rem; font-weight:500; color:#101828; border:1px solid #EAECF0; width:fit-content; min-width:100px; text-align:center;">
+                                        ${results[0].status === 'pass' ? (q.marks / results.length).toFixed(1) : (results[0].status === 'not_run' ? 'PENDING' : '0')}
+                                    </div>
+                                </div>
+                                <div style="margin-bottom:20px;">
+                                    <label style="color:#101828; font-weight:700; font-size:0.95rem; display:block; margin-bottom:12px;">Input Parameters:</label>
+                                    <pre style="background:#F9FAFB; padding:16px; border-radius:8px; border:1px solid #EAECF0; font-family:'Consolas', monospace; font-size:0.9rem; color:#475467;">${results[0].input || 'No input'}</pre>
+                                </div>
+                            ` : '<div style="height:100%; display:flex; align-items:center; justify-content:center; color:#98A2B3;">Select a test case to view details</div>'}
+                        </div>
+                    </div>
+
+                    <div id="preview-console" style="margin-top:20px; display:none; background:#101828; color:#f8f9fa; padding:20px; border-radius:12px; font-family:'JetBrains Mono'; font-size:0.9rem; line-height:1.6; max-height:300px; overflow-y:auto;">
+                        <div style="color:#667085; font-size:0.75rem; margin-bottom:12px; border-bottom:1px solid #1e293b; padding-bottom:8px; font-weight:700;">LAST CONSOLE OUTPUT</div>
+                        ${(resp?.lastConsoleOutput || 'No console history available').replace(/\n/g, '<br>')}
+                    </div>
+                `;
+
+                // Initialize Proper Multi-Editor Setup
+                setTimeout(() => {
+                    const aceMode = "ace/mode/" + (lang.toLowerCase().includes('python') ? 'python' : (lang.toLowerCase().includes('c') ? 'c_cpp' : 'java'));
+                    const commonOpts = { fontSize: "14px", fontFamily: "Consolas, 'JetBrains Mono', monospace", showPrintMargin: false, highlightActiveLine: false, showLineNumbers: true, useSoftTabs: true, tabSize: 4 };
+
+                    if (qCode.prefix) {
+                        const hEd = ace.edit("ace-head");
+                        hEd.setTheme("ace/theme/chrome");
+                        hEd.session.setMode(aceMode);
+                        hEd.setValue(qCode.prefix, -1);
+                        hEd.setReadOnly(true);
+                        hEd.setOptions(commonOpts);
+                    }
+
+                    const mEd = ace.edit("ace-main");
+                    mEd.setTheme("ace/theme/chrome");
+                    mEd.session.setMode(aceMode);
+                    mEd.setValue(studentImplementation, -1);
+                    mEd.setReadOnly(true);
+                    mEd.setOptions(commonOpts);
+
+                    if (qCode.suffix) {
+                        const tEd = ace.edit("ace-tail");
+                        tEd.setTheme("ace/theme/chrome");
+                        tEd.session.setMode(aceMode);
+                        tEd.setValue(qCode.suffix, -1);
+                        tEd.setReadOnly(true);
+                        tEd.setOptions(commonOpts);
+                    }
+                }, 100);
+            } else {
+                const responseText = extractResponse(resp);
+                const displayResponse = (responseText !== null && responseText !== undefined && responseText !== '') ? responseText : 'No response';
+                right.innerHTML = `
+                    <h3 style="margin-bottom:24px;">Your Response</h3>
+                    <pre>${displayResponse}</pre>
+                    ${resp?.manualMark !== undefined ? `
+                        <div style="margin:20px 0; padding:12px; background:#EFF6FF; border:1px solid #BFDBFE; color:#1E40AF; border-radius:8px; font-weight:700;">
+                            TEACHER EVALUATION: ${resp.manualMark} MARKS
+                        </div>
+                    ` : ''}
+                    <h3 style="margin-top:32px; margin-bottom:16px;">Correct Reference</h3>
+                    <div style="background:#ECFDF3; padding:16px; border-radius:8px; border:1px solid #ABEFC6; color:#027A48; font-weight:600;">
+                        ${q.correctAnswer || 'Manual grading required.'}
+                    </div>
+                `;
+            }
+
+            body.appendChild(left);
+            body.appendChild(right);
+            document.getElementById('previewModal').style.display = 'flex';
+        }
+
+        function showTestCaseDetailsInPreview(idx) {
+            const results = window.currentPreviewResults || [];
+            if (!results[idx]) return;
+            const res = results[idx];
+            const qMarks = window.currentPreviewQuestionMarks || 0;
+            const singleMark = (qMarks / results.length).toFixed(1);
+
+            const detailPane = document.getElementById('preview-tc-details');
+            detailPane.innerHTML = `
+                <div style="margin-bottom:24px;">
+                    <label style="color:#98A2B3; font-weight:700; font-size:0.85rem; display:block; margin-bottom:8px; letter-spacing:0.5px;">SCORE</label>
+                    <div style="background:#F9FAFB; padding:20px 24px; border-radius:4px; font-size:1.8rem; font-weight:500; color:#101828; border:1px solid #EAECF0; width:fit-content; min-width:80px; text-align:center;">
+                        ${res.status === 'pass' ? singleMark : '0'}
+                    </div>
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label style="color:#101828; font-weight:700; font-size:0.95rem; display:block; margin-bottom:12px;">Input Parameters:</label>
+                    <pre style="background:#F9FAFB; padding:16px; border-radius:8px; border:1px solid #EAECF0; font-family:'Consolas', monospace; font-size:0.9rem; color:#475467;">${res.input || 'No input'}</pre>
+                </div>
+                <div>
+                     <label style="color:#101828; font-weight:700; font-size:0.9rem; display:block; margin-bottom:12px;">Actual Output:</label>
+                     <pre style="background:#101828; padding:16px; border-radius:8px; border:1px solid #EAECF0; font-family:'Consolas', monospace; font-size:0.9rem; color:#fff;">${res.actual || 'No output recorded'}</pre>
+                </div>
+            `;
+        }
+
+        function closePreview() {
+            document.getElementById('previewModal').style.display = 'none';
+        }
+
+        function switchPreviewTab(tab) {
+            const tc = document.getElementById('preview-testcases');
+            const con = document.getElementById('preview-console');
+            const tabTc = document.getElementById('tab-testcases');
+            const tabCon = document.getElementById('tab-console');
+
+            if (tab === 'testcases') {
+                tc.style.display = 'flex';
+                con.style.display = 'none';
+                tabTc.style.borderBottom = '2px solid var(--primary)';
+                tabTc.style.color = 'var(--text-main)';
+                tabTc.style.fontWeight = '700';
+                tabCon.style.borderBottom = 'none';
+                tabCon.style.color = '#667085';
+                tabCon.style.fontWeight = '400';
+            } else {
+                tc.style.display = 'none';
+                con.style.display = 'block';
+                tabCon.style.borderBottom = '2px solid var(--primary)';
+                tabCon.style.color = 'var(--text-main)';
+                tabCon.style.fontWeight = '700';
+                tabTc.style.borderBottom = 'none';
+                tabTc.style.color = '#667085';
+                tabTc.style.fontWeight = '400';
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

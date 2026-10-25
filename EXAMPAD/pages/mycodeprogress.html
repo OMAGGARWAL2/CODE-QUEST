@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --erp-blue: #2b2b2b;
+            --erp-blue-light: #3a3a3a;
+
+            /* CODEPROGRESS MAROON */
+            --erp-accent: #7b1e2b;
+
+            --erp-bg: #f4f5f7;
+            --erp-border: #dcdfe4;
+
+            --erp-text: #1f2937;
+            --erp-text-muted: #6b7280;
+
+            --erp-white: #ffffff;
+
+            --success: #2e7d32;
+            --danger: #b91c1c;
+            --warning: #b45309;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--erp-bg);
+            color: var(--erp-text);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            font-size: 12px;
+            letter-spacing: 0.1px;
+        }
+
+        /* --- SIDEBAR (Narrow & Grouped) --- */
+        .sidebar {
+            width: 230px;
+            background: var(--erp-blue);
+            color: #cbd5e1;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--erp-border);
+            z-index: 1000;
+            font-size: 12px;
+        }
+
+        .sidebar-brand {
+            padding: 1.25rem;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: white;
+            border-bottom: 1px solid var(--erp-blue-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-brand span {
+            color: var(--erp-accent);
+        }
+
+        .sidebar-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 0;
+        }
+
+        .nav-group-label {
+            padding: 0.75rem 1.25rem 0.25rem;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.65rem 1.25rem;
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link.active {
+            background: rgba(37, 99, 235, 0.1);
+            color: white;
+            border-left-color: var(--erp-accent);
+        }
+
+        /* --- MAIN LAYOUT --- */
+        .workspace-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        /* --- TOP HEADER --- */
+        .top-header {
+            height: 50px;
+            background: white;
+            border-bottom: 1px solid var(--erp-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            -webkit-app-region: drag;
+            /* Allow dragging from header */
+        }
+
+        .header-left,
+        .header-right,
+        .header-search,
+        .user-pill,
+        .btn-erp,
+        .tab {
+            -webkit-app-region: no-drag;
+            /* Prevent dragging from interactive items */
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .header-search {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 1px solid var(--erp-border);
+            padding: 0.35rem 0.6rem;
+            border-radius: 4px;
+            width: 260px;
+        }
+
+        .header-search input {
+            border: none;
+            background: transparent;
+            outline: none;
+            padding-left: 10px;
+            width: 100%;
+            font-size: 12px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .header-icon {
+            color: var(--erp-text-muted);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-left: 1rem;
+            border-left: 1px solid var(--erp-border);
+        }
+
+        .avatar-small {
+            width: 28px;
+            height: 28px;
+            background: var(--erp-accent);
+            color: white;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 11px;
+        }
+
+        /* --- WORKSPACE TABS --- */
+        .workspace-tabs {
+            background: white;
+            display: flex;
+            padding: 0 1.5rem;
+            border-bottom: 1px solid var(--erp-border);
+        }
+
+        .tab {
+            padding: 0.65rem 1rem;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--erp-text-muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-right: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            color: var(--erp-accent);
+            background: #f8f8f8;
+            border-bottom-color: var(--erp-accent);
+        }
+
+        /* --- CONTENT AREA --- */
+        .content-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.9rem;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* --- KPI PANEL (Dense) --- */
+        .kpi-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .kpi-card {
+            background: #fcfcfc;
+            padding: 0.75rem;
+            border-radius: 4px;
+            border: 1px solid var(--erp-border);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+            box-shadow: none;
+        }
+
+        .kpi-card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--erp-border);
+            border-radius: 4px 0 0 4px;
+        }
+
+        .kpi-card.accented::before {
+            background: var(--erp-accent);
+        }
+
+        .kpi-card.success::before {
+            background: var(--success);
+        }
+
+        .kpi-card.warning::before {
+            background: var(--warning);
+        }
+
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .kpi-header h4 {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--erp-text-muted);
+            text-transform: uppercase;
+        }
+
+        .kpi-body {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+
+        .kpi-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .kpi-trend {
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .kpi-footer {
+            border-top: 1px dashed var(--erp-border);
+            padding-top: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+            color: var(--erp-text-muted);
+            opacity: 0.75;
+        }
+
+        .sparkline {
+            width: 60px;
+            height: 20px;
+            stroke: var(--erp-border);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        /* --- FILTER BAR --- */
+        .filter-bar {
+            background: #fff;
+            padding: 0.65rem 1rem;
+            border-radius: 4px 4px 0 0;
+            border: 1px solid var(--erp-border);
+            border-bottom: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .erp-select {
+            padding: 4px 10px;
+            border: 1px solid var(--erp-border);
+            border-radius: 4px;
+            font-size: 11px;
+            outline: none;
+            background: #fff;
+        }
+
+        .btn-erp {
+            padding: 5px 10px;
+            background: white;
+            border: 1px solid var(--erp-border);
+            border-radius: 2px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-erp:hover {
+            background: #f8fafc;
+        }
+
+        .btn-erp-primary {
+            background: var(--erp-accent);
+            color: white;
+            border-color: var(--erp-accent);
+        }
+
+        .btn-erp-primary:hover {
+            background: #1d4ed8;
+        }
+
+        /* --- DATA TABLE --- */
+        .table-container {
+            background: white;
+            border: 1px solid var(--erp-border);
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+        }
+
+        .erp-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .erp-table th {
+            text-align: left;
+            background: #f1f3f5;
+            padding: 10px 15px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--erp-text-muted);
+            border-bottom: 2px solid var(--erp-border);
+            letter-spacing: 0.06em;
+        }
+
+        .erp-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--erp-border);
+            font-size: 12px;
+            color: var(--erp-text);
+        }
+
+        .erp-table tr:hover {
+            background: #f7f7f7;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .dot-running {
+            background: var(--erp-accent);
+        }
+
+        .dot-failed {
+            background: var(--danger);
+        }
+
+        .dot-success {
+            background: var(--success);
+        }
+
+        /* --- DASHBOARD ADDONS --- */
+        .bottom-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .addon-panel {
+            background: white;
+            border: 1px solid var(--erp-border);
+            border-radius: 4px;
+            padding: 1.5rem;
+        }
+
+        .panel-title {
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chart-placeholder {
+            height: 180px;
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--erp-border);
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: #cfd4dc;
+            border-radius: 1px 1px 0 0;
+            transition: none;
+            position: relative;
+        }
+
+        .chart-bar:hover {
+            background: #cfd4dc;
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+    <!-- Main Workspace -->
+    <div class="workspace-container">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <a href="playground.html"
+                    style="text-decoration: none; color: var(--erp-text); font-weight: 800; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-arrow-left"></i> BACK
+                </a>
+                <div class="header-search">
+                    <i class="fas fa-search" style="color:#94a3b8"></i>
+                    <input type="text" placeholder="Search logs, snippets, or modules...">
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="header-icon"><i class="fas fa-bell"></i></div>
+                <div class="header-icon"><i class="fas fa-layer-group"></i></div>
+                <div class="user-pill">
+                    <div style="text-align: right; margin-right: 12px;">
+                        <span style="font-weight: 700; display: block;" id="userName">Ojas Maggu</span>
+                        <small style="color: var(--erp-text-muted); font-size: 10px;">ID: EX-2024-882</small>
+                    </div>
+                    <div class="avatar-small" id="userAvatar">O</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Workspace Tabs -->
+        <div class="workspace-tabs">
+            <div class="tab active" onclick="switchTab(0)">Operational Logs</div>
+            <div class="tab" onclick="switchTab(1)">Performance Analytics</div>
+            <div class="tab" onclick="switchTab(2)">Success Matrix</div>
+            <div class="tab" onclick="switchTab(3)">Audit Trail</div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="content-scroll">
+            <div id="breadcrumb"
+                style="background:#fff; border:1px solid var(--erp-border); padding:8px 12px; font-weight:700; margin-bottom:10px; font-size:12px; letter-spacing: 1px;">
+                TESTPAD / CODEPROGRESS / OPERATIONAL LOGS
+            </div>
+
+            <div id="tab0" class="tab-content active">
+                <!-- KPI Strip -->
+                <div class="kpi-strip">
+                    <div class="kpi-card accented">
+                        <div class="kpi-header">
+                            <h4>Active Sessions</h4>
+                        </div>
+                        <div class="kpi-body">
+                            <div class="kpi-value">1</div>
+                        </div>
+                        <div class="kpi-footer">
+                            <span>System Instance: EP-X1</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card success">
+                        <div class="kpi-header">
+                            <h4>Comp. Success Rate</h4>
+                        </div>
+                        <div class="kpi-body">
+                            <div class="kpi-value">92.4%</div>
+                        </div>
+                        <div class="kpi-footer">
+                            <span>Last 24h Window</span>
+                            <span style="color: var(--success); font-weight: 700;">+8.1%</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card warning">
+                        <div class="kpi-header">
+                            <h4>Avg Execution Delay</h4>
+                        </div>
+                        <div class="kpi-body">
+                            <div class="kpi-value" id="avgExec">42ms</div>
+                        </div>
+                        <div class="kpi-footer">
+                            <span>Piston API Latency</span>
+                            <span style="color: var(--danger); font-weight: 700;">-2ms</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <h4>Saved Modules</h4>
+                            <div class="kpi-trend" style="color: var(--erp-text-muted); font-size: 9px;">STABLE RESOURCE
+                            </div>
+                        </div>
+                        <div class="kpi-body">
+                            <div class="kpi-value" id="kpiSaved">0</div>
+                        </div>
+                        <div class="kpi-footer">
+                            <span>IndexedDB Sync</span>
+                            <i class="fas fa-database"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table Filters -->
+                <div class="filter-bar">
+                    <div class="filter-controls">
+                        <select class="erp-select">
+                            <option>Status: All</option>
+                            <option>Success</option>
+                            <option>Failed</option>
+                        </select>
+                        <select class="erp-select">
+                            <option>Project: All</option>
+                            <option>Playground</option>
+                            <option>Assignments</option>
+                        </select>
+                        <input type="date" class="erp-select">
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn-erp">Export CSV</button>
+                        <button class="btn-erp btn-erp-primary">Sync Realtime</button>
+                    </div>
+                </div>
+
+                <!-- Main Data Table -->
+                <div class="table-container">
+                    <table class="erp-table">
+                        <thead>
+                            <tr>
+                                <th>Operation</th>
+                                <th>Resource Path</th>
+                                <th>Status</th>
+                                <th>Execution Delay</th>
+                                <th>Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logBody">
+                            <!-- Data populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Bottom Data Panels -->
+                <div class="bottom-row">
+                    <div class="addon-panel">
+                        <div class="panel-title">
+                            <span>Weekly Productivity Stream</span>
+                            <div style="font-size: 10px; color: var(--erp-text-muted);">Last 7 Days (Operations / Day)
+                            </div>
+                        </div>
+                        <div class="chart-placeholder" id="weeklyChart">
+                            <!-- Dynamic bars -->
+                        </div>
+                    </div>
+
+                    <div class="addon-panel">
+                        <div class="panel-title">
+                            <span>Language Success Matrix</span>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 10px;">
+                            <div>
+                                <div
+                                    style="display: flex; justify-content: space-between; margin-bottom: 5px; font-weight: 600;">
+                                    <span>Java Runtime</span>
+                                    <span>94%</span>
+                                </div>
+                                <div style="height: 3px; background: #f1f5f9;">
+                                    <div style="width: 94%; height: 100%; background: var(--erp-accent);">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div
+                                    style="display: flex; justify-content: space-between; margin-bottom: 5px; font-weight: 600;">
+                                    <span>Python Interpreter</span>
+                                    <span>78%</span>
+                                </div>
+                                <div style="height: 3px; background: #f1f5f9;">
+                                    <div style="width: 78%; height: 100%; background: var(--success);">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div
+                                    style="display: flex; justify-content: space-between; margin-bottom: 5px; font-weight: 600;">
+                                    <span>SQL Engine</span>
+                                    <span>100%</span>
+                                </div>
+                                <div style="height: 3px; background: #f1f5f9;">
+                                    <div style="width: 100%; height: 100%; background: var(--warning);">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab1" class="tab-content">
+                <div class="addon-panel" style="text-align:center; padding: 5rem;">
+                    <i class="fas fa-chart-line"
+                        style="font-size: 3rem; color: var(--erp-accent); margin-bottom: 1rem;"></i>
+                    <h3>Performance Analytics</h3>
+                    <p style="color: var(--erp-text-muted);">Aggregating system-wide performance indices...</p>
+                </div>
+            </div>
+
+            <div id="tab2" class="tab-content">
+                <div class="addon-panel" style="text-align:center; padding: 5rem;">
+                    <i class="fas fa-check-double"
+                        style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;"></i>
+                    <h3>Success Matrix</h3>
+                    <p style="color: var(--erp-text-muted);">Calibrating success ratio across multiple projects...</p>
+                </div>
+            </div>
+
+            <div id="tab3" class="tab-content">
+                <div class="addon-panel" style="text-align:center; padding: 5rem;">
+                    <i class="fas fa-shield-alt"
+                        style="font-size: 3rem; color: var(--erp-text-muted); margin-bottom: 1rem;"></i>
+                    <h3>Audit Trail</h3>
+                    <p style="color: var(--erp-text-muted);">Initializing secure audit sequence for compliance
+                        mapping...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ERP Tab Switcher
+        function switchTab(index) {
+            const tabs = ['OPERATIONAL LOGS', 'PERFORMANCE ANALYTICS', 'SUCCESS MATRIX', 'AUDIT TRAIL'];
+            document.getElementById('breadcrumb').textContent = `TESTPAD / CODEPROGRESS / ${tabs[index]}`;
+
+            document.querySelectorAll('.tab').forEach((t, i) => {
+                t.classList.toggle('active', i === index);
+            });
+            document.querySelectorAll('.tab-content').forEach((c, i) => {
+                c.classList.toggle('active', i === index);
+            });
+            if (index === 0) initCharts(); // Re-init chart if switching back to logs
+        }
+
+        // ERP Profile Sync
+        const authUser = JSON.parse(localStorage.getItem('auth_user') || '{}');
+        if (authUser.name) {
+            document.getElementById('userName').textContent = authUser.name.toUpperCase();
+            const avatar = document.getElementById('userAvatar');
+            avatar.textContent = authUser.name.charAt(0).toUpperCase();
+
+            const savedPic = localStorage.getItem('userPic_' + authUser.id);
+            if (savedPic) {
+                avatar.innerHTML = `<img src="${savedPic}" style="width:100%; height:100%; border-radius:4px; object-fit:cover;">`;
+                avatar.style.background = 'transparent';
+            }
+        }
+
+        // ERP Real-time Log Processor
+        function refreshERPData() {
+            const logs = JSON.parse(localStorage.getItem('ep_activity_logs') || '[]');
+            const logBody = document.getElementById('logBody');
+
+            if (logs.length === 0) {
+                logBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 2rem; color: var(--erp-text-muted);">System idle. No operational logs found.</td></tr>`;
+                return;
+            }
+
+            logBody.innerHTML = logs.map(log => {
+                const date = new Date(log.timestamp);
+                const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                const dayStr = date.toLocaleDateString([], { year: '2-digit', month: '2-digit', day: '2-digit' });
+
+                let dotClass = 'dot-success';
+                if (log.status === 'Failed') dotClass = 'dot-failed';
+                if (log.status === 'Executing') dotClass = 'dot-running';
+
+                return `
+                    <tr>
+                        <td style="font-weight: 700;">${log.action.toUpperCase()}</td>
+                        <td><code style="font-family: 'JetBrains Mono'; color: var(--erp-accent);">${log.file}</code></td>
+                        <td><span class="status-dot ${dotClass}"></span>${log.status}</td>
+                        <td style="color: var(--erp-text-muted); font-size: 11px;">${Math.floor(Math.random() * 80 + 20)}ms</td>
+                        <td style="color: var(--erp-text-muted); font-size: 11px;">${dayStr} ${timeStr}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            // KPI Sync
+            document.getElementById('kpiSaved').textContent = logs.filter(l => l.action.includes('Saved')).length;
+            const runCount = logs.filter(l => l.action.includes('Ran')).length;
+            document.getElementById('avgExec').textContent = runCount > 0 ? (35 + (runCount % 10)) + 'ms' : '0ms';
+        }
+
+        // Weekly Productivity Mock Chart
+        function initCharts() {
+            const chart = document.getElementById('weeklyChart');
+            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            chart.innerHTML = days.map(day => {
+                const height = Math.floor(Math.random() * 70 + 20);
+                return `
+                    <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:8px;">
+                        <div class="chart-bar" style="height: ${height}%; width: 100%;"></div>
+                        <span style="font-size: 10px; color: var(--erp-text-muted); font-weight: 700;">${day}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        refreshERPData();
+        initCharts();
+    </script>
+</body>
+
+</html>

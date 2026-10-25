@@ -1,0 +1,18 @@
+{
+  "name": "codequest",
+  "version": "1.0.0",
+  "description": "CodeQuest - Advanced DSA & Assessment Engine",
+  "main": "firstpage.html",
+  "scripts": {
+    "start": "npx -y serve . -l 3000 -s",
+    "dev": "npx -y serve . -l 3000 -s"
+  },
+  "keywords": [
+    "codequest",
+    "dsa",
+    "leetcode",
+    "assessment"
+  ],
+  "author": "CodeQuest",
+  "license": "ISC"
+}

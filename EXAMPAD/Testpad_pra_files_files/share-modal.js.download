@@ -1,0 +1,40 @@
+const toggleShareModal = (message) => {
+  if(message){
+      document.getElementById("shareMsg").value = message;
+      let getOnlyUrl = message.match(/(https?:\/\/[^\s]+)/g);
+      let onlyMessage = message.replace(/(https?:\/\/[^\s]+)/g,'');
+      document.getElementById("whatsapp-url").href = `https://web.whatsapp.com/send?text=${message}`
+      document.getElementById("twitter-url").href = `https://twitter.com/intent/tweet?text=${message}`
+      document.getElementById("reddit-url").href = `http://reddit.com/submit?title=${message}`
+      if(getOnlyUrl != null){
+          document.getElementById("linkedin-url").href = `https://www.linkedin.com/shareArticle?mini=true&url=${getOnlyUrl[0]}&title=${onlyMessage}`
+          // document.getElementById("linkedin-url").parentNode.style.display = 'block';
+          document.getElementById("fb-url").href = `https://www.facebook.com/sharer.php?u=${getOnlyUrl[0]}`
+          // document.getElementById("shareSocialIconsContainer").style.gridTemplateColumns = '1fr 1fr 1fr 1fr 1fr';
+          document.getElementById("twitter-url").href = `https://twitter.com/intent/tweet?url=${getOnlyUrl[0]}&text=${onlyMessage}`
+      }else{
+          document.getElementById("linkedin-url").href = `https://www.linkedin.com/shareArticle?mini=true&url=https://codequotient.com/`
+          document.getElementById("fb-url").href = `https://www.facebook.com/sharer.php?u=https://codequotient.com/`
+          // document.getElementById("linkedin-url").parentNode.style.display = 'none';
+          // document.getElementById("shareSocialIconsContainer").style.gridTemplateColumns = '1fr 1fr 1fr 1fr';
+      }
+  }else{
+      document.getElementById("shareMsg").value = ' '
+  }
+
+let shareModal = document.getElementById('share-modal');
+
+document
+.getElementById('close-share-modal')
+.addEventListener('click', () => {
+  shareModal.classList.remove('visible-share-modal');
+});
+
+window.addEventListener('click', function (event) {
+if (event.target == shareModal) {
+  shareModal.classList.remove('visible-share-modal');
+}
+});
+
+shareModal.classList.add('visible-share-modal');
+};

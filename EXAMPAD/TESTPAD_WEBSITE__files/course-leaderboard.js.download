@@ -1,0 +1,362 @@
+let loaded_sub_select_elements = false;
+
+function leaderboardSearch({value}) {
+  leaderboardDataTable.search(value).draw();
+}
+
+async function loadLeaderboardData(courseId, currentStudentId) {
+  await updateSubSelectElements(courseId);
+
+  $(".leaderboard-sub-select").show();
+  const filter = {
+    "batchId": $("#batchId-leaderboardSelect")?.val(),
+    "sectionId": $("#sectionId-leaderboardSelect")?.val(),
+  };
+  if(leaderboardDataTable !== null) {
+    leaderboardDataTable.destroy();
+    leaderboardDataTable = null;
+  }
+  toggleLoader(true);
+  const leaderBoardData = await getLeaderBoardData(courseId, filter);
+  leaderboardDataTable = createLeaderboardDataTable(leaderBoardData, currentStudentId,courseId);
+  document.getElementById("input-search-name").value = leaderboardDataTable.state().search.search;
+  leaderboardDataTable.column(3).visible(currentUserRole !== "1");
+  leaderboardDataTable.column(4).visible(currentUserRole !== "1");
+  leaderboardDataTable.column(7).visible(currentUserRole !== "1");
+  const rankElement = document.getElementById("yourrank");
+  if(rankElement) {
+    rankElement.innerText = leaderBoardData.find(item => item.id === currentStudentId)?.rank ?? 0;
+  }
+  leaderboardDataTable?.order([1, "asc"]).draw();
+  useLeaderboardData(leaderBoardData);
+  toggleLoader(false);
+}
+
+async function updateSubSelectElements(courseId) {
+  if(loaded_sub_select_elements) {
+    return;
+  }
+  loaded_sub_select_elements = true;
+  /** @type {HTMLSelectElement} */
+  const sectionIdSelectElement = document.getElementById("sectionId-leaderboardSelect");
+  /** @type {HTMLSelectElement} */
+  const batchIdSelectElement = document.getElementById("batchId-leaderboardSelect");
+
+  sectionIdSelectElement?.add(new Option("All Sections", "-1", true));
+  batchIdSelectElement?.add(new Option("All Batches", "-1", true));
+
+  console.log("%c%s", "color: red", "fetching select data")
+  try {
+    const response = await fetch("/api/course/getLeaderBoardData/" + courseId);
+    /** @type {{ course: { courseSegments: { _id: string; title: string; count: number; isAssignment: boolean }[] }; batches: { _id: string; title: string }[] }} */
+    const { course = {}, batches = [] } = await response.json();
+    const segments = course.courseSegments ?? [];
+    window.userBatches = batches;
+
+    for(const [ index, segment ] of segments.entries()) {
+      if(segment.count === 0) {
+        continue;
+      }
+      const option = new Option(`${ index + 1 }. ${ segment.title }`, segment._id);
+      sectionIdSelectElement?.add(option);
+    }
+
+    for(const [ index, batch ] of batches.entries()) {
+      const option = new Option(batch.title, batch._id);
+      batchIdSelectElement?.add(option);
+    }
+  } catch(ex) {
+    console.log(ex);
+    toggleAlertMsgModal("Unable to get leaderboard data", 2);
+  }
+  $(sectionIdSelectElement).selectpicker({ liveSearch: true });
+  $(batchIdSelectElement).selectpicker({ liveSearch: true });
+  console.log("%c%s", "color: green", "fetched select data")
+}
+
+function initLeaderboard(courseId, currentStudentId) {
+  window.addEventListener("load", function() {
+    $("select.leaderboard-select").on("change", function() {
+      console.log(this.id, this.value)
+      loadLeaderboardData(courseId, currentStudentId);
+    });
+  })
+}
+
+let leaderBoardData;
+
+//getCourseDiscussionCount();
+
+/** @param {Awaited<ReturnType<getLeaderBoardData>>} data */
+function createLeaderboardDataTable(data, currentStudentId,courseId) {
+  return $("#leaderboard-table").DataTable({
+      language: {
+        paginate: {
+          next: '<i class="fa fa-caret-right" aria-hidden="true"></i>', // or '→'
+          previous: '<i class="fa fa-caret-left" aria-hidden="true"></i>', // or '←'
+        },
+        sLengthMenu: "_MENU_"
+      },
+      "bJQueryUI": true,
+      stateSave: true,
+      //"bInfo" : false,
+      processing: true,
+      serverSide: false,
+      searching: true,
+      dom: '<"top">rt<"bottom"lp><"clear">',
+      lengthMenu: [ 20, 50, 100 ],
+      /** @type {{ render?: (item: any, _: string, data: Awaited<ReturnType<getLeaderBoardData>>[number]) => string }[]} */
+      columns: [
+        {
+          data: null,
+          title: `<span></span>`,
+          className: "text-center",
+          orderable: false,
+        },
+        {
+          data: "rank",
+          title: `<span>Rank</span>`,
+          className: "text-center",
+          orderable: true
+        },
+        {
+          data: "name",
+          title: `<span>Name</span>`,
+          orderable: true,
+          className: "text-left",
+          render: currentStudentId ? undefined : function(item, _unused_param, data) {
+            if(data.batches.length === 0) {
+              return item;
+            }
+            return `<button type="button" class="text-button" onclick="viewUserMetrics('${ data.batches[0]._id }', '${ data.id }')">${ item }</button>`;
+          }
+        },
+        {
+          data: "email",
+          title: `<span>Email</span>`,
+          orderable: true,
+          className: "text-left"
+        },
+        {
+          data: "batches",
+          orderable: true,
+          title: `<span>Batch</span>`,
+          className: "text-left",
+          render(item) {
+            return item[0]?.title ?? "-";
+          }
+        },
+        {
+          data: "score",
+          orderable: true,
+          title: `<span>Score</span>`,
+          className: "text-center",
+          render(item) {
+            return item.toFixed(2);
+          }
+        },
+        {
+          data: "completedAt",
+          orderable: true,
+          title: `<span>Time</span>`,
+          className: "text-center",
+          /** @param {Date | null} item */
+          render(item, type) {
+            if(type === "sort") {
+              return item?.getTime() ?? 0;
+            }
+            if (!item) {
+              return "-NA-"
+            }
+            return item.toLocaleString("en-IN", {
+              dateStyle: "medium",
+              timeStyle: "short"
+            }).split(",").join("<br/>");
+          }
+        },
+        {
+          data: "action",
+          orderable: false,
+          title: "Actions",
+          className: "text-center",
+          render(item, type, row) {
+            const viewAttemptLink = document.createElement("a");
+            viewAttemptLink.href = `/user-dashboard/view/${ row.id }/${ courseId }`;
+            viewAttemptLink.target = "_blank";
+            viewAttemptLink.className = "tooltip-left attempts-icon";
+            viewAttemptLink.setAttribute("data-customTooltip", "View attempts");
+            viewAttemptLink.innerHTML = `<span class="material-icons" style="color: black;">format_list_bulleted</span>`;
+
+            const buttonsHolder = document.createElement("div");
+            buttonsHolder.className = "d-flex justify-content-center";
+            buttonsHolder.append(viewAttemptLink);
+
+            return buttonsHolder.outerHTML;
+          }
+        }
+      ],
+      columnDefs: [
+        { width: "3%", targets: 0 },
+        { width: "8%", targets: 1 },
+        { width: "20%", targets: 2 },
+        { width: "20%", targets: 3 },
+        { width: "15%", targets: 4 }
+       ],
+      order: [[ 1, "asc" ]],
+      rowId : "_id",
+      drawCallback: function (settings) {
+        var api = this.api();
+        var pageInfo = api.page.info();        
+        if(pageInfo.recordsTotal <= 20) {
+          $('.dataTables_paginate').hide();
+          $('.dataTables_length').hide();
+        }
+        else {
+          $('.dataTables_length').show();
+          $('.dataTables_paginate').show();
+        }
+        $("select[name='leaderboard-table_length']").selectpicker("refresh");
+      },
+      /**
+       * @param {HTMLTableRowElement} tr
+       * @param {Awaited<ReturnType<getLeaderBoardData>>[number]} data
+       */
+      fnRowCallback(tr, data , iDisplayIndex) {
+          var oSettings = this.fnSettings ();
+          if(currentStudentId === data.id) {
+            tr.classList.add("selected");
+          }
+          if(currentStudentId) {
+            // const td = tr.cells.item(0);
+            // td.
+          }
+          $("td:eq(0)", tr).text(oSettings._iDisplayStart + iDisplayIndex + 1 +
+            '.');
+      },
+      data
+  });
+}
+
+/** @param {Awaited<ReturnType<getLeaderBoardData>>} data */
+function useLeaderboardData(data) {
+  const totlaStudentsCountElement = document.getElementById("total-students");
+  if(totlaStudentsCountElement === null) {
+    return;
+  }
+  totlaStudentsCountElement.innerText = data.length;
+}
+
+async function getLeaderBoardData(courseId, { sectionId, batchId }) {
+
+  const url = new URL(`/api/course/getUserScore/${courseId}`, window.location.origin);
+  if(sectionId && sectionId !== "-1") {
+    url.searchParams.set("sectionId", sectionId);
+  }
+  if(batchId && batchId !== "-1") {
+    url.searchParams.set("batchId", batchId);
+  }
+  const rawLeaderBoardData = await fetch(url);
+  if(rawLeaderBoardData.redirected) {
+    if(rawLeaderBoardData.url && rawLeaderBoardData.url.indexOf('login') > -1) location.reload();
+    else window.location = `${rawLeaderBoardData.url}`;
+  }
+  /** @type {{ data: { user_id: string; email: string; enrollmentId?: string; displayname: string; score: number; completedAt: string | null; batchId: { _id: string; title: string }[] }[] }} */
+  const { data = [] } = await rawLeaderBoardData.json();
+  for(const item of data) {
+    if (item.completedAt) {
+      item.completedAt = new Date(item.completedAt);
+    }
+  }
+  data.sort((a, b) => {
+    const scoreDiff = b.score - a.score;
+    if(scoreDiff !== 0) {
+      return scoreDiff;
+    }
+    if (b.completedAt && a.completedAt) {
+      return b.completedAt - a.completedAt;
+    }
+    if (a.completedAt) {
+      return -1;
+    }
+    if (b.completedAt) {
+      return 1
+    }
+    return 0;
+  });
+  let rankCounter = 1;
+  return data.map((userInfo, index) => {
+    const score = userInfo.score;
+    const rank = rankCounter;
+    rankCounter++;
+    if(data[index + 1] && (userInfo.score == data[index + 1].score)) {
+      rankCounter--;
+    }
+    return {
+      rank,
+      score,
+      name: userInfo.displayname,
+      email: userInfo.email,
+      enrollmentId: userInfo.enrollmentId,
+      id: userInfo.user_id,
+      completedAt: userInfo.completedAt,
+      batches: userInfo.batchId
+    };
+  });
+
+}
+
+function getLeaderBoardXlsx(){
+  let table = $("#leaderboard-table").DataTable()
+  const title = window.courseTitle
+  let data = table.rows().data().toArray()
+
+  let exportData = [];
+  
+  let skipColumns =[0,7];
+  let headers = [];
+  table.columns().every(function (index) {
+    if(!skipColumns.includes(index)){
+      headers.push(this.header().textContent.trim());
+    }
+  });
+  exportData.push(headers);
+
+  const rankIndex = headers.findIndex(header => header === 'Rank');
+  data.sort((a, b) => {
+    const rankA = parseInt(a[table.column(rankIndex + 1).dataSrc()], 10) || 0;
+    const rankB = parseInt(b[table.column(rankIndex + 1).dataSrc()], 10) || 0;
+    return rankA - rankB;
+  });
+
+  data.forEach(row => {
+    let rowData = [];
+    headers.forEach((header, index) => {
+      const cellData = table.column(index+1).dataSrc();
+      if(header==='Batch')
+      {
+        rowData.push( row[cellData]?.[0]?.title || '' );
+      }
+      else if(header==='Time')
+      {
+        const timeValue =row[cellData] !== null ?new Date(row[cellData]): ''
+        if(timeValue!=="")
+        {
+          const date =timeValue.toLocaleString();
+          rowData.push(date);
+        }
+        
+      }
+      else {
+        rowData.push(row[cellData]);
+      }
+    });
+    exportData.push(rowData);
+  });
+  
+
+  let workbook = XLSX.utils.book_new();
+  let worksheet = XLSX.utils.aoa_to_sheet(exportData);
+
+  XLSX.utils.book_append_sheet(workbook, worksheet, `Leaderboard`);
+  XLSX.writeFile(workbook, `${title} - Leaderboard.xlsx`);
+}

@@ -1,0 +1,13 @@
+
+        .uploaded-file-download-link {
+            display: inline;
+            border: none;
+            background-color: transparent;
+            color: #de6834;
+            text-decoration: none;
+        }
+
+        .uploaded-file-download-link:hover {
+            color: #de6834;
+        }
+    

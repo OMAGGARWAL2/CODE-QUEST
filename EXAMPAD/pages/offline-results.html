@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- ERP Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0B3A6E;
+            --secondary: #F4F6F8;
+            --border: #D9DEE5;
+            --text: #1F2933;
+            --success: #4a7c59;
+            /* muted green */
+            --danger: #b33939;
+            /* muted red */
+            --hover: #EDF2F7;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--secondary);
+            color: var(--text);
+            font-size: 13px;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        /* SEARCH VIEW */
+        #searchView {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #EAECEF;
+        }
+
+        .search-box {
+            width: 450px;
+            background: #fff;
+            padding: 40px;
+            border: 1px solid var(--border);
+            text-align: center;
+            border-top: 5px solid var(--primary);
+        }
+
+        .search-logo {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0 auto 20px;
+        }
+
+        .search-box h1 {
+            font-size: 20px;
+            color: var(--text);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .search-input-group {
+            text-align: left;
+            margin-top: 25px;
+        }
+
+        .search-input-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #4A5568;
+            margin-bottom: 5px;
+        }
+
+        .search-input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            outline: none;
+            background: #fff;
+        }
+
+        .search-input-group input:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-search {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 20px;
+            text-transform: uppercase;
+        }
+
+        .btn-search:hover {
+            background: #082a52;
+        }
+
+        /* ERP LAYOUT */
+        #resultView {
+            display: none;
+        }
+
+        .erp-top-ribbon {
+            background: #111;
+            color: #ccc;
+            font-size: 10px;
+            padding: 5px 20px;
+            text-align: left;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .erp-header {
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .inst-id {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .inst-logo {
+            width: 35px;
+            height: 35px;
+            background: var(--primary);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .inst-name-top {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .header-actions button {
+            background: #fff;
+            border: 1px solid var(--border);
+            padding: 6px 15px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .header-actions button:hover {
+            background: var(--hover);
+        }
+
+        .header-actions button.primary {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .erp-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 20px auto;
+            background: #fff;
+            border: 1px solid var(--border);
+            min-height: 700px;
+        }
+
+        .erp-sidebar {
+            width: 240px;
+            border-right: 1px solid var(--border);
+            background: #FAFBFC;
+        }
+
+        .erp-sidebar-menu {
+            list-style: none;
+        }
+
+        .erp-sidebar-menu li {
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: #4A5568;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .erp-sidebar-menu li.active {
+            background: #fff;
+            border-left: 3px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .erp-main {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .erp-page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .erp-status-strip {
+            background: var(--hover);
+            border: 1px solid var(--border);
+            padding: 8px 15px;
+            font-size: 12px;
+            color: #4A5568;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+        }
+
+        .status-promoted {
+            color: var(--success);
+        }
+
+        .status-reappear {
+            color: var(--danger);
+        }
+
+        .erp-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+            font-size: 13px;
+        }
+
+        .erp-info-row {
+            display: flex;
+            border-bottom: 1px dotted var(--border);
+            padding-bottom: 5px;
+        }
+
+        .erp-info-label {
+            width: 120px;
+            font-weight: 600;
+            color: #718096;
+        }
+
+        .erp-info-value {
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .erp-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .erp-table th {
+            background: var(--secondary);
+            padding: 10px 15px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--primary);
+            color: var(--primary);
+            border-right: 1px solid var(--border);
+        }
+
+        .erp-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            font-weight: 700;
+            border-right: 1px solid var(--border);
+        }
+
+        .erp-grid-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .erp-panel {
+            border: 1px solid var(--border);
+            background: #fff;
+            margin-bottom: 20px;
+        }
+
+        .erp-panel-header {
+            background: var(--secondary);
+            padding: 10px 15px;
+            font-weight: 600;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+            text-transform: uppercase;
+        }
+
+        .erp-panel-body {
+            padding: 0;
+        }
+
+        .erp-action-row {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text);
+            transition: background 0.2s;
+            font-weight: 600;
+        }
+
+        .erp-action-row:last-child {
+            border-bottom: none;
+        }
+
+        .erp-action-row:hover {
+            background: var(--hover);
+        }
+
+        .erp-action-row i {
+            width: 25px;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .erp-action-row span.desc {
+            font-size: 11px;
+            color: #718096;
+            margin-left: auto;
+            font-weight: 400;
+        }
+
+        .erp-audit-log {
+            list-style: none;
+            padding: 15px;
+            font-size: 12px;
+        }
+
+        .erp-audit-log li {
+            padding: 6px 0;
+            border-bottom: 1px dashed var(--border);
+            color: #4A5568;
+        }
+
+        .erp-audit-log li:last-child {
+            border-bottom: none;
+        }
+
+        .erp-audit-log li::before {
+            content: "•";
+            color: var(--primary);
+            margin-right: 8px;
+            font-weight: bold;
+        }
+
+        .erp-footer {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 11px;
+            color: #718096;
+        }
+
+        /* SCRIPT VIEWER MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: #cbd5e1;
+            z-index: 2000;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            z-index: 2100;
+            position: relative;
+        }
+
+        .modal-header-title {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .modal-content {
+            height: calc(100vh - 50px);
+            display: flex;
+        }
+
+        .viewport {
+            flex: 1;
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+            padding: 30px;
+            background: #EAECEF;
+        }
+
+        #scriptImg {
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transform-origin: top center;
+            border: 1px solid #ccc;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: #fff;
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 15px;
+            background: var(--secondary);
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--primary);
+        }
+
+        .mark-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 15px;
+            border-bottom: 1px solid var(--hover);
+            font-size: 12px;
+        }
+
+        .mark-row b {
+            color: var(--primary);
+        }
+
+        .page-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .p-btn {
+            border: 1px solid var(--border);
+            background: #fff;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 4px 10px;
+            color: var(--text);
+        }
+
+        .p-btn:hover {
+            background: var(--hover);
+        }
+
+        /* PREMIUM ALERTS */
+        .sys-alert-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sys-alert-box {
+            background: #fff;
+            width: 400px;
+            border: 1px solid var(--border);
+            border-top: 4px solid var(--primary);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+
+        .sys-alert-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sys-alert-msg {
+            font-size: 13px;
+            color: #4A5568;
+            margin-bottom: 20px;
+        }
+
+        .btn-alert-close {
+            padding: 8px 20px;
+            background: var(--secondary);
+            color: var(--text);
+            border: 1px solid var(--border);
+            font-weight: 600;
+            cursor: pointer;
+            float: right;
+        }
+
+        .btn-alert-close:hover {
+            background: #e2e8f0;
+        }
+
+        /* Question Selection for Query */
+        .q-select-list {
+            list-style: none;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            margin-top: 15px;
+        }
+
+        .q-select-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .q-select-item:hover {
+            background: var(--hover);
+        }
+
+        .q-select-item b {
+            color: var(--primary);
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+
+    <!-- SYSTEM ALERTS -->
+    <div class="sys-alert-overlay" id="sysAlert">
+        <div class="sys-alert-box">
+            <div class="sys-alert-title"><i id="sysAlertIcon" class="fas fa-info-circle"></i> <span
+                    id="sysAlertTitle">System Message</span></div>
+            <div class="sys-alert-msg" id="sysAlertMsg">---</div>
+            <div style="overflow: hidden;">
+                <button class="btn-alert-close" onclick="closeSysAlert()">Acknowledge</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUERY SELECTION MODAL (MULTI) -->
+    <div class="sys-alert-overlay" id="queryMdl">
+        <div class="sys-alert-box" style="width:500px;">
+            <div class="sys-alert-title"><i class="fas fa-question-circle"></i> RAISE CLARIFICATION QUERY</div>
+            <div class="sys-alert-msg">Select one or more questions you wish to clarify. This will be bundled into a
+                single official query ticket.</div>
+            <ul class="q-select-list" id="qList"></ul>
+            <div class="modal-btn-group">
+                <button class="btn-alert-close"
+                    onclick="document.getElementById('queryMdl').style.display='none'">CANCEL</button>
+                <button class="btn-search" style="margin-top:0; width:auto; padding:8px 25px;"
+                    onclick="submitQueries()">RAISE QUERY</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RE-EVALUATION MODAL -->
+    <div class="sys-alert-overlay" id="reevalMdl">
+        <div class="sys-alert-box" style="width:500px; text-align:left;">
+            <div class="sys-alert-title"><i class="fas fa-balance-scale"></i> RE-EVALUATION APPLICATION</div>
+            <div class="sys-alert-msg">Please provide the administrative details for your remarking request.</div>
+
+            <div class="search-input-group" style="margin-top:10px;">
+                <label>Target Subject Full Name</label>
+                <input type="text" id="reSubName" readonly>
+            </div>
+            <div class="search-input-group">
+                <label>Official Subject Code</label>
+                <input type="text" id="reSubCode" placeholder="e.g. CS102 / PY405">
+            </div>
+            <div class="search-input-group">
+                <label>Reason for Re-evaluation</label>
+                <textarea id="reReason"
+                    style="width:100%; height:80px; padding:10px; border:1px solid var(--border); font-size:12px; resize:none;"
+                    placeholder="Describe why you are applying for remarking..."></textarea>
+            </div>
+
+            <div class="modal-btn-group">
+                <button class="btn-alert-close"
+                    onclick="document.getElementById('reevalMdl').style.display='none'">CANCEL</button>
+                <button class="btn-search" style="margin-top:0; width:auto; padding:8px 25px;"
+                    onclick="submitReeval()">PROCEED TO PAYMENT</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUBJECT DISCOVERY MODAL -->
+    <div class="sys-alert-overlay" id="subjectMdl">
+        <div class="sys-alert-box" style="width:550px;">
+            <div class="sys-alert-title"><i class="fas fa-layer-group"></i> MULTIPLE SUBJECTS FOUND</div>
+            <div class="sys-alert-msg">Multiple evaluation records are linked to your Roll Number. Please select the
+                subject record you wish to retrieve.</div>
+            <ul class="q-select-list" id="subList"></ul>
+            <div style="margin-top:20px; overflow:hidden;">
+                <button class="btn-alert-close"
+                    onclick="document.getElementById('subjectMdl').style.display='none'">BACK TO SEARCH</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BACKLOG REGISTRATION MODAL -->
+    <div class="sys-alert-overlay" id="reappearMdl">
+        <div class="sys-alert-box" style="width:500px; text-align:left;">
+            <div class="sys-alert-title"><i class="fas fa-sync"></i> BACKLOG REGISTRATION</div>
+            <div class="sys-alert-msg">Register for the supplementary examination cycle for this subject.</div>
+
+            <div class="search-input-group" style="margin-top:10px;">
+                <label>Subject for Backlog</label>
+                <input type="text" id="raSubName" readonly>
+            </div>
+            <div class="search-input-group">
+                <label>Total Subject Credits (Academic Weightage)</label>
+                <select id="raCredits" style="width:100%; padding:10px; border:1px solid var(--border); font-size:13px;"
+                    onchange="updateBacklogFee()">
+                    <option value="1">1 Credit (₹ 2,000)</option>
+                    <option value="2">2 Credits (₹ 4,000)</option>
+                    <option value="3">3 Credits (₹ 6,000)</option>
+                    <option value="4" selected>4 Credits (₹ 8,000)</option>
+                </select>
+            </div>
+            <div id="backlogFeeSummary"
+                style="padding:15px; background:#f0f7ff; border:1px solid #e1e8f0; border-radius:4px; margin-top:15px; font-weight:700; color:var(--primary); text-align:center;">
+                REGISTRATION FEE: ₹ 8,000.00
+            </div>
+
+            <div class="modal-btn-group">
+                <button class="btn-alert-close"
+                    onclick="document.getElementById('reappearMdl').style.display='none'">CANCEL</button>
+                <button class="btn-search" style="margin-top:0; width:auto; padding:8px 25px;"
+                    onclick="submitBacklog()">PROCEED TO PAYMENT</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEARCH VIEW -->
+    <div id="searchView">
+        <div class="search-box">
+            <div class="search-logo"
+                style="background: transparent; border-radius: 0; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;">
+                <img src="https://api.learntechww.com/college_icon/logo1733989968823.jpg" alt="Chitkara"
+                    style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
+            <h1>Student Registry Module</h1>
+            <p style="font-size:12px; color:#4A5568;">Enterprise authentication required.</p>
+
+            <div class="search-input-group">
+                <label>Candidate Roll Number / System ID</label>
+                <input type="text" id="rollInput" placeholder="Enter Registration Number"
+                    onkeyup="if(event.key==='Enter') fetchResult()">
+            </div>
+
+            <button class="btn-search" onclick="fetchResult()">Retrieve Results</button>
+
+            <div id="dbStatus"
+                style="margin-top:20px; font-size:11px; font-weight:600; color:#718096; text-transform:uppercase;">
+                Initializing secure connection...
+            </div>
+        </div>
+    </div>
+
+    <!-- RESULT VIEW -->
+    <div id="resultView">
+        <div class="erp-top-ribbon">EXAMINATION MANAGEMENT SYSTEM | RESULT MODULE v3.4</div>
+        <div class="erp-header">
+            <div class="inst-id">
+                <div class="inst-logo"
+                    style="background: transparent; border-radius: 0; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;">
+                    <img src="https://api.learntechww.com/college_icon/logo1733989968823.jpg" alt="Chitkara"
+                        style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+                <div class="inst-name-text">
+                    <span class="inst-name-top">TESTPAD ENTERPRISE PORTAL</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                <button class="primary" onclick="printTranscript()"><i class="fas fa-print"></i> Print
+                    Transcript</button>
+            </div>
+        </div>
+
+        <div class="erp-container">
+            <aside class="erp-sidebar">
+                <ul class="erp-sidebar-menu">
+                    <li id="tabBtnPerf" class="active" onclick="switchTab('perf')"><i class="fas fa-chart-bar"></i>
+                        Performance Report</li>
+                    <li onclick="openScript()"><i class="fas fa-file-signature"></i> Evaluated Script</li>
+                    <li id="tabBtnLedger" onclick="switchTab('ledger')"><i class="fas fa-receipt"></i> View Transaction
+                        History
+                    </li>
+                    <li onclick="initiateService('reeval')"><i class="fas fa-redo-alt"></i> Apply Re-evaluation</li>
+                    <li onclick="initiateService('query')"><i class="fas fa-question-circle"></i> Raise Query</li>
+                    <li id="changeSubBtn" style="display:none; color:var(--brand-primary);"
+                        onclick="document.getElementById('subjectMdl').style.display='flex'"><i
+                            class="fas fa-exchange-alt"></i> Switch Subject</li>
+                    <li onclick="initiateService('reappear')"><i class="fas fa-sync"></i> Registration for Backlog</li>
+                </ul>
+            </aside>
+
+            <main class="erp-main">
+                <!-- PERFORMANCE TAB -->
+                <div id="tabPerformance">
+                    <h2 class="erp-page-title">OFFICIAL RESULT TRANSCRIPT</h2>
+
+                    <div class="erp-status-strip">
+                        <span id="statusBadge">Status: ---</span>
+                        <span id="sealDate">Verified by OSM | Last Updated: ---</span>
+                    </div>
+
+                    <div class="erp-info-grid">
+                        <div>
+                            <div class="erp-info-row">
+                                <div class="erp-info-label">Candidate Name:</div>
+                                <div class="erp-info-value">STUDENT RECORD</div>
+                            </div>
+                            <div class="erp-info-row" style="margin-top:8px;">
+                                <div class="erp-info-label">Roll Number:</div>
+                                <div class="erp-info-value" id="rollTag">---</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="erp-info-row">
+                                <div class="erp-info-label">Program:</div>
+                                <div class="erp-info-value">B.Tech / 4th Semester</div>
+                            </div>
+                            <div class="erp-info-row" style="margin-top:8px;">
+                                <div class="erp-info-label">Exam Cycle:</div>
+                                <div class="erp-info-value" id="examTitle">---</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="erp-grid-layout">
+                        <div>
+                            <table class="erp-table">
+                                <thead>
+                                    <tr>
+                                        <th>Raw Score</th>
+                                        <th>Maximum Marks</th>
+                                        <th>Percentage</th>
+                                        <th>Grade</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td id="rawScore">00.0</td>
+                                        <td id="maxScore">00</td>
+                                        <td id="percentage">0%</td>
+                                        <td id="gradeTxt" style="font-weight:800;">F</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="erp-panel">
+                                <div class="erp-panel-header">Administrative Actions</div>
+                                <div class="erp-panel-body">
+                                    <div class="erp-action-row" onclick="openScript()">
+                                        <i class="fas fa-search-plus"></i> View Evaluated Script
+                                        <span class="desc">Interactive digital booklet</span>
+                                    </div>
+                                    <div class="erp-action-row" onclick="initiateService('reeval')">
+                                        <i class="fas fa-balance-scale"></i> Apply Re-evaluation
+                                        <span class="desc">Official remarking protocol</span>
+                                    </div>
+                                    <div class="erp-action-row" onclick="initiateService('query')">
+                                        <i class="fas fa-headset"></i> Raise Clarification
+                                        <span class="desc">Helpdesk ticket</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="erp-panel">
+                                <div class="erp-panel-header">System Audit Trail</div>
+                                <div class="erp-panel-body">
+                                    <ul class="erp-audit-log">
+                                        <li>Assessment initialized in secure facility.</li>
+                                        <li>Script evaluated by mapped Examiner.</li>
+                                        <li>OSM validation engine checks cleared.</li>
+                                        <li>Scores securely persisted to local node.</li>
+                                        <li>Result officially published to candidate.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LEDGER TAB -->
+                    <div id="tabLedger" style="display:none;">
+                        <h2 class="erp-page-title">VIEW TRANSACTION HISTORY</h2>
+                        <div class="erp-status-strip">
+                            <span>Forensic Payment Audit</span>
+                            <span>Total Paid: ₹ <span id="ledgerTotal">0.00</span></span>
+                        </div>
+
+                        <table class="erp-table">
+                            <thead>
+                                <tr>
+                                    <th>Ref ID</th>
+                                    <th>Date</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th style="text-align:right">Fee (₹)</th>
+                                    <th style="text-align:center;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ledgerBody">
+                                <!-- Injected -->
+                            </tbody>
+                        </table>
+
+                        <div class="erp-panel">
+                            <div class="erp-panel-header">Financial Disclosure</div>
+                            <p style="padding:15px; font-size:11px; color:#718096; line-height:1.6;">
+                                This ledger displays all administrative services initiated by this account. Transactions
+                                marked as 'PENDING' require verification at the Academic Cell. All payments are
+                                non-refundable as per university bylaws.
+                            </p>
+                        </div>
+                    </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- SCRIPT MODAL -->
+    <div class="modal" id="scriptModal">
+        <div class="modal-header">
+            <div class="modal-header-title">OSM SCRIPT VIEWER - <span id="sModRoll"></span></div>
+            <div class="page-nav">
+                <button class="p-btn" onclick="zMod(-0.1)"><i class="fas fa-search-minus"></i></button>
+                <button class="p-btn" onclick="zMod(0.1)"><i class="fas fa-search-plus"></i></button>
+                <span style="font-weight:600; font-size:12px; margin:0 10px;">Page <span id="pCur">1</span> / <span
+                        id="pTot">1</span></span>
+                <button class="p-btn" onclick="changePg(-1)"><i class="fas fa-chevron-left"></i> Prev</button>
+                <button class="p-btn" onclick="changePg(1)">Next <i class="fas fa-chevron-right"></i></button>
+                <button class="p-btn" style="background:#b33939; color:#fff; border-color:#b33939; margin-left: 20px;"
+                    onclick="closeModal()"><i class="fas fa-times"></i> Close</button>
+            </div>
+        </div>
+
+        <div class="modal-content">
+            <div class="viewport">
+                <img id="scriptImg" src="" alt="Evaluated Page">
+            </div>
+            <aside class="sidebar">
+                <div class="sidebar-header">Evaluation Breakdown</div>
+                <div style="flex:1; overflow-y:auto;" id="marksList"></div>
+                <div style="padding:15px; border-top:1px solid var(--border); background:var(--secondary);">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-weight:600; font-size:12px; text-transform:uppercase;">Grand Total</span>
+                        <span style="font-size:18px; font-weight:700; color:var(--primary);" id="sidebarTotal">00 /
+                            00</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <footer class="erp-footer">
+        © Testpad ERP System | Confidential Academic Record<br>
+        Version 3.4 | Infrastructure by Testpad Global
+    </footer>
+
+    <script>
+        const DB_NAME = 'TESTPAD_OSM_PERSISTENCE';
+        let _db = null;
+        let currentArchive = null;
+        let cPg = 1, tPg = 1, zoom = 1.0;
+
+        async function initDB() {
+            return new Promise((resolve) => {
+                const req = indexedDB.open(DB_NAME, 2);
+
+                req.onupgradeneeded = e => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains('archives')) db.createObjectStore('archives');
+                };
+
+                req.onsuccess = e => {
+                    _db = e.target.result;
+                    const stat = document.getElementById('dbStatus');
+                    if (stat) {
+                        stat.innerHTML = 'Database Link: Active';
+                        stat.style.color = 'var(--success)';
+                    }
+                    resolve();
+                };
+
+                req.onerror = e => {
+                    const stat = document.getElementById('dbStatus');
+                    if (stat) {
+                        stat.innerHTML = 'Database Link: Offline';
+                        stat.style.color = 'var(--danger)';
+                    }
+                    resolve();
+                };
+            });
+        }
+
+        function sysAlert(title, msg, type = 'warning') {
+            const icons = {
+                error: 'fa-times-circle',
+                warning: 'fa-exclamation-triangle',
+                success: 'fa-check-circle'
+            };
+            const colors = {
+                error: 'var(--danger)',
+                warning: '#d97706',
+                success: 'var(--success)'
+            };
+            const box = document.getElementById('sysAlert');
+            document.getElementById('sysAlertIcon').className = `fas ${icons[type]}`;
+            document.getElementById('sysAlertTitle').style.color = colors[type];
+            document.getElementById('sysAlertTitle').innerHTML = `<i class="fas ${icons[type]}"></i> ${title}`;
+            document.getElementById('sysAlertMsg').textContent = msg;
+            box.style.display = 'flex';
+        }
+
+        function closeSysAlert() {
+            document.getElementById('sysAlert').style.display = 'none';
+        }
+
+        function getGrade(percent, isAbsent = false) {
+            if (isAbsent) return { l: 'AB', c: '#b33939' };
+            if (percent >= 90) return { l: 'O', c: '#0B3A6E' };
+            if (percent >= 80) return { l: 'A+', c: '#4a7c59' };
+            if (percent >= 70) return { l: 'A', c: '#4a7c59' };
+            if (percent >= 60) return { l: 'B', c: '#d97706' };
+            if (percent >= 50) return { l: 'C', c: '#f59e0b' };
+            if (percent >= 40) return { l: 'D', c: '#718096' };
+            return { l: 'F', c: '#b33939' };
+        }
+
+        async function fetchResult() {
+            const rollInput = document.getElementById('rollInput');
+            const roll = rollInput.value.trim().toUpperCase();
+            if (!roll) {
+                sysAlert("SECURITY PROTOCOL", "Please enter a valid Registration Number.", "error");
+                return;
+            }
+
+            try {
+                if (!_db) await initDB();
+                const tx = _db.transaction('archives', 'readonly');
+                const store = tx.objectStore('archives');
+
+                // Use a cursor to find ALL subjects for this student
+                const subjects = [];
+                store.openCursor().onsuccess = (e) => {
+                    const cursor = e.target.result;
+                    if (cursor) {
+                        const val = cursor.value;
+                        if (val.roll === roll && val.isPublished) {
+                            subjects.push(val);
+                        }
+                        cursor.continue();
+                    } else {
+                        handleSubjectDiscovery(subjects, roll);
+                    }
+                };
+            } catch (err) {
+                sysAlert("STALL DETECTED", "Database engine busy. Please retry.", "warning");
+            }
+        }
+
+        function handleSubjectDiscovery(subjects, roll) {
+            if (subjects.length === 0) {
+                sysAlert("NO RECORD FOUND", `No published records found for Roll Number [${roll}].`, "warning");
+                return;
+            }
+
+            if (subjects.length === 1) {
+                selectSubject(subjects[0]);
+            } else {
+                const subList = document.getElementById('subList');
+                subList.innerHTML = subjects.map((s, idx) => `
+                    <li class="q-select-item" onclick="selectSubjectByIndex(${idx})">
+                        <span>Subject: <b>${s.exam}</b></span>
+                        <span style="font-size:11px; color:var(--success); font-weight:800;">${s.total.toFixed(1)} MARKS</span>
+                    </li>
+                `).join('');
+                window.discoveredSubjects = subjects;
+                document.getElementById('subjectMdl').style.display = 'flex';
+                document.getElementById('changeSubBtn').style.display = 'flex';
+            }
+        }
+
+        function selectSubjectByIndex(idx) {
+            selectSubject(window.discoveredSubjects[idx]);
+            document.getElementById('subjectMdl').style.display = 'none';
+        }
+
+        function selectSubject(res) {
+            currentArchive = res;
+            localStorage.setItem('TESTPAD_last_roll', res.roll);
+            localStorage.setItem('TESTPAD_last_exam', res.exam);
+            showResultUI();
+        }
+
+        function showResultUI() {
+            document.getElementById('searchView').style.display = 'none';
+            document.getElementById('resultView').style.display = 'block';
+
+            document.getElementById('rollTag').textContent = currentArchive.roll;
+            document.getElementById('sModRoll').textContent = currentArchive.roll;
+            document.getElementById('examTitle').textContent = currentArchive.exam;
+            document.getElementById('rawScore').textContent = currentArchive.total.toFixed(1);
+            document.getElementById('maxScore').textContent = currentArchive.max;
+
+            // Check Attendance
+            const attn = JSON.parse(localStorage.getItem('TESTPAD_attendance') || '{}');
+            const isAbsent = attn[currentArchive.roll] === 'A';
+
+            const perc = (currentArchive.total / currentArchive.max) * 100;
+            const grade = getGrade(perc, isAbsent);
+
+            document.getElementById('percentage').textContent = isAbsent ? '0%' : perc.toFixed(1) + '%';
+
+            const gradeTxt = document.getElementById('gradeTxt');
+            gradeTxt.textContent = grade.l;
+            gradeTxt.style.color = grade.c;
+
+            document.getElementById('sealDate').textContent = `Verified by OSM | Last Updated: ${currentArchive.date}`;
+
+            const badge = document.getElementById('statusBadge');
+            if (isAbsent) {
+                badge.innerHTML = 'Status: <span class="status-reappear">ABSENT FROM EXAMINATION</span>';
+                document.getElementById('rawScore').textContent = '0.0';
+                document.getElementById('rawScore').style.color = 'var(--danger)';
+            } else if (perc >= 40) {
+                badge.innerHTML = 'Status: <span class="status-promoted">PROMOTED</span>';
+            } else {
+                badge.innerHTML = 'Status: <span class="status-reappear">REAPPEARANCE REQUIRED</span>';
+            }
+        }
+
+        function openScript() {
+            if (!currentArchive.pages) {
+                sysAlert("FILE ERROR", "No digital script found in this archive.", "error");
+                return;
+            }
+            tPg = Object.keys(currentArchive.pages).length;
+            document.getElementById('pTot').textContent = tPg;
+            document.getElementById('sidebarTotal').textContent = `${currentArchive.total} / ${currentArchive.max}`;
+
+            document.getElementById('marksList').innerHTML = currentArchive.marks.map(m => `
+                <div class="mark-row">
+                    <span>${m.i}${m.s} (Max ${m.mx})</span>
+                    <b>${m.aw ?? 'N/A'}</b>
+                </div>
+            `).join('');
+
+            renderPage(1);
+            document.getElementById('scriptModal').style.display = 'block';
+        }
+
+        function renderPage(n) {
+            cPg = n;
+            document.getElementById('pCur').textContent = cPg;
+            document.getElementById('scriptImg').src = currentArchive.pages[cPg] || '';
+            zoom = 1.0;
+            updateZoom();
+        }
+
+        function changePg(d) {
+            const nx = cPg + d;
+            if (nx >= 1 && nx <= tPg) renderPage(nx);
+        }
+
+        function zMod(d) { Math.max(0.5, zoom += d); updateZoom(); }
+        function updateZoom() { document.getElementById('scriptImg').style.transform = `scale(${zoom})`; }
+        function closeModal() { document.getElementById('scriptModal').style.display = 'none'; }
+
+        function initiateService(type) {
+            if (type === 'query') {
+                const qList = document.getElementById('qList');
+                qList.innerHTML = currentArchive.marks.map(m => `
+                    <li class="q-select-item" onclick="toggleQCheck('${m.i}${m.s}')">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <input type="checkbox" class="q-check" value="${m.i}${m.s}" onclick="event.stopPropagation()">
+                            <span>Question <b>${m.i}${m.s}</b></span>
+                        </div>
+                        <span style="font-size:11px; color:#718096;">Awarded: ${m.aw ?? '0'} / ${m.mx}</span>
+                    </li>
+                `).join('');
+                document.getElementById('queryMdl').style.display = 'flex';
+                return;
+            }
+
+            if (type === 'reeval') {
+                document.getElementById('reSubName').value = currentArchive.exam;
+                document.getElementById('reSubCode').value = '';
+                document.getElementById('reReason').value = '';
+                document.getElementById('reevalMdl').style.display = 'flex';
+                return;
+            }
+
+            if (type === 'reappear') {
+                document.getElementById('raSubName').value = currentArchive.exam;
+                updateBacklogFee();
+                document.getElementById('reappearMdl').style.display = 'flex';
+                return;
+            }
+
+            const amount = 100; // Legacy catch-all
+            const purpose = 'Administrative Request';
+            const ref = 'ADM_' + Date.now().toString().substr(-6);
+
+            logTx(ref, purpose, amount, 'General Service');
+
+            const params = new URLSearchParams({
+                roll: currentArchive.roll,
+                type: type,
+                amount: amount,
+                purpose: purpose,
+                ref: ref
+            });
+            window.location.href = './payforre.html?' + params.toString();
+        }
+
+        function updateBacklogFee() {
+            const credits = parseInt(document.getElementById('raCredits').value);
+            const fee = credits * 2000;
+            document.getElementById('backlogFeeSummary').textContent = `REGISTRATION FEE: ₹ ${fee.toLocaleString()}.00`;
+        }
+
+        function submitBacklog() {
+            const credits = parseInt(document.getElementById('raCredits').value);
+            const fee = credits * 2000;
+            const ref = 'RA_' + Date.now().toString().substr(-6);
+            const purpose = `Backlog Registration: ${currentArchive.exam} (${credits} Credits)`;
+
+            logTx(ref, purpose, fee, 'Backlog');
+
+            const params = new URLSearchParams({
+                roll: currentArchive.roll,
+                type: 'reappear',
+                amount: fee,
+                purpose: purpose,
+                ref: ref,
+                subject: currentArchive.exam,
+                credits: credits
+            });
+            window.location.href = './payforre.html?' + params.toString();
+        }
+
+        function toggleQCheck(qid) {
+            const checks = document.querySelectorAll('.q-check');
+            checks.forEach(c => {
+                if (c.value === qid) c.checked = !c.checked;
+            });
+        }
+
+        function submitQueries() {
+            const selected = Array.from(document.querySelectorAll('.q-check:checked')).map(c => c.value);
+            if (selected.length === 0) {
+                sysAlert("SELECTION REQUIRED", "Please select at least one question to raise a query.", "warning");
+                return;
+            }
+
+            const qStr = selected.join(', ');
+            const amount = selected.length * 100;
+            const purpose = `Clarification Query for Qs: ${qStr}`;
+            const ref = 'QRY_' + Date.now().toString().substr(-6);
+
+            logTx(ref, purpose, amount, 'Query');
+
+            const params = new URLSearchParams({
+                roll: currentArchive.roll,
+                type: 'query',
+                qid: qStr,
+                amount: amount,
+                purpose: purpose,
+                ref: ref,
+                subject: currentArchive.exam
+            });
+            window.location.href = './payforre.html?' + params.toString();
+        }
+
+        function submitReeval() {
+            const code = document.getElementById('reSubCode').value.trim();
+            const reason = document.getElementById('reReason').value.trim();
+
+            if (!code || !reason) {
+                sysAlert("DATA MISSING", "Subject code and reason are required for re-evaluation.", "warning");
+                return;
+            }
+
+            const ref = 'REV_' + Date.now().toString().substr(-6);
+            logTx(ref, `Re-evaluation: ${currentArchive.exam} (${code})`, 500, 'Re-eval');
+            const params = new URLSearchParams({
+                roll: currentArchive.roll,
+                type: 'reeval',
+                amount: 500,
+                purpose: `Re-evaluation: ${currentArchive.exam} (${code})`,
+                reason: reason,
+                subject: currentArchive.exam,
+                code: code,
+                ref: ref
+            });
+            window.location.href = './payforre.html?' + params.toString();
+        }
+
+        function logTx(ref, desc, amt, type) {
+            const txs = JSON.parse(localStorage.getItem('TESTPAD_tx_history') || '[]');
+            txs.push({
+                ref, desc, amt,
+                roll: currentArchive.roll,
+                subject: currentArchive.exam,
+                type: type || 'Service',
+                date: new Date().toLocaleString(),
+                status: 'PAID'
+            });
+            localStorage.setItem('TESTPAD_tx_history', JSON.stringify(txs));
+        }
+
+        function switchTab(t) {
+            document.getElementById('tabPerformance').style.display = t === 'perf' ? 'block' : 'none';
+            document.getElementById('tabLedger').style.display = t === 'ledger' ? 'block' : 'none';
+            document.getElementById('tabBtnPerf').classList.toggle('active', t === 'perf');
+            document.getElementById('tabBtnLedger').classList.toggle('active', t === 'ledger');
+            if (t === 'ledger') renderLedger();
+        }
+
+        function renderLedger() {
+            if (!currentArchive) return;
+            const txs = JSON.parse(localStorage.getItem('TESTPAD_tx_history') || '[]');
+            const myTxs = txs.filter(t => t.roll === currentArchive.roll);
+            const body = document.getElementById('ledgerBody');
+
+            if (myTxs.length === 0) {
+                body.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:100px; color:#718096;">Registry ledger is empty. No financial records found.</td></tr>';
+                document.getElementById('ledgerTotal').textContent = '0.00';
+                return;
+            }
+
+            let total = 0;
+            body.innerHTML = myTxs.reverse().map(t => {
+                total += t.amt;
+                return `
+                <tr>
+                    <td style="font-family:monospace; color:var(--primary); font-size:11px;">${t.ref}</td>
+                    <td style="font-size:10px;">${t.date}</td>
+                    <td style="font-size:11px;">
+                        <span style="font-weight:700; color:#444;">${t.type}</span><br>
+                        <span style="color:#718096; font-size:10px;">Subject: ${t.subject || 'N/A'}</span>
+                    </td>
+                    <td style="font-size:11px;">${t.desc}</td>
+                    <td style="text-align:right; font-weight:700;">₹ ${t.amt.toLocaleString()}.00</td>
+                    <td style="text-align:center;">
+                        <span style="background:var(--success); color:#fff; font-size:9px; padding:3px 8px; border-radius:2px; font-weight:800;">CONFIRMED</span>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+            document.getElementById('ledgerTotal').textContent = total.toFixed(2);
+        }
+
+        function printTranscript() {
+            const win = window.open('', '_blank');
+            const perc = (currentArchive.total / currentArchive.max) * 100;
+            const status = perc >= 40 ? 'PROMOTED' : 'REAPPEARANCE REQUIRED';
+
+            win.document.write(`
+                <html>
+                <head>
+                    <title>TESTPAD</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+                    <style>
+                        body { font-family: 'Segoe UI', sans-serif; padding: 40px; color: #111; line-height: 1.5; font-size:12px; }
+                        .header { border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items:flex-end; }
+                        .logo { font-size: 20px; font-weight: 700; color: #000; text-transform:uppercase; }
+                        .title { text-align: center; margin-bottom: 30px; }
+                        .title h1 { margin: 0; font-size: 18px; text-transform: uppercase; border:1px solid #000; display:inline-block; padding:5px 15px; }
+                        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; border:1px solid #000; border-bottom:none; }
+                        .box { border-bottom: 1px solid #000; padding: 10px; display:flex; justify-content:space-between; }
+                        .label { font-weight: 600; text-transform: uppercase; }
+                        .val { font-weight: 700; }
+                        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; border:1px solid #000; }
+                        th { background: #f0f0f0; text-align: left; padding: 10px; text-transform: uppercase; border-bottom: 1px solid #000; border-right:1px solid #000; }
+                        td { padding: 10px; border-bottom: 1px solid #000; border-right:1px solid #000; }
+                        .total-row { background: #f9f9f9; font-weight: 700; }
+                        .footer { margin-top: 50px; display: flex; justify-content: space-between; align-items: flex-end; }
+                        .sign-box { border-top: 1px solid #000; width: 180px; padding-top: 5px; text-align: center; font-weight: 700; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div class="logo">TESTPAD OFFICIAL TRANSCRIPT</div>
+                        <div><b>Ref:</b> ${'TRN' + Date.now().toString().substr(-8)}</div>
+                    </div>
+                    
+                    <div class="title">
+                        <h1>Statement of Marks & Evaluation</h1>
+                    </div>
+
+                    <div class="grid">
+                        <div class="box"><div class="label">Candidate Roll No</div><div class="val">${currentArchive.roll}</div></div>
+                        <div class="box"><div class="label">Examination</div><div class="val">${currentArchive.exam}</div></div>
+                        <div class="box"><div class="label">Published On</div><div class="val">${currentArchive.date}</div></div>
+                        <div class="box"><div class="label">Final Status</div><div class="val">${status}</div></div>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Subject Code / Question</th>
+                                <th style="text-align:right">Max Marks</th>
+                                <th style="text-align:right">Marks Awarded</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${currentArchive.marks.map(m => `
+                                <tr>
+                                    <td>${m.i}${m.s}</td>
+                                    <td style="text-align:right">${m.mx}</td>
+                                    <td style="text-align:right">${m.aw ?? '0.0'}</td>
+                                </tr>
+                            `).join('')}
+                            <tr class="total-row">
+                                <td>AGGREGATE PERFORMANCE</td>
+                                <td style="text-align:right">${currentArchive.max}</td>
+                                <td style="text-align:right">${currentArchive.total}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="font-size:10px; text-align:justify; margin-bottom:40px;">
+                        <b>NOTE:</b> This is an electronically generated Official Performance Transcript processed via the TESTPAD OSM protocol. Physical signature is not required.
+                    </div>
+
+                    <div class="footer">
+                        <div>Date: ${new Date().toLocaleString()}</div>
+                        <div class="sign-box">Controller of Examinations<br>TESTPAD REGISTRY</div>
+                    </div>
+                </body>
+                </html>
+            `);
+            win.document.close();
+        }
+
+        function logout() {
+            localStorage.removeItem('TESTPAD_last_roll');
+            localStorage.removeItem('TESTPAD_last_exam');
+            location.reload();
+        }
+
+        function restoreSession() {
+            return new Promise((resolve) => {
+                const lastRoll = localStorage.getItem('TESTPAD_last_roll');
+                const lastExam = localStorage.getItem('TESTPAD_last_exam');
+                if (!lastRoll) return resolve();
+
+                const tx = _db.transaction('archives', 'readonly');
+                const store = tx.objectStore('archives');
+                let found = false;
+
+                store.openCursor().onsuccess = (e) => {
+                    const cursor = e.target.result;
+                    if (cursor) {
+                        const val = cursor.value;
+                        if (val.roll === lastRoll && val.exam === lastExam && val.isPublished) {
+                            currentArchive = val;
+                            showResultUI();
+                            document.getElementById('changeSubBtn').style.display = 'flex';
+                            found = true;
+                        }
+                        cursor.continue();
+                    } else {
+                        resolve();
+                    }
+                };
+            });
+        }
+
+        window.onload = async () => {
+            await initDB();
+            await restoreSession();
+
+            // Check for payment return
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('status') === 'paid') {
+                sysAlert("PAYMENT SUCCESSFUL", "Transaction verified. Service request has been logged in your transaction history.", "success");
+                setTimeout(() => switchTab('ledger'), 500);
+            }
+        };
+    </script>
+</body>
+
+</html>

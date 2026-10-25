@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Hind:wght@400;500;600;700&family=Roboto:wght@300;400;500&family=Montserrat:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #DE6834;
+            --primary-soft: #FFF1EC;
+            --bg: #FFFFFF;
+            --subtle: #F9FAFB;
+            --border: #EAECF0;
+            --text-main: #101828;
+            --text-muted: #475467;
+            --radius: 12px;
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* Navigation Header */
+        header {
+            height: 64px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+        }
+
+        .logo-sq {
+            width: 36px;
+            height: 36px;
+            background: #f04438;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-tabs {
+            display: flex;
+            height: 40px;
+        }
+
+        .nav-tab {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 19px;
+            font-weight: 600;
+            color: #212529;
+            margin-right: 20px;
+            cursor: pointer;
+            position: relative;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+        }
+
+        .nav-tab:last-child {
+            margin-right: 0;
+        }
+
+        .nav-tab.active {
+            color: #333333;
+            border-bottom-color: #de6834;
+        }
+
+        .nav-tab:hover {
+            color: #333333;
+            border-bottom-color: rgba(222, 104, 52, 0.4);
+        }
+
+        /* Course Hero (SCR 1) */
+        .course-hero {
+            background: #fff;
+            width: 100%;
+            border-bottom: 1px solid #EAECF0;
+        }
+
+        .hero-inner {
+            padding: 24px 0 0 0;
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .hero-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .course-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            line-height: 1.4;
+            font-weight: 700;
+            color: var(--primary);
+            max-width: 70%;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .pdf-btn {
+            color: #475467;
+            font-size: 2.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .pdf-btn:hover {
+            color: #111;
+        }
+
+        .hero-progress-box {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        .resume-btn {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #d15a22;
+            cursor: pointer;
+            text-decoration: none;
+            align-self: center;
+        }
+
+        .progress-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .big-progress-bg {
+            width: 140px;
+            height: 6px;
+            background: #e8c6b7;
+            overflow: hidden;
+        }
+
+        .big-progress-fill {
+            height: 100%;
+            background: #d15a22;
+            width: 7%;
+            /* Example */
+            transition: width 1s ease;
+        }
+
+        .progress-stat {
+            font-size: 1.25rem;
+            font-family: 'Hind', sans-serif;
+            font-weight: 500;
+            color: #222;
+        }
+
+        /* Content List (SCR 1) */
+        .content-section {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .lesson-row {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            padding: 20px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .lesson-row:hover {
+            background: #fafafa;
+        }
+
+        .lesson-index {
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: #666;
+            width: 30px;
+            text-align: center;
+        }
+
+        .lesson-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .lesson-type-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #888;
+        }
+
+        .lesson-name {
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: #444;
+        }
+
+        .lesson-status {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: #666;
+        }
+
+        .status-dot {
+            color: #555;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .status-dot.active {
+            display: flex;
+        }
+
+        .carousel-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .nav-triangle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px 16px;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-triangle:hover {
+            opacity: 1;
+        }
+
+        .triangle-left {
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 14px solid var(--primary);
+        }
+
+        .triangle-right {
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 14px solid var(--primary);
+        }
+
+        .card-carousel {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            padding: 20px 0;
+            scrollbar-width: none;
+            flex: 1;
+            scroll-behavior: smooth;
+        }
+
+        .card-carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .topic-card {
+            min-width: 280px;
+            min-height: 180px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-family: 'Hind', sans-serif;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .topic-card.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .topic-card:not(.active):hover {
+            background: #FFF8F5;
+            border-color: var(--border);
+        }
+
+
+        .topic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .topic-header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+
+        .topic-index {
+            width: 38px;
+            height: 38px;
+            background: #e0e0e0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 400;
+            font-size: 1.1rem;
+            color: #111;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .topic-card.active .topic-index {
+            background: #fff;
+            color: var(--primary);
+        }
+
+        .topic-status-label {
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--primary);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .topic-card.active .topic-status-label {
+            color: #fff;
+        }
+
+        .dots-icon {
+            color: #111;
+            font-size: 1.25rem;
+            padding: 4px;
+            cursor: pointer;
+        }
+
+        .topic-card.active .dots-icon {
+            color: #fff;
+        }
+
+        .dots-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            padding: 14px 20px;
+            display: none;
+            z-index: 10;
+            white-space: nowrap;
+            color: #333;
+            cursor: pointer;
+            font-family: 'Hind', sans-serif;
+            border: 1px solid var(--border);
+        }
+
+        .dots-dropdown.show {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .dots-dropdown i {
+            font-size: 1.3rem;
+            color: #555;
+        }
+
+        .dots-dropdown span {
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+
+        .topic-title {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.45rem;
+            font-weight: 400;
+            color: #111;
+            margin-bottom: 12px;
+            margin-top: auto;
+            line-height: 1.3;
+        }
+
+        .topic-card.active .topic-title {
+            color: #fff;
+        }
+
+        .topic-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 0.95rem;
+            color: #666;
+            font-weight: 400;
+            align-items: center;
+        }
+
+        .topic-card.active .topic-stats {
+            color: #fff;
+        }
+
+        .topic-stats i {
+            margin-right: 4px;
+        }
+
+        /* Footer */
+        .site-footer {
+            height: 100px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .header-left-icons {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .chitkara-logo-red {
+            width: 32px;
+            height: 32px;
+            background: transparent;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .header-icon {
+            font-size: 20px;
+            color: #555;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .header-icon:hover {
+            color: var(--primary);
+        }
+
+        .header-right-tools {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            height: 100%;
+        }
+
+        .plus-tool {
+            width: 64px;
+            height: 100%;
+            background: #FFF4ED;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 26px;
+            cursor: pointer;
+        }
+
+        .profile-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .profile-info {
+            text-align: right;
+            line-height: 1.2;
+        }
+
+        .profile-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+            text-transform: uppercase;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .profile-role {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .profile-avatar {
+            width: 46px;
+            height: 46px;
+            background: transparent;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.4rem;
+        }
+
+        /* POPOVERS */
+        .popover {
+            position: absolute;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid #EAECF0;
+            z-index: 2000;
+            display: none;
+            padding: 12px;
+        }
+
+        .plus-popover {
+            top: 64px;
+            right: 210px;
+            width: 220px;
+        }
+
+        .grid-popover {
+            top: 64px;
+            right: 140px;
+            width: 320px;
+            padding: 24px 16px;
+        }
+
+        .plus-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .plus-item:hover {
+            background: #F9FAFB;
+        }
+
+        .plus-item-text {
+            font-size: 1.15rem;
+            color: #344054;
+            font-weight: 500;
+            font-family: 'Hind', sans-serif;
+        }
+
+        .grid-items {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .grid-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 12px;
+            border-radius: 8px;
+            width: 90px;
+        }
+
+        .grid-item:hover {
+            background: #F9FAFB;
+        }
+
+        .grid-item span {
+            font-size: 1.1rem;
+            color: #344054;
+            font-weight: 500;
+            font-family: 'Hind', sans-serif;
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="header-left-icons" style="gap: 110px;">
+            <div class="chitkara-logo-red" onclick="window.location.reload();"
+                style="background: transparent; width: auto; height: auto; margin-left: -10px; cursor: pointer;" title="Refresh Page">
+                <img src="../Tests _ Chitkara_files/chitkara.a1beb7f0.png" style="height: 52px; border-radius: 6px;">
+            </div>
+            <img src="../Testpad_pra_files_files/menu-1.svg" id="widgetDashboard" onclick="window.location.href='./student-dashboard.html';"
+                style="height: 32px; cursor: pointer;" title="Student Dashboard">
+            <img src="../Testpad_pra_files_files/statistics.svg" id="widgetAttempts" onclick="const urlParams = new URLSearchParams(window.location.search); const cid = urlParams.get('courseId') || (typeof courseId !== 'undefined' ? courseId : ''); window.location.href='./course-attempts.html?courseId=' + cid;"
+                style="height: 32px; cursor: pointer;" title="Course Attempts">
+        </div>
+
+        <div class="header-right-tools">
+
+            <div class="plus-tool" id="plusBtn">
+                <i class="fas fa-plus"></i>
+            </div>
+
+            <div class="header-icon" id="gridBtn"
+                style="width: 52px; height: 100%; display: flex; align-items: center; justify-content: center; position: relative;">
+                <img src="../Testpad_pra_files_files/icons8-squared-menu-90.png"
+                    style="width: 36px; height: 36px; opacity: 0.75; transition: all 0.2s;"
+                    onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'">
+            </div>
+            <div class="profile-area" id="profileBtn">
+                <div class="profile-info">
+                    <div class="profile-name">OM AGGARWAL</div>
+                    <div class="profile-role">STUDENT</div>
+                </div>
+                <div class="profile-avatar" style="width: 52px; height: 52px;"><img src="../Testpad_pra_files_files/portrait_placeholder_circle.png" style="width:100%; height:100%;"></div>
+            </div>
+        </div>
+
+        <!-- Profile Popover -->
+        <div class="popover profile-popover" id="profileMenu" style="top: 74px; right: 24px; width: 220px; padding: 8px 0; border-radius: 8px; border: 1px solid #EAECF0;">
+            <div class="profile-item" style="display: flex; align-items: center; gap: 16px; padding: 12px 24px; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
+                <img src="../Testpad_pra_files_files/password.svg" style="width: 24px; height: 24px;">
+                <span style="font-size: 1.15rem; color: #666; font-weight: 400; font-family: 'Hind', sans-serif;">Settings</span>
+            </div>
+            <div class="profile-item" onclick="auth.logout()" style="display: flex; align-items: center; gap: 16px; padding: 12px 24px; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'">
+                <img src="../Testpad_pra_files_files/logout.svg" style="width: 24px; height: 24px;">
+                <span style="font-size: 1.15rem; color: #666; font-weight: 400; font-family: 'Hind', sans-serif;">Logout</span>
+            </div>
+        </div>
+
+        <!-- Plus Popover -->
+        <div class="popover plus-popover" id="plusMenu">
+            <div class="plus-item" onclick="window.location.href='./playground.html';" style="cursor: pointer;">
+                <img src="../Testpad_pra_files_files/playground.svg" style="width: 28px; height: 28px;">
+                <span class="plus-item-text">Playground</span>
+            </div>
+            <div class="plus-item" onclick="window.location.href='./playground.html';" style="cursor: pointer;">
+                <img src="../Testpad_pra_files_files/playground.svg" style="width: 28px; height: 28px;">
+                <span class="plus-item-text">Python Notebook</span>
+            </div>
+        </div>
+
+        <!-- Grid Popover -->
+        <div class="popover grid-popover" id="gridMenu">
+            <div class="grid-items">
+                <div class="grid-item" onclick="location.href='./student-dashboard.html'">
+                    <img src="../Testpad_pra_files_files/quiz.svg"
+                        style="width: 48px; height: 48px; margin-bottom: 4px;">
+                    <span>Test</span>
+                </div>
+                <div class="grid-item" onclick="location.href='./student-dashboard.html'">
+                    <img src="../Testpad_pra_files_files/folder-2.svg"
+                        style="width: 48px; height: 48px; margin-bottom: 4px;">
+                    <span>Courses</span>
+                </div>
+                <div class="grid-item" onclick="location.href='./mybookmarks.html'">
+                    <img src="../Testpad_pra_files_files/iconmonstr-star-3.svg"
+                        style="width: 48px; height: 48px; margin-bottom: 4px;">
+                    <span>Bookmarks</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="course-hero">
+        <div class="hero-inner">
+            <div class="hero-top" style="align-items: center; position: relative;">
+                <div
+                    style="position: absolute; left: -80px; top: 0; width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; opacity: 0.15;">
+                    <img src="../TESTPAD_WEBSITE__files/noun_code_3355385.svg" style="width: 42px; height: 42px;">
+                </div>
+                <div style="display: flex; align-items: flex-start; gap: 24px;">
+                    <div>
+                        <h1 class="course-title" id="courseTitle"
+                            style="font-family: 'Hind', sans-serif; font-size: 20px; font-weight: 600; font-style: normal; line-height: 1.5; color: #DE6834; margin-bottom: 8px;">
+                            Loading Course...</h1>
+                        <div class="nav-tabs">
+                            <div class="nav-tab active" onclick="switchTab('learning', this)">Learning Content</div>
+                            <div class="nav-tab" onclick="switchTab('assignments', this)">Assignments</div>
+                            <div class="nav-tab" onclick="switchTab('attempts', this)">Attempts</div>
+                            <div class="nav-tab" onclick="switchTab('digital', this)">Digital Library</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-actions" style="margin-top: -10px;">
+                    <i class="far fa-file-pdf pdf-btn" onclick="generateReport()" title="Download Progress Report"></i>
+                    <div class="hero-progress-box">
+                        <a href="#" id="resumeLink" class="resume-btn">Resume</a>
+                        <div class="progress-row">
+                            <div class="big-progress-bg">
+                                <div class="big-progress-fill" id="overallFill"></div>
+                            </div>
+                            <span class="progress-stat" id="overallText">0% done</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="learningContent">
+        <div class="content-section">
+            <!-- Horizontal Carousel of Modules -->
+            <div class="carousel-wrapper">
+                <button class="nav-triangle" onclick="scrollModules(-1)">
+                    <div class="triangle-left"></div>
+                </button>
+                <div class="card-carousel" id="moduleCards">
+                    <!-- Injected by JS -->
+                </div>
+                <button class="nav-triangle" onclick="scrollModules(1)">
+                    <div class="triangle-right"></div>
+                </button>
+            </div>
+
+            <!-- Vertical List of Lessons for the active module -->
+            <div id="lessonList">
+                <!-- Injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <div id="assignmentsContent"
+        style="display: none; padding: 60px 20px; min-height: 50vh; justify-content: center; align-items: flex-start;">
+        <div
+            style="color: #DE6834; font-size: 1.4rem; font-weight: 500; font-family: 'Hind', sans-serif; text-align: center; width: 100%; margin-top: 40px;">
+            No Assignment Available</div>
+    </div>
+
+
+    <script src="../js/pdfkit.standalone.min.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/pdf-creator.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const courseId = params.get('courseId');
+        const user = auth.getCurrentUser();
+        let currentCourse = null;
+        let activeModuleIndex = 0;
+
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            if (el) el.classList.add('active');
+
+            document.getElementById('learningContent').style.display = 'none';
+            document.getElementById('assignmentsContent').style.display = 'none';
+
+            if (tabId === 'learning') {
+                document.getElementById('learningContent').style.display = 'block';
+            } else if (tabId === 'assignments') {
+                document.getElementById('assignmentsContent').style.display = 'flex';
+            } else if (tabId === 'attempts') {
+                location.href = './course-attempts.html?courseId=' + courseId;
+            } else if (tabId === 'digital') {
+                document.getElementById('learningContent').style.display = 'none';
+            }
+        }
+
+        function init() {
+            currentCourse = db.getCourseById(courseId);
+            if (!currentCourse) {
+                location.href = './student-dashboard.html';
+                return;
+            }
+
+            document.getElementById('courseTitle').textContent = currentCourse.title;
+            updateOverview();
+            renderModules();
+            renderLessons(0);
+        }
+
+        function scrollModules(direction) {
+            const container = document.getElementById('moduleCards');
+            const scrollAmount = 300;
+            container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+        }
+
+        function updateOverview() {
+            const progress = db.getCourseProgress(courseId, user.id);
+            const totalItems = currentCourse.modules.reduce((acc, m) => acc + m.lessons.length, 0);
+            const completedCount = progress ? progress.completedItems.length : 0;
+            const percentage = totalItems > 0 ? Math.round((completedCount / totalItems) * 100) : 0;
+
+            document.getElementById('overallFill').style.width = percentage + '%';
+            document.getElementById('overallText').textContent = percentage + '% done';
+
+            document.getElementById('resumeLink').href = `./course-player.html?courseId=${courseId}`;
+        }
+
+        function toggleDotsMenu(event, index) {
+            event.stopPropagation();
+            const allDropdowns = document.querySelectorAll('.dots-dropdown');
+            allDropdowns.forEach((dd, i) => {
+                if (i !== index) dd.classList.remove('show');
+            });
+            const dd = document.getElementById(`dots-dropdown-${index}`);
+            if (dd) dd.classList.toggle('show');
+        }
+
+        document.getElementById('plusBtn').onclick = (e) => {
+            e.stopPropagation();
+            const m = document.getElementById('plusMenu');
+            const g = document.getElementById('gridMenu');
+            const p = document.getElementById('profileMenu');
+            if (g) g.style.display = 'none';
+            if (p) p.style.display = 'none';
+            m.style.display = m.style.display === 'block' ? 'none' : 'block';
+        };
+
+        document.getElementById('gridBtn').onclick = (e) => {
+            e.stopPropagation();
+            const m = document.getElementById('plusMenu');
+            const g = document.getElementById('gridMenu');
+            const p = document.getElementById('profileMenu');
+            if (m) m.style.display = 'none';
+            if (p) p.style.display = 'none';
+            g.style.display = g.style.display === 'block' ? 'none' : 'block';
+        };
+
+        document.getElementById('profileBtn').onclick = (e) => {
+            e.stopPropagation();
+            const m = document.getElementById('plusMenu');
+            const g = document.getElementById('gridMenu');
+            const p = document.getElementById('profileMenu');
+            if (m) m.style.display = 'none';
+            if (g) g.style.display = 'none';
+            p.style.display = p.style.display === 'block' ? 'none' : 'block';
+        };
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.topic-header-right')) {
+                document.querySelectorAll('.dots-dropdown').forEach(dd => dd.classList.remove('show'));
+            }
+            if (!e.target.closest('#plusBtn') && !e.target.closest('#plusMenu')) {
+                const plusMenu = document.getElementById('plusMenu');
+                if (plusMenu) plusMenu.style.display = 'none';
+            }
+            if (!e.target.closest('#gridBtn') && !e.target.closest('#gridMenu')) {
+                const gridMenu = document.getElementById('gridMenu');
+                if (gridMenu) gridMenu.style.display = 'none';
+            }
+            if (!e.target.closest('#profileBtn') && !e.target.closest('#profileMenu')) {
+                const profileMenu = document.getElementById('profileMenu');
+                if (profileMenu) profileMenu.style.display = 'none';
+            }
+        });
+
+        function renderModules() {
+            const container = document.getElementById('moduleCards');
+            container.innerHTML = currentCourse.modules.map((m, i) => {
+                const isCompleted = isModuleDone(m);
+                const docsCount = m.lessons.filter(l => l.type !== 'mcq').length;
+                const quizCount = m.lessons.filter(l => l.type === 'mcq').length;
+
+                return `
+                    <div class="topic-card ${activeModuleIndex === i ? 'active' : ''}" onclick="selectModule(${i})">
+                        <div class="topic-header">
+                            <div class="topic-index">${i + 1}</div>
+                            <div class="topic-header-right">
+                                ${isCompleted ? '<span class="topic-status-label">DONE</span>' : ''}
+                                <i class="fas fa-ellipsis-v dots-icon" onclick="toggleDotsMenu(event, ${i})"></i>
+                                <div class="dots-dropdown" id="dots-dropdown-${i}" onclick="event.stopPropagation(); downloadreportsforcourseattempt(courseId, user.id, { isChitkara: true, sectionIndex: ${i} })">
+                                    <i class="far fa-file-pdf"></i>
+                                    <span>Download attempts</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="topic-title">${m.title}</div>
+                        <div class="topic-stats">
+                            ${docsCount > 0 ? `<span><i class="far fa-file-alt"></i> ${docsCount}</span>` : ''}
+                            ${quizCount > 0 ? `<span><i class="far fa-question-circle"></i> ${quizCount}</span>` : ''}
+                            ${docsCount === 0 && quizCount === 0 ? `<span><i class="far fa-file-alt"></i> 0</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function isModuleDone(mod) {
+            const progress = db.getCourseProgress(courseId, user.id);
+            if (!progress) return false;
+            return mod.lessons.every(l => progress.completedItems.includes(l.id));
+        }
+
+        function selectModule(index) {
+            activeModuleIndex = index;
+            renderModules();
+            renderLessons(index);
+        }
+
+        function renderLessons(mIdx) {
+            const container = document.getElementById('lessonList');
+            const mod = currentCourse.modules[mIdx];
+            const progress = db.getCourseProgress(courseId, user.id);
+
+            if (!mod.lessons || mod.lessons.length === 0) {
+                container.innerHTML = '<div style="color: #DE6834; font-size: 1.4rem; font-weight: 500; font-family: \'Hind\', sans-serif; text-align: center; width: 100%; margin-top: 40px;">No Data Available in this module</div>';
+                return;
+            }
+
+            container.innerHTML = mod.lessons.map((less, i) => {
+                const isDone = progress?.completedItems.includes(less.id);
+                let typeLabel = 'Tutorial';
+                if (less.type === 'coding') typeLabel = 'Coding';
+                else if (less.type === 'mcq') typeLabel = 'Quiz';
+                else if (less.type === 'video') typeLabel = 'Video';
+
+                return `
+                    <div class="lesson-row" onclick="location.href='./course-player.html?courseId=${courseId}&moduleIndex=${mIdx}&lessonIndex=${i}'">
+                        <div class="lesson-index">${i + 1}</div>
+                        <div class="lesson-info">
+                            <div class="lesson-type-label">${typeLabel}</div>
+                            <div class="lesson-name">${less.title}</div>
+                        </div>
+                        <div class="lesson-status">
+                            ${less.type === 'coding' ? `<i class="far fa-file-pdf" style="font-size:1.4rem; color:#888;" title="Download Question Report" onclick="event.stopPropagation(); downloadreportsforcourseattempt('${courseId}', '${user.id}', { isChitkara: true, sectionIndex: ${mIdx}, questionId: '${less.id}' })"></i>` : ''}
+                            <div class="status-dot ${isDone ? 'active' : ''}"><i class="fas fa-check"></i></div>
+                            <i class="fas fa-caret-up" style="font-size:1.2rem; opacity:0.4;"></i>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function generateReport() {
+            console.log("PDF clicked");
+            console.log("courseId=", courseId);
+            console.log("user=", user);
+
+            downloadreportsforcourseattempt(courseId, user.id, { isChitkara: true });
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

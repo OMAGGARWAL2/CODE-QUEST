@@ -1,0 +1,205 @@
+.feedback-ballon-container {
+  /* position: absolute;
+  width: 310px;
+  height: 330px; */
+  font-family: 'Hind', sans-serif !important;
+  z-index: 1;
+}
+.feedback-ballon {
+  box-sizing: border-box;
+  padding: 23px 20px 20px 20px;
+  background: #ffffff;
+  box-shadow: 0px 2px 3px #00000029;
+  border: 1px solid #f2f2f2;
+  border-radius: 10px;
+  width: 300px;
+  height: 280px;
+  transition: 0.3s ease-in-out;
+  transform: translateY(-10%) translateX(10%) scale(0);
+  position: absolute;
+  z-index: 3;
+  top: 145px;
+  left: 24%;
+}
+.feedback-ballon-visible {
+  transform: translateY(0px) translateX(0px) scale(1);
+}
+
+.feedback-ballon p {
+  line-height: 25px;
+  margin-bottom: 0.2rem !important;
+  font-family: 'Hind', sans-serif !important;
+}
+
+.feedback-ballon > p:first-child {
+  font-size: 17px !important;
+}
+
+.feedback-ballon > p:nth-child(2) {
+  font-size: 15px !important;
+}
+
+.issue-select-dropdown .issue-select {
+  background: #f8f3f0;
+  border: none;
+  width: 150px;
+  padding: 5px 10px;
+  color: #8d8d8d;
+  -moz-appearance: none; /* Firefox */
+  -webkit-appearance: none; /* Safari and Chrome */
+  appearance: none;
+  outline: none;
+}
+.issue-select-dropdown .issue-select:focus {
+  outline: none;
+}
+.issue-select-dropdown i {
+  color: #de6834;
+  font-size: 22px;
+  position: relative;
+  right: 30px;
+  top: 2px;
+}
+.issue-text-box textarea {
+  resize: none;
+  margin-top: 10px;
+  border: 1px solid #e3e3e3;
+  width: 253px;
+  height: 80px;
+  padding: 7px;
+}
+.issue-text-box textarea:focus {
+  outline: none;
+}
+.issue-text-box textarea::-webkit-input-placeholder {
+  color: #a3a3a3;
+  /* padding-left: 5px;
+  padding-top: 5px; */
+}
+.issue-text-box textarea:-moz-placeholder {
+  /* Firefox 18- */
+  color: #a3a3a3;
+  /* padding-left: 5px;
+  padding-top: 5px; */
+}
+.issue-text-box textarea::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #a3a3a3;
+  /* padding-left: 5px;
+  padding-top: 5px; */
+}
+.issue-text-box textarea:-ms-input-placeholder {
+  color: #a3a3a3;
+  /* padding-left: 5px;
+  padding-top: 5px; */
+}
+.issue-text-box textarea::placeholder {
+  color: #a3a3a3;
+  /* padding-left: 5px;
+  padding-top: 5px; */
+}
+.feedback-ballon .feedback-ballon-submit {
+  display: block;
+  margin-left: auto;
+  border: none;
+  outline: none;
+  background: #de6834;
+  border-radius: 4px;
+  color: white;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.feedback-ballon-button {
+  border: none;
+  outline: none;
+  background: #ffffff;
+  box-shadow: 0px 3px 6px #00000029 !important;
+  border-radius: 50%;
+  padding: 0px;
+  position: absolute;
+  top: 75px;
+  left: 45%;
+  cursor: pointer !important;
+  z-index: 3;
+  padding: 10px;
+}
+.feedback-ballon-button:focus {
+  outline: none;
+}
+.feedback-ballon-button img {
+  width: 30px;
+  height: 30px;
+}
+
+/* select tag css starts */
+/*the container must be positioned relative:*/
+.custom-select-2 {
+  position: relative;
+      font-family: 'Hind', sans-serif !important;
+      font-size: 13px;
+}
+
+.custom-select-2 select {
+  display: none; /*hide original SELECT element:*/
+}
+
+.select-selected-2 {
+  background-color: white;
+  /* box-shadow: inset 0px 0px 3px 0px #00000029; */
+  /* border: 1px solid #d1d1d1; */
+  /* border-radius: 5px; */
+  background: #f8f3f0;
+}
+
+/*style the arrow inside the select element:*/
+.select-selected-2:after {
+  position: absolute;
+  content: '';
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #de6834 transparent transparent transparent;
+}
+
+/*point the arrow upwards when the select box is open (active):*/
+.select-selected-2.select-arrow-active:after {
+  border-color: transparent transparent #de6834 transparent;
+  top: 7px;
+}
+
+/*style the items (options), including the selected item:*/
+.select-items-2 div,
+.select-selected-2 {
+  color: #8d8d8d;
+  padding: 8px 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/*style items (options):*/
+.select-items-2 {
+  position: absolute;
+  background-color: #ffffff;
+  top: 130%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  box-shadow: 0px 3px 6px #00000029;
+  height: 106px;
+  overflow-y: scroll;
+}
+
+/*hide the items when the select box is closed:*/
+.select-hide-2 {
+  display: none;
+}
+
+.select-items-2 div:hover,
+.same-as-selected {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* select tag css ends */

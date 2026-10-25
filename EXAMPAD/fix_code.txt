@@ -1,0 +1,652 @@
+﻿            if (student) {
+                currentUser = student;
+            } else {
+                err.textContent = "Invalid Credentials. Match not found in registered candidates.";
+                return;
+            }
+
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    customAlert(`Error attempting to enable full-screen mode: ${err.message}`);
+                });
+            }
+
+            document.getElementById('instStudentName').textContent = currentUser.name || currentUser.rollNo;
+            document.getElementById('examStudentName').textContent = currentUser.name || currentUser.rollNo;
+
+            if (currentUser.photoUrl || currentUser.photo) {
+                const photoSrc = currentUser.photoUrl || currentUser.photo;
+                const iImg = document.getElementById('instStudentImg');
+                const eImg = document.getElementById('examStudentImg');
+                iImg.src = photoSrc;
+                iImg.style.display = 'block';
+                eImg.src = photoSrc;
+                eImg.style.display = 'block';
+                document.querySelector('.avatar-lg i').style.display = 'none';
+                document.querySelector('.user-avatar i').style.display = 'none';
+            }
+
+            if (examData.headerImage) {
+                const ihImg = document.getElementById('instHeaderImg');
+                const ehImg = document.getElementById('examHeaderImg');
+                if (ihImg) { ihImg.src = examData.headerImage; ihImg.style.display = 'block'; }
+                if (ehImg) { ehImg.src = examData.headerImage; ehImg.style.display = 'block'; }
+            }
+
+            populateInstructions();
+
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('instruction-view').classList.remove('hidden');
+        }
+
+        function populateInstructions() {
+            questions = examData.questions || [];
+            document.getElementById('instDuration').textContent = examData.duration || 60;
+            document.getElementById('instDuration2').textContent = examData.duration || 60;
+            document.getElementById('instMarks').textContent = examData.totalMarks || (questions.length > 0 ? questions.reduce((acc, q) => acc + (parseFloat(q.marks) || 1), 0) : 100);
+            document.getElementById('instQCount').textContent = questions.length;
+
+            document.getElementById('instPosMark').textContent = questions.length > 0 ? (questions[0].marks || 1) : 1;
+            document.getElementById('instNegMark').textContent = examData.negativeMarking || 0.33;
+
+            const langSelect = document.getElementById('defaultLanguage');
+            const qLang = document.getElementById('qLang');
+            const langs = ["English", "Hindi", "Punjabi", "Odissi", "Assamese", "Tamil", "Urdu", "Sanskrit", "Marathi", "Bengali", "Telugu", "Kannada"];
+            let opts = '<option value="">-- Select --</option>' + langs.map(l => '<option value="' + l + '">' + l + '</option>').join('');
+            langSelect.innerHTML = opts;
+
+            const viewIn = document.getElementById('viewInLanguage');
+            if (viewIn) {
+                let viewOpts = '<option value="English">English</option>' + langs.filter(l => l !== "English").map(l => '<option value="' + l + '">' + l + '</option>').join('');
+                viewIn.innerHTML = viewOpts;
+            }
+
+            let qOpts = langs.map(l => '<option value="' + l + '">' + l + '</option>').join('');
+            qLang.innerHTML = qOpts;
+
+            checkPreExamWait();
+        }
+
+        function goToInstPage(pageNum) {
+            if (pageNum === 1) {
+                document.getElementById('instMainPage1').classList.remove('hidden');
+                document.getElementById('instFooterPage1').classList.remove('hidden');
+                document.getElementById('instMainPage2').classList.add('hidden');
+                document.getElementById('instFooterPage2').classList.add('hidden');
+            } else if (pageNum === 2) {
+                document.getElementById('instMainPage1').classList.add('hidden');
+                document.getElementById('instFooterPage1').classList.add('hidden');
+                document.getElementById('instMainPage2').classList.remove('hidden');
+                document.getElementById('instFooterPage2').classList.remove('hidden');
+            }
+        }
+
+        let waitInterval = null;
+        function checkPreExamWait() {
+            if (!examData.scheduledDate) return;
+            const start = new Date(examData.scheduledDate).getTime();
+
+            const waitDisp = document.getElementById('waitTimerDisplay');
+            const waitClock = document.getElementById('waitTimerClock');
+
+            clearInterval(waitInterval);
+
+            const updateWait = () => {
+                const now = new Date().getTime();
+                const diff = start - now;
+                if (diff > 0) {
+                    waitDisp.style.display = 'block';
+                    let h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    let m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    let s = Math.floor((diff % (1000 * 60)) / 1000);
+                    waitClock.textContent = h.toString().padStart(2, '0') + ':' + m.toString().padStart(2, '0') + ':' + s.toString().padStart(2, '0');
+                    // Disable start button
+                    const btn = document.getElementById('readyBtn');
+                    btn.disabled = true;
+                    btn.style.opacity = '0.5';
+                    btn.style.cursor = 'not-allowed';
+                } else {
+                    waitDisp.style.display = 'none';
+                    clearInterval(waitInterval);
+                    toggleReadyBtn(); // re-check the checkbox
+                }
+            };
+
+            updateWait();
+            waitInterval = setInterval(updateWait, 1000);
+        }
+
+        function syncLanguage(val) {
+            const vSelect = document.getElementById('viewInLanguage');
+            const dSelect = document.getElementById('defaultLanguage');
+
+            if (vSelect && vSelect.value !== val) vSelect.value = val || "English";
+            if (dSelect && dSelect.value !== val) dSelect.value = val;
+
+            toggleReadyBtn();
+        }
+
+        function toggleReadyBtn() {
+            const btn = document.getElementById('readyBtn');
+            const chk = document.getElementById('declarationCheck').checked;
+            const langVal = document.getElementById('defaultLanguage').value;
+
+            translateInstructions(langVal);
+
+            if (examData.scheduledDate) {
+                const start = new Date(examData.scheduledDate).getTime();
+                if (new Date().getTime() < start) {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.5';
+                    btn.style.cursor = 'not-allowed';
+                    return;
+                }
+            }
+
+            if (chk && langVal !== "") {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+            } else {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.style.cursor = 'not-allowed';
+            }
+        }
+
+        const txData = {
+            "Hindi": {
+                read: "कृपया निम्नलिखित निर्देशों को ध्यान से पढ़ें",
+                genInst: "सामान्य निर्देश:",
+                navQ: "प्रश्न पर जाना :",
+                ansQ: "प्रश्न का उत्तर देना :",
+                qCount: (q) => `परीक्षण में <span id="instQCount">${q}</span> कुल प्रश्न हैं।`,
+                opts: "प्रत्येक प्रश्न के 4 विकल्प हैं जिनमें से केवल एक ही सही है।",
+                time: (t) => `आपको यह परीक्षा <span id="instDuration2">${t}</span> मिनट में पूरी करनी है।`,
+                marks: (p, n) => `प्रत्येक सही उत्तर के लिए आपको <span id="instPosMark">${p}</span> अंक दिया जाएगा और प्रत्येक गलत उत्तर के लिए <span id="instNegMark">${n}</span> काट लिया जाएगा।`,
+                neg: "आपके द्वारा हल न किए गए प्रश्नों के लिए कोई नकारात्मक अंकन नहीं है।",
+                decl: "मैंने सभी निर्देशों को समझ लिया है और सहमत हूँ।",
+                warn: "कृपया ध्यान दें कि सभी प्रश्न आपकी डिफ़ॉल्ट भाषा में दिखाई देंगे। बाद में किसी विशेष प्रश्न के लिए इस भाषा को बदला जा सकता है।"
+            },
+            "Punjabi": {
+                read: "ਕਿਰਪਾ ਕਰਕੇ ਹੇਠ ਲਿਖੀਆਂ ਹਦਾਇਤਾਂ ਨੂੰ ਧਿਆਨ ਨਾਲ ਪੜ੍ਹੋ",
+                genInst: "ਆਮ ਹਦਾਇਤਾਂ:",
+                navQ: "ਪ੍ਰਸ਼ਨ 'ਤੇ ਜਾਣਾ :",
+                ansQ: "ਪ੍ਰਸ਼ਨ ਦਾ ਉੱਤਰ ਦੇਣਾ :",
+                qCount: (q) => `ਟੈਸਟ ਵਿੱਚ ਕੁੱਲ <span id="instQCount">${q}</span> ਪ੍ਰਸ਼ਨ ਹਨ।`,
+                opts: "ਹਰੇਕ ਪ੍ਰਸ਼ਨ ਦੇ 4 ਵਿਕਲਪ ਹਨ ਜਿਨ੍ਹਾਂ ਵਿੱਚੋਂ ਸਿਰਫ਼ ਇੱਕ ਹੀ ਸਹੀ ਹੈ।",
+                time: (t) => `ਤੁਹਾਨੂੰ ਟੈਸਟ ਨੂੰ <span id="instDuration2">${t}</span> ਮਿੰਟਾਂ ਵਿੱਚ ਪੂਰਾ ਕਰਨਾ ਹੋਵੇਗਾ।`,
+                marks: (p, n) => `ਹਰੇਕ ਸਹੀ ਉੱਤਰ ਲਈ ਤੁਹਾਨੂੰ <span id="instPosMark">${p}</span> ਅੰਕ ਦਿੱਤਾ ਜਾਵੇਗਾ ਅਤੇ ਹਰੇਕ ਗਲਤ ਉੱਤਰ ਲਈ <span id="instNegMark">${n}</span> ਕੱਟਿਆ ਜਾਵੇਗਾ।`,
+                neg: "ਜਿਨ੍ਹਾਂ ਪ੍ਰਸ਼ਨਾਂ ਦੀ ਤੁਸੀਂ ਕੋਸ਼ਿਸ਼ ਨਹੀਂ ਕੀਤੀ ਉਹਨਾਂ ਲਈ ਕੋਈ ਨਕਾਰਾਤਮਕ ਮਾਰਕਿੰਗ ਨਹੀਂ ਹੈ।",
+                decl: "ਮੈਂ ਸਾਰੀਆਂ ਹਦਾਇਤਾਂ ਨੂੰ ਸਮਝ ਲਿਆ ਹੈ ਅਤੇ ਉਹਨਾਂ ਨਾਲ ਸਹਿਮਤ ਹਾਂ।",
+                warn: "ਕਿਰਪਾ ਕਰਕੇ ਨੋਟ ਕਰੋ ਕਿ ਸਾਰੇ ਪ੍ਰਸ਼ਨ ਤੁਹਾਡੀ ਡਿਫੌਲਟ ਭਾਸ਼ਾ ਵਿੱਚ ਦਿਖਾਈ ਦੇਣਗੇ। ਬਾਅਦ ਵਿੱਚ ਕਿਸੇ ਖਾਸ ਪ੍ਰਸ਼ਨ ਲਈ ਇਹ ਭਾਸ਼ਾ ਬਦਲੀ ਜਾ ਸਕਦੀ ਹੈ।"
+            },
+            "Odissi": {
+                read: "ଦୟାକରି ନିମ୍ନଲିଖିତ ନିର୍ଦ୍ଦେଶାବଳୀକୁ ଧ୍ୟାନର ସହ ପଢନ୍ତୁ",
+                genInst: "ସାଧାରଣ ନିର୍ଦ୍ଦେଶାବଳୀ:",
+                navQ: "ପ୍ରଶ୍ନକୁ ଯିବା :",
+                ansQ: "ପ୍ରଶ୍ନର ଉତ୍ତର ଦେବା :",
+                qCount: (q) => `ଏହି ପରୀକ୍ଷାରେ ସମୁଦାୟ <span id="instQCount">${q}</span> ପ୍ରଶ୍ନ ଅଛି।`,
+                opts: "ପ୍ରତ୍ୟେକ ପ୍ରଶ୍ନର ୪ଟି ବିକଳ୍ପ ଅଛି, ଯେଉଁଥିରୁ କେବଳ ଗୋଟିଏ ଠିକ ଅଟେ।",
+                time: (t) => `ଆପଣଙ୍କୁ ପରୀକ୍ଷା <span id="instDuration2">${t}</span> ମିନିଟରେ ଶେଷ କରିବାକୁ ହେବ।`,
+                marks: (p, n) => `ପ୍ରତ୍ୟେକ ସଠିକ୍ ଉତ୍ତର ପାଇଁ ଆପଣଙ୍କୁ <span id="instPosMark">${p}</span> ମାର୍କ ଦିଆଯିବ ଏବଂ ପ୍ରତ୍ୟେକ ଭୁଲ୍ ଉତ୍ତର ପାଇଁ <span id="instNegMark">${n}</span> କଟାଯିବ।`,
+                neg: "ଯେଉଁ ପ୍ରଶ୍ନଗୁଡ଼ିକ ଆପଣ ଚେଷ୍ଟା କରିନାହାଁନ୍ତି ସେଥିପାଇଁ କୌଣସି ନକାରାତ୍ମକ ମାର୍କିଂ ନାହିଁ।",
+                decl: "ମୁଁ ସମସ୍ତ ନିର୍ଦ୍ଦେଶକୁ ବୁଝିଛି ଏବଂ ସମ୍ମତ ଅଟେ।",
+                warn: "ଦୟାକରି ଧ୍ୟାନ ଦିଅନ୍ତୁ ଯେ ସମସ୍ତ ପ୍ରଶ୍ନ ଆପଣଙ୍କ ଡିଫଲ୍ଟ ଭାଷାରେ ଦେଖାଯିବ। ପରେ କୌଣସି ନିର୍ଦ୍ଦିଷ୍ଟ ପ୍ରଶ୍ନ ପାଇଁ ଏହି ଭାଷା ପରିବର୍ତ୍ତନ କରାଯାଇପାରିବ।"
+            },
+            "Tamil": {
+                read: "கீழே கொடுக்கப்பட்டுள்ள வழிமுறைகளை கவனமாக படிக்கவும்",
+                genInst: "பொதுவான வழிமுறைகள்:",
+                navQ: "கேள்விக்குச் செல்வது :",
+                ansQ: "கேள்விக்கு பதிலளிப்பது :",
+                qCount: (q) => `இந்த தேர்வில் மொத்தம் <span id="instQCount">${q}</span> கேள்விகள் உள்ளன.`,
+                opts: "ஒவ்வொரு கேள்விக்கும் 4 விருப்பங்கள் உள்ளன, அவற்றில் ஒன்று மட்டுமே சரியானது.",
+                time: (t) => `நீங்கள் தேர்வை <span id="instDuration2">${t}</span> நிமிடங்களில் முடிக்க வேண்டும்.`,
+                marks: (p, n) => `ஒவ்வொரு சரியான பதிலுக்கும் <span id="instPosMark">${p}</span> மதிப்பெண் வழங்கப்படும், மேலும் ஒவ்வொரு தவறான பதிலுக்கும் <span id="instNegMark">${n}</span> கழிக்கப்படும்.`,
+                neg: "நீங்கள் முயற்சிக்காத கேள்விகளுக்கு எதிர்மறை மதிப்பெண் இல்லை.",
+                decl: "நான் அனைத்து வழிமுறைகளையும் புரிந்து கொண்டுள்ளேன், அவற்றை ஏற்றுக்கொள்கிறேன்.",
+                warn: "அனைத்து கேள்விகளும் உங்களின் இயல்புநிலை மொழியில் தோன்றும் என்பதை நினைவில் கொள்க. இந்த மொழியை பின்னர் ஒரு குறிப்பிட்ட கேள்விக்கு மாற்றிக்கொள்ளலாம்."
+            },
+            "Sanskrit": {
+                read: "कृपया निम्नलिखितनिर्देशान् ध्यानपूर्वकं पठन्तु",
+                genInst: "सामान्यनिर्देशाः:",
+                navQ: "प्रश्नं प्रति गमनम् :",
+                ansQ: "प्रश्नस्य उत्तरं दातुम् :",
+                qCount: (q) => `परीक्षणे कुलम् <span id="instQCount">${q}</span> प्रश्नाः सन्ति।`,
+                opts: "प्रत्येकस्य प्रश्नस्य ४ विकल्पाः सन्ति येषु केवलम् एकः एव सम्यक् अस्ति।",
+                time: (t) => `भवद्भिः एषा परीक्षा <span id="instDuration2">${t}</span> निमेषेषु समापनीया।`,
+                marks: (p, n) => `प्रत्येकं सम्यक् उत्तरार्थं <span id="instPosMark">${p}</span> अङ्कः प्रदास्यते तथा प्रत्येकं त्रुटिपूर्णोत्तरार्थं <span id="instNegMark">${n}</span> अङ्कः कतिष्यते।`,
+                neg: "अनुत्तरीतप्रश्नानां कृते नकारात्मकम् अङ्कनं नास्ति।",
+                decl: "अहं सर्वान् निर्देशान् अवगतवान् अस्मि तथा च तान् अङ्गीकरोमि।",
+                warn: "कृपया ध्यानं ददतु यत् सर्वे प्रश्नाः भवतः पूर्वनिर्धारितभाषायां दृश्यन्ते। कस्यचित् विशिष्टप्रश्नस्य कृते एषा भाषा पश्चात् परिवर्तयितुं शक्यते।"
+            },
+            "English": {
+                read: "Please read the following instructions carefully",
+                genInst: "General Instructions:",
+                navQ: "Navigating to a Question :",
+                ansQ: "Answering a Question :",
+                qCount: (q) => `The test contains <span id="instQCount">${q}</span> total questions.`,
+                opts: "Each question has 4 options out of which only one is correct.",
+                time: (t) => `You have to finish the test in <span id="instDuration2">${t}</span> minutes.`,
+                marks: (p, n) => `You will be awarded <span id="instPosMark">${p}</span> mark for each correct answer and <span id="instNegMark">${n}</span> will be deducted for each wrong answer.`,
+                neg: "There is no negative marking for the questions that you have not attempted.",
+                decl: "I have understood and agree to all the instructions.",
+                warn: "Please note all questions will appear in your default language. This language can be changed for a particular question later on."
+            }
+        };
+
+        let originalPage1Html = null;
+
+        function translateInstructions(lang) {
+            const tx = txData[lang] || txData["English"];
+
+            const p1Head = document.querySelector('#instMainPage1 div:first-child');
+            if (p1Head) p1Head.textContent = tx.read;
+
+            const page1Cont = document.getElementById('instPage1Content');
+            if (page1Cont) {
+                if (!originalPage1Html) originalPage1Html = page1Cont.innerHTML;
+
+                if (typeof page1Translations !== 'undefined' && page1Translations[lang]) {
+                    page1Cont.innerHTML = page1Translations[lang];
+                } else if (typeof page1Translations !== 'undefined' && page1Translations["English"]) {
+                    page1Cont.innerHTML = page1Translations["English"];
+                } else {
+                    page1Cont.innerHTML = originalPage1Html;
+                }
+            }
+
+            const p2Head = document.querySelector('#instMainPage2 > div:nth-child(2)');
+            if (p2Head) p2Head.textContent = tx.read;
+
+            const p2Items = document.querySelectorAll('#instMainPage2 ol li');
+            if (p2Items.length >= 5) {
+                const qC = document.getElementById('instQCount').textContent;
+                const d2 = document.getElementById('instDuration2').textContent;
+                const pM = document.getElementById('instPosMark').textContent;
+                const nM = document.getElementById('instNegMark').textContent;
+
+                p2Items[0].innerHTML = tx.qCount(qC);
+                p2Items[1].textContent = tx.opts;
+                p2Items[2].innerHTML = tx.time(d2);
+                p2Items[3].innerHTML = tx.marks(pM, nM);
+                p2Items[4].textContent = tx.neg;
+            }
+
+            const declLbl = document.querySelector('label[for="declarationCheck"]');
+            if (declLbl) declLbl.textContent = tx.decl;
+
+            const warnText = document.querySelector('.inst-footer-inner > div:nth-child(2)');
+            if (warnText) warnText.textContent = tx.warn;
+        }
+
+        function startExam() {
+            document.getElementById('instruction-view').classList.add('hidden');
+            document.getElementById('exam-view').classList.remove('hidden');
+
+            for (let i = 0; i < questions.length; i++) {
+                qStatus[i] = 'not-visited';
+            }
+
+            initSections();
+
+            totalSeconds = (parseInt(examData.duration) || 60) * 60;
+            if (examData.scheduledEndDate) {
+                const now = new Date();
+                const end = new Date(examData.scheduledEndDate);
+                const diff = Math.floor((end - now) / 1000);
+                if (diff > 0 && diff < totalSeconds) {
+                    totalSeconds = diff;
+                }
+            }
+
+            startTimer();
+            buildPalette();
+            loadQuestion(0);
+
+            // You can call showNotification("Your message here") anywhere to display a notification.
+        }
+
+        let notifTimeout = null;
+        function showNotification(message, duration = 6000) {
+            const notif = document.getElementById('examNotification');
+            const notifMsg = document.getElementById('examNotifMsg');
+            if (notif && notifMsg) {
+                notifMsg.textContent = message;
+                notif.style.display = 'block';
+                if (notifTimeout) clearTimeout(notifTimeout);
+                notifTimeout = setTimeout(() => { notif.style.display = 'none'; }, duration);
+            }
+        }
+
+        function startTimer() {
+            updateTimerDisplay();
+            examTimer = setInterval(() => {
+                totalSeconds--;
+                if (totalSeconds <= 0) {
+                    clearInterval(examTimer);
+                    submitTest(true);
+                } else {
+                    updateTimerDisplay();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            let h = Math.floor(totalSeconds / 3600);
+            let m = Math.floor((totalSeconds % 3600) / 60);
+            let s = totalSeconds % 60;
+            document.getElementById('th').textContent = h.toString().padStart(2, '0');
+            document.getElementById('tm').textContent = m.toString().padStart(2, '0');
+            document.getElementById('ts').textContent = s.toString().padStart(2, '0');
+        }
+
+        function initSections() {
+            let secSet = new Set();
+            questions.forEach(q => secSet.add(q.section || 'General'));
+            examSections = Array.from(secSet);
+            if (examSections.length > 0) currentSection = examSections[0];
+            renderSectionTabs();
+        }
+
+        function renderSectionTabs() {
+            const bar = document.querySelector('.section-bar');
+            if (!bar) return;
+            let html = '<div class="sec-label">SECTIONS |</div>';
+            examSections.forEach(s => {
+                let isActive = s === currentSection;
+                html += `<div class="sec-tab" style="cursor:pointer; padding:8px 16px; margin:0 5px; font-weight: bold; transition: all 0.2s; border-radius:4px; white-space: nowrap; flex-shrink: 0; ${isActive ? 'background:#156a89; color:#fff;' : 'background:transparent; color:#555;'}" onclick="selectSection('${s}')">${s}</div>`;
+            });
+            bar.innerHTML = html;
+        }
+
+        function selectSection(sec) {
+            currentSection = sec;
+            renderSectionTabs();
+            buildPalette();
+            let firstQIdx = questions.findIndex(q => (q.section || 'General') === sec);
+            if (firstQIdx !== -1) loadQuestion(firstQIdx);
+        }
+
+        function buildPalette() {
+            let html = '';
+            let sectionQs = [];
+            for (let i = 0; i < questions.length; i++) {
+                let qSec = questions[i].section || 'General';
+                if (qSec === currentSection) {
+                    sectionQs.push(i);
+                }
+            }
+
+            const paletteHeader = document.querySelector('.palette-header');
+            if (paletteHeader) paletteHeader.textContent = 'SECTION : ' + currentSection;
+
+            sectionQs.forEach((globalIdx, localIdx) => {
+                html += '<button class="p-btn p-not-vis" id="pbtn-' + globalIdx + '" onclick="loadQuestion(' + globalIdx + ')">' + (localIdx + 1) + '</button>';
+            });
+            document.getElementById('paletteGrid').innerHTML = html;
+            updatePaletteCounters();
+        }
+
+        function updatePaletteCounters() {
+            let cAns = 0, cNotAns = 0, cNotVis = 0, cMark = 0, cMarkAns = 0;
+            for (let i = 0; i < questions.length; i++) {
+                let st = qStatus[i];
+                if (st === 'answered') cAns++;
+                else if (st === 'not-answered') cNotAns++;
+                else if (st === 'not-visited') cNotVis++;
+                else if (st === 'marked') cMark++;
+                else if (st === 'marked-answered') cMarkAns++;
+
+                let btn = document.getElementById('pbtn-' + i);
+                if (btn) {
+                    btn.className = 'p-btn ' + (i === currentIndex ? 'active ' : '') + 'p-' + getShortStatus(st);
+                }
+            }
+            document.getElementById('cAns').textContent = cAns;
+            document.getElementById('cNotAns').textContent = cNotAns;
+            document.getElementById('cNotVis').textContent = cNotVis;
+            document.getElementById('cMark').textContent = cMark;
+            document.getElementById('cMarkAns').textContent = cMarkAns;
+        }
+
+        function getShortStatus(st) {
+            if (st === 'answered') return 'ans';
+            if (st === 'not-answered') return 'not-ans';
+            if (st === 'marked') return 'mark';
+            if (st === 'marked-answered') return 'mark-ans';
+            return 'not-vis';
+        }
+
+        function loadQuestion(index) {
+            if (index < 0 || index >= questions.length) return;
+
+            let qSec = questions[index].section || 'General';
+            if (qSec !== currentSection) {
+                currentSection = qSec;
+                renderSectionTabs();
+                buildPalette();
+            }
+
+            if (qStatus[currentIndex] === 'not-visited') {
+                qStatus[currentIndex] = 'not-answered';
+            }
+
+            currentIndex = index;
+            if (qStatus[currentIndex] === 'not-visited') {
+                qStatus[currentIndex] = 'not-answered';
+            }
+
+            updatePaletteCounters();
+
+            const q = questions[index];
+            let localIndex = questions.slice(0, index).filter(item => (item.section || 'General') === currentSection).length + 1;
+            document.getElementById('qNoDisplay').textContent = "Question No. " + localIndex;
+            document.getElementById('qMarkPos').textContent = "+" + (q.marks || 1);
+            document.getElementById('qMarkNeg').textContent = "-" + (examData.negativeMarking || 0);
+
+            document.getElementById('qTextDisplay').innerHTML = q.title || q.heading;
+
+            let optsHtml = '';
+            if (q.options && q.options.length > 0) {
+                q.options.forEach((opt, i) => {
+                    let checked = responses[currentIndex] === opt ? "checked" : "";
+                    optsHtml += `
+                        <label class="opt-row">
+                            <input type="radio" name="currentQ" value="${opt}" ${checked}>
+                            <div class="opt-text">${opt}</div>
+                        </label>
+                    `;
+                });
+            } else {
+                optsHtml = "<p><i>Subjective / Code question interface placeholder.</i></p>";
+            }
+            document.getElementById('qOptionsDisplay').innerHTML = optsHtml;
+
+            document.getElementById('qTimer').textContent = "00:" + Math.floor(Math.random() * 60).toString().padStart(2, '0');
+
+            // Set languages based on selection if populated, else use default languages
+            const langSelect = document.getElementById('defaultLanguage');
+            if (langSelect && langSelect.value) {
+                document.getElementById('qLang').value = langSelect.value;
+            }
+            changeQuestionLanguage(); // Auto-translate question on load
+        }
+
+        const libreTranslateLangMap = {
+            "English": "en", "Hindi": "hi", "Punjabi": "pa", "Odissi": "or", "Tamil": "ta",
+            "Assamese": "as", "Urdu": "ur", "Sanskrit": "sa", "Marathi": "mr", "Bengali": "bn",
+            "Telugu": "te", "Kannada": "kn"
+        };
+
+        async function translateTextWithLibre(text, targetCode) {
+            if (!text) return "";
+            if (targetCode === "en") return text;
+            try {
+                // Try official open source LibreTranslate public mirrors
+                const res = await fetch("https://translate.argosopentech.com/translate", {
+                    method: "POST",
+                    body: JSON.stringify({ q: text, source: "en", target: targetCode, format: "html" }),
+                    headers: { "Content-Type": "application/json" }
+                });
+                const data = await res.json();
+                if (data && data.translatedText) return data.translatedText;
+                return text;
+            } catch (e) {
+                console.error("LibreTranslate API error:", e);
+                return text;
+            }
+        }
+
+        async function changeQuestionLanguage() {
+            const lang = document.getElementById('qLang').value;
+            const q = questions[currentIndex];
+            if (!q) return;
+
+            let titleHtml = q.title || q.heading;
+            let options = q.options || [];
+
+            if (lang === 'English') {
+                document.getElementById('qTextDisplay').innerHTML = titleHtml;
+                renderOptions(q, options, lang);
+                return;
+            }
+
+            if (!q.translations) q.translations = {};
+            if (!q.translations[lang]) q.translations[lang] = {};
+
+            if (q.translations[lang].title && q.translations[lang].options) {
+                document.getElementById('qTextDisplay').innerHTML = q.translations[lang].title;
+                renderOptions(q, q.translations[lang].options, lang);
+                return;
+            }
+
+            document.getElementById('qTextDisplay').innerHTML = `<div style="display:flex; align-items:center; gap:8px; color:#17a2b8;"><i class="fas fa-spinner fa-spin"></i> Auto-translating to ${lang} via LibreTranslate API...</div>`;
+            document.getElementById('qOptionsDisplay').innerHTML = '';
+
+            const targetCode = libreTranslateLangMap[lang] || "en";
+
+            try {
+                const titlePromise = translateTextWithLibre(titleHtml, targetCode);
+                const optsPromises = options.map(o => translateTextWithLibre(o, targetCode));
+
+                const [translatedTitle, ...translatedOpts] = await Promise.all([titlePromise, ...optsPromises]);
+
+                q.translations[lang].title = translatedTitle;
+                q.translations[lang].options = translatedOpts;
+
+                if (questions[currentIndex].id === q.id) {
+                    document.getElementById('qTextDisplay').innerHTML = translatedTitle;
+                    renderOptions(q, translatedOpts, lang);
+                }
+            } catch (err) {
+                document.getElementById('qTextDisplay').innerHTML = `<span style="color:red; font-size:0.8rem;">[Translation Failed]</span> ` + titleHtml;
+                renderOptions(q, options, lang);
+            }
+        }
+
+        function renderOptions(q, displayOpts, lang) {
+            let optsHtml = '';
+            if (q.options && q.options.length > 0) {
+                q.options.forEach((opt, i) => {
+                    let checked = responses[currentIndex] === opt ? "checked" : "";
+                    let optDisplay = displayOpts[i] || opt;
+                    optsHtml += `
+                        <label class="opt-row">
+                            <input type="radio" name="currentQ" value="${opt}" ${checked}>
+                            <div class="opt-text">${optDisplay}</div>
+                        </label>
+                    `;
+                });
+            } else {
+                optsHtml = "<p><i>Subjective / Code question interface placeholder.</i></p>";
+            }
+            document.getElementById('qOptionsDisplay').innerHTML = optsHtml;
+        }
+
+        function getSelectedOption() {
+            const rad = document.querySelector('input[name="currentQ"]:checked');
+            return rad ? rad.value : null;
+        }
+
+        function saveAndNext() {
+            const ans = getSelectedOption();
+            if (ans) {
+                responses[currentIndex] = ans;
+                qStatus[currentIndex] = 'answered';
+            } else {
+                if (qStatus[currentIndex] !== 'marked' && qStatus[currentIndex] !== 'marked-answered') {
+                    qStatus[currentIndex] = 'not-answered';
+                }
+            }
+            goToNext();
+        }
+
+        function markAndNext() {
+            const ans = getSelectedOption();
+            if (ans) {
+                responses[currentIndex] = ans;
+                qStatus[currentIndex] = 'marked-answered';
+            } else {
+                qStatus[currentIndex] = 'marked';
+            }
+            goToNext();
+        }
+
+        function clearResponse() {
+            const rad = document.querySelector('input[name="currentQ"]:checked');
+            if (rad) rad.checked = false;
+            delete responses[currentIndex];
+            qStatus[currentIndex] = 'not-answered';
+            updatePaletteCounters();
+        }
+
+        function goToNext() {
+            if (currentIndex < questions.length - 1) {
+                loadQuestion(currentIndex + 1);
+            } else {
+                updatePaletteCounters();
+                customAlert("You have reached the end of the sections. You can review your answers.");
+            }
+        }
+
+        function submitTest(auto = false) {
+            if (auto) {
+                finalSubmitTest();
+                return;
+            }
+
+            let tbody = '';
+            examSections.forEach(sec => {
+                let secQs = questions.filter(q => (q.section || 'General') === sec);
+                let qCount = secQs.length;
+                let ans = 0, notAns = 0, marked = 0, notVis = 0;
+
+                secQs.forEach(q => {
+                    let globalIdx = questions.findIndex(item => item.id === q.id);
+                    let st = qStatus[globalIdx];
+                    if (st === 'answered') ans++;
+                    else if (st === 'not-answered') notAns++;
+                    else if (st === 'marked' || st === 'marked-answered') marked++;
+                    else notVis++;
+                });
+
+                tbody += `
+                    <tr>
+                        <td style="padding:10px; border:1px solid #eee;">${sec}</td>
+                        <td style="padding:10px; border:1px solid #eee;">${qCount}</td>
+                        <td style="padding:10px; border:1px solid #eee;">${ans}</td>
+                        <td style="padding:10px; border:1px solid #eee;">${notAns}</td>
+                        <td style="padding:10px; border:1px solid #eee;">${marked}</td>
+                        <td style="padding:10px; border:1px solid #eee;">${notVis}</td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('submitModalBody').innerHTML = tbody;
+            document.getElementById('submitModal').classList.remove('hidden');
+        }
+
+        function closeSubmitModal() {
+            document.getElementById('submitModal').classList.add('hidden');
+        }

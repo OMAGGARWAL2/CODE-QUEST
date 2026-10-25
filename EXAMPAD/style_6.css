@@ -1,0 +1,192 @@
+
+                                #metricsContainerr {
+                                    padding: 1rem 2rem;
+                                    padding-left: 75px !important;
+                                    padding-right: 70px;
+                                    margin-top: 155px;
+                                }
+
+                                .chart-container {
+                                    display: flex;
+                                    padding: 2rem 4rem;
+                                }
+
+                                .Scoring-pattern-container {
+                                    width: 100%;
+                                    margin: auto !important;
+                                    padding-left: 0;
+                                    padding-right: 0;
+                                }
+
+                                .skeleton {
+                                    background-color: #e0e0e0;
+                                }
+
+                                @keyframes skeleton-animation {
+                                    0% {
+                                        background-color: #e0e0e0;
+                                    }
+
+                                    50% {
+                                        background-color: #f7f7f7;
+                                    }
+
+                                    100% {
+                                        background-color: #e0e0e0;
+                                    }
+                                }
+
+
+                                .skeleton-chart {
+                                    height: 380px;
+                                    background-color: #f0f0f0;
+                                    border-radius: 8px;
+                                    position: relative;
+                                    overflow: hidden;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                }
+
+
+                                .skeleton-rect {
+                                    width: 100%;
+                                    height: 100%;
+                                    border-radius: 8px;
+                                    background-color: #e0e0e0;
+                                    animation: skeleton-animation 1.5s infinite ease-in-out;
+                                }
+
+                                .skeleton-text {
+                                    width: 60%;
+                                    height: 20px;
+                                    border-radius: 4px;
+                                    background-color: #e0e0e0;
+                                    margin-top: 10px;
+                                }
+
+
+                                .chart-container .hidden {
+                                    display: none !important;
+                                }
+
+                                .graph-container-column {
+                                    display: flex;
+                                    flex-direction: row;
+                                    flex-wrap: wrap;
+                                    gap: 2rem;
+                                    width: 100%;
+                                }
+
+                                .graph-container {
+                                    flex-grow: 1;
+                                    display: flex;
+                                    flex-direction: column;
+                                    padding: 1.5rem;
+                                    width: calc(50% - 1rem);
+                                    border-radius: 0.5rem;
+                                    border: 1px solid #eee;
+                                    background-color: #fff;
+                                }
+
+                                .graph-container .canvas-holder,
+                                .graph-container .message-holder {
+                                    flex-shrink: 1;
+                                    flex-grow: 1;
+                                    overflow: hidden;
+                                }
+
+                                .graph-container .message-holder {
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    height: 380px;
+                                    font-weight: 600;
+                                    color: #666;
+                                }
+
+                                .graph-container .head {
+                                    display: flex;
+                                    justify-content: space-between;
+                                    margin-bottom: 1rem;
+                                }
+
+                                /* .graph-container .head .group-column {
+  } */
+                                .graph-container .title {
+                                    font-size: 20px;
+                                    font-weight: 700;
+                                    color: #444;
+                                }
+
+                                .graph-container .sub-title {
+                                    font-size: 16px;
+                                    font-weight: 500;
+                                    color: #aaa;
+                                }
+
+                                .graph-container .head button {
+                                    display: inline-flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    padding: 0px;
+                                    width: 2rem;
+                                    height: 2rem;
+                                    font-size: 20px;
+                                    color: #444;
+                                    background-color: #fff;
+                                    border: 1px solid #eee;
+                                    border-radius: 0.25rem;
+                                }
+
+                                .graph-container .head button svg {
+                                    flex-shrink: 0;
+                                    width: 1em;
+                                    height: 1em;
+                                }
+
+                                .graph-container .head button svg.icon-exit,
+                                .graph-container:fullscreen .head button svg.icon-enter {
+                                    display: none;
+                                }
+
+                                .graph-container:fullscreen .head button svg.icon-exit {
+                                    display: initial;
+                                }
+
+                                @media only screen and (max-width: 500px) {
+                                    .Scoring-pattern-container {
+                                        width: 100%;
+                                    }
+
+                                    .chart-container {
+                                        padding: 0;
+                                    }
+                                }
+
+                                @media print {
+                                    #graphs-space-container {
+                                        padding: 0;
+                                    }
+
+                                    .graph-container-column {
+                                        margin-top: 5px;
+                                        display: flex;
+                                        flex-wrap: nowrap;
+                                        flex-direction: column;
+                                        page-break-inside: avoid;
+                                        gap: 10px;
+                                    }
+
+                                    .graph-container {
+                                        margin-top: 8px;
+                                        width: 100%;
+                                        display: block;
+                                        page-break-inside: avoid;
+                                    }
+
+                                    .graph-container:nth-child(2n) {
+                                        page-break-after: always;
+                                    }
+                                }
+                            

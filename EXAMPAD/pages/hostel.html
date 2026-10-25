@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <style>
+        :root {
+            --erp-blue: #3b5998;
+            --erp-dark-blue: #2d4373;
+            --erp-light-blue: #eef2f7;
+            --erp-border: #d0d7e5;
+            --erp-red: #d92d20;
+            --erp-text: #333;
+            --erp-bg: #e8ecf3;
+        }
+
+        body {
+            margin: 0;
+            font-family: Tahoma, Arial, sans-serif;
+            background-color: var(--erp-bg);
+            color: var(--erp-text);
+            font-size: 12px;
+        }
+
+        .erp-topbar {
+            background-color: var(--erp-blue);
+            color: white;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 5px 20px;
+            font-size: 11px;
+            height: 35px;
+            gap: 15px;
+        }
+
+        .erp-container {
+            max-width: 1100px;
+            margin: 15px auto;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            min-height: 80vh;
+        }
+
+        .breadcrumb {
+            font-size: 11px;
+            margin-bottom: 10px;
+            color: var(--erp-blue);
+        }
+
+        .erp-section-title {
+            background: var(--erp-light-blue);
+            padding: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--erp-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid var(--erp-border);
+        }
+
+        .access-denied {
+            background: #fff5f5;
+            border: 1px solid #feb2b2;
+            padding: 40px;
+            text-align: center;
+            border-radius: 4px;
+            margin-top: 50px;
+        }
+
+        .access-denied i {
+            font-size: 48px;
+            color: #f56565;
+            margin-bottom: 15px;
+        }
+
+        .access-denied h2 {
+            margin: 0 0 10px 0;
+            color: #c53030;
+        }
+
+        .btn-opt {
+            background: var(--erp-blue);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 3px;
+            margin-top: 15px;
+        }
+
+        .hostel-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            display: none;
+            /* Controlled by JS */
+        }
+
+        .card {
+            border: 1px solid #eee;
+            padding: 15px;
+            background: white;
+        }
+
+        .card-header {
+            font-weight: bold;
+            border-bottom: 2px solid var(--erp-blue);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            color: var(--erp-blue);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+
+        .btn-action {
+            padding: 8px 15px;
+            background: var(--erp-blue);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="../logo.jpg">
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+    <div class="erp-topbar">
+        <span>Session Jan-Jun 2026</span>
+        <i class="fas fa-home" onclick="location.href='erp.html'" style="cursor:pointer;"></i>
+        <i class="fas fa-sign-out-alt" onclick="location.href='erp-login.html'" style="cursor:pointer;"></i>
+    </div>
+
+    <div class="erp-container">
+        <div class="breadcrumb">Home » <span id="breadSub">Hostel Management</span></div>
+        <div class="erp-section-title"><i class="fas fa-hotel"></i> Hostel Management</div>
+
+        <div id="deniedSection" class="access-denied">
+            <i class="fas fa-user-lock"></i>
+            <h2>ACCESS DENIED</h2>
+            <p>You have not opted for university hostel services for the academic session 2025-26.</p>
+            <p style="font-size: 11px; color: #666;">If you have already paid the fee, please visit the hostel
+                coordinator office for data synchronization.</p>
+            <button class="btn-opt" onclick="simulateOptIn()">Simulate Opted Student (Demo)</button>
+        </div>
+
+        <div id="activeSection" class="hostel-grid">
+            <div class="card">
+                <div class="card-header"><i class="fas fa-info-circle"></i> Allocation Details</div>
+                <div style="font-size: 13px; line-height: 1.8;">
+                    <strong>Hostel Block:</strong> Block B (Newton)<br>
+                    <strong>Room Number:</strong> B-402<br>
+                    <strong>Floor:</strong> 4th Floor<br>
+                    <strong>Seating:</strong> 3 Seater (Shared)<br>
+                    <strong>Warden:</strong> Mr. Vikas Sharma (+91-9988776655)
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><i class="fas fa-utensils"></i> Mess Menu (Today)</div>
+                <table style="width:100%; font-size: 11px; border-collapse: collapse;">
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 5px;"><strong>Breakfast:</strong></td>
+                        <td style="padding: 5px;">Aloo Paratha, Curd, Tea</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 5px;"><strong>Lunch:</strong></td>
+                        <td style="padding: 5px;">Dal Makhni, Bhindi Masala, Rice, Chapati</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 5px;"><strong>Evening:</strong></td>
+                        <td style="padding: 5px;">Samosa, Coffee</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 5px;"><strong>Dinner:</strong></td>
+                        <td style="padding: 5px;">Paneer Butter Masala, Raita, Gulab Jamun</td>
+                    </tr>
+                </table>
+                <button class="btn-action" style="margin-top: 15px; width: 100%;"
+                    onclick="alert('Food Order Placed')">Order Special Meal</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><i class="fas fa-exclamation-circle"></i> Complaints & Requests</div>
+                <label>Category</label>
+                <select class="form-control">
+                    <option>Electricity/Light</option>
+                    <option>Cleaning/Housekeeping</option>
+                    <option>Carpenter/Furniture</option>
+                    <option>Food Quality</option>
+                    <option>Gym Equipment</option>
+                </select>
+                <label>Description</label>
+                <textarea class="form-control" placeholder="Describe your issue..."></textarea>
+                <button class="btn-action" onclick="alert('Complaint Registered')">Submit Complaint</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><i class="fas fa-coins"></i> Hostel Services</div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dotted #ccc; padding-bottom: 5px;">
+                        <span>Gym Subscription (Active)</span>
+                        <button class="btn-action" style="background: #28a745;">Paid</button>
+                    </div>
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dotted #ccc; padding-bottom: 5px;">
+                        <span>Laundry (12 Loads/Month)</span>
+                        <button class="btn-action" style="background: orange;"
+                            onclick="location.href='payforre.html?amount=500&purpose=Laundry%20Recharge'">Recharge
+                            ¥500</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function simulateOptIn() {
+            document.getElementById('deniedSection').style.display = 'none';
+            document.getElementById('activeSection').style.display = 'grid';
+        }
+    </script>
+</body>
+
+</html>

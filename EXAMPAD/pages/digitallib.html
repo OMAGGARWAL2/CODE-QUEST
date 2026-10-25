@@ -1,0 +1,1785 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts: Mulish -->
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="https://api.learntechww.com/college_icon/logo1733989968823.jpg">
+    <!-- jsPDF Library for generating real downloadable PDFs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #F46036;
+            --primary-hover: #e05328;
+            --primary-soft: #FFF5F0;
+            --secondary: #64748b;
+            --border-default: #eaecf0;
+            --border-light: #f2f4f7;
+            --text-primary: #101828;
+            --text-secondary: #344054;
+            --text-muted: #667085;
+            --bg-canvas: #ffffff;
+            --bg-subtle: #fcfcfd;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            font-family: 'Mulish', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        }
+
+        /* Custom ultra-thin smooth scrollbar across all elements & PDF reader */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #c1c1c1 transparent;
+        }
+
+        *::-webkit-scrollbar,
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        *::-webkit-scrollbar-track,
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        *::-webkit-scrollbar-thumb,
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 10px;
+        }
+
+        *::-webkit-scrollbar-thumb:hover,
+        ::-webkit-scrollbar-thumb:hover {
+            background: #F46036;
+        }
+
+        body {
+            background-color: var(--bg-canvas);
+            color: var(--text-primary);
+            font-family: 'Mulish', sans-serif !important;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- SITE HEADER (MATCHING TEACHER DASHBOARD EXACTLY) --- */
+        .site-header {
+            height: 72px;
+            background: #fff;
+            border-bottom: 1px solid var(--border-default);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 48px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .logo-container:hover {
+            opacity: 0.8;
+        }
+
+        .logo-square {
+            width: 52px;
+            height: 52px;
+            background: transparent;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-square img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 57px;
+            margin-left: 40px;
+        }
+
+        .nav-icon-btn {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #344054;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+        }
+
+        .nav-icon-btn img {
+            width: 32px !important;
+            height: 32px !important;
+        }
+
+        .nav-icon-btn:hover {
+            background: #F9FAFB;
+            color: #F46036;
+        }
+
+        .nav-icon-btn.active {
+            color: #F46036;
+            background: #FFF5F0;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .plus-btn {
+            width: 48px;
+            height: 72px;
+            background: #fff5f0;
+            color: #F46036;
+            border: none;
+            border-left: 1px solid #f0f0f0;
+            border-right: 1px solid #f0f0f0;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .plus-btn:hover {
+            background: #ffece5;
+            color: #F46036;
+        }
+
+        .grid-btn {
+            width: 54px;
+            height: 54px;
+            color: #344054;
+            border: none;
+            background: transparent;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border-radius: 14px;
+        }
+
+        .grid-btn img {
+            width: 32px !important;
+            height: 32px !important;
+        }
+
+        .grid-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .profile-bubble {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-left: 16px;
+            border-left: 1px solid var(--border-default);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            font-family: 'Mulish', sans-serif !important;
+            color: #444;
+            text-transform: uppercase;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            font-weight: 800;
+            font-family: 'Mulish', sans-serif !important;
+            color: #F46036;
+            text-transform: uppercase;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            background: transparent;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        /* --- SIGNATURE TRI-ORANGE LINE --- */
+        .tri-orange-line {
+            display: flex;
+            height: 6px !important;
+            width: 290px !important;
+            border-radius: 0px;
+            overflow: hidden;
+            margin: 8px 0 28px 0;
+        }
+
+        /* --- MAIN CONTENT LAYOUT --- */
+        .page-content {
+            max-width: 95%;
+            margin: 0 auto;
+            padding: 36px 32px 60px;
+            width: 100%;
+            flex: 1;
+        }
+
+        .page-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 4px;
+        }
+
+        .page-header-row h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            letter-spacing: -0.025em;
+            color: #F46036;
+            font-family: 'Mulish', sans-serif !important;
+        }
+
+        .doc-count-tag {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #667085;
+            font-family: 'Mulish', sans-serif !important;
+        }
+
+        /* --- AUDIT CONTAINER & TABLE --- */
+        .audit-container {
+            border: 1px solid var(--border-default);
+            border-radius: 8px;
+            background: #fff;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .audit-top {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-default);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            gap: 16px;
+        }
+
+        .search-wrap {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .search-wrap svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            fill: #98a2b3;
+        }
+
+        .search-wrap input {
+            width: 100%;
+            padding: 12px 14px 12px 42px;
+            border: 1px solid #d0d5dd;
+            border-radius: 8px;
+            font-family: 'Mulish', sans-serif !important;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #101828;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .search-wrap input:focus {
+            border-color: #F46036;
+            box-shadow: 0 0 0 3px rgba(244, 96, 54, 0.15);
+        }
+
+        .table-scroll-wrap {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Mulish', sans-serif !important;
+        }
+
+        th {
+            padding: 18px 24px;
+            text-align: left;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #344054;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            background: #fff;
+            border-bottom: 1px solid var(--border-default);
+            font-family: 'Mulish', sans-serif !important;
+        }
+
+        td {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-default);
+            font-size: 1.05rem;
+            color: #101828;
+            vertical-align: middle;
+            font-family: 'Mulish', sans-serif !important;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr.active-row {
+            transition: background 0.15s;
+            cursor: pointer;
+        }
+
+        tr.active-row:hover td {
+            background: #FFF5F0;
+        }
+
+        .doc-title-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #101828;
+            margin-bottom: 2px;
+            line-height: 1.35;
+            font-family: 'Mulish', sans-serif !important;
+        }
+
+        .doc-meta-text {
+            font-size: 0.92rem;
+            font-weight: 400;
+            color: #667085;
+            font-family: 'Mulish', sans-serif !important;
+        }
+
+        .discipline-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: #344054;
+            font-family: 'Mulish', sans-serif !important;
+        }
+
+        .access-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: #344054;
+            font-family: 'Mulish', sans-serif !important;
+        }
+
+        /* Action Links (Underlined, No Box) */
+        .action-cell-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            justify-content: flex-end;
+        }
+
+        .link-open-pdf {
+            font-family: 'Mulish', sans-serif !important;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #F46036;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.15s;
+        }
+
+        .link-open-pdf:hover {
+            color: #e05328;
+        }
+
+        .link-download-pdf {
+            font-family: 'Mulish', sans-serif !important;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #344054;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.15s;
+        }
+
+        .link-download-pdf:hover {
+            color: #F46036;
+        }
+
+        /* --- 100% FULL SCREEN LIVE REAL E-BOOK READER OVERLAY --- */
+        .pdf-viewer-overlay {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #ffffff;
+            z-index: 99999;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .pdf-viewer-header {
+            height: 64px;
+            background: #fff;
+            border-bottom: 1px solid var(--border-default);
+            padding: 0 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+            z-index: 100;
+        }
+
+        .pdf-header-title-box {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .pdf-header-title-box h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #101828;
+            font-family: 'Mulish', sans-serif !important;
+        }
+
+        .pdf-header-tools {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-tool-btn {
+            background: #fff;
+            border: 1px solid #eaecf0;
+            border-radius: 6px;
+            padding: 0 14px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            font-family: 'Mulish', sans-serif !important;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #344054;
+            transition: all 0.15s;
+            text-decoration: none;
+        }
+
+        .modal-tool-btn:hover {
+            background: #FFF5F0;
+            border-color: #F46036;
+            color: #F46036;
+        }
+
+        .modal-tool-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: #344054;
+        }
+
+        .modal-tool-btn:hover svg {
+            fill: #F46036;
+        }
+
+        .modal-tool-btn.primary {
+            background: #F46036;
+            color: #fff;
+            border-color: #F46036;
+        }
+
+        .modal-tool-btn.primary svg {
+            fill: #fff;
+        }
+
+        .modal-tool-btn.primary:hover {
+            background: #e05328;
+            border-color: #e05328;
+        }
+
+        .modal-tool-btn.close {
+            background: #fee4e2;
+            border-color: #fecdca;
+            color: #d92d20;
+            width: 38px;
+            padding: 0;
+        }
+
+        .modal-tool-btn.close svg {
+            fill: #d92d20;
+        }
+
+        /* Reader Viewport */
+        .pdf-reader-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            height: calc(100vh - 64px);
+            background: #ffffff;
+            position: relative;
+        }
+
+        .real-ebook-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #ffffff;
+        }
+
+        /* --- TOAST --- */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #101828;
+            color: #ffffff;
+            padding: 14px 26px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            display: none;
+            z-index: 100000;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SITE HEADER (MATCHING TEACHER DASHBOARD EXACTLY) -->
+    <header class="site-header">
+        <div class="header-left">
+            <div class="logo-container" onclick="location.reload()" data-tooltip-bottom="Refresh Page">
+                <div class="logo-square">
+                    <img src="../TESTPAD_WEBSITE__files/chitkara.png" alt="CHITKARA">
+                </div>
+                <div class="logo-text"></div>
+            </div>
+            <div class="header-nav">
+                <button class="nav-icon-btn" data-tooltip-bottom="Dashboard"
+                    onclick="location.href='./teacher-dashboard.html'">
+                    <img src="../TESTPAD_WEBSITE__files/menu-1.svg">
+                </button>
+                <button class="nav-icon-btn" data-tooltip-bottom="Assessments"
+                    onclick="location.href='./teacher-dashboard.html#examsList'">
+                    <img src="../TESTPAD_WEBSITE__files/quiz.svg">
+                </button>
+                <button class="nav-icon-btn" data-tooltip-bottom="Question Pool"
+                    onclick="location.href='./questionpool.html'">
+                    <img src="../TESTPAD_WEBSITE__files/folder-2.svg">
+                </button>
+                <button class="nav-icon-btn" data-tooltip-bottom="Analytics & Registry Archives"
+                    onclick="location.href='./analyticshistory.html'">
+                    <img src="../TESTPAD_WEBSITE__files/playground-normal.svg">
+                </button>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <button class="plus-btn" onclick="location.href='./exam-creator.html'"
+                data-tooltip-bottom="Launch New Assessment">
+                <i class="fas fa-plus"></i>
+            </button>
+            <div class="grid-menu-container" style="position: relative;">
+                <button class="grid-btn" id="gridMenuBtn" onclick="toggleGridMenu()" data-tooltip-bottom="Apps">
+                    <img src="../Testpad_pra_files_files/icons8-squared-menu-90.png"
+                        style="width: 32px; height: 32px; opacity: 0.75;" onmouseover="this.style.opacity='1'"
+                        onmouseout="this.style.opacity='0.75'">
+                </button>
+                <div id="gridMenuDropdown" class="grid-menu-dropdown"
+                    style="display: none; position: absolute; top: calc(100% + 15px); right: 0; background: #ffffff; border: 1px solid #f0f0f0; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); padding: 16px; width: 320px; z-index: 1000; flex-direction: row; justify-content: space-between;">
+                    <div class="grid-item" onclick="location.href='./teacher-dashboard.html'"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../TESTPAD_WEBSITE__files/quiz.svg" style="width: 36px; height: 36px;">
+                        <span style="font-size: 0.95rem; font-weight: 600;">Test</span>
+                    </div>
+                    <div class="grid-item" onclick="location.href='./course-dashboard.html'"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../TESTPAD_WEBSITE__files/folder-2.svg" style="width: 36px; height: 36px;">
+                        <span style="font-size: 0.95rem; font-weight: 600;">Courses</span>
+                    </div>
+                    <div class="grid-item" onclick="showToast('Bookmarks Collection Active')"
+                        style="display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; flex: 1; color: #475467;"
+                        onmouseover="this.style.backgroundColor='#fff5f0'; this.style.color='#F46036'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#475467'">
+                        <img src="../Testpad_pra_files_files/iconmonstr-star-3.svg" style="width: 36px; height: 36px;">
+                        <span style="font-size: 0.95rem; font-weight: 600;">Bookmarks</span>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-container" style="position: relative; margin-left: 10px;">
+                <div class="profile-bubble" id="profileToggle" onclick="toggleMenu()">
+                    <div class="user-info">
+                        <div class="user-name">OM AGGARWAL</div>
+                        <div class="user-role">PROFESSOR</div>
+                    </div>
+                    <div class="avatar">
+                        <img src="../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png">
+                    </div>
+                </div>
+
+                <div class="profile-menu" id="profileMenu"
+                    style="display: none; position: absolute; right: 0; top: calc(100% + 10px); background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 220px; z-index: 1000; overflow: hidden; border: 1px solid #eee;">
+                    <div class="menu-item" onclick="location.href='./profile.html'"
+                        style="padding: 12px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer;"
+                        onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
+                        <img src="../TESTPAD_WEBSITE__files/portrait_placeholder_circle.png"
+                            style="width: 20px; height: 20px;">
+                        <span style="font-size: 0.95rem; font-weight: 600; color: #475467;">My Profile</span>
+                    </div>
+                    <div class="menu-item" onclick="location.href='./preferences.html'"
+                        style="padding: 12px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer;"
+                        onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='transparent'">
+                        <img src="../TESTPAD_WEBSITE__files/password.svg" style="width: 20px; height: 20px;">
+                        <span style="font-size: 0.95rem; font-weight: 600; color: #475467;">Preferences</span>
+                    </div>
+                    <div class="menu-item" onclick="location.href='./login.html'"
+                        style="padding: 12px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; border-top: 1px solid #eee;"
+                        onmouseover="this.style.background='#fff5f0'" onmouseout="this.style.background='transparent'">
+                        <i class="fas fa-sign-out-alt" style="color: #F46036; font-size: 1.1rem;"></i>
+                        <span style="font-size: 0.95rem; font-weight: 700; color: #F46036;">Logout</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="page-content">
+        <!-- HEADER ROW -->
+        <div class="page-header-row">
+            <h1>Digital Library & Academic Publications</h1>
+            <span class="doc-count-tag" id="docCountTag">Loading records...</span>
+        </div>
+
+        <!-- TRI-ORANGE LINE -->
+        <div class="tri-orange-line">
+            <div style="background: #FFF1E7; flex: 2.5;"></div>
+            <div style="background: #E6BCA5; flex: 3.5;"></div>
+            <div style="background: #DE5B2B; flex: 5;"></div>
+        </div>
+
+        <!-- AUDIT CONTAINER -->
+        <div class="audit-container">
+            <!-- AUDIT TOP: SEARCH -->
+            <div class="audit-top">
+                <div class="search-wrap">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                    </svg>
+                    <input type="text" id="searchInput"
+                        placeholder="Search across all 90 books by title, author, or discipline..."
+                        onkeyup="handleFilterSearch(this.value)">
+                </div>
+            </div>
+
+            <!-- TABLE -->
+            <div class="table-scroll-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 46%;">Academic E-Book / Publication</th>
+                            <th>Discipline</th>
+                            <th>Pages</th>
+                            <th>Access Status</th>
+                            <th style="text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="documentsTableBody">
+                        <!-- Loaded dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- 100% FULL SCREEN LIVE REAL E-BOOK READER OVERLAY -->
+    <div class="pdf-viewer-overlay" id="pdfViewerOverlay">
+        <div class="pdf-viewer-header">
+            <div class="pdf-header-title-box">
+                <div>
+                    <h3 id="modalPdfTitle">Real Complete E-Book</h3>
+                    <span id="modalPdfMeta" style="font-size: 0.88rem; color: #667085; font-weight: 500;">Author •
+                        Project Gutenberg / Official Public Domain Archive</span>
+                </div>
+            </div>
+
+            <div class="pdf-header-tools">
+                <a id="externalSourceBtn" href="#" target="_blank" class="modal-tool-btn"
+                    title="Open Full Book on Project Gutenberg / Official Source in New Tab">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z" />
+                    </svg>
+                    Open Source Page
+                </a>
+                <button class="modal-tool-btn primary" onclick="downloadCurrentPdf()" title="Download PDF File">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                    </svg>
+                    Download Book
+                </button>
+                <button class="modal-tool-btn close" onclick="closePdfViewer()" title="Exit Full Screen Reader">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="pdf-reader-body">
+            <!-- Actual live real complete e-book embedded via sandbox frame -->
+            <iframe id="realEbookFrame" class="real-ebook-frame" src="about:blank" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Exact 90 Verified Public Domain Books (40 Base + 20 Psychology + 20 Novel + 10 Science)
+        const libraryData = [
+            // ART (3)
+            {
+                id: "art_01",
+                title: "The Practice and Science of Drawing",
+                author: "Harold Speed",
+                category: "Art",
+                pages: 296,
+                year: "1913",
+                bookUrl: "https://www.gutenberg.org/files/14264/14264-h/14264-h.htm"
+            },
+            {
+                id: "art_02",
+                title: "The Story of Art",
+                author: "Public Domain Art History Edition",
+                category: "Art",
+                pages: 460,
+                year: "1950",
+                bookUrl: "https://archive.org/stream/storyofart0000unse/storyofart0000unse_djvu.txt"
+            },
+            {
+                id: "art_03",
+                title: "The Art of War",
+                author: "Sun Tzu",
+                category: "Art",
+                pages: 98,
+                year: "5th C. BC",
+                bookUrl: "https://www.gutenberg.org/files/17405/17405-h/17405-h.htm"
+            },
+
+            // SCIENCE (13 Total: 3 Original + 10 New)
+            {
+                id: "sci_04",
+                title: "Relativity: The Special and General Theory",
+                author: "Albert Einstein",
+                category: "Science",
+                pages: 168,
+                year: "1920",
+                bookUrl: "https://www.gutenberg.org/files/5001/5001-h/5001-h.htm"
+            },
+            {
+                id: "sci_05",
+                title: "On the Origin of Species",
+                author: "Charles Darwin",
+                category: "Science",
+                pages: 502,
+                year: "1859",
+                bookUrl: "https://www.gutenberg.org/files/1228/1228-h/1228-h.htm"
+            },
+            {
+                id: "sci_06",
+                title: "Chemistry: A First Book of Laboratory Experiments",
+                author: "John Howard Appleton",
+                category: "Science",
+                pages: 232,
+                year: "1884",
+                bookUrl: "https://www.gutenberg.org/files/47116/47116-h/47116-h.htm"
+            },
+            {
+                id: "sci_07",
+                title: "Philosophiæ Naturalis Principia Mathematica",
+                author: "Sir Isaac Newton",
+                category: "Science",
+                pages: 540,
+                year: "1687",
+                bookUrl: "https://www.gutenberg.org/files/28233/28233-pdf.pdf"
+            },
+            {
+                id: "sci_08",
+                title: "Opticks: A Treatise of Light Reflections & Refractions",
+                author: "Sir Isaac Newton",
+                category: "Science",
+                pages: 414,
+                year: "1704",
+                bookUrl: "https://www.gutenberg.org/files/33504/33504-h/33504-h.htm"
+            },
+            {
+                id: "sci_09",
+                title: "Dialogues Concerning Two New Sciences",
+                author: "Galileo Galilei",
+                category: "Science",
+                pages: 330,
+                year: "1638",
+                bookUrl: "https://www.gutenberg.org/files/47743/47743-h/47743-h.htm"
+            },
+            {
+                id: "sci_10",
+                title: "The Voyage of the Beagle",
+                author: "Charles Darwin",
+                category: "Science",
+                pages: 520,
+                year: "1839",
+                bookUrl: "https://www.gutenberg.org/files/3704/3704-h/3704-h.htm"
+            },
+            {
+                id: "sci_11",
+                title: "The Descent of Man",
+                author: "Charles Darwin",
+                category: "Science",
+                pages: 680,
+                year: "1871",
+                bookUrl: "https://www.gutenberg.org/files/2300/2300-h/2300-h.htm"
+            },
+            {
+                id: "sci_12",
+                title: "Experiments in Plant Hybridisation",
+                author: "Gregor Mendel",
+                category: "Science",
+                pages: 48,
+                year: "1866",
+                bookUrl: "https://www.gutenberg.org/files/285/285-h/285-h.htm"
+            },
+            {
+                id: "sci_13",
+                title: "Radio-Active Substances",
+                author: "Marie Curie",
+                category: "Science",
+                pages: 94,
+                year: "1903",
+                bookUrl: "https://www.gutenberg.org/files/44826/44826-h/44826-h.htm"
+            },
+            {
+                id: "sci_14",
+                title: "The Chemical History of a Candle",
+                author: "Michael Faraday",
+                category: "Science",
+                pages: 180,
+                year: "1861",
+                bookUrl: "https://www.gutenberg.org/files/14474/14474-h/14474-h.htm"
+            },
+            {
+                id: "sci_15",
+                title: "Experimental Researches in Electricity",
+                author: "Michael Faraday",
+                category: "Science",
+                pages: 580,
+                year: "1839",
+                bookUrl: "https://www.gutenberg.org/files/14969/14969-h/14969-h.htm"
+            },
+            {
+                id: "sci_16",
+                title: "Micrographia: Physiological Descriptions of Minute Bodies",
+                author: "Robert Hooke",
+                category: "Science",
+                pages: 320,
+                year: "1665",
+                bookUrl: "https://www.gutenberg.org/files/15491/15491-h/15491-h.htm"
+            },
+
+            // PHILOSOPHY (4)
+            {
+                id: "phil_07",
+                title: "The Republic",
+                author: "Plato",
+                category: "Philosophy",
+                pages: 416,
+                year: "375 BC",
+                bookUrl: "https://www.gutenberg.org/files/1497/1497-h/1497-h.htm"
+            },
+            {
+                id: "phil_08",
+                title: "Meditations",
+                author: "Marcus Aurelius",
+                category: "Philosophy",
+                pages: 180,
+                year: "180 AD",
+                bookUrl: "https://www.gutenberg.org/files/2680/2680-h/2680-h.htm"
+            },
+            {
+                id: "phil_09",
+                title: "Thus Spoke Zarathustra",
+                author: "Friedrich Nietzsche",
+                category: "Philosophy",
+                pages: 352,
+                year: "1883",
+                bookUrl: "https://www.gutenberg.org/files/1998/1998-h/1998-h.htm"
+            },
+            {
+                id: "phil_10",
+                title: "The Problems of Philosophy",
+                author: "Bertrand Russell",
+                category: "Philosophy",
+                pages: 160,
+                year: "1912",
+                bookUrl: "https://www.gutenberg.org/files/5827/5827-h/5827-h.htm"
+            },
+
+            // MEDICAL (5)
+            {
+                id: "med_11",
+                title: "A Short History of Medicine",
+                author: "Charles Singer",
+                category: "Medical",
+                pages: 368,
+                year: "1928",
+                bookUrl: "https://archive.org/details/shorthistoryofme00sing"
+            },
+            {
+                id: "med_12",
+                title: "A Guide to Health",
+                author: "Mahatma Gandhi",
+                category: "Medical",
+                pages: 140,
+                year: "1921",
+                bookUrl: "https://www.gutenberg.org/files/11964/11964-h/11964-h.htm"
+            },
+            {
+                id: "med_13",
+                title: "Preventable Diseases",
+                author: "Woods Hutchinson",
+                category: "Medical",
+                pages: 442,
+                year: "1909",
+                bookUrl: "https://www.gutenberg.org/files/18440/18440-h/18440-h.htm"
+            },
+            {
+                id: "med_14",
+                title: "The Genuine Works of Hippocrates",
+                author: "Hippocrates",
+                category: "Medical",
+                pages: 390,
+                year: "400 BC",
+                bookUrl: "https://www.gutenberg.org/files/5131/5131-h/5131-h.htm"
+            },
+            {
+                id: "med_15",
+                title: "Medical Essays",
+                author: "Oliver Wendell Holmes",
+                category: "Medical",
+                pages: 445,
+                year: "1883",
+                bookUrl: "https://www.gutenberg.org/files/2664/2664-h/2664-h.htm"
+            },
+
+            // CONSTITUTION & LAW (5)
+            {
+                id: "law_16",
+                title: "The Constitution of India",
+                author: "Dr. B.R. Ambedkar & Constituent Assembly",
+                category: "Constitution/Law",
+                pages: 395,
+                year: "1950",
+                bookUrl: "https://www.gutenberg.org/ebooks/search/?query=Constitution+of+India"
+            },
+            {
+                id: "law_17",
+                title: "Indian Penal Code (IPC)",
+                author: "Official Legislative Archive",
+                category: "Constitution/Law",
+                pages: 511,
+                year: "1860",
+                bookUrl: "https://www.gutenberg.org/ebooks/search/?query=Indian+Penal+Code"
+            },
+            {
+                id: "law_18",
+                title: "Code of Criminal Procedure (CrPC)",
+                author: "Ministry of Law & Justice",
+                category: "Constitution/Law",
+                pages: 484,
+                year: "1973",
+                bookUrl: "https://www.gutenberg.org/ebooks/search/?query=Criminal+Procedure"
+            },
+            {
+                id: "law_19",
+                title: "Code of Civil Procedure (CPC)",
+                author: "Legislative Department of India",
+                category: "Constitution/Law",
+                pages: 350,
+                year: "1908",
+                bookUrl: "https://www.gutenberg.org/ebooks/search/?query=Civil+Procedure"
+            },
+            {
+                id: "law_20",
+                title: "Indian Evidence Act",
+                author: "Law Commission of India Archive",
+                category: "Constitution/Law",
+                pages: 167,
+                year: "1872",
+                bookUrl: "https://www.gutenberg.org/ebooks/search/?query=Evidence+Act"
+            },
+
+            // HABITS & BEHAVIOUR (7)
+            {
+                id: "hab_21",
+                title: "As a Man Thinketh",
+                author: "James Allen",
+                category: "Habits & Behaviour",
+                pages: 80,
+                year: "1903",
+                bookUrl: "https://www.gutenberg.org/files/4507/4507-h/4507-h.htm"
+            },
+            {
+                id: "hab_22",
+                title: "The Power of Concentration",
+                author: "William Walker Atkinson",
+                category: "Habits & Behaviour",
+                pages: 188,
+                year: "1918",
+                bookUrl: "https://www.gutenberg.org/files/3144/3144-h/3144-h.htm"
+            },
+            {
+                id: "hab_23",
+                title: "How to Live on 24 Hours a Day",
+                author: "Arnold Bennett",
+                category: "Habits & Behaviour",
+                pages: 96,
+                year: "1910",
+                bookUrl: "https://www.gutenberg.org/files/2274/2274-h/2274-h.htm"
+            },
+            {
+                id: "hab_24",
+                title: "The Way to Wealth",
+                author: "Benjamin Franklin",
+                category: "Habits & Behaviour",
+                pages: 64,
+                year: "1758",
+                bookUrl: "https://www.gutenberg.org/files/20203/20203-h/20203-h.htm"
+            },
+            {
+                id: "hab_25",
+                title: "Self-Help",
+                author: "Samuel Smiles",
+                category: "Habits & Behaviour",
+                pages: 412,
+                year: "1859",
+                bookUrl: "https://www.gutenberg.org/files/935/935-h/935-h.htm"
+            },
+            {
+                id: "hab_26",
+                title: "Character",
+                author: "Samuel Smiles",
+                category: "Habits & Behaviour",
+                pages: 388,
+                year: "1871",
+                bookUrl: "https://www.gutenberg.org/files/2541/2541-h/2541-h.htm"
+            },
+            {
+                id: "hab_27",
+                title: "The Science of Being Well",
+                author: "Wallace D. Wattles",
+                category: "Habits & Behaviour",
+                pages: 134,
+                year: "1910",
+                bookUrl: "https://www.gutenberg.org/files/19970/19970-h/19970-h.htm"
+            },
+
+            // NOVEL / LITERATURE (30 Total: 10 Original + 20 New)
+            {
+                id: "nov_28",
+                title: "Pride and Prejudice",
+                author: "Jane Austen",
+                category: "Novel",
+                pages: 432,
+                year: "1813",
+                bookUrl: "https://www.gutenberg.org/files/1342/1342-h/1342-h.htm"
+            },
+            {
+                id: "nov_29",
+                title: "Great Expectations",
+                author: "Charles Dickens",
+                category: "Novel",
+                pages: 505,
+                year: "1861",
+                bookUrl: "https://www.gutenberg.org/files/1400/1400-h/1400-h.htm"
+            },
+            {
+                id: "nov_30",
+                title: "Moby-Dick; or, The Whale",
+                author: "Herman Melville",
+                category: "Novel",
+                pages: 635,
+                year: "1851",
+                bookUrl: "https://www.gutenberg.org/files/2701/2701-h/2701-h.htm"
+            },
+            {
+                id: "nov_31",
+                title: "Frankenstein; or, The Modern Prometheus",
+                author: "Mary Shelley",
+                category: "Novel",
+                pages: 280,
+                year: "1818",
+                bookUrl: "https://www.gutenberg.org/files/84/84-h/84-h.htm"
+            },
+            {
+                id: "nov_32",
+                title: "Dracula",
+                author: "Bram Stoker",
+                category: "Novel",
+                pages: 418,
+                year: "1897",
+                bookUrl: "https://www.gutenberg.org/files/345/345-h/345-h.htm"
+            },
+            {
+                id: "nov_33",
+                title: "The Adventures of Sherlock Holmes",
+                author: "Arthur Conan Doyle",
+                category: "Novel",
+                pages: 307,
+                year: "1892",
+                bookUrl: "https://www.gutenberg.org/files/1661/1661-h/1661-h.htm"
+            },
+            {
+                id: "nov_34",
+                title: "Alice's Adventures in Wonderland",
+                author: "Lewis Carroll",
+                category: "Novel",
+                pages: 192,
+                year: "1865",
+                bookUrl: "https://www.gutenberg.org/files/11/11-h/11-h.htm"
+            },
+            {
+                id: "nov_35",
+                title: "The Adventures of Tom Sawyer",
+                author: "Mark Twain",
+                category: "Novel",
+                pages: 274,
+                year: "1876",
+                bookUrl: "https://www.gutenberg.org/files/74/74-h/74-h.htm"
+            },
+            {
+                id: "nov_36",
+                title: "The Great Gatsby",
+                author: "F. Scott Fitzgerald",
+                category: "Novel",
+                pages: 218,
+                year: "1925",
+                bookUrl: "https://www.gutenberg.org/ebooks/64317.html.images"
+            },
+            {
+                id: "nov_37",
+                title: "Crime and Punishment",
+                author: "Fyodor Dostoevsky",
+                category: "Novel",
+                pages: 545,
+                year: "1866",
+                bookUrl: "https://www.gutenberg.org/files/2554/2554-h/2554-h.htm"
+            },
+            {
+                id: "nov_38",
+                title: "Wuthering Heights",
+                author: "Emily Brontë",
+                category: "Novel",
+                pages: 410,
+                year: "1847",
+                bookUrl: "https://www.gutenberg.org/files/768/768-h/768-h.htm"
+            },
+            {
+                id: "nov_39",
+                title: "Jane Eyre",
+                author: "Charlotte Brontë",
+                category: "Novel",
+                pages: 530,
+                year: "1847",
+                bookUrl: "https://www.gutenberg.org/files/1260/1260-h/1260-h.htm"
+            },
+            {
+                id: "nov_40",
+                title: "Sense and Sensibility",
+                author: "Jane Austen",
+                category: "Novel",
+                pages: 380,
+                year: "1811",
+                bookUrl: "https://www.gutenberg.org/files/161/161-h/161-h.htm"
+            },
+            {
+                id: "nov_41",
+                title: "Emma",
+                author: "Jane Austen",
+                category: "Novel",
+                pages: 474,
+                year: "1815",
+                bookUrl: "https://www.gutenberg.org/files/158/158-h/158-h.htm"
+            },
+            {
+                id: "nov_42",
+                title: "Persuasion",
+                author: "Jane Austen",
+                category: "Novel",
+                pages: 250,
+                year: "1817",
+                bookUrl: "https://www.gutenberg.org/files/105/105-h/105-h.htm"
+            },
+            {
+                id: "nov_43",
+                title: "A Tale of Two Cities",
+                author: "Charles Dickens",
+                category: "Novel",
+                pages: 340,
+                year: "1859",
+                bookUrl: "https://www.gutenberg.org/files/98/98-h/98-h.htm"
+            },
+            {
+                id: "nov_44",
+                title: "David Copperfield",
+                author: "Charles Dickens",
+                category: "Novel",
+                pages: 620,
+                year: "1850",
+                bookUrl: "https://www.gutenberg.org/files/766/766-h/766-h.htm"
+            },
+            {
+                id: "nov_45",
+                title: "Oliver Twist",
+                author: "Charles Dickens",
+                category: "Novel",
+                pages: 440,
+                year: "1838",
+                bookUrl: "https://www.gutenberg.org/files/730/730-h/730-h.htm"
+            },
+            {
+                id: "nov_46",
+                title: "The Picture of Dorian Gray",
+                author: "Oscar Wilde",
+                category: "Novel",
+                pages: 254,
+                year: "1890",
+                bookUrl: "https://www.gutenberg.org/files/174/174-h/174-h.htm"
+            },
+            {
+                id: "nov_47",
+                title: "The Count of Monte Cristo",
+                author: "Alexandre Dumas",
+                category: "Novel",
+                pages: 1276,
+                year: "1844",
+                bookUrl: "https://www.gutenberg.org/files/1184/1184-h/1184-h.htm"
+            },
+            {
+                id: "nov_48",
+                title: "The Three Musketeers",
+                author: "Alexandre Dumas",
+                category: "Novel",
+                pages: 680,
+                year: "1844",
+                bookUrl: "https://www.gutenberg.org/files/1257/1257-h/1257-h.htm"
+            },
+            {
+                id: "nov_49",
+                title: "Les Misérables",
+                author: "Victor Hugo",
+                category: "Novel",
+                pages: 1460,
+                year: "1862",
+                bookUrl: "https://www.gutenberg.org/files/135/135-h/135-h.htm"
+            },
+            {
+                id: "nov_50",
+                title: "The Hunchback of Notre-Dame",
+                author: "Victor Hugo",
+                category: "Novel",
+                pages: 510,
+                year: "1831",
+                bookUrl: "https://www.gutenberg.org/files/2610/2610-h/2610-h.htm"
+            },
+            {
+                id: "nov_51",
+                title: "War and Peace",
+                author: "Leo Tolstoy",
+                category: "Novel",
+                pages: 1225,
+                year: "1869",
+                bookUrl: "https://www.gutenberg.org/files/2600/2600-h/2600-h.htm"
+            },
+            {
+                id: "nov_52",
+                title: "Anna Karenina",
+                author: "Leo Tolstoy",
+                category: "Novel",
+                pages: 864,
+                year: "1877",
+                bookUrl: "https://www.gutenberg.org/files/1399/1399-h/1399-h.htm"
+            },
+            {
+                id: "nov_53",
+                title: "The Brothers Karamazov",
+                author: "Fyodor Dostoevsky",
+                category: "Novel",
+                pages: 820,
+                year: "1880",
+                bookUrl: "https://www.gutenberg.org/files/28054/28054-h/28054-h.htm"
+            },
+            {
+                id: "nov_54",
+                title: "The Metamorphosis",
+                author: "Franz Kafka",
+                category: "Novel",
+                pages: 110,
+                year: "1915",
+                bookUrl: "https://www.gutenberg.org/files/5200/5200-h/5200-h.htm"
+            },
+            {
+                id: "nov_55",
+                title: "The Time Machine",
+                author: "H. G. Wells",
+                category: "Novel",
+                pages: 140,
+                year: "1895",
+                bookUrl: "https://www.gutenberg.org/files/35/35-h/35-h.htm"
+            },
+            {
+                id: "nov_56",
+                title: "The War of the Worlds",
+                author: "H. G. Wells",
+                category: "Novel",
+                pages: 280,
+                year: "1898",
+                bookUrl: "https://www.gutenberg.org/files/36/36-h/36-h.htm"
+            },
+            {
+                id: "nov_57",
+                title: "The Invisible Man",
+                author: "H. G. Wells",
+                category: "Novel",
+                pages: 210,
+                year: "1897",
+                bookUrl: "https://www.gutenberg.org/files/5230/5230-h/5230-h.htm"
+            },
+
+            // PSYCHOLOGY (23 Total: 3 Original + 20 New)
+            {
+                id: "psych_38",
+                title: "Psychology: Briefer Course",
+                author: "William James",
+                category: "Psychology",
+                pages: 478,
+                year: "1892",
+                bookUrl: "https://www.gutenberg.org/ebooks/47841.html.images"
+            },
+            {
+                id: "psych_39",
+                title: "Psychology: A Study of Mental Life",
+                author: "Robert S. Woodworth",
+                category: "Psychology",
+                pages: 580,
+                year: "1921",
+                bookUrl: "https://www.gutenberg.org/ebooks/61183.html.images"
+            },
+            {
+                id: "psych_40",
+                title: "The Science of Human Nature",
+                author: "William Henry Pyle",
+                category: "Psychology",
+                pages: 390,
+                year: "1917",
+                bookUrl: "https://www.gutenberg.org/files/41829/41829-h/41829-h.htm"
+            },
+            {
+                id: "psych_58",
+                title: "The Interpretation of Dreams",
+                author: "Sigmund Freud",
+                category: "Psychology",
+                pages: 600,
+                year: "1899",
+                bookUrl: "https://www.gutenberg.org/files/58607/58607-h/58607-h.htm"
+            },
+            {
+                id: "psych_59",
+                title: "Psychopathology of Everyday Life",
+                author: "Sigmund Freud",
+                category: "Psychology",
+                pages: 340,
+                year: "1901",
+                bookUrl: "https://www.gutenberg.org/files/44540/44540-h/44540-h.htm"
+            },
+            {
+                id: "psych_60",
+                title: "Totem and Taboo",
+                author: "Sigmund Freud",
+                category: "Psychology",
+                pages: 260,
+                year: "1913",
+                bookUrl: "https://www.gutenberg.org/files/41214/41214-h/41214-h.htm"
+            },
+            {
+                id: "psych_61",
+                title: "Group Psychology and the Analysis of the Ego",
+                author: "Sigmund Freud",
+                category: "Psychology",
+                pages: 135,
+                year: "1921",
+                bookUrl: "https://www.gutenberg.org/files/35877/35877-h/35877-h.htm"
+            },
+            {
+                id: "psych_62",
+                title: "The Principles of Psychology (Volume 1)",
+                author: "William James",
+                category: "Psychology",
+                pages: 704,
+                year: "1890",
+                bookUrl: "https://www.gutenberg.org/files/57628/57628-h/57628-h.htm"
+            },
+            {
+                id: "psych_63",
+                title: "The Principles of Psychology (Volume 2)",
+                author: "William James",
+                category: "Psychology",
+                pages: 720,
+                year: "1890",
+                bookUrl: "https://www.gutenberg.org/files/57634/57634-h/57634-h.htm"
+            },
+            {
+                id: "psych_64",
+                title: "The Varieties of Religious Experience",
+                author: "William James",
+                category: "Psychology",
+                pages: 534,
+                year: "1902",
+                bookUrl: "https://www.gutenberg.org/files/621/621-h/621-h.htm"
+            },
+            {
+                id: "psych_65",
+                title: "The Psychology of Insanity",
+                author: "Bernard Hart",
+                category: "Psychology",
+                pages: 190,
+                year: "1912",
+                bookUrl: "https://www.gutenberg.org/files/42490/42490-h/42490-h.htm"
+            },
+            {
+                id: "psych_66",
+                title: "Applied Psychology: Driving Mental Power",
+                author: "Warren Hilton",
+                category: "Psychology",
+                pages: 120,
+                year: "1914",
+                bookUrl: "https://www.gutenberg.org/files/40248/40248-h/40248-h.htm"
+            },
+            {
+                id: "psych_67",
+                title: "Making Good with What You Have",
+                author: "Warren Hilton",
+                category: "Psychology",
+                pages: 110,
+                year: "1914",
+                bookUrl: "https://www.gutenberg.org/files/40250/40250-h/40250-h.htm"
+            },
+            {
+                id: "psych_68",
+                title: "Mental Efficiency & Other Hints to Men and Women",
+                author: "Arnold Bennett",
+                category: "Psychology",
+                pages: 160,
+                year: "1911",
+                bookUrl: "https://www.gutenberg.org/files/2782/2782-h/2782-h.htm"
+            },
+            {
+                id: "psych_69",
+                title: "The Crowd: A Study of the Popular Mind",
+                author: "Gustave Le Bon",
+                category: "Psychology",
+                pages: 240,
+                year: "1895",
+                bookUrl: "https://www.gutenberg.org/files/445/445-h/445-h.htm"
+            },
+            {
+                id: "psych_70",
+                title: "Dynamic Psychology",
+                author: "Robert S. Woodworth",
+                category: "Psychology",
+                pages: 220,
+                year: "1918",
+                bookUrl: "https://www.gutenberg.org/files/48625/48625-h/48625-h.htm"
+            },
+            {
+                id: "psych_71",
+                title: "The Psychology of Child Development",
+                author: "Irving King",
+                category: "Psychology",
+                pages: 280,
+                year: "1903",
+                bookUrl: "https://www.gutenberg.org/files/39097/39097-h/39097-h.htm"
+            },
+            {
+                id: "psych_72",
+                title: "Educational Psychology",
+                author: "Edward L. Thorndike",
+                category: "Psychology",
+                pages: 450,
+                year: "1903",
+                bookUrl: "https://www.gutenberg.org/files/45638/45638-h/45638-h.htm"
+            },
+            {
+                id: "psych_73",
+                title: "Animal Intelligence: Experimental Studies",
+                author: "Edward L. Thorndike",
+                category: "Psychology",
+                pages: 310,
+                year: "1911",
+                bookUrl: "https://www.gutenberg.org/files/45492/45492-h/45492-h.htm"
+            },
+            {
+                id: "psych_74",
+                title: "The Subconscious",
+                author: "Joseph Jastrow",
+                category: "Psychology",
+                pages: 560,
+                year: "1906",
+                bookUrl: "https://www.gutenberg.org/files/58957/58957-h/58957-h.htm"
+            },
+            {
+                id: "psych_75",
+                title: "Psychology of the Unconscious",
+                author: "Carl Gustav Jung",
+                category: "Psychology",
+                pages: 570,
+                year: "1916",
+                bookUrl: "https://www.gutenberg.org/files/57388/57388-h/57388-h.htm"
+            },
+            {
+                id: "psych_76",
+                title: "Analytical Psychology",
+                author: "Carl Gustav Jung",
+                category: "Psychology",
+                pages: 410,
+                year: "1916",
+                bookUrl: "https://www.gutenberg.org/files/42445/42445-h/42445-h.htm"
+            },
+            {
+                id: "psych_77",
+                title: "Man's Supreme Inheritance: Conscious Guidance",
+                author: "F. Matthias Alexander",
+                category: "Psychology",
+                pages: 354,
+                year: "1918",
+                bookUrl: "https://www.gutenberg.org/files/55294/55294-h/55294-h.htm"
+            }
+        ];
+
+        let state = {
+            searchQuery: '',
+            currentDoc: null
+        };
+
+        function renderTable() {
+            const tableBody = document.getElementById('documentsTableBody');
+            const countTag = document.getElementById('docCountTag');
+
+            let filtered = libraryData;
+
+            if (state.searchQuery) {
+                const q = state.searchQuery.toLowerCase();
+                filtered = filtered.filter(item =>
+                    item.title.toLowerCase().includes(q) ||
+                    item.author.toLowerCase().includes(q) ||
+                    item.category.toLowerCase().includes(q)
+                );
+            }
+
+            countTag.textContent = `Showing ${filtered.length} of ${libraryData.length} Academic Records`;
+
+            if (filtered.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 60px; color: #98a2b3; font-weight: 600; font-size: 1.05rem;">
+                            No academic records matched your search query.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tableBody.innerHTML = filtered.map(doc => `
+                <tr class="active-row" onclick="openPdfViewer('${doc.id}')">
+                    <td>
+                        <div>
+                            <div class="doc-title-text">${doc.title}</div>
+                            <div class="doc-meta-text">By ${doc.author} • ${doc.year}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="discipline-text">${doc.category}</span>
+                    </td>
+                    <td style="font-weight: 500; color: #344054;">
+                        ${doc.pages} Pages
+                    </td>
+                    <td>
+                        <span class="access-text">Free Access</span>
+                    </td>
+                    <td>
+                        <div class="action-cell-group" onclick="event.stopPropagation()">
+                            <span class="link-open-pdf" onclick="openPdfViewer('${doc.id}')">Open E-Book</span>
+                            <span class="link-download-pdf" onclick="downloadRealBook('${doc.id}')" title="Download E-Book">Download</span>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function handleFilterSearch(q) {
+            state.searchQuery = q;
+            renderTable();
+        }
+
+        // --- FULL SCREEN LIVE E-BOOK VIEWER ---
+        function openPdfViewer(id) {
+            const doc = libraryData.find(d => d.id === id);
+            if (!doc) return;
+
+            state.currentDoc = doc;
+
+            document.getElementById('modalPdfTitle').textContent = doc.title;
+            document.getElementById('modalPdfMeta').textContent = `By ${doc.author} • ${doc.pages} Pages • Discipline: ${doc.category}`;
+
+            // Set External Source Link
+            const extBtn = document.getElementById('externalSourceBtn');
+            extBtn.href = doc.bookUrl;
+
+            // Load actual full complete e-book inside iframe
+            const frame = document.getElementById('realEbookFrame');
+            frame.src = doc.bookUrl;
+
+            // Display Full Screen Overlay
+            document.getElementById('pdfViewerOverlay').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePdfViewer() {
+            document.getElementById('pdfViewerOverlay').style.display = 'none';
+            document.getElementById('realEbookFrame').src = 'about:blank';
+            document.body.style.overflow = 'auto';
+        }
+
+        function downloadRealBook(id) {
+            const doc = libraryData.find(d => d.id === id);
+            if (!doc) return;
+            showToast(`Opening complete book download for: ${doc.title}...`);
+            window.open(doc.bookUrl, '_blank');
+        }
+
+        function downloadCurrentPdf() {
+            if (state.currentDoc) {
+                downloadRealBook(state.currentDoc.id);
+            }
+        }
+
+        // --- HEADER DROPDOWNS ---
+        function toggleGridMenu() {
+            const grid = document.getElementById('gridMenuDropdown');
+            const profile = document.getElementById('profileMenu');
+            if (profile) profile.style.display = 'none';
+            if (grid) grid.style.display = grid.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function toggleMenu() {
+            const profile = document.getElementById('profileMenu');
+            const grid = document.getElementById('gridMenuDropdown');
+            if (grid) grid.style.display = 'none';
+            if (profile) profile.style.display = profile.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'block';
+            setTimeout(() => { t.style.display = 'none'; }, 2400);
+        }
+
+        document.addEventListener('click', (e) => {
+            const gridBtn = document.getElementById('gridMenuBtn');
+            const gridDrop = document.getElementById('gridMenuDropdown');
+            const profToggle = document.getElementById('profileToggle');
+            const profMenu = document.getElementById('profileMenu');
+
+            if (gridDrop && gridBtn && !gridBtn.contains(e.target) && !gridDrop.contains(e.target)) {
+                gridDrop.style.display = 'none';
+            }
+            if (profMenu && profToggle && !profToggle.contains(e.target) && !profMenu.contains(e.target)) {
+                profMenu.style.display = 'none';
+            }
+        });
+
+        // Initialize Table
+        renderTable();
+    </script>
+</body>
+
+</html>

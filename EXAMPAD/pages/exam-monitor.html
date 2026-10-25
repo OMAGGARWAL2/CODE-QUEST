@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTPAD</title>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #f26b3a;
+            --primary-light: #ff8e6e;
+            --accent: #1e272e;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --text-main: #1a202c;
+            --text-dim: #718096;
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            --danger: #ef4444;
+            --success: #22c55e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        /* --- MODERN HEADER --- */
+        .monitor-header {
+            height: 90px;
+            background: #fff;
+            border-bottom: 1px solid #edf2f7;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .btn-back {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            border: 1px solid #edf2f7;
+            background: #fff;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-back:hover {
+            background: #f8fafc;
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .monitor-title h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .monitor-title p {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .live-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f0fdf4;
+            padding: 8px 16px;
+            border-radius: 30px;
+            color: #16a34a;
+            font-weight: 800;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* --- DASHBOARD GRIDS --- */
+        .workspace {
+            max-width: 1400px;
+            margin: 32px auto;
+            padding: 0 40px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: #fff;
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            border: 1px solid #f1f5f9;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stat-card span {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-card h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        /* --- SURVEILLANCE TABLE --- */
+        .table-vault {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            border: 1px solid #f1f5f9;
+            overflow: hidden;
+        }
+
+        .table-controls {
+            padding: 24px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8fafc;
+            padding: 16px 24px;
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        td {
+            padding: 18px 24px;
+            border-bottom: 1px solid #f8fafc;
+            font-size: 0.95rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #fcfcfc;
+        }
+
+        .student-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .security-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 800;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono';
+        }
+
+        .security-safe {
+            background: #f0fdf4;
+            color: #16a34a;
+        }
+
+        .security-risk {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+
+        /* --- PROGRESS METER --- */
+        .progress-meter {
+            width: 140px;
+        }
+
+        .meter-bar {
+            height: 6px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+
+        .meter-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .meter-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-dim);
+        }
+
+        .status-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .status-submitted {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .btn-view {
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: 1px solid #edf2f7;
+            background: #fff;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-view:hover {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: #fff;
+        }
+
+        /* --- EMPTY STATE --- */
+        .empty-proctor {
+            text-align: center;
+            padding: 80px 24px;
+        }
+
+        .empty-proctor i {
+            font-size: 4rem;
+            color: #e2e8f0;
+            margin-bottom: 24px;
+            display: block;
+        }
+    </style>
+
+    <style>
+        ::selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+        ::-moz-selection { background: rgba(251, 146, 60, 0.3) !important; color: inherit; }
+    </style>
+</head>
+
+<body>
+
+    <header class="monitor-header">
+        <div class="header-left">
+            <button class="btn-back" onclick="goBack()"><i class="fas fa-chevron-left"></i></button>
+            <div class="monitor-title">
+                <h1 id="examTitleTitle">Session Monitor</h1>
+                <p id="examSubtitle">Verifying academic integrity in real-time</p>
+            </div>
+        </div>
+        <div class="live-status">
+            <div class="pulse-dot"></div>
+            Live Proctored Session
+        </div>
+    </header>
+
+    <main class="workspace">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span>Total Registered</span>
+                <h2 id="totalStudents">0</h2>
+            </div>
+            <div class="stat-card">
+                <span>Active Channels</span>
+                <h2 id="inProgress" style="color: #2563eb;">0</h2>
+            </div>
+            <div class="stat-card">
+                <span>Validated Submissions</span>
+                <h2 id="submitted" style="color: #16a34a;">0</h2>
+            </div>
+            <div class="stat-card">
+                <span>Avg Intelligence</span>
+                <h2 id="avgScore">0%</h2>
+            </div>
+        </div>
+
+        <div class="table-vault">
+            <div class="table-controls">
+                <h3 style="font-weight: 800; font-size: 1.2rem;">Participant Surveillance</h3>
+                <div style="font-size: 0.8rem; color: var(--text-dim); font-weight: 600;">System Refresh: 5.0s</div>
+            </div>
+            <table id="surveillanceTable">
+                <thead>
+                    <tr>
+                        <th>Participant ID</th>
+                        <th>Workflow Status</th>
+                        <th>Completion</th>
+                        <th>Engagement Time</th>
+                        <th>Integrity (Switches)</th>
+                        <th>Validated Score</th>
+                        <th>Intervention</th>
+                    </tr>
+                </thead>
+                <tbody id="studentsTable">
+                    <!-- Dynamic Rows -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const examId = urlParams.get('examId');
+
+        if (!examId) goBack();
+
+        function init() {
+            const exam = db.getExamById(examId);
+            if (!exam) return goBack();
+
+            document.getElementById('examTitleTitle').textContent = exam.title;
+            refreshData();
+        }
+
+        function refreshData() {
+            const attempts = db.getExamAttempts(examId);
+            const inProgress = attempts.filter(a => a.status === 'in-progress');
+            const submitted = attempts.filter(a => a.status === 'submitted');
+
+            document.getElementById('totalStudents').textContent = attempts.length;
+            document.getElementById('inProgress').textContent = inProgress.length;
+            document.getElementById('submitted').textContent = submitted.length;
+
+            const totalScore = submitted.reduce((sum, a) => sum + (a.score?.percentage || 0), 0);
+            const avg = submitted.length ? Math.round(totalScore / submitted.length) : 0;
+            document.getElementById('avgScore').textContent = `${avg}%`;
+
+            renderTable(attempts);
+            setTimeout(refreshData, 5000);
+        }
+
+        function renderTable(attempts) {
+            const table = document.getElementById('studentsTable');
+            const exam = db.getExamById(examId);
+
+            if (!attempts.length) {
+                table.innerHTML = `<tr><td colspan="7" class="empty-proctor">
+                    <i class="fas fa-radar"></i>
+                    <p style="font-weight: 700; color: var(--text-dim);">Scanning for active sessions... No participants detected.</p>
+                </td></tr>`;
+                return;
+            }
+
+            table.innerHTML = attempts.map(a => {
+                const totalQ = exam.questions?.length || 1;
+                const doneQ = Object.keys(a.responses || {}).length;
+                const perc = Math.round((doneQ / totalQ) * 100);
+                const startTime = new Date(a.startTime);
+                const diff = Math.round((new Date() - startTime) / 60000);
+
+                const integrityClass = a.tabSwitchCount > 2 ? 'security-risk' : 'security-safe';
+                const statusClass = a.status === 'submitted' ? 'status-submitted' : 'status-active';
+
+                return `
+                    <tr>
+                        <td class="student-id">${a.studentId}</td>
+                        <td><span class="status-tag ${statusClass}">${a.status}</span></td>
+                        <td>
+                            <div class="progress-meter">
+                                <div class="meter-bar"><div class="meter-fill" style="width:${perc}%"></div></div>
+                                <div class="meter-label">${doneQ} / ${totalQ} Units</div>
+                            </div>
+                        </td>
+                        <td style="font-weight:700;">${diff} Minutes</td>
+                        <td><span class="security-badge ${integrityClass}">${a.tabSwitchCount} Events</span></td>
+                        <td style="font-weight:800; color:var(--primary);">${a.score ? a.score.percentage + '%' : '---'}</td>
+                        <td><button class="btn-view" onclick="viewAttempt('${a.id}')">ANALYZE</button></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function viewAttempt(aid) {
+            alert('Opening Deep Analysis for session ' + aid);
+        }
+
+        function goBack() {
+            window.location.href = './teacher-dashboard.html';
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

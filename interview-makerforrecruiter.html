@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Selection Test Builder</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;800&family=Hind:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+    <style>
+        :root { --primary: #D92D20; --primary-hover: #B42318; --primary-soft: #FEF3F2; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind', sans-serif; }
+        html, body { height: 100%; }
+        body { background: #F9FAFB; color: #101828; display: flex; flex-direction: column; }
+
+        /* Splash shown for a moment before the builder takes over */
+        #splash { position: fixed; inset: 0; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; z-index: 50; transition: opacity .4s; }
+        #splash .logo { width: 72px; height: 72px; }
+        #splash .logo img { width: 100%; height: 100%; object-fit: contain; }
+        #splash h1 { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.5rem; }
+        #splash p { color: #667085; font-size: 1rem; max-width: 420px; text-align: center; }
+        #splash .spin { width: 42px; height: 42px; border: 4px solid var(--primary-soft); border-top-color: var(--primary); border-radius: 50%; animation: sp 0.9s linear infinite; margin-top: 8px; }
+        @keyframes sp { to { transform: rotate(360deg); } }
+        #splash .back { margin-top: 10px; color: var(--primary); font-family: 'Mulish', sans-serif; font-weight: 700; text-decoration: none; cursor: pointer; }
+
+        #frame { flex: 1; width: 100%; border: none; display: none; }
+        #err { display: none; text-align: center; color: #b42318; font-family: 'Mulish', sans-serif; margin-top: 8px; }
+        #err a { color: var(--primary); font-weight: 700; cursor: pointer; }
+    </style>
+</head>
+
+<body>
+    <div id="splash">
+        <div class="logo"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest"></div>
+        <h1>Selection Test Builder</h1>
+        <p id="splashMsg">Preparing the full assessment studio in recruiter mode — you can publish the final test to only the registered applicants.</p>
+        <div class="spin"></div>
+        <p id="err">If you are not redirected automatically, <a onclick="doRedirect()">click here</a>.</p>
+        <span class="back" onclick="goBack()"><i class="fas fa-arrow-left"></i> Back to Job Postings</span>
+    </div>
+
+    <iframe id="frame" title="Selection Test Builder"></iframe>
+
+    <script>
+        // interview-makerforrecruiter is the recruiter-facing entry into the SAME
+        // 19k-line assessment studio (interview-maker.html). We forward every existing
+        // query param and force recruiter mode so step 5 offers "Only Registered Students"
+        // + passing criteria, instead of shipping a fragile duplicate of the builder.
+        (function () {
+            const params = new URLSearchParams(location.search);
+            const jobId = params.get('job') || '';
+            params.set('recruiter', '1');
+            if (jobId) params.set('job', jobId);
+            if (jobId) {
+                let job = null;
+                try { job = (JSON.parse(localStorage.getItem('CodeQuest_job_postings')) || []).find(j => j.id === jobId); } catch (e) {}
+                if (job) {
+                    document.getElementById('splashMsg').innerHTML =
+                        'Building the final selection test for <b>' + (job.title || 'this role') + ' @ ' + (job.company || '') + '</b>. ' +
+                        'Publish it to only the registered applicants or universally in the last step.';
+                }
+            }
+            const target = 'interview-maker.html?' + params.toString();
+            window.__cqTarget = target;
+            // Prefer a full-window handoff (bulletproof under file:// and http).
+            doRedirect();
+            // Safety net: if the browser blocked navigation, surface a manual link.
+            setTimeout(() => { const e = document.getElementById('err'); if (e) e.style.display = 'block'; }, 1500);
+        })();
+
+        function doRedirect() { window.location.replace(window.__cqTarget); }
+
+        function goBack() { location.href = 'openjobposting.html' + (new URLSearchParams(location.search).get('job') ? '?job=' + encodeURIComponent(new URLSearchParams(location.search).get('job')) : ''); }
+    </script>
+</body>
+
+</html>
