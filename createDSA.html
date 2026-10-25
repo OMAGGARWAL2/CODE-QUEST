@@ -1057,27 +1057,10 @@
                 </button>
             </div>
 
-            <!-- 5. HIDDEN TEST CASES -->
+            <!-- 5. CODE SKELETON: ALL 22 LANGUAGES (UPPER, MID, LOWER) -->
             <div class="section-block">
                 <div class="section-tagline">
                     <span class="section-num">5</span>
-                    <span>Hidden Test Cases</span>
-                </div>
-                <p style="font-family:'Hind', sans-serif; color:#667085; font-size:0.95rem; margin-bottom:16px;">
-                    <i class="fas fa-eye-slash" style="color:var(--primary);"></i> These cases are <strong>never shown to students</strong>. They run only during final judging / scoring.
-                </p>
-
-                <div class="examples-list" id="hiddenTestsContainer"></div>
-
-                <button type="button" class="btn-add-example" onclick="addNewHiddenField()">
-                    <i class="fas fa-plus"></i> Add Hidden Test Case
-                </button>
-            </div>
-
-            <!-- 6. CODE SKELETON: ALL 22 LANGUAGES (UPPER, MID, LOWER) -->
-            <div class="section-block">
-                <div class="section-tagline">
-                    <span class="section-num">6</span>
                     <span>Code Skeleton (Upper, Mid &amp; Lower)</span>
                 </div>
 
@@ -1131,7 +1114,7 @@
             <!-- 6. SEND TO CHAT GROUP -->
             <div class="section-block">
                 <div class="section-tagline">
-                    <span class="section-num">7</span>
+                    <span class="section-num">6</span>
                     <span>Send to Chat Group</span>
                 </div>
                 <div class="form-group" style="flex-direction: row; align-items: center;">
@@ -1450,47 +1433,6 @@
             container.appendChild(box);
         }
 
-        function addNewHiddenField() {
-            const container = document.getElementById('hiddenTestsContainer');
-            if (!container) return;
-            const count = container.querySelectorAll('.example-item-box').length + 1;
-            const box = document.createElement('div');
-            box.className = 'example-item-box';
-            box.innerHTML = `
-                <div class="example-box-header">
-                    <span class="example-box-title"><i class="fas fa-eye-slash" style="color:var(--primary);"></i> Hidden Case ${count}</span>
-                    <button type="button" class="btn-remove-ex" onclick="this.closest('.example-item-box').remove()">
-                        <i class="fas fa-trash"></i> Remove
-                    </button>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="field-label">Input</label>
-                        <input type="text" class="input-text ht-input" placeholder="e.g. s = '(){}[]'">
-                    </div>
-                    <div class="form-group">
-                        <label class="field-label">Expected Output</label>
-                        <input type="text" class="input-text ht-output" placeholder="e.g. true">
-                    </div>
-                </div>`;
-            container.appendChild(box);
-        }
-
-        function loadHiddenTests(list) {
-            const container = document.getElementById('hiddenTestsContainer');
-            if (!container) return;
-            container.innerHTML = '';
-            (list || []).forEach(tc => {
-                addNewHiddenField();
-                const boxes = container.querySelectorAll('.example-item-box');
-                const last = boxes[boxes.length - 1];
-                if (last) {
-                    last.querySelector('.ht-input').value = tc.input || '';
-                    last.querySelector('.ht-output').value = tc.output || '';
-                }
-            });
-        }
-
         let quillDesc = null;
         let isSourceMode = false;
 
@@ -1648,9 +1590,6 @@
                     if (prob.constraints && Array.isArray(prob.constraints)) {
                         document.getElementById('probConstraints').value = prob.constraints.join('\n');
                     }
-                    if (prob.hiddenTests && Array.isArray(prob.hiddenTests)) {
-                        loadHiddenTests(prob.hiddenTests);
-                    }
                     if (prob.upperCode && editors.Upper) editors.Upper.setValue(prob.upperCode, -1);
                     if (prob.midBoiler && editors.Mid) editors.Mid.setValue(prob.midBoiler, -1);
                     if (prob.lowerCode && editors.Lower) editors.Lower.setValue(prob.lowerCode, -1);
@@ -1711,14 +1650,6 @@
                 examples.push({ input: "input = standard", output: "output = result", explanation: "" });
             }
 
-            // Extract hidden test cases (never shown to students)
-            const hiddenTests = [];
-            document.querySelectorAll('#hiddenTestsContainer .example-item-box').forEach(box => {
-                const input = box.querySelector('.ht-input').value.trim();
-                const output = box.querySelector('.ht-output').value.trim();
-                if (input || output) hiddenTests.push({ input, output });
-            });
-
             // Save active editor states
             saveCurrentSkeletonState();
 
@@ -1767,7 +1698,6 @@
                 desc: desc,
                 constraints: constraints,
                 examples: examples,
-                hiddenTests: hiddenTests,
                 language: currentLang,
                 upperCode: upper,
                 midBoiler: mid,
