@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeQuest - Notifications</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Hind:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Mulish:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Hind:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
@@ -22,7 +22,7 @@
             --border: #EAECF0;
             --green: #34A853;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
         body { background: var(--bg-body); color: var(--text-main); min-height: 100vh; }
 
         /* ===== HEADER ===== */
@@ -33,7 +33,7 @@
         .logo-square img { width: 100%; height: 100%; object-fit: contain; }
         .logo-text { font-size: 1.35rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; text-transform: uppercase; line-height: 1; }
         .logo-text small { display: block; font-size: 0.7rem; font-weight: 700; color: var(--primary); letter-spacing: 0.8px; margin-top: 3px; }
-        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--text-tertiary); text-decoration: none; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 0.95rem; padding: 8px 14px; border-radius: 8px; transition: all 0.2s; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--text-tertiary); text-decoration: none; font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 0.95rem; padding: 8px 14px; border-radius: 8px; transition: all 0.2s; }
         .back-link:hover { background: var(--primary-soft); color: var(--primary); }
         .avatar { width: 40px; height: 40px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; overflow: hidden; }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -42,28 +42,28 @@
         .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 24px 80px; }
         .page-head { display: flex; align-items: center; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
         .page-head .ph-ico { width: 46px; height: 46px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
-        .page-head h1 { font-family: 'Mulish', sans-serif; font-size: 1.7rem; font-weight: 800; color: #101828; }
+        .page-head h1 { font-family: 'Roboto', sans-serif; font-size: 1.7rem; font-weight: 800; color: #101828; }
         .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin: 22px 0 8px; }
-        .filter-chip { font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 0.85rem; color: #475467; background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 7px 16px; cursor: pointer; transition: all 0.2s; }
+        .filter-chip { font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 0.85rem; color: #475467; background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 7px 16px; cursor: pointer; transition: all 0.2s; }
         .filter-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
         /* ===== TIMELINE (matches screenshot) ===== */
         .tl { position: relative; margin-top: 10px; }
-        .tl-date { text-align: center; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 1.35rem; color: #344054; margin: 30px 0 34px; position: relative; }
+        .tl-date { text-align: center; font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 1.35rem; color: #344054; margin: 30px 0 34px; position: relative; }
         .tl-date::before, .tl-date::after { content: ''; position: absolute; top: 50%; width: 30%; height: 1px; background: #e6e8ec; }
         .tl-date::before { left: 2%; } .tl-date::after { right: 2%; }
         .tl-item { display: flex; gap: 22px; position: relative; padding-left: 6px; margin-bottom: 40px; }
         .tl-item::before { content: ''; position: absolute; left: 66px; top: 56px; bottom: -40px; width: 4px; background: #bcd4f6; border-radius: 2px; }
         .tl-item:last-child::before { display: none; }
         .tl-node { display: flex; align-items: center; gap: 12px; width: 150px; flex-shrink: 0; }
-        .tl-label { font-family: 'Mulish', sans-serif; font-weight: 700; color: var(--green); font-size: 1.02rem; }
+        .tl-label { font-family: 'Roboto', sans-serif; font-weight: 700; color: var(--green); font-size: 1.02rem; }
         .tl-arrow { color: var(--green); font-size: 0.8rem; }
         .tl-ico { width: 58px; height: 58px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; font-size: 1.7rem; box-shadow: 0 0 0 6px #fff; flex-shrink: 0; }
         .tl-content { flex: 1; min-width: 0; padding-top: 4px; }
-        .tl-title { font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 1.28rem; color: #1a1a1a; line-height: 1.45; margin-bottom: 12px; }
-        .tl-desc { font-family: 'Hind', sans-serif; font-size: 1.08rem; color: #475467; line-height: 1.55; }
+        .tl-title { font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 1.28rem; color: #1a1a1a; line-height: 1.45; margin-bottom: 12px; }
+        .tl-desc { font-family: 'Roboto', sans-serif; font-size: 1.08rem; color: #475467; line-height: 1.55; }
         .tl-more { color: var(--primary); font-weight: 700; cursor: pointer; }
-        .tl-empty { text-align: center; padding: 70px 20px; color: #98a2b3; font-family: 'Mulish', sans-serif; font-size: 1.05rem; }
+        .tl-empty { text-align: center; padding: 70px 20px; color: #98a2b3; font-family: 'Roboto', sans-serif; font-size: 1.05rem; }
         .tl-empty i { font-size: 2.6rem; color: #d0d5dd; display: block; margin-bottom: 14px; }
 
         /* ===== DETAIL MODAL (matches screenshot 2) ===== */
@@ -72,12 +72,12 @@
         .modal-tools { position: absolute; top: 22px; right: 22px; display: flex; gap: 12px; }
         .tool-btn { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary); background: #fff; color: var(--primary); font-size: 1.05rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
         .tool-btn:hover { background: var(--primary); color: #fff; }
-        .md-title { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.9rem; color: #1a1a1a; line-height: 1.35; margin: 6px 0 22px; padding-right: 60px; }
-        .md-body { font-family: 'Hind', sans-serif; font-size: 1.12rem; color: #344054; line-height: 1.6; white-space: pre-wrap; }
+        .md-title { font-family: 'Roboto', sans-serif; font-weight: 800; font-size: 1.9rem; color: #1a1a1a; line-height: 1.35; margin: 6px 0 22px; padding-right: 60px; }
+        .md-body { font-family: 'Roboto', sans-serif; font-size: 1.12rem; color: #344054; line-height: 1.6; white-space: pre-wrap; }
         .md-meta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
-        .md-chip { background: #f2f4f7; color: #475467; border-radius: 6px; padding: 5px 12px; font-size: 0.82rem; font-weight: 700; font-family: 'Mulish', sans-serif; }
-        .md-att-head { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.25rem; color: #1a1a1a; margin: 30px 0 12px; }
-        .md-att { display: flex; align-items: center; gap: 10px; color: var(--primary); font-family: 'Hind', sans-serif; font-size: 1.05rem; text-decoration: none; margin-bottom: 8px; cursor: pointer; word-break: break-all; }
+        .md-chip { background: #f2f4f7; color: #475467; border-radius: 6px; padding: 5px 12px; font-size: 0.82rem; font-weight: 700; font-family: 'Roboto', sans-serif; }
+        .md-att-head { font-family: 'Roboto', sans-serif; font-weight: 800; font-size: 1.25rem; color: #1a1a1a; margin: 30px 0 12px; }
+        .md-att { display: flex; align-items: center; gap: 10px; color: var(--primary); font-family: 'Roboto', sans-serif; font-size: 1.05rem; text-decoration: none; margin-bottom: 8px; cursor: pointer; word-break: break-all; }
         .md-att:hover { text-decoration: underline; }
         .md-divider { border: none; border-top: 1px solid #eaecf0; margin: 30px 0 0; }
 
@@ -103,7 +103,6 @@
             <div class="logo-square"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest"></div>
             <div class="logo-text">CodeQuest<small>Notifications</small></div>
         </a>
-        <a href="#" class="back-link" onclick="goHome(event)"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
     </div>
     <div class="header-right">
         <div class="avatar"><img src="EXAMPAD/LINUX_TEST_CHITKARA_files/user-icon.3d6e2547.svg" alt="Profile"></div>
@@ -112,7 +111,6 @@
 
 <div class="wrap">
     <div class="page-head">
-        <div class="ph-ico"><i class="fas fa-sliders"></i></div>
         <h1>My Timeline</h1>
     </div>
 

@@ -690,38 +690,48 @@
         /* Individual Bubble matching Screenshot 2 */
         .bubble-node {
             border-radius: 50%;
-            background-color: #ebeef2;
+            background-color: #f3f5f8;
             position: relative;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            cursor: pointer;
+            cursor: grab;
             transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04), 0 2px 6px rgba(0, 0, 0, 0.03);
             user-select: none;
             flex-shrink: 0;
             border: 1px solid #dce1e7;
+            animation: bubbleFloat 4s ease-in-out infinite;
+        }
+
+        .bubble-node:active { cursor: grabbing; }
+        .bubble-node.dragging { z-index: 200; box-shadow: 0 16px 34px rgba(0,0,0,0.18); transition: none; }
+
+        @keyframes bubbleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-7px); }
         }
 
         .bubble-node:hover {
             transform: scale(1.15);
             z-index: 50;
-            box-shadow: 0 12px 30px rgba(223, 90, 34, 0.25), 0 4px 12px rgba(0, 0, 0, 0.08);
-            border-color: var(--primary);
+            box-shadow: 0 12px 30px rgba(255, 165, 110, 0.35), 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-color: #ffb380;
+            animation-play-state: paused;
         }
 
-        /* Orange Liquid Layer */
+        /* Light Orange Liquid Layer */
         .bubble-liquid-layer {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(180deg, #df5a22 0%, #c54814 100%);
+            background: linear-gradient(180deg, #ffb37e 0%, #ff8c4a 100%);
             width: 100%;
             z-index: 1;
-            transition: height 0.5s ease;
+            transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .bubble-liquid-layer::before {
@@ -731,7 +741,7 @@
             left: -50%;
             width: 200%;
             height: 10px;
-            background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.4) 0%, rgba(223, 90, 34, 0) 70%);
+            background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.6) 0%, rgba(255, 140, 74, 0) 70%);
             border-radius: 50%;
             animation: liquidWaveMove 3s ease-in-out infinite alternate;
         }
@@ -1652,13 +1662,8 @@
             </nav>
         </div>
 
-        <!-- Center Join Assessment Pill -->
-        <div class="header-center">
-            <button class="join-assessment-btn" onclick="promptJoinTest()">
-                <span>Join Assessment</span>
-                <i class="fas fa-chevron-down" style="font-size: 0.8rem;"></i>
-            </button>
-        </div>
+        <!-- Center spacer (Join Assessment removed from header) -->
+        <div class="header-center"></div>
 
         <!-- Right: Profile Name, Role, and Avatar Circle -->
         <div class="header-right">
@@ -2002,38 +2007,7 @@
                     Topic Proficiency & Question Volume
                 </h2>
                 <div style="font-size: 0.95rem; color: #667085;">
-                    Hover over bubbles to view orange liquid fill level & acceptance rates
-                </div>
-            </div>
-
-            <!-- Acceptance Rates Top Bar -->
-            <div class="acceptance-overview-box">
-                <div class="acc-metrics-group">
-                    <div class="acc-stat-pill">
-                        <span class="acc-dot main"></span>
-                        <span>Overall Acceptance:</span>
-                        <strong>78.4%</strong>
-                    </div>
-                    <div class="acc-stat-pill">
-                        <span class="acc-dot easy"></span>
-                        <span>Easy:</span>
-                        <strong>89.2%</strong>
-                    </div>
-                    <div class="acc-stat-pill">
-                        <span class="acc-dot med"></span>
-                        <span>Medium:</span>
-                        <strong>74.5%</strong>
-                    </div>
-                    <div class="acc-stat-pill">
-                        <span class="acc-dot hard"></span>
-                        <span>Hard:</span>
-                        <strong>49.1%</strong>
-                    </div>
-                </div>
-
-                <div class="acc-stat-pill">
-                    <span>Total Question Base:</span>
-                    <strong style="color: var(--primary);">2,410</strong>
+                    Drag the bubbles to rearrange &mdash; each fills with light orange as you solve that topic
                 </div>
             </div>
 
@@ -2062,9 +2036,6 @@
                     <button class="c-tab-btn" onclick="switchCourseTab('assignments', this)">Assignments</button>
                 </div>
                 <div style="display: flex; align-items: center; gap: 16px;">
-                    <button onclick="toggleCoursesEmptyState()" style="padding: 5px 14px; border-radius: 16px; border: 1px solid var(--border); background: white; color: #555; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
-                        State: <span id="stateModeText">Enrolled View (3)</span>
-                    </button>
                     <div class="search-container-box">
                         <i class="fas fa-search"></i>
                         <input type="text" class="search-input-pool" placeholder="Search courses..."
@@ -2073,22 +2044,18 @@
                 </div>
             </div>
 
-            <!-- No Courses Assigned Yet State -->
-            <div class="empty-courses-state" id="emptyCoursesState">
+            <!-- No Courses Created Yet State -->
+            <div class="empty-courses-state" id="emptyCoursesState" style="display: none;">
                 <div class="empty-courses-icon-circle">
                     <i class="fas fa-folder-open"></i>
                 </div>
-                <h3 class="empty-courses-title">no courses assigned yet</h3>
+                <h3 class="empty-courses-title">Not created yet</h3>
                 <p class="empty-courses-desc">
-                    You currently have no registered courses or active learning modules assigned to your account. When enrolled, they will appear right here.
+                    No courses have been created or assigned to your account yet. When your teacher publishes a course, it will appear right here.
                 </p>
-                <button class="join-assessment-btn" style="margin: 0 auto;" onclick="promptJoinTest()">
-                    <i class="fas fa-key"></i>
-                    <span>Enroll with Course Code</span>
-                </button>
             </div>
 
-            <!-- Enrolled Courses -->
+            <!-- Enrolled Courses (rendered dynamically from created courses) -->
             <div id="enrolledCoursesArea">
 
                 <!-- Course 1 -->
@@ -2477,16 +2444,11 @@
                 <div class="story-slide" id="slide-2">
                     <div>
                         <div class="slide-section-subhead">Most Attempted Question</div>
-                        <div class="slide-question-highlight" id="storyMostAtt">1. Two Sum</div>
+                        <div class="slide-question-highlight" id="storyMostAtt">Not attempted yet</div>
 
                         <div class="slide-section-subhead">Language & topics you are most familiar with</div>
-                        <div class="slide-tags-cloud">
-                            <span class="cloud-tag-pill">Hash Table</span>
-                            <span class="cloud-tag-pill">Java</span>
-                            <span class="cloud-tag-pill">Array</span>
-                            <span class="cloud-tag-pill">Python</span>
-                            <span class="cloud-tag-pill">Two Pointers</span>
-                            <span class="cloud-tag-pill">Dynamic Programming</span>
+                        <div class="slide-tags-cloud" id="storyTagCloud">
+                            <span class="cloud-tag-pill" style="opacity:0.55;">No topics solved yet</span>
                         </div>
                     </div>
                     <div></div>
@@ -2890,40 +2852,89 @@
             { name: "Radix Sort", solved: 2, total: 16, acc: 85.0, size: "xs", fill: 16 }
         ];
 
+        // Read the current student's real per-topic solved counts.
+        function getRealTopicSolved() {
+            let map = {};
+            try { map = JSON.parse(localStorage.getItem('CodeQuest_solved_topics')) || {}; } catch (e) { map = {}; }
+            return map;
+        }
+
+        // Rewind slide 3 is built from the student's real attempt records only —
+        // it never falls back to a demo question or demo topics.
+        function renderStoryHighlights() {
+            const att = document.getElementById('storyMostAtt');
+            if (att) {
+                let label = 'Not attempted yet';
+                try {
+                    const sess = JSON.parse(localStorage.getItem('CodeQuest_active_session') || localStorage.getItem('TESTPAD_current_user') || '{}');
+                    const who = (sess.email || sess.rollNo || sess.name || 'guest').toString().toLowerCase();
+                    const solved = (JSON.parse(localStorage.getItem('CodeQuest_solved_problems') || '{}')[who]) || [];
+                    const problems = JSON.parse(localStorage.getItem('CodeQuest_dsa_problems') || '[]');
+                    if (solved.length && Array.isArray(problems)) {
+                        const p = problems.find(x => x && x.id === solved[solved.length - 1]);
+                        if (p) label = (p.num ? p.num + '. ' : '') + (p.title || '');
+                    }
+                } catch (e) { }
+                att.textContent = label;
+            }
+
+            const cloud = document.getElementById('storyTagCloud');
+            if (cloud) {
+                const topics = Object.keys(getRealTopicSolved())
+                    .filter(t => getRealTopicSolved()[t] > 0)
+                    .sort((a, b) => getRealTopicSolved()[b] - getRealTopicSolved()[a])
+                    .slice(0, 8);
+                cloud.innerHTML = topics.length
+                    ? topics.map(t => `<span class="cloud-tag-pill">${t}</span>`).join('')
+                    : `<span class="cloud-tag-pill" style="opacity:0.55;">No topics solved yet</span>`;
+            }
+        }
+
         function renderTopicBubbles() {
             const container = document.getElementById('bubblesPackingContainer');
+            if (!container) return;
             container.innerHTML = '';
+            const solvedMap = getRealTopicSolved();
 
-            TOPIC_BUBBLES_LIST.forEach(t => {
+            TOPIC_BUBBLES_LIST.forEach((t, index) => {
+                const solved = solvedMap[t.name] || 0;
+                // Fill grows "more and more" as that topic is solved; empty (0) when nothing done.
+                const target = Math.min(t.total, 20); // solving ~20 of a topic fills it fully
+                const fill = solved <= 0 ? 0 : Math.min(100, Math.round((solved / target) * 100));
+
                 const bubble = document.createElement('div');
                 bubble.className = `bubble-node b-${t.size}`;
-                if (t.fill > 45) bubble.classList.add('high-fill');
+                if (fill > 60) bubble.classList.add('high-fill');
+                bubble.style.animationDelay = `${(index % 8) * 0.35}s`;
 
-                // Liquid fill
+                // Light-orange liquid fill (empty when nothing solved)
                 const liquid = document.createElement('div');
                 liquid.className = 'bubble-liquid-layer';
-                liquid.style.height = `${Math.max(10, t.fill)}%`;
+                liquid.style.height = `${fill}%`;
 
-                // Title
+                // Title + solved count
                 const textWrap = document.createElement('div');
                 textWrap.className = 'bubble-node-text';
                 const label = document.createElement('span');
                 label.className = 'bubble-label-title';
                 label.textContent = t.name;
-
+                const countEl = document.createElement('span');
+                countEl.style.cssText = 'display:block; font-size:0.66rem; font-weight:700; color:#8a94a6; margin-top:3px;';
+                countEl.textContent = `${solved} solved`;
                 textWrap.appendChild(label);
+                textWrap.appendChild(countEl);
+
                 bubble.appendChild(liquid);
                 bubble.appendChild(textWrap);
 
                 // Tooltip events
-                bubble.addEventListener('mouseenter', (e) => {
+                bubble.addEventListener('mouseenter', () => {
                     document.getElementById('popName').textContent = t.name;
-                    document.getElementById('popScore').textContent = `${t.solved} / ${t.total}`;
-                    document.getElementById('popAcc').textContent = `Acceptance: ${t.acc}%`;
+                    document.getElementById('popScore').textContent = `${solved} / ${t.total}`;
+                    document.getElementById('popAcc').textContent = `Mastered: ${fill}%`;
 
                     const popup = document.getElementById('bubblePopupBadge');
                     popup.style.display = 'block';
-
                     const rect = bubble.getBoundingClientRect();
                     const boardRect = document.querySelector('.bubble-chart-board').getBoundingClientRect();
                     popup.style.left = `${rect.left + rect.width / 2 - boardRect.left}px`;
@@ -2934,13 +2945,106 @@
                     document.getElementById('bubblePopupBadge').style.display = 'none';
                 });
 
-                bubble.addEventListener('click', () => {
-                    showToast(`Topic: ${t.name} (${t.solved}/${t.total} Completed)`);
-                });
-
+                makeBubbleDraggable(bubble, container);
                 container.appendChild(bubble);
             });
         }
+
+        // Pointer-based dragging so bubbles can be rearranged freely on the board.
+        function makeBubbleDraggable(el, container) {
+            let dragging = false, moved = false, startX, startY, origX, origY;
+            el.addEventListener('pointerdown', (e) => {
+                dragging = true; moved = false;
+                const rect = el.getBoundingClientRect();
+                const cRect = container.getBoundingClientRect();
+                startX = e.clientX; startY = e.clientY;
+                origX = rect.left - cRect.left; origY = rect.top - cRect.top;
+                el.setPointerCapture(e.pointerId);
+            });
+            el.addEventListener('pointermove', (e) => {
+                if (!dragging) return;
+                const dx = e.clientX - startX, dy = e.clientY - startY;
+                if (Math.abs(dx) > 3 || Math.abs(dy) > 3) moved = true;
+                if (!moved) return;
+                el.classList.add('dragging');
+                el.style.animation = 'none';
+                el.style.position = 'absolute';
+                el.style.left = `${origX + dx}px`;
+                el.style.top = `${origY + dy}px`;
+                el.style.margin = '0';
+            });
+            const end = (e) => {
+                if (!dragging) return;
+                dragging = false;
+                el.classList.remove('dragging');
+                try { el.releasePointerCapture(e.pointerId); } catch (err) {}
+            };
+            el.addEventListener('pointerup', end);
+            el.addEventListener('pointercancel', end);
+        }
+
+        // Render created/assigned courses dynamically; show "Not created yet" when none.
+        function renderProgressCourses() {
+            const area = document.getElementById('enrolledCoursesArea');
+            const empty = document.getElementById('emptyCoursesState');
+            if (!area || !empty) return;
+
+            let courses = [];
+            try { courses = JSON.parse(localStorage.getItem('CodeQuest_teacher_courses')) || []; } catch (e) { courses = []; }
+
+            // Filter to courses visible to this student (batch audience), same rule as studentindex.
+            courses = (Array.isArray(courses) ? courses : []).filter(c => {
+                if (!c) return false;
+                if (c.audience && c.audience !== 'universal') {
+                    const my = _progressBatchIds();
+                    return (c.batchIds || []).some(id => my.includes(id));
+                }
+                return true;
+            });
+
+            if (!courses.length) {
+                area.style.display = 'none';
+                empty.style.display = 'block';
+                return;
+            }
+
+            empty.style.display = 'none';
+            area.style.display = 'block';
+            area.innerHTML = courses.map((c, i) => {
+                const sections = c.sectionsCount || (c.sections && c.sections.length) || 0;
+                const prog = c.progress || 0;
+                const title = (c.code || c.name || c.title || 'Untitled Course');
+                return `
+                <div class="course-card-unit">
+                    <div class="course-card-top-row">
+                        <div>
+                            <div class="course-code-heading">${escapeProgressHtml(title)}</div>
+                            <div class="course-section-sub">${sections} Sections</div>
+                        </div>
+                        <div class="course-top-right-wrap">
+                            <div class="progress-indicator-unit">
+                                <div class="progress-track-bg"><div class="progress-fill-line" style="width: ${prog}%;"></div></div>
+                                <span class="progress-pct-text">${prog}% done</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function _progressBatchIds() {
+            let s = {}; try { s = JSON.parse(localStorage.getItem('CodeQuest_active_session')) || JSON.parse(localStorage.getItem('TESTPAD_current_user')) || {}; } catch (e) {}
+            const email = (s.email || '').toLowerCase(), name = (s.name || '').toLowerCase(), roll = String(s.rollNo || s.regNo || '').toLowerCase();
+            let batches = []; try { batches = JSON.parse(localStorage.getItem('CodeQuest_batches')) || []; } catch (e) {}
+            const ids = [];
+            batches.forEach(b => (b.students || []).forEach(st => {
+                const u = (st.username || '').toLowerCase(), r = (st.regNo || st.roll || '').toLowerCase(), n = (st.name || '').toLowerCase();
+                if ((email && (u === email || r === email)) || (roll && r === roll) || (name && n === name)) { if (!ids.includes(b.id)) ids.push(b.id); }
+            }));
+            return ids;
+        }
+
+        function escapeProgressHtml(s) { return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
         // 5. Course Progress State Toggle
         let isCoursesEmpty = false;
@@ -2998,6 +3102,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             initProfile();
             renderTopicBubbles();
+            renderProgressCourses();
+            renderStoryHighlights();
         });
     </script>
 </body>

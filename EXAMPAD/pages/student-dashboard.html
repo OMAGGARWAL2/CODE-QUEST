@@ -1550,11 +1550,11 @@
 
             let res = db.startAttempt(exam.id, user.id);
 
-            // Allow resuming or re-attempting if an attempt already exists
+            // Allow resuming, but a finished attempt cannot be re-started
             if (!res.success && res.existingAttempt) {
-                if (res.existingAttempt.status === 'submitted' || res.existingAttempt.status === 'reviewed') {
-                    // Start a fresh re-attempt
-                    res = db.startAttempt(exam.id, user.id, true);
+                if (res.existingAttempt.status === 'submitted' || res.existingAttempt.status === 'reviewed' || res.existingAttempt.status === 'completed') {
+                    window.location.href = './Secondattemptnotallowed.html?examId=' + encodeURIComponent(exam.id);
+                    return;
                 } else {
                     // Resume in-progress attempt
                     res.success = true;
@@ -1907,6 +1907,12 @@
             }
             else {
                 if (examStatus === 'ended') return showToast("This test has already ended.", "error");
+                // Block re-starting a finished attempt (second attempt not allowed)
+                const existing = db.getAttemptHistory(user.id, examId).find(a => a.status === 'submitted' || a.status === 'reviewed' || a.status === 'completed');
+                if (existing) {
+                    location.href = `./Secondattemptnotallowed.html?examId=${encodeURIComponent(examId)}`;
+                    return;
+                }
                 // Quick start new attempt
                 const res = db.startAttempt(examId, user.id, true);
                 if (res.success || res.attempt) {

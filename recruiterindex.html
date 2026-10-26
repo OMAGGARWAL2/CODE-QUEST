@@ -52,6 +52,7 @@
         .grid-item { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; padding: 12px; border-radius: 8px; transition: all 0.2s; flex: 1; color: #475467; }
         .grid-item:hover { background: var(--primary-soft); color: var(--primary); }
         .grid-item i { font-size: 1.7rem; }
+        .grid-item img { width: 30px; height: 30px; object-fit: contain; }
         .grid-item span { font-family: 'Mulish', sans-serif; font-size: 0.9rem; font-weight: 600; }
         .plus-btn { width: 48px; height: 72px; background: var(--primary-soft); color: var(--primary); border: none; border-left: 1px solid #f0f0f0; border-right: 1px solid #f0f0f0; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; cursor: pointer; transition: background 0.2s; }
         .plus-btn:hover { background: #fde3e0; }
@@ -72,7 +73,8 @@
 
         .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; gap: 16px; }
         .section-title { font-family: 'Mulish', sans-serif; font-size: 1.25rem; font-weight: 700; color: #222; display: flex; align-items: center; gap: 12px; }
-        .section-title .st-ico { width: 40px; height: 40px; border-radius: 10px; background: var(--primary); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+        .section-title .st-ico { width: 40px; height: 40px; border-radius: 10px; background: var(--primary); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; overflow: hidden; }
+        .section-title .st-ico img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
         .section-title span { font-weight: 400; color: #888; font-size: 1.1rem; margin-left: 8px; }
         .section-create-btn { background: var(--primary); color: #fff; border: none; height: 38px; padding: 0 18px; font-size: 0.85rem; font-weight: 700; border-radius: 8px; font-family: 'Mulish', sans-serif; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s; }
         .section-create-btn:hover { background: var(--primary-hover); }
@@ -81,37 +83,44 @@
         .search-input { width: 100%; padding: 6px 8px 6px 28px; border: none; border-bottom: 1px solid #e0e0e0; border-radius: 0; font-size: 0.9rem; outline: none; background: transparent; font-family: 'Mulish', sans-serif; color: #222; }
         .search-input:focus { border-bottom-color: var(--primary); }
 
-        /* ===== TIMELINE (notification look) ===== */
-        .tl { position: relative; padding: 8px 0; }
-        .tl-date { text-align: center; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 1.15rem; color: #344054; margin: 18px 0 26px; position: relative; }
-        .tl-date::before, .tl-date::after { content: ''; position: absolute; top: 50%; width: 26%; height: 1px; background: #e6e8ec; }
-        .tl-date::before { left: 4%; } .tl-date::after { right: 4%; }
-        .tl-item { display: flex; gap: 20px; position: relative; padding-left: 6px; margin-bottom: 34px; }
-        .tl-item::before { content: ''; position: absolute; left: 40px; top: 46px; bottom: -34px; width: 3px; background: #cfe0f7; }
-        .tl-item:last-child::before { display: none; }
-        .tl-node { display: flex; align-items: center; gap: 12px; width: 130px; flex-shrink: 0; }
-        .tl-label { font-family: 'Mulish', sans-serif; font-weight: 700; color: var(--green); font-size: 0.98rem; }
-        .tl-ico { width: 52px; height: 52px; border-radius: 50%; background: var(--green); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 0 0 5px #fff; flex-shrink: 0; }
-        .tl-content { flex: 1; min-width: 0; padding-top: 4px; }
-        .tl-title { font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 1.15rem; color: #1a1a1a; line-height: 1.4; margin-bottom: 8px; }
-        .tl-desc { font-family: 'Hind', sans-serif; font-size: 1rem; color: #475467; line-height: 1.5; }
-        .tl-more { color: var(--primary); font-weight: 700; cursor: pointer; }
-        .tl-actions { margin-top: 12px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-        .tl-chip { background: #f2f4f7; color: #475467; border-radius: 6px; padding: 4px 10px; font-size: 0.78rem; font-weight: 700; font-family: 'Mulish', sans-serif; }
-        .tl-att { display: inline-flex; align-items: center; gap: 6px; margin: 4px 8px 0 0; font-size: 0.85rem; color: var(--primary); cursor: pointer; }
-        .mini-btn { background: #fff; border: 1px solid #d0d5dd; color: #475467; border-radius: 7px; padding: 5px 12px; font-size: 0.8rem; font-weight: 700; font-family: 'Mulish', sans-serif; cursor: pointer; }
-        .mini-btn:hover { border-color: var(--primary); color: var(--primary); }
-        .mini-btn.danger { color: #d32f2f; border-color: #fecdca; }
-        .mini-btn.danger:hover { background: #fef3f2; }
-        .tl-empty { text-align: center; padding: 60px; color: #98a2b3; font-family: 'Hind', sans-serif; font-size: 1.1rem; }
-        .tl-empty .em { font-size: 3rem; display: block; margin-bottom: 12px; }
+        /* ===== LIST CONTAINER ===== */
+        .assessments-grid { display: flex; flex-direction: column; gap: 20px; margin-bottom: 56px; }
+
+        /* ===== SIMPLE CARD (teacher-dashboard learning-module-card style) ===== */
+        .lm-card { background: #fff; border: 1px solid #f0f0f0; border-radius: 12px; padding: 22px 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 10px; position: relative; transition: all 0.25s ease; cursor: pointer; }
+        .lm-card:hover { box-shadow: 0 12px 30px rgba(0,0,0,0.08); border-color: var(--primary); }
+        .lm-card-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+        .lm-title-wrap { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
+        .lm-lead { width: 40px; height: 40px; border-radius: 10px; overflow: hidden; flex: none; display: flex; align-items: center; justify-content: center; background: var(--primary-soft); }
+        .lm-lead img { width: 100%; height: 100%; object-fit: cover; }
+        .lm-title { font-family: 'Mulish', sans-serif; font-size: 1.25rem; font-weight: 600; color: #111; margin: 0; line-height: 1.35; flex: 1; word-break: break-word; }
+        .lm-icons { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+        .icon-btn-box { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: #f9fafb; transition: background 0.2s; }
+        .icon-btn-box:hover { background: #f3f4f6; }
+        .icon-btn-box img { width: 24px; height: 24px; }
+        .icon-btn-box i { color: #666; font-size: 0.95rem; }
+        .lm-sub { font-family: 'Mulish', sans-serif; font-size: 0.9rem; color: #777; font-weight: 400; }
+        .lm-details { display: none; margin-top: 18px; padding-top: 18px; border-top: 1px solid #f3f4f6; cursor: default; font-family: 'Mulish', sans-serif; }
+        .lm-details .btn-detail-action { margin: 0 8px 8px 0; }
+        .lm-desc-text { font-family: 'Hind', sans-serif; font-size: 1rem; color: #475467; line-height: 1.6; margin: 0 0 12px; }
+        .lm-att { display: inline-flex; align-items: center; gap: 6px; margin: 4px 10px 0 0; font-size: 0.88rem; color: var(--primary); cursor: pointer; font-family: 'Mulish', sans-serif; }
+
+        .btn-detail-action { background: #fff; border: 1px solid #e5e7eb; color: #344054; height: 42px; padding: 0 18px; font-size: 0.9rem; font-weight: 700; border-radius: 8px; font-family: 'Mulish', sans-serif; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; white-space: nowrap; transition: all 0.2s; }
+        .btn-detail-action:hover { background: #f9fafb; border-color: #d0d5dd; }
+        .btn-detail-action.danger { color: #d32f2f; border-color: #fecdca; }
+        .btn-detail-action.danger:hover { background: #fff5f5; }
+
+        .status-pill { padding: 5px 14px; border-radius: 16px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; }
+        .status-pill.active { background: #ecfdf3; color: #027a48; }
+        .empty-state { text-align: center; padding: 40px; color: #98a2b3; font-family: 'Mulish', sans-serif; font-size: 1rem; }
 
         .toast-box { position: fixed; bottom: 24px; right: 24px; background: #101828; color: #fff; padding: 14px 24px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; z-index: 100000; font-weight: 600; font-family: 'Mulish', sans-serif; }
 
         @media (max-width: 900px) {
             .main-content { padding: 24px 18px; }
             .header-nav { display: none; }
-            .tl-node { width: auto; } .tl-label { display: none; }
+            .lm-card { padding: 18px 20px; }
+            .lm-card-top { flex-wrap: wrap; }
         }
     </style>
 </head>
@@ -126,8 +135,9 @@
         </a>
         <nav class="header-nav">
             <button class="nav-icon-btn active" data-tip="Dashboard" onclick="scrollTo({top:0,behavior:'smooth'})"><img src="EXAMPAD/TESTPAD_WEBSITE__files/menu-1.svg" alt="Dashboard"></button>
-            <button class="nav-icon-btn" data-tip="Notifications" onclick="location.href='recPosts.html'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/statistics.svg" alt="Notifications"></button>
+            <button class="nav-icon-btn" data-tip="Notifications" onclick="location.href='recPosts.html'"><img src="NOTIFICATIONBELLicon.png" alt="Notifications"></button>
             <button class="nav-icon-btn" data-tip="Job Postings" onclick="location.href='openjobposting.html'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/folder-2.svg" alt="Job Postings"></button>
+            <button class="nav-icon-btn" data-tip="University Talent" onclick="location.href='universityview.html'"><img src="UNIVERSITY-ICON(MAIN).jpg" alt="University Talent"></button>
             <button class="nav-icon-btn" data-tip="Selection Test" onclick="location.href='interview-makerforrecruiter.html'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/quiz.svg" alt="Selection Test"></button>
             <button class="nav-icon-btn" data-tip="My Applications" onclick="location.href='openjobposting.html?view=applications'"><i class="fas fa-users" style="font-size:1.15rem; color:#667085;"></i></button>
         </nav>
@@ -138,8 +148,9 @@
             <button class="grid-btn" onclick="toggleGridMenu(event)" title="Apps"><img src="EXAMPAD/Testpad_pra_files_files/icons8-squared-menu-90.png" alt="Apps"></button>
             <div class="grid-menu" id="gridMenu">
                 <div class="grid-item" onclick="location.href='createpost.html'"><i class="fas fa-bullhorn"></i><span>Post</span></div>
-                <div class="grid-item" onclick="location.href='openjobposting.html'"><i class="fas fa-briefcase"></i><span>Jobs</span></div>
+                <div class="grid-item" onclick="location.href='openjobposting.html'"><img src="JOBSICONMAIN.png" alt="Jobs"><span>Jobs</span></div>
                 <div class="grid-item" onclick="location.href='interview-makerforrecruiter.html'"><i class="fas fa-file-circle-check"></i><span>Test</span></div>
+                <div class="grid-item" onclick="location.href='universityview.html'"><img src="UNIVERSITY-ICON(MAIN).jpg" alt="Talent"><span>Talent</span></div>
                 <div class="grid-item" onclick="location.href='recPosts.html'"><i class="fas fa-bell"></i><span>Feed</span></div>
             </div>
         </div>
@@ -167,7 +178,27 @@
                     <div class="search-container"><i class="fas fa-search"></i><input type="text" class="search-input" placeholder="Search posts..." onkeyup="renderPosts()"></div>
                 </div>
             </div>
-            <div class="tl" id="postsTimeline"></div>
+            <div class="assessments-grid" id="postsTimeline"></div>
+        </section>
+
+        <section id="testsSection">
+            <div class="content-header">
+                <h2 class="section-title"><span class="st-ico"><img src="TESTICON.jpg" alt="My Tests"></span> My Tests <span id="testsCount">(0)</span></h2>
+                <div style="display:flex; align-items:center; gap:16px;">
+                    <button class="section-create-btn" onclick="location.href='interview-makerforrecruiter.html'"><i class="fas fa-plus"></i> Create Test</button>
+                </div>
+            </div>
+            <div class="assessments-grid" id="testsTimeline"></div>
+        </section>
+
+        <section id="appsSection">
+            <div class="content-header">
+                <h2 class="section-title"><span class="st-ico"><img src="ONLINEFORM.png" alt="Application Forms"></span> My Application Forms and Positions <span id="appsCount">(0)</span></h2>
+                <div style="display:flex; align-items:center; gap:16px;">
+                    <button class="section-create-btn" onclick="location.href='createjob.html'"><i class="fas fa-plus"></i> Post Position</button>
+                </div>
+            </div>
+            <div class="assessments-grid" id="appsTimeline"></div>
         </section>
 
     </main>
@@ -177,7 +208,12 @@
 
 <script>
     const POSTS_KEY = 'CodeQuest_recruiter_posts';
-    const CAT_EMOJI = { 'circular': '📄', 'job': '💼', 'notice': '📢', 'result': '📊' };
+    const CATEGORY_ICON = {
+        'circular': 'OFFICIALCIRCULARS.png',
+        'job': 'JOBSICONMAIN.png',
+        'notice': 'NOTIFICATIONBELLicon.png',
+        'result': 'EXAMPAD/TESTPAD_WEBSITE__files/statistics.svg'
+    };
 
     function readJSON(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
     function getPosts() { return readJSON(POSTS_KEY, []); }
@@ -185,7 +221,22 @@
     function esc(s) { return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
     function session() { return readJSON('CodeQuest_active_session', null) || readJSON('TESTPAD_current_user', {}); }
     function fmtDate(iso) { const d = new Date(iso); return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + ', ' + d.toLocaleDateString(undefined, { weekday: 'long' }); }
-    function emojiFor(cat) { return CAT_EMOJI[(cat || 'circular').toLowerCase()] || '📄'; }
+    function iconFor(cat) { return CATEGORY_ICON[(cat || 'circular').toLowerCase()] || 'OFFICIALCIRCULARS.png'; }
+
+    // ===== EXPAND / COLLAPSE CARD DETAILS (like teacherindex) =====
+    function toggleCardDetails(event, id) {
+        if (event) event.stopPropagation();
+        const details = document.getElementById('details-' + id);
+        const btn = document.getElementById('expandBtn-' + id);
+        if (!details) return;
+        const hidden = details.style.display === 'none' || details.style.display === '';
+        details.style.display = hidden ? 'block' : 'none';
+        if (btn) {
+            const icon = btn.querySelector('i');
+            if (icon) icon.className = hidden ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
+            btn.style.background = hidden ? '#fef3f2' : '#f9fafb';
+        }
+    }
 
     function renderPosts() {
         const term = (document.querySelector('#postsSection .search-input').value || '').toLowerCase().trim();
@@ -194,23 +245,109 @@
         const posts = all.filter(p => !term || (p.title + ' ' + (p.company || '') + ' ' + (p.description || '')).toLowerCase().includes(term))
             .sort((a, b) => b.createdAt - a.createdAt);
         const el = document.getElementById('postsTimeline');
-        if (!posts.length) { el.innerHTML = `<div class="tl-empty"><span class="em">📭</span>No notifications yet. Click "Post Notification" to publish your first one.</div>`; return; }
-        let lastDay = '';
+        if (!posts.length) { el.innerHTML = `<div class="empty-state">No notifications yet. Click "Post Notification" to publish your first one.</div>`; return; }
         el.innerHTML = posts.map(p => {
-            const day = fmtDate(p.createdAt);
-            const sep = day !== lastDay ? `<div class="tl-date">${day}</div>` : '';
-            lastDay = day;
-            const atts = (p.attachments || []).map((a, i) => `<span class="tl-att" onclick="openAtt('${p.id}',${i})">📎 ${esc(a.name)}</span>`).join('');
-            return `${sep}
-            <div class="tl-item">
-                <div class="tl-node"><span class="tl-label">${esc(p.category || 'Circular')}</span><div class="tl-ico">${emojiFor(p.category)}</div></div>
-                <div class="tl-content">
-                    <div class="tl-title">${esc(p.company ? p.company + ' — ' : '')}${esc(p.title)}</div>
-                    <div class="tl-desc">${esc((p.description || '').slice(0, 160))}${(p.description || '').length > 160 ? '… ' : ''}<span class="tl-more" onclick="openPostDetail('${p.id}')">More</span></div>
-                    <div class="tl-actions"><span class="tl-chip">${esc(p.audience === 'all' ? 'Everyone' : p.audience || 'all')}</span>${atts}
-                        <span style="flex:1"></span>
-                        <button class="mini-btn" onclick="location.href='createpost.html?id=${p.id}'"><i class="fas fa-edit"></i> Edit</button>
-                        <button class="mini-btn danger" onclick="deletePost('${p.id}')"><i class="fas fa-trash"></i> Delete</button>
+            const dcid = 'post-' + p.id;
+            const atts = (p.attachments || []).map((a, i) => `<span class="lm-att" onclick="openAtt('${p.id}',${i})">📎 ${esc(a.name)}</span>`).join('');
+            return `
+            <div class="lm-card" onclick="openPostDetail('${p.id}')">
+                <div class="lm-card-top">
+                    <div class="lm-title-wrap">
+                        <div class="lm-lead"><img src="${iconFor(p.category)}" alt=""></div>
+                        <h3 class="lm-title">${esc(p.company ? p.company + ' — ' : '')}${esc(p.title)}</h3>
+                    </div>
+                    <div class="lm-icons" onclick="event.stopPropagation();">
+                        <div class="icon-btn-box" title="Open" onclick="openPostDetail('${p.id}')"><img src="EXAMPAD/TESTPAD_WEBSITE__files/menu-1.svg" alt="Open"></div>
+                        <div class="icon-btn-box" id="expandBtn-${dcid}" title="Details &amp; Actions" onclick="toggleCardDetails(event,'${dcid}')"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+                </div>
+                <div class="lm-sub">${esc(p.category || 'Circular')} &bull; ${esc(p.audience === 'all' ? 'Everyone' : (p.audience || 'all'))} &bull; ${fmtDate(p.createdAt)}</div>
+                <div id="details-${dcid}" class="lm-details" onclick="event.stopPropagation();">
+                    <p class="lm-desc-text">${esc(p.description || '')}</p>
+                    ${atts ? '<div>' + atts + '</div>' : ''}
+                    <div style="margin-top:16px;">
+                        <a class="btn-detail-action" href="createpost.html?id=${p.id}"><i class="fas fa-edit"></i> Edit</a>
+                        <button class="btn-detail-action danger" onclick="deletePost('${p.id}')"><i class="fas fa-trash"></i> Delete</button>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    const TESTS_KEY = 'CodeQuest_teacher_tests';
+    const JOBS_KEY = 'CodeQuest_job_postings';
+    const APPS_KEY = 'CodeQuest_job_applications';
+
+    function renderTests() {
+        const tests = readJSON(TESTS_KEY, []);
+        document.getElementById('testsCount').textContent = `(${tests.length})`;
+        const el = document.getElementById('testsTimeline');
+        if (!tests.length) { el.innerHTML = `<div class="empty-state">Not created yet. Click "Create Test" to build your first selection test.</div>`; return; }
+        let jobs = []; try { jobs = JSON.parse(localStorage.getItem(JOBS_KEY)) || []; } catch (e) {}
+        const CAT_LABEL = { practice: 'Practice Test', university: 'University / College Exam', interview: 'Interview Test', selection: 'Selection Test' };
+        el.innerHTML = tests.map(t => {
+            const tid = encodeURIComponent(t.id || t.code || '');
+            const qCount = (t.questionsCount != null ? t.questionsCount : ((t.questions && t.questions.length) || 0));
+            const cat = String(t.testCategory || '').toLowerCase() || 'selection';
+            const job = t.jobId ? jobs.find(j => j.id === t.jobId) : null;
+            const statsPage = cat === 'university' ? 'statsteachuni.html' : 'interviewteststats.html';
+            const dcid = 'test-' + (t.id || t.code || '');
+            return `
+            <div class="lm-card" onclick="location.href='interound-attempt.html?id=${tid}'">
+                <div class="lm-card-top">
+                    <div class="lm-title-wrap">
+                        <div class="lm-lead"><img src="TESTICON.jpg" alt=""></div>
+                        <h3 class="lm-title">${esc(t.title || 'Untitled Test')}</h3>
+                    </div>
+                    <div class="lm-icons" onclick="event.stopPropagation();">
+                        <div class="icon-btn-box" title="Results &amp; Publish" onclick="location.href='${statsPage}?test=${tid}'"><i class="fas fa-chart-column" style="color:#D96C33;"></i></div>
+                        <div class="icon-btn-box" title="Open" onclick="location.href='interound-attempt.html?id=${tid}'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/menu-1.svg" alt="Open"></div>
+                        <div class="icon-btn-box" id="expandBtn-${dcid}" title="Details &amp; Actions" onclick="toggleCardDetails(event,'${dcid}')"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+                </div>
+                <div class="lm-sub">ID: ${esc(t.id || t.code || '—')} &bull; Duration: ${esc(t.duration || '—')} &bull; ${qCount} question${qCount === 1 ? '' : 's'}${job ? ' &bull; ' + esc((job.company || '') + ' — ' + (job.title || '')) : ''}</div>
+                <div id="details-${dcid}" class="lm-details" onclick="event.stopPropagation();">
+                    <span class="status-pill active">${esc(t.status || 'Active')}</span>
+                    <span class="status-pill" style="background:#fff5f0;color:#C4551D;border:1px solid #ffd7c2;">${CAT_LABEL[cat] || 'Selection Test'}</span>
+                    ${t.resultsPublished ? '<span class="status-pill active">Results Published</span>' : ''}
+                    <div style="margin-top:16px;">
+                        <a class="btn-detail-action" href="${statsPage}?test=${tid}"><i class="fas fa-chart-column"></i> Results &amp; Publish</a>
+                        <a class="btn-detail-action" href="interound-attempt.html?id=${tid}"><i class="fas fa-eye"></i> Preview</a>
+                        <a class="btn-detail-action" href="interview-makerforrecruiter.html?edit=${tid}"><i class="fas fa-edit"></i> Edit</a>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function renderApps() {
+        const jobs = readJSON(JOBS_KEY, []);
+        const appsMap = readJSON(APPS_KEY, {});
+        document.getElementById('appsCount').textContent = `(${jobs.length})`;
+        const el = document.getElementById('appsTimeline');
+        if (!jobs.length) { el.innerHTML = `<div class="empty-state">Not created yet. Click "Post Position" to publish your first opening.</div>`; return; }
+        el.innerHTML = jobs.map(j => {
+            const list = appsMap[j.id] || [];
+            const count = list.length;
+            const jid = encodeURIComponent(j.id);
+            const dcid = 'app-' + j.id;
+            return `
+            <div class="lm-card" onclick="location.href='openjobposting.html?view=applications&job=${jid}'">
+                <div class="lm-card-top">
+                    <div class="lm-title-wrap">
+                        <div class="lm-lead"><img src="ONLINEFORM.png" alt=""></div>
+                        <h3 class="lm-title">${esc(j.title || 'Untitled Position')}</h3>
+                    </div>
+                    <div class="lm-icons" onclick="event.stopPropagation();">
+                        <div class="icon-btn-box" title="View Applications" onclick="location.href='openjobposting.html?view=applications&job=${jid}'"><i class="fas fa-users" style="color:#666;"></i></div>
+                        <div class="icon-btn-box" id="expandBtn-${dcid}" title="Details &amp; Actions" onclick="toggleCardDetails(event,'${dcid}')"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+                </div>
+                <div class="lm-sub">${esc(j.company || '')}${j.qualification ? ' &bull; ' + esc(j.qualification) : ''}</div>
+                <div id="details-${dcid}" class="lm-details" onclick="event.stopPropagation();">
+                    <span class="status-pill" style="background:#f2f4f7;color:#475467;">${count} application${count === 1 ? '' : 's'}</span>
+                    <div style="margin-top:16px;">
+                        <a class="btn-detail-action" href="openjobposting.html?view=applications&job=${jid}"><i class="fas fa-users"></i> View Applications</a>
                     </div>
                 </div>
             </div>`;
@@ -227,7 +364,7 @@
     function handleLogout() { localStorage.removeItem('CodeQuest_active_session'); window.location.href = 'firstpage.html'; }
     function toast(msg) { const t = document.getElementById('recToast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(toast._h); toast._h = setTimeout(() => t.style.display = 'none', 3000); }
 
-    window.addEventListener('DOMContentLoaded', () => { const s = session(); if (s && s.name) document.getElementById('userName').textContent = s.name; renderPosts(); });
+    window.addEventListener('DOMContentLoaded', () => { const s = session(); if (s && s.name) document.getElementById('userName').textContent = s.name; renderPosts(); renderTests(); renderApps(); });
 </script>
 </body>
 

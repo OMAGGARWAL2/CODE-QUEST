@@ -10979,7 +10979,7 @@
                 return;
             }
 
-            // Choose publish audience (Universal vs Only My Batch), then continue
+            // Choose publish audience (Universal vs Only My Batch vs Registered Students), then continue
             openAudiencePicker(function (audience, batchIds, extra) {
                 exams.audience = audience;
                 exams.batchIds = batchIds || [];
@@ -10987,6 +10987,8 @@
                     exams.jobId = extra.jobId || '';
                     exams.passingCriteria = extra.passingCriteria || '';
                     exams.registeredOnly = (audience === 'registered');
+                    exams.testCategory = extra.testCategory || '';
+                    exams.universityId = extra.universityId || '';
                 }
                 // Check if account security passcode is enabled
                 const secConfig = getCreatorSecurityConfig();
@@ -10998,10 +11000,12 @@
             });
         }
 
-        // ===== PUBLISH AUDIENCE PICKER (Universal vs Only My Batch vs Registered Students) =====
+        // ===== PUBLISH AUDIENCE PICKER (Category + Universal vs Only My Batch vs Registered Students vs University) =====
         function openAudiencePicker(cb) {
             let batches = [];
             try { batches = JSON.parse(localStorage.getItem('CodeQuest_batches')) || []; } catch (e) {}
+            let unis = [];
+            try { unis = JSON.parse(localStorage.getItem('CodeQuest_universities')) || []; } catch (e) {}
             const recruiterMode = /[?&]recruiter=1/.test(location.search);
             const jobId = (location.search.match(/[?&]job=([^&]+)/) || [])[1] || '';
             let job = null;
@@ -11017,6 +11021,9 @@
                 ? batches.map(b => `<label style="display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid #eaecf0;border-radius:8px;margin-bottom:8px;font-family:'Mulish',sans-serif;font-weight:600;color:#344054;cursor:pointer;"><input type="checkbox" class="cq-aud-batch" value="${b.id}"> ${String(b.name || '').replace(/</g, '&lt;')} <span style="color:#98a2b3;font-weight:400;">(${(b.students || []).length})</span></label>`).join('')
                 : `<div style="color:#98a2b3;font-family:'Mulish',sans-serif;padding:8px 2px;">No batches yet. Create batches from the dashboard to enable batch-only publishing.</div>`;
 
+            const uniOptions = unis.length
+                ? unis.map(u => `<option value="${u.id}">${String(u.name || '').replace(/</g, '&lt;')}</option>`).join('')
+                : '';
             let scopeHtml;
             if (recruiterMode) {
                 const regCount = job ? ((JSON.parse(localStorage.getItem('CodeQuest_job_applications') || '{}')[job.id] || []).length) : 0;
@@ -11039,17 +11046,38 @@
                         <input type="radio" name="cqAud" value="universal" checked style="margin-top:4px;">
                         <span><b style="font-family:'Mulish',sans-serif;">Publish Universally</b><br><span style="color:#667085;font-size:0.92rem;">Any student on CodeQuest can find and attempt this.</span></span>
                     </label>
-                    <label style="display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid #eaecf0;border-radius:10px;margin-bottom:14px;cursor:pointer;">
+                    <label style="display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid #eaecf0;border-radius:10px;margin-bottom:10px;cursor:pointer;">
                         <input type="radio" name="cqAud" value="batch" style="margin-top:4px;">
                         <span><b style="font-family:'Mulish',sans-serif;">Publish to Only My Batch</b><br><span style="color:#667085;font-size:0.92rem;">Only students in the selected batches get access.</span></span>
                     </label>
-                    <div id="cqAudBatches" style="max-height:180px;overflow-y:auto;display:none;margin-bottom:8px;">${batchOptions}</div>`;
+                    <div id="cqAudBatches" style="max-height:180px;overflow-y:auto;display:none;margin-bottom:8px;">${batchOptions}</div>
+                    <div id="cqAudUniRow" style="display:none;">
+                        <label style="display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid #eaecf0;border-radius:10px;margin-bottom:10px;cursor:pointer;">
+                            <input type="radio" name="cqAud" value="university" style="margin-top:4px;">
+                            <span><b style="font-family:'Mulish',sans-serif;">Only My University Students</b><br><span style="color:#667085;font-size:0.92rem;">${unis.length ? 'Restricted to students registered under the selected university.' : 'No universities registered yet. Create one from the University portal first.'}</span></span>
+                        </label>
+                        ${unis.length ? `<select id="cqAudUni" style="width:100%;padding:10px 12px;border:1px solid #d0d5dd;border-radius:8px;font-family:'Mulish',sans-serif;font-size:0.95rem;outline:none;margin-bottom:8px;">${uniOptions}</select>` : ''}
+                    </div>`;
             }
+
+            // Test Category picker (Practice / University / Interview / Selection) - same for recruiters & teachers
+            const defCat = recruiterMode ? 'selection' : 'practice';
+            const catBlock = `
+                <div style="margin-bottom:16px;">
+                    <label style="font-family:'Mulish',sans-serif;font-weight:700;font-size:0.9rem;color:#344054;display:block;margin-bottom:8px;"><i class="fas fa-tags" style="color:#D96C33;"></i> Label This Test As <span style="color:#98a2b3;font-weight:400;">(decides how results are evaluated &amp; published)</span></label>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                        <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid #eaecf0;border-radius:8px;font-family:'Mulish',sans-serif;font-weight:600;font-size:0.88rem;color:#344054;cursor:pointer;"><input type="radio" name="cqCat" value="practice" ${defCat === 'practice' ? 'checked' : ''}> Practice Test</label>
+                        <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid #eaecf0;border-radius:8px;font-family:'Mulish',sans-serif;font-weight:600;font-size:0.88rem;color:#344054;cursor:pointer;"><input type="radio" name="cqCat" value="university" ${defCat === 'university' ? 'checked' : ''}> University / College Exam</label>
+                        <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid #eaecf0;border-radius:8px;font-family:'Mulish',sans-serif;font-weight:600;font-size:0.88rem;color:#344054;cursor:pointer;"><input type="radio" name="cqCat" value="interview" ${defCat === 'interview' ? 'checked' : ''}> Interview Test</label>
+                        <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid #eaecf0;border-radius:8px;font-family:'Mulish',sans-serif;font-weight:600;font-size:0.88rem;color:#344054;cursor:pointer;"><input type="radio" name="cqCat" value="selection" ${defCat === 'selection' ? 'checked' : ''}> Selection Test</label>
+                    </div>
+                </div>`;
 
             wrap.innerHTML = `
                 <div style="background:#fff;border-radius:16px;max-width:480px;width:100%;padding:26px 28px;box-shadow:0 20px 50px rgba(0,0,0,0.3);font-family:'Hind',sans-serif;">
                     <h3 style="font-family:'Mulish',sans-serif;font-size:1.3rem;font-weight:800;margin:0 0 4px;">${recruiterMode ? 'Selection Test &mdash; Audience' : 'Choose Publishing Audience'}</h3>
                     <p style="color:#667085;margin:0 0 18px;">Who should be able to see and access this assessment?</p>
+                    ${catBlock}
                     ${scopeHtml}
                     <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:14px;">
                         <button id="cqAudCancel" style="background:#fff;border:1px solid #d0d5dd;color:#475467;padding:10px 20px;border-radius:8px;font-weight:700;font-family:'Mulish',sans-serif;cursor:pointer;">Cancel</button>
@@ -11058,18 +11086,44 @@
                 </div>`;
             document.body.appendChild(wrap);
             const batchBox = wrap.querySelector('#cqAudBatches');
+            const uniRow = wrap.querySelector('#cqAudUniRow');
+            // Category drives extra audience rows: university category reveals the university audience
+            wrap.querySelectorAll('input[name="cqCat"]').forEach(r => r.addEventListener('change', () => {
+                const cat = wrap.querySelector('input[name="cqCat"]:checked').value;
+                if (uniRow) uniRow.style.display = (cat === 'university' && !recruiterMode) ? 'block' : 'none';
+                if (cat !== 'university') {
+                    const uniAud = wrap.querySelector('input[name="cqAud"][value="university"]');
+                    if (uniAud && uniAud.checked) {
+                        const def = wrap.querySelector('input[name="cqAud"][value="universal"]');
+                        if (def) def.checked = true;
+                    }
+                }
+            }));
             wrap.querySelectorAll('input[name="cqAud"]').forEach(r => r.addEventListener('change', () => {
                 if (batchBox) batchBox.style.display = (wrap.querySelector('input[name="cqAud"]:checked').value === 'batch') ? 'block' : 'none';
             }));
             wrap.querySelector('#cqAudCancel').onclick = () => wrap.remove();
             wrap.querySelector('#cqAudGo').onclick = () => {
                 const val = wrap.querySelector('input[name="cqAud"]:checked').value;
+                const catEl = wrap.querySelector('input[name="cqCat"]:checked');
+                const category = catEl ? catEl.value : '';
                 let ids = [];
                 if (val === 'batch') {
                     ids = Array.from(wrap.querySelectorAll('.cq-aud-batch:checked')).map(c => c.value);
                     if (!ids.length) { alert('Select at least one batch.'); return; }
                 }
-                const extra = recruiterMode ? { jobId: jobId, passingCriteria: (wrap.querySelector('#cqAudPass') || {}).value || '' } : null;
+                let uniId = '';
+                if (val === 'university') {
+                    const sel = wrap.querySelector('#cqAudUni');
+                    uniId = sel ? sel.value : '';
+                    if (!uniId) { alert('Register a university first (University portal).'); return; }
+                }
+                const extra = {
+                    testCategory: category,
+                    universityId: uniId,
+                    jobId: recruiterMode ? jobId : '',
+                    passingCriteria: recruiterMode ? ((wrap.querySelector('#cqAudPass') || {}).value || '') : ''
+                };
                 wrap.remove();
                 cb(val, ids, extra);
             };
@@ -11126,6 +11180,8 @@
                             jobId: exams.jobId || '',
                             registeredOnly: !!exams.registeredOnly,
                             passingCriteria: exams.passingCriteria || '',
+                            testCategory: exams.testCategory || '',
+                            universityId: exams.universityId || '',
                             teacherEmail: (JSON.parse(localStorage.getItem('CodeQuest_active_session') || '{}').email) || '',
                             createdAt: savedExam.createdAt || new Date().toISOString()
                         };

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Results For Jobs</title>
+    <!-- Google Fonts: Hind, Inter, Outfit, Mulish (questionpool.html stack) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Mulish:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+    <style>
+        :root {
+            --primary: #1570EF;
+            --primary-hover: #175CD3;
+            --primary-soft: #EFF6FF;
+            --accent: #D96C33;
+            --secondary: #667085;
+            --text-main: #101828;
+            --text-secondary: #475467;
+            --bg-body: #F9FAFB;
+            --border: #EAECF0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+        h1, h2, h3, .logo-text { font-family: 'Outfit', sans-serif; }
+
+        .site-header { height: 72px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; position: sticky; top: 0; z-index: 1000; }
+        .header-left { display: flex; align-items: center; gap: 24px; }
+        .logo-container { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; }
+        .logo-square { width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .logo-square img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text { font-size: 1.35rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; text-transform: uppercase; line-height: 1; }
+        .logo-text small { display: block; font-size: 0.7rem; font-weight: 700; color: var(--primary); letter-spacing: 0.8px; margin-top: 3px; font-family: 'Mulish', sans-serif; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--secondary); text-decoration: none; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 1rem; padding: 8px 14px; border-radius: 8px; }
+        .back-link:hover { background: var(--primary-soft); color: var(--primary); }
+        .brand-ico { width: 34px; height: 34px; object-fit: contain; border-radius: 8px; }
+
+        .main-container { width: 100%; max-width: 1240px; margin: 0 auto; padding: 36px 32px 90px; flex: 1; }
+
+        /* ERP breadcrumb strip */
+        .erp-crumb { display: flex; align-items: center; gap: 10px; font-family: 'Mulish', sans-serif; font-size: 0.85rem; font-weight: 700; color: #98a2b3; margin-bottom: 22px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .erp-crumb i { font-size: 0.7rem; }
+        .erp-crumb .cur { color: var(--primary); }
+
+        .page-header { margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+        .page-header h1 { font-size: 2rem; font-weight: 700; }
+        .page-header p { color: var(--text-secondary); font-size: 1.05rem; margin-top: 4px; }
+
+        /* ERP summary tiles */
+        .erp-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 26px; }
+        .erp-tile { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+        .erp-tile .t-k { font-family: 'Mulish', sans-serif; font-size: 0.72rem; font-weight: 800; color: #98a2b3; text-transform: uppercase; letter-spacing: 0.6px; }
+        .erp-tile .t-v { font-family: 'Mulish', sans-serif; font-size: 1.7rem; font-weight: 800; color: var(--text-main); margin-top: 6px; }
+        .erp-tile.green .t-v { color: #067647; }
+        .erp-tile.red .t-v { color: #B42318; }
+        .erp-tile.amber .t-v { color: #B45309; }
+
+        .search-row { margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; }
+        .search-box { position: relative; flex: none; width: 350px; }
+        .search-box i { position: absolute; left: 0; top: 50%; transform: translateY(-50%); color: #d0d5dd; font-size: 1.3rem; }
+        .search-input { width: 100%; padding: 12px 8px 12px 36px; border: none; border-bottom: 1px solid #eaecf0; border-radius: 0; font-size: 1.25rem; font-weight: 400; font-family: 'Mulish', sans-serif; color: #344054; outline: none; background: transparent; }
+        .search-input:focus { border-bottom-color: var(--primary); }
+        .btn { border: none; border-radius: 8px; padding: 11px 22px; font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 0.92rem; cursor: pointer; display: inline-flex; align-items: center; gap: 9px; background: #fff; color: #475467; border: 1.5px solid #d0d5dd; }
+        .btn:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* questionpool.html-style table on white ERP card */
+        .pool-card { background: #fff; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .pool-card.scroll-x { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #fff; padding: 16px 24px; text-align: left; font-size: 1.05rem; text-transform: uppercase; font-family: 'Mulish', sans-serif; font-weight: 500; color: #344054; border-bottom: 1px solid var(--border); white-space: nowrap; }
+        td { padding: 20px 24px; border-bottom: 1px solid var(--border); vertical-align: middle; font-size: 1.25rem; font-family: 'Mulish', sans-serif; font-weight: 400; color: #000; }
+        td.center, th.center { text-align: center; }
+        .job-head { font-weight: 700; color: #DE5B2B; font-size: 1.25rem; }
+        .sub { font-size: 0.95rem; color: #667085; font-family: 'Hind', sans-serif; }
+        .form-no { font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: var(--primary); font-weight: 700; }
+        .status-pill { display: inline-flex; align-items: center; gap: 7px; padding: 5px 14px; border-radius: 20px; font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; white-space: nowrap; }
+        .status-pill.selected { background: #ecfdf3; color: #067647; border: 1px solid #abefc6; }
+        .status-pill.short { background: #eff6ff; color: #1570EF; border: 1px solid #b9d6fb; }
+        .status-pill.not { background: #fef2f2; color: #B42318; border: 1px solid #fecaca; }
+        .status-pill.await { background: #fffaeb; color: #B45309; border: 1px solid #fedf89; }
+        .status-pill.grey { background: #f2f4f7; color: #475467; border: 1px solid #eaecf0; }
+        .empty-state { text-align: center; padding: 80px 40px; color: #98a2b3; font-family: 'Hind', sans-serif; font-size: 1.15rem; }
+        .empty-state i { font-size: 3.4rem; display: block; margin-bottom: 14px; color: var(--border); }
+
+        @media (max-width: 900px) { .erp-tiles { grid-template-columns: 1fr 1fr; } }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="header-left">
+        <a href="studentindex.html" class="logo-container">
+            <div class="logo-square"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest"></div>
+            <div class="logo-text">CodeQuest<small>Candidate Results Desk</small></div>
+            <img class="brand-ico" src="JOBSICONMAIN.png" alt="Jobs">
+        </a>
+        <a href="studentindex.html" class="back-link"><i class="fas fa-arrow-left"></i> Back To Dashboard</a>
+    </div>
+</header>
+
+<div class="main-container">
+    <div class="erp-crumb"><span>Student</span><i class="fas fa-chevron-right"></i><span>Jobs</span><i class="fas fa-chevron-right"></i><span class="cur">Results For Jobs</span></div>
+
+    <div class="page-header">
+        <div>
+            <h1 id="pageTitle">Results For Jobs</h1>
+            <p id="pageSub">Every hiring test you attempted — company, application form number, score and selection outcome.</p>
+        </div>
+        <button class="btn" onclick="window.print()"><i class="fas fa-print"></i> Print Statement</button>
+    </div>
+
+    <div class="erp-tiles" id="erpTiles"></div>
+
+    <div class="search-row">
+        <div class="search-box"><i class="fas fa-search"></i><input type="text" class="search-input" id="searchInput" placeholder="Search by company, role or form number..." onkeyup="renderRows()"></div>
+    </div>
+
+    <div class="pool-card scroll-x">
+        <table>
+            <thead>
+                <tr>
+                    <th>Job Role</th>
+                    <th>Company</th>
+                    <th>Form Number</th>
+                    <th>Hiring Test</th>
+                    <th class="center">Score</th>
+                    <th class="center">Percentage</th>
+                    <th class="center">Selection Status</th>
+                </tr>
+            </thead>
+            <tbody id="resBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<script src="EXAMPAD/js/db.js"></script>
+<script src="cq-shared.js"></script>
+<script>
+    function esc(s) { return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    let ROWS = [];
+
+    function buildRows() {
+        const s = CQ.session();
+        const tests = CQ.getTests().filter(t => ['interview', 'selection'].includes(String(t.testCategory || '').toLowerCase()) || t.jobId);
+        const store = CQ.publishedStore();
+        const apps = CQ.readJSON('CodeQuest_job_applications', {});
+        const myEmail = String(s.email || '').toLowerCase();
+        const myName = String(s.name || '').toLowerCase();
+        const myRoll = String(s.rollNo || s.regNo || s.roll || '').toLowerCase();
+        ROWS = [];
+
+        tests.forEach(t => {
+            const key = String(t.id || t.code || '');
+            const job = t.jobId ? CQ.jobFor(t.jobId) : null;
+            const applied = t.jobId ? (apps[t.jobId] || []).some(a =>
+                (myEmail && String(a.applicantEmail || '').toLowerCase() === myEmail) ||
+                (myRoll && String(a.applicantRoll || '').toLowerCase() === myRoll) ||
+                (myName && String(a.applicantName || '').toLowerCase() === myName)) : false;
+
+            const pub = store[key];
+            const myPub = (pub && pub.category !== 'university') ? (pub.results || []).find(r => CQ.isMyResult(r)) : null;
+            const myAtt = CQ.myAttemptFor(key);
+
+            if (!myPub && !myAtt && !applied) return; // nothing to show for this student
+
+            const exam = CQ.examForTest(t);
+            const live = myAtt && !myPub ? (exam ? CQ.resultRows(exam).find(r => CQ.isMyResult(r)) : null) : null;
+
+            let status;
+            if (myPub) {
+                const st = String(myPub.status || '');
+                if (st === 'Shortlisted') status = { cls: 'short', ico: 'fa-bookmark', label: 'Shortlisted' };
+                else if (st === 'Selected') status = { cls: 'selected', ico: 'fa-circle-check', label: 'Selected' };
+                else status = { cls: 'not', ico: 'fa-circle-xmark', label: st || 'Not Selected' };
+            } else if (myAtt) {
+                status = { cls: 'await', ico: 'fa-hourglass-half', label: 'Result Awaits Publication' };
+            } else {
+                status = { cls: 'grey', ico: 'fa-user-pen', label: 'Registered — Not Attempted' };
+            }
+
+            const scoreCell = myPub ? `${myPub.score} / ${myPub.totalMarks}` : (live ? `${live.score} / ${live.totalMarks}` : '—');
+            const pctCell = myPub ? `${myPub.percentage.toFixed(1)}%` : (live ? `${live.percentage.toFixed(1)}%` : '—');
+
+            ROWS.push({
+                role: (job && job.title) || 'Hiring Test',
+                company: (pub && pub.company) || (job && job.company) || '—',
+                formNo: (pub && pub.formNumber) || (job && job.formNumber) || '—',
+                testTitle: t.title || 'Untitled Test',
+                testId: key,
+                testType: CQ.categoryLabel(t.testCategory || 'selection'),
+                publishedAt: pub ? pub.publishedAt : '',
+                score: scoreCell, pct: pctCell, status
+            });
+        });
+        ROWS.sort((a, b) => new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0));
+    }
+
+    function renderTiles() {
+        const total = ROWS.length;
+        const good = ROWS.filter(r => ['short', 'selected'].includes(r.status.cls)).length;
+        const not = ROWS.filter(r => r.status.cls === 'not').length;
+        const awaitR = ROWS.filter(r => r.status.cls === 'await' || r.status.cls === 'grey').length;
+        document.getElementById('erpTiles').innerHTML = `
+            <div class="erp-tile"><div class="t-k">Total Job Tests</div><div class="t-v">${total}</div></div>
+            <div class="erp-tile green"><div class="t-k">Shortlisted / Selected</div><div class="t-v">${good}</div></div>
+            <div class="erp-tile red"><div class="t-k">Not Selected</div><div class="t-v">${not}</div></div>
+            <div class="erp-tile amber"><div class="t-k">Awaiting Results</div><div class="t-v">${awaitR}</div></div>`;
+    }
+
+    function renderRows() {
+        const term = (document.getElementById('searchInput').value || '').toLowerCase();
+        const rows = ROWS.filter(r => !term || (r.role + ' ' + r.company + ' ' + r.formNo + ' ' + r.testTitle).toLowerCase().includes(term));
+        const tbody = document.getElementById('resBody');
+        if (!rows.length) {
+            tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><i class="far fa-briefcase"></i>' + (ROWS.length === 0 ? 'You have not appeared for any interview or selection test yet. Apply to jobs and take their selection tests — results appear here once the hirer publishes them.' : 'No results match your search.') + '</div></td></tr>';
+            return;
+        }
+        tbody.innerHTML = rows.map(r => `
+            <tr>
+                <td><div class="job-head">${esc(r.role)}</div><div class="sub">${esc(r.testType)}</div></td>
+                <td>${esc(r.company)}</td>
+                <td><span class="form-no">${esc(r.formNo)}</span></td>
+                <td>${esc(r.testTitle)}<div class="sub">${esc(r.testId)}${r.publishedAt ? ' &bull; Published ' + new Date(r.publishedAt).toLocaleDateString() : ''}</div></td>
+                <td class="center">${esc(r.score)}</td>
+                <td class="center">${esc(r.pct)}</td>
+                <td class="center"><span class="status-pill ${r.status.cls}"><i class="fas ${r.status.ico}"></i> ${esc(r.status.label)}</span></td>
+            </tr>`).join('');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const s = CQ.session();
+        if (!s || !s.role) {
+            document.getElementById('pageTitle').textContent = 'Sign In Required';
+            document.getElementById('resBody').innerHTML = '<tr><td colspan="7"><div class="empty-state">Please <a href="firstpage.html" style="color:#1570EF;font-weight:700;">log in</a> to view your job test results.</div></td></tr>';
+            return;
+        }
+        if (s.universityName) document.getElementById('pageSub').textContent = `Candidate: ${s.name || ''} • ${s.universityName}`;
+        buildRows();
+        renderTiles();
+        renderRows();
+    });
+</script>
+</body>
+
+</html>

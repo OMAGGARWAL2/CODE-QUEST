@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Hiring Test Statistics</title>
+    <!-- Google Fonts: Hind, Inter, Outfit, Mulish (questionpool.html stack) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Mulish:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+    <style>
+        :root {
+            --primary: #D96C33;
+            --primary-hover: #B4551D;
+            --primary-soft: #fff5f0;
+            --secondary: #667085;
+            --text-main: #101828;
+            --text-secondary: #475467;
+            --bg-body: #FFFFFF;
+            --border: #EAECF0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+        h1, h2, h3, .logo-text { font-family: 'Outfit', sans-serif; }
+
+        .site-header { height: 72px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; position: sticky; top: 0; z-index: 1000; }
+        .header-left { display: flex; align-items: center; gap: 24px; }
+        .logo-container { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; }
+        .logo-square { width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .logo-square img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text { font-size: 1.4rem; font-weight: 700; color: var(--text-main); letter-spacing: -0.5px; }
+        .logo-text small { display: block; font-size: 0.7rem; font-weight: 700; color: var(--primary); letter-spacing: 0.8px; margin-top: 3px; font-family: 'Mulish', sans-serif; }
+        .header-nav { display: flex; align-items: center; gap: 14px; margin-left: 24px; }
+        .nav-icon-btn { width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--secondary); cursor: pointer; transition: all 0.2s; background: transparent; border: none; font-size: 1.3rem; }
+        .nav-icon-btn img { width: 32px !important; height: 32px !important; }
+        .nav-icon-btn:hover { background: #f5f5f5; color: var(--primary); }
+        .nav-icon-btn.active { color: var(--primary); background: var(--primary-soft); }
+
+        .main-container { width: 100%; padding: 40px 32px; flex: 1; }
+        .page-header { margin-bottom: 26px; display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+        .title-area h1 { font-size: 2rem; font-weight: 700; color: var(--text-main); }
+        .title-area p { color: var(--text-secondary); font-size: 1rem; margin-top: 4px; }
+
+        .search-row { margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; }
+        .search-left { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+        .search-box { position: relative; flex: none; width: 350px; }
+        .search-box i { position: absolute; left: 0; top: 50%; transform: translateY(-50%); color: #d0d5dd; font-size: 1.3rem; }
+        .search-input { width: 100%; padding: 12px 8px 12px 36px; border: none; border-bottom: 1px solid #eaecf0; border-radius: 0; font-size: 1.25rem; font-weight: 400; font-family: 'Mulish', sans-serif; color: #344054; outline: none; transition: all 0.2s; background: transparent; }
+        .search-input::placeholder { color: #98A2B3; font-weight: 400; }
+        .search-input:focus { border-bottom-color: var(--primary); box-shadow: none; }
+        .filter-select { padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: #fff; color: var(--text-secondary); font-weight: 600; outline: none; cursor: pointer; font-family: 'Mulish', sans-serif; max-width: 400px; }
+
+        .btn { border: none; border-radius: 8px; padding: 12px 24px; font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 0.98rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; }
+        .btn.primary { background: var(--primary); color: #fff; }
+        .btn.primary:hover { background: var(--primary-hover); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .pub-banner { display: none; background: #ecfdf3; border: 1px solid #abefc6; border-left: 6px solid #067647; border-radius: 8px; padding: 14px 20px; margin-bottom: 20px; font-family: 'Mulish', sans-serif; font-weight: 700; color: #067647; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+        .meta-strip { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; }
+        .meta-box { border: 1px solid var(--border); border-radius: 8px; background: #fff; padding: 10px 18px; font-family: 'Mulish', sans-serif; }
+        .meta-box .k { font-size: 0.7rem; font-weight: 800; color: #98a2b3; text-transform: uppercase; letter-spacing: 0.6px; }
+        .meta-box .v { font-size: 1.05rem; font-weight: 700; color: #101828; margin-top: 2px; }
+
+        /* questionpool.html-style table */
+        .pool-card { background: #fff; border: 1px solid #eaecf0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .pool-card.scroll-x { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #fff; padding: 16px 24px; text-align: left; font-size: 1.05rem; text-transform: uppercase; font-family: 'Mulish', sans-serif; font-weight: 500; color: #344054; border-bottom: 1px solid var(--border); white-space: nowrap; }
+        td { padding: 20px 24px; border-bottom: 1px solid var(--border); vertical-align: middle; font-size: 1.25rem; font-family: 'Mulish', sans-serif; font-weight: 400; color: #000; white-space: nowrap; }
+        td.center, th.center { text-align: center; }
+        .roll-cell { color: var(--primary); font-weight: 700; }
+        .cand-name { font-weight: 700; color: #101828; }
+        .cand-sub { font-size: 0.9rem; color: #98a2b3; font-family: 'Hind', sans-serif; }
+        .form-no { font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: #1570EF; font-weight: 700; }
+        .status-pill { display: inline-flex; align-items: center; gap: 7px; padding: 5px 14px; border-radius: 20px; font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; }
+        .status-pill.short { background: #ecfdf3; color: #067647; border: 1px solid #abefc6; }
+        .status-pill.not { background: #fef2f2; color: #B42318; border: 1px solid #fecaca; }
+        .status-pending { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; color: #B45309; background: #fffaeb; border: 1px solid #fedf89; padding: 5px 14px; border-radius: 20px; }
+        .empty-state { text-align: center; padding: 80px 40px; color: #98a2b3; font-family: 'Hind', sans-serif; font-size: 1.15rem; }
+        .empty-state i { font-size: 3.4rem; display: block; margin-bottom: 14px; color: var(--border); }
+
+        .toast-box { position: fixed; bottom: 24px; right: 24px; background: #101828; color: #fff; padding: 14px 24px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; z-index: 100000; font-weight: 600; font-family: 'Mulish', sans-serif; }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="header-left">
+        <a href="recruiterindex.html" class="logo-container">
+            <div class="logo-square"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest"></div>
+            <div class="logo-text">CodeQuest<small>Hiring Test Statistics</small></div>
+        </a>
+        <nav class="header-nav">
+            <button class="nav-icon-btn" data-tip="Recruiter Dashboard" onclick="location.href='recruiterindex.html'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/menu-1.svg" alt="Dashboard"></button>
+            <button class="nav-icon-btn" data-tip="Job Postings" onclick="location.href='openjobposting.html'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/folder-2.svg" alt="Jobs"></button>
+            <button class="nav-icon-btn active" data-tip="Statistics" title="Statistics"><i class="fas fa-chart-column"></i></button>
+            <button class="nav-icon-btn" data-tip="Create Selection Test" onclick="location.href='interview-makerforrecruiter.html'" title="Create Test"><img src="EXAMPAD/TESTPAD_WEBSITE__files/quiz.svg" alt="Create"></button>
+        </nav>
+    </div>
+</header>
+
+<div class="main-container">
+    <div class="page-header">
+        <div class="title-area">
+            <h1>Interview &amp; Selection Test — Results</h1>
+            <p>Candidate-wise evaluation for hiring tests: company, applied form number, score and selection outcome. Publish to let candidates see it on their Results for Jobs page.</p>
+        </div>
+        <button class="btn primary" id="publishBtn" onclick="publishCurrent()"><i class="fas fa-upload"></i> Publish Results</button>
+    </div>
+
+    <div class="search-row">
+        <div class="search-left">
+            <select class="filter-select" id="testSelect" onchange="onTestChange()"></select>
+            <div class="search-box"><i class="fas fa-search"></i><input type="text" class="search-input" id="searchInput" placeholder="Search by roll number, name or form..." onkeyup="applyFilter()"></div>
+        </div>
+        <span style="font-family:'Mulish';font-weight:700;color:#667085;" id="summaryLine"></span>
+    </div>
+
+    <div class="meta-strip" id="metaStrip"></div>
+    <div class="pub-banner" id="pubBanner"><i class="fas fa-circle-check"></i> <span id="pubBannerText"></span></div>
+
+    <div class="pool-card scroll-x">
+        <table>
+            <thead>
+                <tr>
+                    <th>Roll / Reg No</th>
+                    <th>Candidate</th>
+                    <th>Company</th>
+                    <th>Job Role</th>
+                    <th>Form Number</th>
+                    <th class="center">Score</th>
+                    <th class="center">Percentage</th>
+                    <th class="center">Grade</th>
+                    <th class="center">Outcome</th>
+                </tr>
+            </thead>
+            <tbody id="statsBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="toast-box" id="cqToast">Done</div>
+
+<script src="EXAMPAD/js/db.js"></script>
+<script src="cq-shared.js"></script>
+<script>
+    function esc(s) { return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function toast(msg) { const t = document.getElementById('cqToast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(toast._h); toast._h = setTimeout(() => t.style.display = 'none', 3000); }
+
+    let allTests = [];
+    let currentKey = '';
+    let currentRows = [];
+    let currentTest = null;
+    let currentJob = null;
+
+    function init() {
+        const s = CQ.session();
+        const role = String(s.role || '').toLowerCase();
+        if (!role || role === 'student') {
+            document.querySelector('.main-container').innerHTML = `
+                <div class="pool-card"><div class="empty-state"><i class="fas fa-ban"></i>Access Denied — only recruiters, hirers and staff can view hiring test statistics.<br><br><a href="firstpage.html" style="color:#B4551D;font-weight:700;">Go to login</a></div></div>`;
+            return;
+        }
+        allTests = CQ.getTests().filter(t => ['interview', 'selection'].includes(String(t.testCategory || '').toLowerCase()) || t.jobId);
+        const sel = document.getElementById('testSelect');
+        if (!allTests.length) {
+            sel.innerHTML = '<option>No interview / selection tests published yet</option>';
+            sel.disabled = true;
+            document.getElementById('publishBtn').disabled = true;
+            document.getElementById('statsBody').innerHTML = '<tr><td colspan="9"><div class="empty-state"><i class="fas fa-inbox"></i>Create a test labelled "Interview Test" or "Selection Test" from the test creator, then open its Results &amp; Publish button here.</div></td></tr>';
+            return;
+        }
+        const req = new URLSearchParams(location.search).get('test');
+        sel.innerHTML = allTests.map(t => `<option value="${esc(t.id || t.code)}">${esc(t.title || 'Untitled')} (${esc(t.id || t.code)})</option>`).join('');
+        currentKey = allTests.some(t => String(t.id || t.code) === String(req)) ? req : String(allTests[0].id || allTests[0].code);
+        sel.value = currentKey;
+        loadCurrent();
+    }
+
+    function onTestChange() { currentKey = document.getElementById('testSelect').value; loadCurrent(); }
+
+    function loadCurrent() {
+        currentTest = allTests.find(x => String(x.id || x.code) === String(currentKey)) || null;
+        currentJob = currentTest && currentTest.jobId ? CQ.jobFor(currentTest.jobId) : null;
+        const exam = currentTest ? CQ.examForTest(currentTest) : null;
+        currentRows = exam ? CQ.resultRows(exam) : [];
+        renderMeta();
+        renderBody(currentRows);
+        updatePublishUi();
+    }
+
+    function renderMeta() {
+        const pass = parseFloat(currentTest && currentTest.passingCriteria) || 40;
+        document.getElementById('metaStrip').innerHTML = `
+            <div class="meta-box"><div class="k">Company</div><div class="v">${esc((currentJob && currentJob.company) || (currentTest && currentTest.createdByName) || '—')}</div></div>
+            <div class="meta-box"><div class="k">Job Role</div><div class="v">${esc((currentJob && currentJob.title) || '—')}</div></div>
+            <div class="meta-box"><div class="k">Form Number</div><div class="v"><span class="form-no">${esc((currentJob && currentJob.formNumber) || '—')}</span></div></div>
+            <div class="meta-box"><div class="k">Test Type</div><div class="v">${esc(CQ.categoryLabel(currentTest ? currentTest.testCategory : 'selection'))}</div></div>
+            <div class="meta-box"><div class="k">Passing Criteria</div><div class="v">${pass}%</div></div>`;
+    }
+
+    function passMark(r) {
+        const pass = parseFloat(currentTest && currentTest.passingCriteria) || 40;
+        return r.percentage >= pass;
+    }
+
+    function renderBody(rows) {
+        const tbody = document.getElementById('statsBody');
+        if (!rows.length) {
+            tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><i class="fas fa-user-clock"></i>No submissions found for this test yet.</div></td></tr>';
+            document.getElementById('summaryLine').textContent = '';
+            return;
+        }
+        const pub = CQ.getPublished(currentKey);
+        tbody.innerHTML = rows.map(r => {
+            const shortlisted = passMark(r);
+            let outcome;
+            if (pub) {
+                const saved = (pub.results || []).find(x => String(x.studentId) === String(r.studentId) && String(x.rollNo) === String(r.rollNo)) || (pub.results || []).find(x => String(x.studentId) === String(r.studentId));
+                const st = saved ? saved.status : (shortlisted ? 'Shortlisted' : 'Not Selected');
+                outcome = st === 'Shortlisted'
+                    ? '<span class="status-pill short"><i class="fas fa-circle-check"></i> Shortlisted</span>'
+                    : '<span class="status-pill not"><i class="fas fa-circle-xmark"></i> Not Selected</span>';
+            } else {
+                outcome = `<span class="status-pending">${shortlisted ? 'Would Shortlist' : 'Would Reject'} • Awaiting Publish</span>`;
+            }
+            return `
+            <tr>
+                <td class="roll-cell">${esc(r.rollNo)}</td>
+                <td><div class="cand-name">${esc(r.name)}</div><div class="cand-sub">${esc(r.email || '')}</div></td>
+                <td>${esc((currentJob && currentJob.company) || '—')}</td>
+                <td>${esc((currentJob && currentJob.title) || '—')}</td>
+                <td><span class="form-no">${esc((currentJob && currentJob.formNumber) || '—')}</span></td>
+                <td class="center">${r.score} / ${r.totalMarks}</td>
+                <td class="center">${r.percentage.toFixed(1)}%</td>
+                <td class="center"><span class="status-pill" style="background:${r.grade.bg};color:${r.grade.color};border:1px solid currentColor;">${r.grade.letter}</span></td>
+                <td class="center">${outcome}</td>
+            </tr>`;
+        }).join('');
+        const shorts = rows.filter(passMark).length;
+        document.getElementById('summaryLine').textContent = `${rows.length} attempt(s) • ${shorts} meet passing criteria`;
+    }
+
+    function applyFilter() {
+        const term = (document.getElementById('searchInput').value || '').toLowerCase();
+        renderBody(currentRows.filter(r => !term
+            || r.rollNo.toLowerCase().includes(term)
+            || r.name.toLowerCase().includes(term)
+            || ((currentJob && currentJob.formNumber) || '').toLowerCase().includes(term)));
+    }
+
+    function updatePublishUi() {
+        const pub = CQ.getPublished(currentKey);
+        const banner = document.getElementById('pubBanner');
+        const btn = document.getElementById('publishBtn');
+        if (pub) {
+            banner.style.display = 'flex';
+            document.getElementById('pubBannerText').textContent = `Results published on ${new Date(pub.publishedAt).toLocaleString()} — candidates can already see them on their Results for Jobs page.`;
+            btn.innerHTML = '<i class="fas fa-rotate"></i> Re-Publish Results';
+        } else {
+            banner.style.display = 'none';
+            btn.innerHTML = '<i class="fas fa-upload"></i> Publish Results';
+        }
+        btn.disabled = !currentRows.length;
+    }
+
+    function publishCurrent() {
+        if (!currentTest || !currentRows.length) { toast('Nothing to publish yet.'); return; }
+        if (!confirm(`Publish interview/selection results for "${currentTest.title}"? Candidates will see selection outcomes on their Results for Jobs page.`)) return;
+        CQ.publishResults(currentKey, {
+            testId: currentKey,
+            testTitle: currentTest.title || 'Untitled Hiring Test',
+            category: String(currentTest.testCategory || 'selection').toLowerCase(),
+            jobId: currentTest.jobId || '',
+            company: (currentJob && currentJob.company) || '',
+            jobTitle: (currentJob && currentJob.title) || '',
+            formNumber: (currentJob && currentJob.formNumber) || '',
+            passingCriteria: parseFloat(currentTest.passingCriteria) || 40,
+            results: currentRows.map(r => ({ studentId: r.studentId, rollNo: r.rollNo, name: r.name, email: r.email, score: r.score, totalMarks: r.totalMarks, percentage: r.percentage, grade: r.grade, status: passMark(r) ? 'Shortlisted' : 'Not Selected' }))
+        });
+        toast('Results published. Candidates can now view them.');
+        loadCurrent();
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+
+</html>

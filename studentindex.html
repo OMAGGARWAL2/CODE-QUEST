@@ -34,7 +34,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Mulish', sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
 
         body {
@@ -160,7 +160,7 @@
             border-radius: 20px;
             padding: 8px 20px;
             font-weight: 700;
-            font-family: 'Mulish', sans-serif;
+            font-family: 'Roboto', sans-serif;
             font-size: 0.92rem;
             cursor: pointer;
             display: flex;
@@ -312,7 +312,7 @@
         }
 
         .section-title {
-            font-family: 'Mulish', sans-serif;
+            font-family: 'Roboto', sans-serif;
             font-size: 1.35rem;
             font-weight: 700;
             color: #222222;
@@ -346,7 +346,7 @@
             border-bottom: 1px solid #e0e0e0;
             padding: 7px 12px 7px 34px;
             font-size: 0.95rem;
-            font-family: 'Mulish', sans-serif;
+            font-family: 'Roboto', sans-serif;
             color: #444;
             outline: none;
             background: transparent;
@@ -466,7 +466,7 @@
         .acceptance-col {
             font-size: 0.9rem;
             color: #666666;
-            font-family: 'Mulish', sans-serif;
+            font-family: 'Roboto', sans-serif;
             font-weight: 500;
         }
 
@@ -495,20 +495,18 @@
 
         .btn-solve-pill {
             background: transparent;
-            color: var(--primary);
-            border: 1px solid #f9d3c5;
-            padding: 5px 14px;
-            border-radius: 16px;
-            font-size: 0.8rem;
-            font-weight: 700;
+            color: #000000;
+            border: none;
+            padding: 0;
+            font-family: 'Mulish', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 400;
             cursor: pointer;
-            transition: all 0.15s;
+            text-decoration: none;
         }
 
         .btn-solve-pill:hover {
-            background: var(--primary);
-            color: #ffffff;
-            border-color: var(--primary);
+            text-decoration: underline;
         }
 
         /* ===== SECTION 2: YOUR COURSES & SECTION 3: YOUR INTERVIEWS AND TESTS ===== */
@@ -547,7 +545,7 @@
         }
 
         .card-item-title {
-            font-family: 'Mulish', sans-serif;
+            font-family: 'Roboto', sans-serif;
             font-size: 1.18rem;
             font-weight: 600;
             color: #111111;
@@ -564,7 +562,7 @@
         }
 
         .card-meta-text {
-            font-family: 'Mulish', sans-serif;
+            font-family: 'Roboto', sans-serif;
             font-size: 0.90rem;
             color: #888888;
             font-weight: 400;
@@ -594,10 +592,329 @@
         }
 
         .progress-label {
-            font-family: 'Mulish', sans-serif;
+            font-family: 'Roboto', sans-serif;
             font-size: 0.86rem;
             color: #888888;
             font-weight: 400;
+        }
+
+        /* ===== QUESTION LIST — styled like EXAMPAD questionpool.html ===== */
+        .pool-card {
+            background: #fff;
+            border: 1px solid #eaecf0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .pool-card table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .pool-card th {
+            background: #fff;
+            padding: 16px 24px;
+            text-align: left;
+            font-size: 1.05rem;
+            text-transform: uppercase;
+            font-family: 'Mulish', sans-serif;
+            font-weight: 500;
+            color: #101828;
+            border-bottom: 1px solid #eaecf0;
+            letter-spacing: 0.3px;
+        }
+
+        .pool-card th .fa-sort {
+            color: #d0d5dd;
+            margin-left: 8px;
+            font-size: 0.8rem;
+        }
+
+        .pool-card td {
+            padding: 20px 24px;
+            border-bottom: 1px solid #eaecf0;
+            vertical-align: middle;
+            font-size: 1.25rem;
+            font-family: 'Mulish', sans-serif;
+            font-weight: 400;
+            color: #000;
+        }
+
+        .pool-card tr:last-child td {
+            border-bottom: none;
+        }
+
+        .q-heading {
+            font-weight: 400;
+            color: #000000;
+            font-size: 1.25rem;
+            line-height: 1.3;
+        }
+
+        /* All question-table text is plain black; on row hover the title underlines */
+        .pool-card td {
+            color: #000000;
+        }
+
+        .q-pool-row:hover .q-heading {
+            text-decoration: underline;
+        }
+
+        .q-topics {
+            margin-top: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .q-topic-chip {
+            background: #f2f4f7;
+            color: #475467;
+            font-size: 0.72rem;
+            padding: 2px 9px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-family: 'Mulish', sans-serif;
+        }
+
+        .status-cell {
+            text-align: center;
+            color: #101828;
+            font-size: 1.15rem;
+        }
+
+        .status-cell .far {
+            color: #101828;
+        }
+
+        /* Orange tick identical to the exam-attempt question rail (.tick-icon in interound-attempt.html) */
+        .status-cell .tick-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            fill: none;
+            stroke: #E66A35;
+            stroke-width: 4.0;
+            stroke-linecap: butt;
+            stroke-linejoin: miter;
+        }
+
+        .q-pool-row {
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .q-pool-row:hover td {
+            background: #fdfdfd;
+        }
+
+        .d-easy { color: var(--easy); }
+        .d-med { color: var(--medium); }
+        .d-hard { color: var(--hard); }
+
+        .pool-pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            gap: 16px;
+            background: #fff;
+            border-top: 1px solid #eaecf0;
+        }
+
+        .pool-nav-btn {
+            border: none;
+            background: transparent;
+            color: #d0d5dd;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .pool-nav-btn:hover { color: #df5a22; }
+
+        .pool-page-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            border: 1px solid #eaecf0;
+            background: #fff;
+            color: #475467;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Mulish', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .pool-page-btn.active {
+            border-color: #df5a22;
+            color: #df5a22;
+            font-weight: 700;
+        }
+
+        .pool-rows-select {
+            margin-left: 16px;
+            padding: 8px 10px;
+            border: 1px solid #df5a22;
+            border-radius: 8px;
+            background: #FAFAFA;
+            font-family: 'Mulish', sans-serif;
+            font-size: 0.95rem;
+            color: #101828;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* ===== TESTS / COURSES — styled like teacherindex lm-card + progress bar ===== */
+        .lm-card {
+            background: #fff;
+            border: 1px solid #f0f0f0;
+            border-radius: 12px;
+            padding: 22px 28px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+
+        .lm-card:hover {
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            border-color: #df5a22;
+        }
+
+        .lm-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .lm-title {
+            font-family: 'Mulish', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #111111;
+            margin: 0;
+            line-height: 1.35;
+            flex: 1;
+            word-break: break-word;
+        }
+
+        .lm-icons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .lm-icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: #f9fafb;
+            transition: background 0.2s;
+        }
+
+        .lm-icon-btn:hover { background: #f3f4f6; }
+        .lm-icon-btn img { width: 24px; height: 24px; }
+        .lm-icon-btn i { color: #666666; font-size: 0.95rem; }
+
+        .lm-sub {
+            font-family: 'Mulish', sans-serif;
+            font-size: 0.9rem;
+            color: #777777;
+            font-weight: 400;
+        }
+
+        .lm-progress-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 4px;
+            width: 100%;
+        }
+
+        .lm-bar {
+            width: 280px;
+            max-width: 60%;
+            height: 7px;
+            background: #f5c6b6;
+            overflow: hidden;
+        }
+
+        .lm-bar > div {
+            height: 100%;
+            background: #df5a22;
+            transition: width 0.6s ease;
+        }
+
+        .lm-progress-label {
+            font-family: 'Mulish', sans-serif;
+            font-size: 0.88rem;
+            color: #888888;
+            font-weight: 500;
+        }
+
+        .lm-details {
+            display: none;
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid #f3f4f6;
+            cursor: default;
+            font-family: 'Mulish', sans-serif;
+        }
+
+        .lm-details .btn-detail-action { margin: 0 8px 8px 0; }
+
+        .btn-detail-action {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            color: #344054;
+            height: 40px;
+            padding: 0 16px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border-radius: 8px;
+            font-family: 'Mulish', sans-serif;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .btn-detail-action:hover { background: #f9fafb; border-color: #d0d5dd; }
+
+        .status-pill {
+            padding: 5px 14px;
+            border-radius: 16px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: #ecfdf3;
+            color: #027a48;
+        }
+
+        .card-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: #98a2b3;
         }
 
         /* ===== PROBLEM SOLVE MODAL ===== */
@@ -761,16 +1078,20 @@
                 <div class="icon-btn-box" onclick="window.location.href='recPosts.html'" title="Notifications">
                     <i class="fas fa-bell" style="font-size: 1.25rem; color: #1570EF;"></i>
                 </div>
+                <div class="icon-btn-box" onclick="window.location.href='university-hub.html'" title="My University">
+                    <img src="UNIVERSITY-ICON(MAIN).jpg" alt="My University">
+                </div>
+                <div class="icon-btn-box" onclick="window.location.href='universityview.html'" title="Recruiter Invites &amp; Resume Builder">
+                    <img src="ONLINEFORM.png" alt="Recruiter Invites &amp; Resume Builder">
+                </div>
+                <div class="icon-btn-box" onclick="window.location.href='Resultsforjobs.html'" title="Job Test Results">
+                    <img src="JOBSICONMAIN.png" alt="Job Test Results">
+                </div>
             </nav>
         </div>
 
-        <!-- Center Join Assessment Pill (Exact student-dashboard style) -->
-        <div class="header-center">
-            <button class="join-assessment-btn" onclick="promptJoinTest()">
-                <span>Join Assessment</span>
-                <i class="fas fa-chevron-down" style="font-size: 0.8rem;"></i>
-            </button>
-        </div>
+        <!-- Center spacer (Join Assessment removed from header) -->
+        <div class="header-center"></div>
 
         <!-- Right: Profile Name, Role, and Avatar Circle -->
         <div class="header-right">
@@ -809,7 +1130,7 @@
         <section id="questionSection" style="margin-bottom: 50px;">
             <div class="section-header">
                 <h2 class="section-title">
-                    Your Question List <span class="section-count" id="questionCount">(5)</span>
+                    Your Question List <span class="section-count" id="questionCount">(0)</span>
                 </h2>
                 <div class="search-wrapper">
                     <i class="fas fa-search"></i>
@@ -818,86 +1139,33 @@
                 </div>
             </div>
 
-            <!-- Topic Filter Pills (LeetCode style) -->
-            <div class="topic-filters-row">
-                <button class="topic-tag-pill active" onclick="filterByTopic('All', this)">All Topics</button>
-                <button class="topic-tag-pill" onclick="filterByTopic('Algorithms', this)">Algorithms</button>
-                <button class="topic-tag-pill" onclick="filterByTopic('Array', this)">Arrays</button>
-                <button class="topic-tag-pill" onclick="filterByTopic('String', this)">Strings</button>
-                <button class="topic-tag-pill" onclick="filterByTopic('Hash Table', this)">Hash Table</button>
-                <button class="topic-tag-pill" onclick="filterByTopic('Dynamic Programming', this)">Dynamic Programming</button>
-            </div>
+            <!-- Question pool table (styled like EXAMPAD questionpool.html) -->
+            <div class="pool-card">
+                <table id="poolTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 90px; text-align: center;">STATUS</th>
+                            <th onclick="sortQuestions('title')" style="cursor: pointer; user-select: none;">TITLE <i class="fas fa-sort"></i></th>
+                            <th onclick="sortQuestions('acceptance')" style="cursor: pointer; user-select: none;">ACCEPTANCE <i class="fas fa-sort"></i></th>
+                            <th onclick="sortQuestions('diff')" style="cursor: pointer; user-select: none;">DIFFICULTY <i class="fas fa-sort"></i></th>
+                            <th style="text-align: center;">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody id="questionsTableBody">
+                        <!-- Rendered from published DSA problems only (renderQuestions) -->
+                    </tbody>
+                </table>
 
-            <!-- LeetCode Table Row List (Matches Image 2) -->
-            <div class="leetcode-table-container">
-                <div class="leetcode-table-header">
-                    <div>Status</div>
-                    <div>Title</div>
-                    <div>Acceptance</div>
-                    <div>Difficulty</div>
-                    <div style="text-align: right;">Action</div>
-                </div>
-
-                <div id="questionsTableBody">
-                    <!-- 1. Two Sum -->
-                    <div class="leetcode-row" data-id="PQ9RJ001" data-topics="Algorithms,Array,Hash Table"
-                        data-title="1. Two Sum" onclick="openQuestionAttempt('PQ9RJ001')">
-                        <div class="status-col"><i class="fas fa-check"></i></div>
-                        <div class="title-col">1. Two Sum</div>
-                        <div class="acceptance-col">58.0%</div>
-                        <div class="difficulty-col diff-easy">Easy</div>
-                        <div class="action-col">
-                            <button class="btn-solve-pill" onclick="event.stopPropagation(); openQuestionAttempt('PQ9RJ001');">Solve</button>
-                        </div>
-                    </div>
-
-                    <!-- 2. Add Two Numbers -->
-                    <div class="leetcode-row" data-id="PQ9RJ002" data-topics="Algorithms,Linked List,Math"
-                        data-title="2. Add Two Numbers" onclick="openQuestionAttempt('PQ9RJ002')">
-                        <div class="status-col" style="color: #bbb;"><i class="far fa-circle"></i></div>
-                        <div class="title-col">2. Add Two Numbers</div>
-                        <div class="acceptance-col">49.6%</div>
-                        <div class="difficulty-col diff-med">Med.</div>
-                        <div class="action-col">
-                            <button class="btn-solve-pill" onclick="event.stopPropagation(); openQuestionAttempt('PQ9RJ002');">Solve</button>
-                        </div>
-                    </div>
-
-                    <!-- 3. Longest Substring Without Repeating Characters -->
-                    <div class="leetcode-row" data-id="PQ9RJ003" data-topics="Algorithms,Hash Table,String"
-                        data-title="3. Longest Substring Without Repeating Characters" onclick="openQuestionAttempt('PQ9RJ003')">
-                        <div class="status-col"><i class="fas fa-check"></i></div>
-                        <div class="title-col" style="color: #df5a22;">3. Longest Substring Without Repeating Characters</div>
-                        <div class="acceptance-col">40.0%</div>
-                        <div class="difficulty-col diff-med">Med.</div>
-                        <div class="action-col">
-                            <button class="btn-solve-pill" onclick="event.stopPropagation(); openQuestionAttempt('PQ9RJ003');">Solve</button>
-                        </div>
-                    </div>
-
-                    <!-- 4. Median of Two Sorted Arrays -->
-                    <div class="leetcode-row" data-id="PQ9RJ004" data-topics="Algorithms,Array,Binary Search"
-                        data-title="4. Median of Two Sorted Arrays" onclick="openQuestionAttempt('PQ9RJ004')">
-                        <div class="status-col"><i class="fas fa-check"></i></div>
-                        <div class="title-col">4. Median of Two Sorted Arrays</div>
-                        <div class="acceptance-col">47.9%</div>
-                        <div class="difficulty-col diff-hard">Hard</div>
-                        <div class="action-col">
-                            <button class="btn-solve-pill" onclick="event.stopPropagation(); openQuestionAttempt('PQ9RJ004');">Solve</button>
-                        </div>
-                    </div>
-
-                    <!-- 5. Longest Palindromic Substring -->
-                    <div class="leetcode-row" data-id="PQ9RJ005" data-topics="Algorithms,String,Dynamic Programming"
-                        data-title="5. Longest Palindromic Substring" onclick="openQuestionAttempt('PQ9RJ005')">
-                        <div class="status-col" style="color: #bbb;"><i class="far fa-circle"></i></div>
-                        <div class="title-col">5. Longest Palindromic Substring</div>
-                        <div class="acceptance-col">38.9%</div>
-                        <div class="difficulty-col diff-med">Med.</div>
-                        <div class="action-col">
-                            <button class="btn-solve-pill" onclick="event.stopPropagation(); openQuestionAttempt('PQ9RJ005');">Solve</button>
-                        </div>
-                    </div>
+                <div class="pool-pagination" id="qPagination">
+                    <button id="qPrevBtn" class="pool-nav-btn" onclick="changeQuestionPage(-1)"><i class="fas fa-chevron-left"></i></button>
+                    <div id="qPageNumbers" style="display: flex; gap: 8px;"></div>
+                    <button id="qNextBtn" class="pool-nav-btn" onclick="changeQuestionPage(1)"><i class="fas fa-chevron-right"></i></button>
+                    <select class="pool-rows-select" onchange="setQuestionRows(parseInt(this.value))">
+                        <option value="10">10 / page</option>
+                        <option value="20">20 / page</option>
+                        <option value="50">50 / page</option>
+                        <option value="100">100 / page</option>
+                    </select>
                 </div>
             </div>
         </section>
@@ -918,7 +1186,7 @@
             </div>
 
             <div class="cards-list" id="coursesListContainer">
-                <div style="padding: 12px 0 20px 0; color: #555555; font-size: 1.15rem; font-weight: 400; font-family: 'Hind', sans-serif;">
+                <div style="padding: 12px 0 20px 0; color: #555555; font-size: 1.15rem; font-weight: 400; font-family: 'Roboto', sans-serif;">
                     Not created yet
                 </div>
             </div>
@@ -940,7 +1208,7 @@
             </div>
 
             <div class="cards-list" id="testsListContainer">
-                <div style="padding: 12px 0 20px 0; color: #555555; font-size: 1.15rem; font-weight: 400; font-family: 'Hind', sans-serif;">
+                <div style="padding: 12px 0 20px 0; color: #555555; font-size: 1.15rem; font-weight: 400; font-family: 'Roboto', sans-serif;">
                     Not created yet
                 </div>
             </div>
@@ -948,125 +1216,11 @@
 
     </main>
 
-    <!-- ===== PROBLEM DETAIL & SOLVE MODAL ===== -->
-    <div class="modal-overlay" id="problemModal" onclick="closeModalOnBackdrop(event)">
-        <div class="modal-box">
-            <div class="modal-header-bar">
-                <h3 class="modal-title-text" id="modalTitle">1. Two Sum</h3>
-                <button class="modal-close-icon" onclick="closeProblemModal()">✕</button>
-            </div>
-            <div class="modal-content-area" id="modalBody">
-                <!-- Dynamically injected -->
-            </div>
-            <div class="modal-footer-bar">
-                <button class="btn-cancel-modal" onclick="closeProblemModal()">Close</button>
-                <button class="btn-run-modal" onclick="simulateRunSolution()">Run Solution</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Notification Toast -->
     <div class="toast-popup" id="toastMsg">Notification message</div>
 
     <!-- ===== SCRIPT LOGIC ===== -->
     <script>
-        // 5 Real LeetCode Problem Details
-        const PROBLEMS_INFO = {
-            1: {
-                title: "1. Two Sum (Easy)",
-                desc: `Given an array of integers <code>nums</code> and an integer <code>target</code>, return indices of the two numbers such that they add up to <code>target</code>.<br><br>You may assume that each input would have <b>exactly one solution</b>, and you may not use the same element twice.`,
-                code: `class Solution:
-    def twoSum(self, nums: list[int], target: int) -> list[int]:
-        seen = {}
-        for i, num in enumerate(nums):
-            diff = target - num
-            if diff in seen:
-                return [seen[diff], i]
-            seen[num] = i
-        return []`
-            },
-            2: {
-                title: "2. Add Two Numbers (Medium)",
-                desc: `You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.`,
-                code: `class Solution:
-    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
-        dummy = ListNode(0)
-        curr = dummy
-        carry = 0
-        while l1 or l2 or carry:
-            val = (l1.val if l1 else 0) + (l2.val if l2 else 0) + carry
-            carry = val // 10
-            curr.next = ListNode(val % 10)
-            curr = curr.next
-            l1 = l1.next if l1 else None
-            l2 = l2.next if l2 else None
-        return dummy.next`
-            },
-            3: {
-                title: "3. Longest Substring Without Repeating Characters (Medium)",
-                desc: `Given a string <code>s</code>, find the length of the <b>longest substring</b> without repeating characters.`,
-                code: `class Solution:
-    def lengthOfLongestSubstring(self, s: str) -> int:
-        char_idx = {}
-        left = 0
-        max_len = 0
-        for right, ch in enumerate(s):
-            if ch in char_idx and char_idx[ch] >= left:
-                left = char_idx[ch] + 1
-            char_idx[ch] = right
-            max_len = max(max_len, right - left + 1)
-        return max_len`
-            },
-            4: {
-                title: "4. Median of Two Sorted Arrays (Hard)",
-                desc: `Given two sorted arrays <code>nums1</code> and <code>nums2</code> of size <code>m</code> and <code>n</code> respectively, return the median of the two sorted arrays. The overall run time complexity should be <b>O(log (m+n))</b>.`,
-                code: `class Solution:
-    def findMedianSortedArrays(self, nums1: list[int], nums2: list[int]) -> float:
-        if len(nums1) > len(nums2):
-            nums1, nums2 = nums2, nums1
-        m, n = len(nums1), len(nums2)
-        low, high = 0, m
-        while low <= high:
-            i = (low + high) // 2
-            j = (m + n + 1) // 2 - i
-            maxLeft1 = float('-inf') if i == 0 else nums1[i - 1]
-            minRight1 = float('inf') if i == m else nums1[i]
-            maxLeft2 = float('-inf') if j == 0 else nums2[j - 1]
-            minRight2 = float('inf') if j == n else nums2[j]
-            if maxLeft1 <= minRight2 and maxLeft2 <= minRight1:
-                if (m + n) % 2 == 1:
-                    return float(max(maxLeft1, maxLeft2))
-                return (max(maxLeft1, maxLeft2) + min(minRight1, minRight2)) / 2.0
-            elif maxLeft1 > minRight2:
-                high = i - 1
-            else:
-                low = i + 1
-        return 0.0`
-            },
-            5: {
-                title: "5. Longest Palindromic Substring (Medium)",
-                desc: `Given a string <code>s</code>, return the longest palindromic substring in <code>s</code>.`,
-                code: `class Solution:
-    def longestPalindrome(self, s: str) -> str:
-        if not s:
-            return ""
-        start, end = 0, 0
-        def expand(left, right):
-            while left >= 0 and right < len(s) and s[left] == s[right]:
-                left -= 1
-                right += 1
-            return right - left - 1
-        for i in range(len(s)):
-            l1 = expand(i, i)
-            l2 = expand(i, i + 1)
-            m = max(l1, l2)
-            if m > end - start:
-                start = i - (m - 1) // 2
-                end = i + m // 2
-        return s[start:end + 1]`
-            }
-        };
-
         // Initialize user info from session
         function initUser() {
             let session = null;
@@ -1138,58 +1292,19 @@
             // 'universal' (default) visible to all; 'batch' only to linked-batch members; 'registered' only to job applicants
             if (!item) return true;
             if (item.audience === 'registered' || item.registeredOnly) return _amApplicant(item.jobId);
+            if (item.audience === 'university') {
+                // University-restricted content: only students registered by a university head, and only their own university
+                const s = _cqSession();
+                return !!s.universityId && String(item.universityId || '') === String(s.universityId);
+            }
             if (item.audience !== 'batch') return true;
             const my = _myBatchIds();
             return (item.batchIds || []).some(id => my.includes(id));
         }
 
-        const DEFAULT_SEEDED_COURSES = [
-            {
-                id: "24CSE0101",
-                code: "24CSE0101-Problem Solving Using Python Programming-1stSem-2024",
-                sectionsCount: 7,
-                progress: 100
-            },
-            {
-                id: "24CSE0102",
-                code: "24CSE0102-Front End Engineering-I-1st Sem-2024",
-                sectionsCount: 13,
-                progress: 57
-            },
-            {
-                id: "24CSE0208",
-                code: "24CSE0208-Data Structures using Object Oriented Programming-2024-CSE-3Sem",
-                sectionsCount: 12,
-                progress: 100
-            }
-        ];
+        // (No seeded demo data) Courses and tests are rendered strictly from
+        // what a teacher has actually created; otherwise "Not created yet" is shown.
 
-        const DEFAULT_SEEDED_TESTS = [
-            {
-                id: "CQ_TEST_101",
-                title: "Google Technical Mock Interview - DSA & System Design Round",
-                duration: "90 Mins",
-                status: "ACTIVE",
-                questionsCount: 4,
-                code: "CQ-GOOG-2024"
-            },
-            {
-                id: "CQ_TEST_102",
-                title: "Amazon SDE-1 Coding Assessment - Arrays & Dynamic Programming",
-                duration: "120 Mins",
-                status: "ACTIVE",
-                questionsCount: 3,
-                code: "CQ-AMZN-2024"
-            },
-            {
-                id: "CQ_TEST_103",
-                title: "Frontend Engineering Round - React, JavaScript & DOM Algorithms",
-                duration: "60 Mins",
-                status: "ACTIVE",
-                questionsCount: 5,
-                code: "CQ-FED-2024"
-            }
-        ];
 
         function promptJoinTest() {
             const key = prompt("Enter your Assessment ID or Joining Key:");
@@ -1199,66 +1314,192 @@
         }
 
         function getDsaList() {
+            purgeLegacyDsaDemo();
             try {
                 const stored = localStorage.getItem(DSA_STORAGE_KEY);
-                if (stored) return JSON.parse(stored);
+                if (stored) {
+                    const list = JSON.parse(stored);
+                    return Array.isArray(list) ? list : [];
+                }
             } catch(e) {}
-            const defaults = [
-                { id: "PQ9RJ001", num: 1, title: "1. Two Sum", diff: "Easy", acceptance: "58.0%", topics: "Algorithms,Array,Hash Table", status: "done" },
-                { id: "PQ9RJ002", num: 2, title: "2. Add Two Numbers", diff: "Med.", acceptance: "49.6%", topics: "Algorithms,Linked List,Math", status: "open" },
-                { id: "PQ9RJ003", num: 3, title: "3. Longest Substring Without Repeating Characters", diff: "Med.", acceptance: "40.0%", topics: "Algorithms,Hash Table,String", status: "done" },
-                { id: "PQ9RJ004", num: 4, title: "4. Median of Two Sorted Arrays", diff: "Hard", acceptance: "47.9%", topics: "Algorithms,Array,Binary Search", status: "done" },
-                { id: "PQ9RJ005", num: 5, title: "5. Longest Palindromic Substring", diff: "Med.", acceptance: "38.9%", topics: "Algorithms,String,Dynamic Programming", status: "open" }
-            ];
-            localStorage.setItem(DSA_STORAGE_KEY, JSON.stringify(defaults));
-            return defaults;
+            // No demo questions are ever seeded — the list is empty until a teacher publishes.
+            return [];
         }
 
+        // Drops the legacy demo rows an older build used to seed into localStorage.
+        // Only untouched demo shells (never authored) are removed, so a real problem
+        // sharing one of those ids is never purged.
+        function purgeLegacyDsaDemo() {
+            try {
+                const raw = localStorage.getItem(DSA_STORAGE_KEY);
+                if (!raw) return;
+                const list = JSON.parse(raw);
+                if (!Array.isArray(list)) return;
+                const demoIds = ['PQ9RJ001', 'PQ9RJ002', 'PQ9RJ003', 'PQ9RJ004', 'PQ9RJ005'];
+                const cleaned = list.filter(p => !(p && demoIds.includes(p.id) && !(p.desc || p.description || p.createdAt)));
+                if (cleaned.length !== list.length) localStorage.setItem(DSA_STORAGE_KEY, JSON.stringify(cleaned));
+            } catch (e) { }
+        }
+
+        // ===== QUESTION POOL STATE (questionpool-style table) =====
+        let Q_POOL = [];       // all visible DSA problems
+        let Q_VIEW = [];       // after search + sort
+        let qPage = 1;
+        let qRows = 10;
+        let qSortCol = '';
+        let qSortAsc = true;
+
         function renderQuestions() {
-            const list = getDsaList().filter(_visibleToStudent);
+            Q_POOL = getDsaList().filter(_visibleToStudent);
+            applyQuestionFilters(true);
+        }
+
+        function getFilteredQuestions() {
+            const term = (document.getElementById('questionSearchInput')?.value || '').toLowerCase().trim();
+            let arr = Q_POOL.filter(q =>
+                !term ||
+                (q.title || '').toLowerCase().includes(term) ||
+                (q.topics || '').toLowerCase().includes(term)
+            );
+            if (qSortCol) {
+                const diffOrder = { 'Easy': 1, 'Med.': 2, 'Medium': 2, 'Hard': 3 };
+                arr = arr.slice().sort((a, b) => {
+                    let va, vb;
+                    if (qSortCol === 'acceptance') { va = parseFloat(a.acceptance) || 0; vb = parseFloat(b.acceptance) || 0; }
+                    else if (qSortCol === 'diff') { va = diffOrder[a.diff] || 2; vb = diffOrder[b.diff] || 2; }
+                    else { va = (a.title || '').toLowerCase(); vb = (b.title || '').toLowerCase(); }
+                    if (va < vb) return qSortAsc ? -1 : 1;
+                    if (va > vb) return qSortAsc ? 1 : -1;
+                    return 0;
+                });
+            }
+            return arr;
+        }
+
+        function applyQuestionFilters(resetPage) {
+            Q_VIEW = getFilteredQuestions();
+            if (resetPage) qPage = 1;
+            const totalPages = Math.ceil(Q_VIEW.length / qRows) || 1;
+            if (qPage > totalPages) qPage = totalPages;
+            document.getElementById('questionCount').textContent = `(${Q_VIEW.length})`;
+            drawQuestionRows();
+            updateQuestionPagination(totalPages);
+        }
+
+        function drawQuestionRows() {
             const container = document.getElementById('questionsTableBody');
             if (!container) return;
-            container.innerHTML = '';
-            document.getElementById('questionCount').textContent = `(${list.length})`;
-
-            list.forEach(q => {
-                const diffClass = q.diff === 'Easy' ? 'diff-easy' : (q.diff === 'Hard' ? 'diff-hard' : 'diff-med');
+            if (!Q_VIEW.length) {
+                container.innerHTML = `<tr><td colspan="5"><div style="text-align:center; padding:44px 20px; color:#667085; font-family:'Mulish',sans-serif; font-size:1.05rem;">Not created yet — no DSA problems have been published to your arena.</div></td></tr>`;
+                return;
+            }
+            const start = (qPage - 1) * qRows;
+            const slice = Q_VIEW.slice(start, start + qRows);
+            container.innerHTML = slice.map(q => {
                 const isDone = q.status === 'done';
-                const topicPills = (q.topics || '').split(',').filter(Boolean).map(t =>
-                    `<span style="background:#f2f4f7; color:#475467; font-size:0.75rem; padding:2px 8px; border-radius:12px; font-weight:600;">${escapeHtml(t.trim())}</span>`
-                ).join(' ');
+                const idAttr = String(q.id).replace(/'/g, "\\'");
+                return `
+                    <tr class="q-pool-row" onclick="openQuestionAttempt('${idAttr}')">
+                        <td class="status-cell">${isDone ? '<svg viewBox="0 0 16 14" class="tick-icon" aria-hidden="true"><path d="M2.5 7 L6 10.5 L13.5 3" /></svg>' : '<i class="far fa-circle"></i>'}</td>
+                        <td>
+                            <div class="q-heading">${escapeHtml(q.title)}</div>
+                        </td>
+                        <td>${escapeHtml(q.acceptance || '50.0%')}</td>
+                        <td>${escapeHtml(q.diff || 'Med.')}</td>
+                        <td style="text-align:center;">
+                            <button class="btn-solve-pill" onclick="event.stopPropagation(); openQuestionAttempt('${idAttr}');">Solve Question</button>
+                        </td>
+                    </tr>`;
+            }).join('');
+        }
 
-                const row = document.createElement('div');
-                row.className = 'leetcode-row';
-                row.setAttribute('data-id', q.id);
-                row.setAttribute('data-topics', q.topics || '');
-                row.setAttribute('data-title', q.title);
-                row.onclick = () => openQuestionAttempt(q.id);
-
-                row.innerHTML = `
-                    <div class="status-col" style="${isDone ? 'color: #00b8a3;' : 'color: #bbb;'}">
-                        <i class="${isDone ? 'fas fa-check' : 'far fa-circle'}"></i>
-                    </div>
-                    <div class="title-col" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                        <span style="font-weight:700;">${escapeHtml(q.title)}</span>
-                        <div style="display:inline-flex; gap:6px; flex-wrap:wrap;">${topicPills}</div>
-                    </div>
-                    <div class="acceptance-col">${escapeHtml(q.acceptance || '50.0%')}</div>
-                    <div class="difficulty-col ${diffClass}">${escapeHtml(q.diff || 'Med.')}</div>
-                    <div class="action-col">
-                        <button class="btn-solve-pill" onclick="event.stopPropagation(); openQuestionAttempt('${escapeHtml(q.id)}');">Solve</button>
-                    </div>
-                `;
-                container.appendChild(row);
+        function sortQuestions(column) {
+            if (qSortCol === column) { qSortAsc = !qSortAsc; }
+            else { qSortCol = column; qSortAsc = true; }
+            const headers = document.querySelectorAll('#poolTable th[onclick]');
+            headers.forEach(th => {
+                const icon = th.querySelector('i');
+                if (!icon) return;
+                if (th.getAttribute('onclick').includes(`'${column}'`)) {
+                    icon.className = qSortAsc ? 'fas fa-sort-up' : 'fas fa-sort-down';
+                } else {
+                    icon.className = 'fas fa-sort';
+                }
             });
+            applyQuestionFilters(true);
+        }
+
+        function changeQuestionPage(delta) {
+            const totalPages = Math.ceil(Q_VIEW.length / qRows);
+            const p = qPage + delta;
+            if (p >= 1 && p <= totalPages) { qPage = p; drawQuestionRows(); updateQuestionPagination(totalPages); }
+        }
+
+        function goToQuestionPage(page) {
+            qPage = page;
+            drawQuestionRows();
+            updateQuestionPagination(Math.ceil(Q_VIEW.length / qRows));
+        }
+
+        function setQuestionRows(n) {
+            qRows = n;
+            applyQuestionFilters(true);
+        }
+
+        function updateQuestionPagination(totalPages) {
+            const box = document.getElementById('qPageNumbers');
+            const prev = document.getElementById('qPrevBtn');
+            const next = document.getElementById('qNextBtn');
+            if (!box) return;
+            if (totalPages <= 1) { box.innerHTML = ''; }
+            else {
+                const maxVisible = 5;
+                let startPage = Math.max(1, qPage - Math.floor(maxVisible / 2));
+                let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+                startPage = Math.max(1, endPage - maxVisible + 1);
+                let html = '';
+                if (startPage > 1) {
+                    html += `<button class="pool-page-btn" onclick="goToQuestionPage(1)">1</button>`;
+                    if (startPage > 2) html += `<span style="padding:0 4px;color:#98A2B3;display:inline-flex;align-items:center;">&hellip;</span>`;
+                }
+                for (let i = startPage; i <= endPage; i++) {
+                    html += (i === qPage)
+                        ? `<button class="pool-page-btn active">${i}</button>`
+                        : `<button class="pool-page-btn" onclick="goToQuestionPage(${i})">${i}</button>`;
+                }
+                if (endPage < totalPages) {
+                    if (endPage < totalPages - 1) html += `<span style="padding:0 4px;color:#98A2B3;display:inline-flex;align-items:center;">&hellip;</span>`;
+                    html += `<button class="pool-page-btn" onclick="goToQuestionPage(${totalPages})">${totalPages}</button>`;
+                }
+                box.innerHTML = html;
+            }
+            if (prev) { prev.disabled = qPage <= 1; prev.style.opacity = qPage <= 1 ? '0.3' : '1'; prev.style.cursor = qPage <= 1 ? 'not-allowed' : 'pointer'; }
+            if (next) { const dis = qPage >= totalPages; next.disabled = dis; next.style.opacity = dis ? '0.3' : '1'; next.style.cursor = dis ? 'not-allowed' : 'pointer'; }
+        }
+
+        function filterQuestions() { applyQuestionFilters(true); }
+
+        // ===== EXPAND / COLLAPSE CARD DETAILS (teacherindex lm-card style) =====
+        function toggleCardDetails(event, id) {
+            if (event) event.stopPropagation();
+            const details = document.getElementById('details-' + id);
+            const btn = document.getElementById('expandBtn-' + id);
+            if (!details) return;
+            const hidden = details.style.display === 'none' || details.style.display === '';
+            details.style.display = hidden ? 'block' : 'none';
+            if (btn) {
+                const icon = btn.querySelector('i');
+                if (icon) icon.className = hidden ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
+                btn.style.background = hidden ? '#fef3f2' : '#f9fafb';
+            }
         }
 
         function renderCourses() {
             let courses = [];
             try {
                 const stored = localStorage.getItem(COURSES_STORAGE_KEY);
-                courses = stored ? JSON.parse(stored) : DEFAULT_SEEDED_COURSES;
-            } catch(e) { courses = DEFAULT_SEEDED_COURSES; }
+                courses = stored ? JSON.parse(stored) : [];
+            } catch(e) { courses = []; }
             courses = (courses || []).filter(_visibleToStudent);
 
             const container = document.getElementById('coursesListContainer');
@@ -1266,42 +1507,97 @@
             container.innerHTML = '';
             document.getElementById('courseCount').textContent = `(${courses.length})`;
 
+            if (!courses.length) {
+                container.innerHTML = `<div style="padding: 12px 0 20px 0; color: #555555; font-size: 1.15rem; font-weight: 400; font-family: 'Roboto', sans-serif;">Not created yet</div>`;
+                return;
+            }
+
             courses.forEach(c => {
                 const cId = encodeURIComponent(c.id || c.code);
+                const prog = parseInt(c.progress) || 0;
+                const modules = c.sectionsCount || (c.sections && c.sections.length) || 0;
+                const dcid = 'course-' + (c.id || c.code);
                 const card = document.createElement('div');
-                card.className = 'learning-module-card';
+                card.className = 'lm-card';
                 card.setAttribute('data-title', c.code);
                 card.onclick = () => {
                     window.location.href = `course-player.html?courseId=${cId}`;
                 };
 
                 card.innerHTML = `
-                    <div class="card-top-row">
-                        <h3 class="card-item-title">${escapeHtml(c.code)}</h3>
-                        <div class="card-action-icons">
-                            <span style="color: var(--primary); font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
-                                <i class="fas fa-play-circle"></i> Open Course
-                            </span>
+                    <div class="lm-card-top">
+                        <h3 class="lm-title">${escapeHtml(c.code)}</h3>
+                        <div class="lm-icons" onclick="event.stopPropagation();">
+                            <div class="lm-icon-btn" title="Open" onclick="window.location.href='course-player.html?courseId=${cId}'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/menu-1.svg" alt="Open"></div>
+                            <div class="lm-icon-btn" id="expandBtn-${dcid}" title="Details &amp; Actions" onclick="toggleCardDetails(event,'${dcid}')"><i class="fas fa-chevron-down"></i></div>
                         </div>
                     </div>
-                    <div class="card-meta-text">${c.sectionsCount || (c.sections && c.sections.length) || 5} sections &bull; Published Course Module</div>
-                    <div class="progress-bar-wrapper">
-                        <div class="progress-track">
-                            <div class="progress-fill" style="width: ${c.progress || 0}%;"></div>
+                    <div class="lm-sub">${modules} Sections &bull; ${c.students || 0} Students</div>
+                    <div class="lm-progress-row">
+                        <div class="lm-bar"><div style="width:${prog}%"></div></div>
+                        <span class="lm-progress-label">${prog}% completion</span>
+                    </div>
+                    <div id="details-${dcid}" class="lm-details" onclick="event.stopPropagation();">
+                        <span class="status-pill">PUBLISHED</span>
+                        <span class="card-id" style="margin-left:12px;">${escapeHtml(c.id || c.code)}</span>
+                        <div style="margin-top:16px;">
+                            <a href="course-player.html?courseId=${cId}" class="btn-detail-action"><i class="fas fa-play"></i> Open Player</a>
                         </div>
-                        <span class="progress-label">${c.progress || 0}% completed</span>
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
 
+        // Resolve whether the current student already finished a given test.
+        // Attempts are recorded by interound-attempt.html in TESTPAD_attempts with
+        // examId = the TESTPAD db exam id. Returns the resolved exam id when a
+        // submitted/reviewed/completed attempt exists, otherwise null.
+        function _attemptedExamId(t) {
+            let attempts = [];
+            try { attempts = JSON.parse(localStorage.getItem('TESTPAD_attempts')) || []; } catch (e) { attempts = []; }
+            if (!attempts.length) return null;
+
+            let exams = [];
+            try { exams = JSON.parse(localStorage.getItem('TESTPAD_exams')) || []; } catch (e) { exams = []; }
+
+            const tid = String(t.id || t.code || '');
+            // The test id may be the db id or the human testId; resolve the canonical db id.
+            const exam = exams.find(e => String(e.id) === tid || String(e.testId || '').toUpperCase() === tid.toUpperCase());
+            const examIds = new Set([tid]);
+            if (exam) {
+                if (exam.id) examIds.add(String(exam.id));
+                if (exam.testId) examIds.add(String(exam.testId));
+            }
+            const examIdList = [...examIds].map(x => x.toLowerCase()).filter(Boolean);
+
+            // Identity tokens for the signed-in student (best effort).
+            const s = _cqSession();
+            const myIds = [s.id, s.rollNo, s.regNo, s.roll, s.email]
+                .filter(Boolean).map(x => String(x).toLowerCase());
+
+            const isDone = (a) => ['submitted', 'reviewed', 'completed'].includes(a.status);
+            const matchExam = (a) => examIdList.includes(String(a.examId || '').toLowerCase());
+
+            // Prefer an attempt that also matches the current student's identity.
+            if (myIds.length) {
+                const mine = attempts.find(a => a && matchExam(a) && isDone(a) && (
+                    myIds.includes(String(a.studentId || '').toLowerCase()) ||
+                    myIds.includes(String(a.studentRollNo || '').toLowerCase())
+                ));
+                if (mine) return (exam && exam.id) || tid;
+            }
+            // Fallback: single-user local storage — any finished attempt for this exam counts.
+            const any = attempts.find(a => a && matchExam(a) && isDone(a));
+            return any ? ((exam && exam.id) || tid) : null;
+        }
+
         function renderTests() {
             let tests = [];
             try {
                 const stored = localStorage.getItem(TESTS_STORAGE_KEY);
-                tests = stored ? JSON.parse(stored) : DEFAULT_SEEDED_TESTS;
-            } catch(e) { tests = DEFAULT_SEEDED_TESTS; }
+                tests = stored ? JSON.parse(stored) : [];
+            } catch(e) { tests = []; }
             tests = (tests || []).filter(_visibleToStudent);
 
             const container = document.getElementById('testsListContainer');
@@ -1309,76 +1605,63 @@
             container.innerHTML = '';
             document.getElementById('testsCount').textContent = `(${tests.length})`;
 
+            if (!tests.length) {
+                container.innerHTML = `<div style="padding: 12px 0 20px 0; color: #555555; font-size: 1.15rem; font-weight: 400; font-family: 'Roboto', sans-serif;">Not created yet</div>`;
+                return;
+            }
+
             tests.forEach(t => {
                 const tId = encodeURIComponent(t.id || t.code);
+                const sections = t.sectionsCount || (t.sections && t.sections.length) || 1;
+                const qns = t.questionsCount || (t.questions && t.questions.length) || 0;
+                const attemptedExamId = _attemptedExamId(t);
+                const attempted = !!attemptedExamId;
+                // Once finished, the card is locked: clicking goes to the "already attempted" screen.
+                const targetLink = attempted
+                    ? `EXAMPAD/pages/Secondattemptnotallowed.html?examId=${encodeURIComponent(attemptedExamId)}&theme=blue`
+                    : `interound-attempt.html?id=${tId}`;
+                const prog = attempted ? 100 : (parseInt(t.progress) || 0);
+                const dcid = 'test-' + (t.id || t.code);
                 const card = document.createElement('div');
-                card.className = 'learning-module-card';
+                card.className = 'lm-card';
                 card.setAttribute('data-title', t.title);
                 card.onclick = () => {
-                    window.location.href = `interound-attempt.html?id=${tId}`;
+                    window.location.href = targetLink;
                 };
 
                 card.innerHTML = `
-                    <div class="card-top-row">
-                        <h3 class="card-item-title">${escapeHtml(t.title)}</h3>
-                        <div class="card-action-icons">
-                            <span style="background: #fff5f0; color: #df5a22; border: 1px solid #fce8e0; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase;">
-                                ${escapeHtml(t.status || 'ACTIVE')}
-                            </span>
-                            <span style="color: var(--primary); font-weight: 700; font-size: 0.88rem; margin-left: 8px; display: flex; align-items: center; gap: 6px;">
-                                <i class="fas fa-arrow-right"></i> Start Round
-                            </span>
+                    <div class="lm-card-top">
+                        <h3 class="lm-title">${escapeHtml(t.title)}</h3>
+                        <div class="lm-icons" onclick="event.stopPropagation();">
+                            <div class="lm-icon-btn" title="Open" onclick="window.location.href='${targetLink}'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/menu-1.svg" alt="Open"></div>
+                            <div class="lm-icon-btn" id="expandBtn-${dcid}" title="Details &amp; Actions" onclick="toggleCardDetails(event,'${dcid}')"><i class="fas fa-chevron-down"></i></div>
                         </div>
                     </div>
-                    <div class="card-meta-text">
-                        <i class="fas fa-stopwatch" style="color: var(--primary); margin-right: 4px;"></i>
-                        Duration: ${escapeHtml(t.duration || '90 Mins')} &bull; ID: ${escapeHtml(t.id || t.code)} &bull; Timed Technical Round
+                    <div class="lm-sub">${sections} Sections (${qns} Qns) &bull; ${escapeHtml(t.duration || '90 Mins')}</div>
+                    <div class="lm-progress-row">
+                        <div class="lm-bar"><div style="width:${prog}%"></div></div>
+                        <span class="lm-progress-label">${attempted ? 'Completed' : (prog > 0 ? prog + '% completed' : 'Not attempted yet')}</span>
+                    </div>
+                    <div id="details-${dcid}" class="lm-details" onclick="event.stopPropagation();">
+                        <span class="status-pill">${attempted ? 'DONE' : escapeHtml(t.status || 'ACTIVE')}</span>
+                        <span class="card-id" style="margin-left:12px;">ID: ${escapeHtml(t.id || t.code)}</span>
+                        <div style="margin-top:16px;">
+                            <a href="${targetLink}" class="btn-detail-action"><i class="fas ${attempted ? 'fa-lock' : 'fa-arrow-right'}"></i> ${attempted ? 'Already Attempted' : 'Start Round'}</a>
+                        </div>
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
 
-        // Filter Questions
-        function filterQuestions() {
-            const q = (document.getElementById('questionSearchInput')?.value || '').toLowerCase();
-            const rows = document.querySelectorAll('.leetcode-row');
-            let count = 0;
-            rows.forEach(r => {
-                const title = (r.getAttribute('data-title') || '').toLowerCase();
-                const topics = (r.getAttribute('data-topics') || '').toLowerCase();
-                if (!q || title.includes(q) || topics.includes(q)) {
-                    r.style.display = 'grid';
-                    count++;
-                } else {
-                    r.style.display = 'none';
-                }
-            });
-            document.getElementById('questionCount').textContent = `(${count})`;
-        }
-
-        function filterByTopic(topic, btn) {
-            document.querySelectorAll('.topic-tag-pill').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            const rows = document.querySelectorAll('.leetcode-row');
-            let count = 0;
-            rows.forEach(r => {
-                const topics = r.getAttribute('data-topics') || '';
-                if (topic === 'All' || topics.includes(topic)) {
-                    r.style.display = 'grid';
-                    count++;
-                } else {
-                    r.style.display = 'none';
-                }
-            });
-            document.getElementById('questionCount').textContent = `(${count})`;
-        }
+        // Question search/sort/pagination is handled by the pool functions above
+        // (filterQuestions -> applyQuestionFilters). filterByTopic was retired with
+        // the LeetCode grid layout.
 
         // Filter Courses
         function filterCourses() {
             const q = (document.getElementById('courseSearchInput')?.value || '').toLowerCase();
-            const cards = document.querySelectorAll('#coursesListContainer .learning-module-card');
+            const cards = document.querySelectorAll('#coursesListContainer .lm-card');
             let count = 0;
             cards.forEach(c => {
                 const title = (c.getAttribute('data-title') || c.innerText).toLowerCase();
@@ -1395,7 +1678,7 @@
         // Filter Tests
         function filterTests() {
             const q = (document.getElementById('testSearchInput')?.value || '').toLowerCase();
-            const cards = document.querySelectorAll('#testsListContainer .learning-module-card');
+            const cards = document.querySelectorAll('#testsListContainer .lm-card');
             let count = 0;
             cards.forEach(c => {
                 const title = (c.getAttribute('data-title') || c.innerText).toLowerCase();
@@ -1409,37 +1692,9 @@
             document.getElementById('testsCount').textContent = `(${count})`;
         }
 
-        // Open question attempt page with dynamic question ID (PQ9RJ001 etc.)
+        // Open the arena attempt page for a published problem id
         function openQuestionAttempt(qId) {
             window.location.href = `CodeQuestattempt.html?id=${encodeURIComponent(qId)}`;
-        }
-
-        // Problem Modal
-        function openProblemModal(id) {
-            const p = PROBLEMS_INFO[id];
-            if (!p) return;
-            document.getElementById('modalTitle').textContent = p.title;
-            document.getElementById('modalBody').innerHTML = `
-                <p style="margin-bottom: 16px;">${p.desc}</p>
-                <div style="font-weight: 700; margin-bottom: 6px;">Python 3 Solution:</div>
-                <pre class="code-block-leet"><code>${escapeHtml(p.code)}</code></pre>
-            `;
-            document.getElementById('problemModal').style.display = 'flex';
-        }
-
-        function closeProblemModal() {
-            document.getElementById('problemModal').style.display = 'none';
-        }
-
-        function closeModalOnBackdrop(e) {
-            if (e.target === document.getElementById('problemModal')) {
-                closeProblemModal();
-            }
-        }
-
-        function simulateRunSolution() {
-            closeProblemModal();
-            showToast("Accepted! 100% test cases passed.");
         }
 
         function showToast(msg) {

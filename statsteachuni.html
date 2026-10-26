@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - University Exam Statistics</title>
+    <!-- Google Fonts: Hind, Inter, Outfit, Mulish (questionpool.html stack) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Mulish:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+    <style>
+        :root {
+            --primary: #D96C33;
+            --primary-hover: #B4551D;
+            --primary-soft: #fff5f0;
+            --secondary: #667085;
+            --text-main: #101828;
+            --text-secondary: #475467;
+            --bg-body: #FFFFFF;
+            --border: #EAECF0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+        h1, h2, h3, .logo-text { font-family: 'Outfit', sans-serif; }
+
+        .site-header { height: 72px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; position: sticky; top: 0; z-index: 1000; }
+        .header-left { display: flex; align-items: center; gap: 24px; }
+        .logo-container { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; }
+        .logo-square { width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .logo-square img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text { font-size: 1.4rem; font-weight: 700; color: var(--text-main); letter-spacing: -0.5px; }
+        .logo-text small { display: block; font-size: 0.7rem; font-weight: 700; color: var(--primary); letter-spacing: 0.8px; margin-top: 3px; font-family: 'Mulish', sans-serif; }
+        .header-nav { display: flex; align-items: center; gap: 14px; margin-left: 24px; }
+        .nav-icon-btn { width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--secondary); cursor: pointer; transition: all 0.2s; background: transparent; border: none; font-size: 1.3rem; }
+        .nav-icon-btn img { width: 32px !important; height: 32px !important; }
+        .nav-icon-btn:hover { background: #f5f5f5; color: var(--primary); }
+        .nav-icon-btn.active { color: var(--primary); background: var(--primary-soft); }
+
+        .main-container { width: 100%; padding: 40px 32px; flex: 1; }
+        .page-header { margin-bottom: 26px; display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+        .title-area h1 { font-size: 2rem; font-weight: 700; color: var(--text-main); }
+        .title-area p { color: var(--text-secondary); font-size: 1rem; margin-top: 4px; }
+
+        .search-row { margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; }
+        .search-left { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+        .search-box { position: relative; flex: none; width: 350px; }
+        .search-box i { position: absolute; left: 0; top: 50%; transform: translateY(-50%); color: #d0d5dd; font-size: 1.3rem; }
+        .search-input { width: 100%; padding: 12px 8px 12px 36px; border: none; border-bottom: 1px solid #eaecf0; border-radius: 0; font-size: 1.25rem; font-weight: 400; font-family: 'Mulish', sans-serif; color: #344054; outline: none; transition: all 0.2s; background: transparent; }
+        .search-input::placeholder { color: #98A2B3; font-weight: 400; }
+        .search-input:focus { border-bottom-color: var(--primary); box-shadow: none; }
+        .filter-select { padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: #fff; color: var(--text-secondary); font-weight: 600; outline: none; cursor: pointer; font-family: 'Mulish', sans-serif; max-width: 380px; }
+
+        .btn { border: none; border-radius: 8px; padding: 12px 24px; font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 0.98rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; }
+        .btn.primary { background: var(--primary); color: #fff; }
+        .btn.primary:hover { background: var(--primary-hover); }
+        .btn.ghost { background: #fff; color: #475467; border: 1.5px solid #d0d5dd; }
+        .btn.ghost:hover { border-color: var(--primary); color: var(--primary); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .pub-banner { display: none; background: #ecfdf3; border: 1px solid #abefc6; border-left: 6px solid #067647; border-radius: 8px; padding: 14px 20px; margin-bottom: 20px; font-family: 'Mulish', sans-serif; font-weight: 700; color: #067647; align-items: center; gap: 10px; }
+
+        /* questionpool.html-style table */
+        .pool-card { background: #fff; border: 1px solid #eaecf0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .pool-card.scroll-x { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #fff; padding: 16px 24px; text-align: left; font-size: 1.05rem; text-transform: uppercase; font-family: 'Mulish', sans-serif; font-weight: 500; color: #344054; border-bottom: 1px solid var(--border); white-space: nowrap; }
+        td { padding: 20px 24px; border-bottom: 1px solid var(--border); vertical-align: middle; font-size: 1.25rem; font-family: 'Mulish', sans-serif; font-weight: 400; color: #000; white-space: nowrap; }
+        td.center, th.center { text-align: center; }
+        .roll-cell { color: var(--primary); font-weight: 700; }
+        .cand-name { font-weight: 700; color: #101828; }
+        .cand-sub { font-size: 0.9rem; color: #98a2b3; font-family: 'Hind', sans-serif; }
+        .q-mark { font-weight: 700; color: #059669; }
+        .q-mark.zero { color: #344054; font-weight: 600; }
+        .grade-pill { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: 20px; font-family: 'Mulish', sans-serif; }
+        .grade-letter { font-weight: 800; font-size: 1.05rem; }
+        .empty-state { text-align: center; padding: 80px 40px; color: #98a2b3; font-family: 'Hind', sans-serif; font-size: 1.15rem; }
+        .empty-state i { font-size: 3.4rem; display: block; margin-bottom: 14px; color: var(--border); }
+
+        .toast-box { position: fixed; bottom: 24px; right: 24px; background: #101828; color: #fff; padding: 14px 24px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; z-index: 100000; font-weight: 600; font-family: 'Mulish', sans-serif; }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="header-left">
+        <a href="teacherindex.html" class="logo-container">
+            <div class="logo-square"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest"></div>
+            <div class="logo-text">CodeQuest<small>University Exam Statistics</small></div>
+        </a>
+        <nav class="header-nav">
+            <button class="nav-icon-btn" data-tip="Teacher Dashboard" onclick="location.href='teacherindex.html'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/menu-1.svg" alt="Dashboard"></button>
+            <button class="nav-icon-btn" data-tip="University Hub" onclick="location.href='university-hub.html'"><img src="UNIVERSITY-ICON(MAIN).jpg" alt="University Hub"></button>
+            <button class="nav-icon-btn active" data-tip="Statistics" title="Statistics"><i class="fas fa-chart-column"></i></button>
+            <button class="nav-icon-btn" data-tip="Create University Exam" onclick="location.href='interview-maker.html'" title="Create Test"><img src="EXAMPAD/TESTPAD_WEBSITE__files/quiz.svg" alt="Create"></button>
+        </nav>
+    </div>
+</header>
+
+<div class="main-container">
+    <div class="page-header">
+        <div class="title-area">
+            <h1>Roll-Number-Wise Results</h1>
+            <p>Evaluate university / college exam submissions, then publish marks so students can view them from their University Hub.</p>
+        </div>
+        <button class="btn primary" id="publishBtn" onclick="publishCurrent()"><i class="fas fa-upload"></i> Publish Marks</button>
+    </div>
+
+    <div class="search-row">
+        <div class="search-left">
+            <select class="filter-select" id="testSelect" onchange="onTestChange()"></select>
+            <div class="search-box"><i class="fas fa-search"></i><input type="text" class="search-input" id="searchInput" placeholder="Search by roll number or name..." onkeyup="applyFilter()"></div>
+        </div>
+        <span style="font-family:'Mulish';font-weight:700;color:#667085;" id="summaryLine"></span>
+    </div>
+
+    <div class="pub-banner" id="pubBanner"><i class="fas fa-circle-check"></i> <span id="pubBannerText"></span></div>
+
+    <div class="pool-card scroll-x">
+        <table>
+            <thead id="statsHead"></thead>
+            <tbody id="statsBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="toast-box" id="cqToast">Done</div>
+
+<script src="EXAMPAD/js/db.js"></script>
+<script src="cq-shared.js"></script>
+<script>
+    function esc(s) { return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function toast(msg) { const t = document.getElementById('cqToast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(toast._h); toast._h = setTimeout(() => t.style.display = 'none', 3000); }
+
+    let allTests = [];
+    let currentKey = '';
+    let currentRows = [];
+    let currentExam = null;
+
+    function init() {
+        const s = CQ.session();
+        if (!String(s.role || '') || String(s.role || '').toLowerCase() === 'student') {
+            document.querySelector('.main-container').innerHTML = `
+                <div class="pool-card"><div class="empty-state"><i class="fas fa-ban"></i>Access Denied — only teachers, faculty and university heads can view exam statistics.<br><br><a href="firstpage.html" style="color:#B4551D;font-weight:700;">Go to login</a></div></div>`;
+            return;
+        }
+        allTests = CQ.getTests().filter(t => String(t.testCategory || '').toLowerCase() === 'university');
+        // If opened from a university management view, keep only that university's exams
+        const uniFilter = new URLSearchParams(location.search).get('university');
+        if (uniFilter) allTests = allTests.filter(t => String(t.universityId || '') === uniFilter);
+
+        const sel = document.getElementById('testSelect');
+        if (!allTests.length) {
+            sel.innerHTML = '<option>No university exams published yet</option>';
+            sel.disabled = true;
+            document.getElementById('publishBtn').disabled = true;
+            document.getElementById('statsHead').innerHTML = '';
+            document.getElementById('statsBody').innerHTML = '<tr><td><div class="empty-state"><i class="fas fa-inbox"></i>Publish a test labelled "University / College Exam" from the test creator, then open its dashboard icon to evaluate results here.</div></td></tr>';
+            return;
+        }
+        const req = new URLSearchParams(location.search).get('test');
+        sel.innerHTML = allTests.map(t => `<option value="${esc(t.id || t.code)}">${esc(t.title || 'Untitled')} (${esc(t.id || t.code)})</option>`).join('');
+        currentKey = allTests.some(t => String(t.id || t.code) === String(req)) ? req : String(allTests[0].id || allTests[0].code);
+        sel.value = currentKey;
+        loadCurrent();
+    }
+
+    function onTestChange() { currentKey = document.getElementById('testSelect').value; loadCurrent(); }
+
+    function loadCurrent() {
+        const t = allTests.find(x => String(x.id || x.code) === String(currentKey));
+        currentExam = t ? CQ.examForTest(t) : null;
+        currentRows = currentExam ? CQ.resultRows(currentExam) : [];
+        renderHead();
+        renderBody(currentRows);
+        updatePublishUi(t);
+    }
+
+    function renderHead() {
+        const questions = (currentExam && currentExam.questions) ? currentExam.questions : [];
+        const qHeaders = questions.map((q, idx) => `<th class="center">Q${idx + 1} (${q.marks || 1}m)</th>`).join('');
+        document.getElementById('statsHead').innerHTML = `
+            <tr>
+                <th>Roll No</th>
+                <th>Candidate</th>
+                <th class="center">Correct</th>
+                <th class="center">Skipped</th>
+                <th class="center">Wrong</th>
+                ${qHeaders}
+                <th class="center">Time Taken</th>
+                <th class="center">Final Grade</th>
+            </tr>`;
+    }
+
+    function renderBody(rows) {
+        const tbody = document.getElementById('statsBody');
+        const questions = (currentExam && currentExam.questions) ? currentExam.questions : [];
+        const colCount = 8 + questions.length;
+        if (!rows.length) {
+            tbody.innerHTML = `<tr><td colspan="${colCount}"><div class="empty-state"><i class="fas fa-user-clock"></i>No submissions found for this university exam yet.</div></td></tr>`;
+            document.getElementById('summaryLine').textContent = '';
+            return;
+        }
+        tbody.innerHTML = rows.map(r => {
+            const qCols = questions.map((q, i) => {
+                const m = r.perQuestion[i];
+                if (m === null || m === undefined) return '<td class="center" style="color:#94a3b8;">-</td>';
+                return `<td class="center"><span class="q-mark ${m > 0 ? '' : 'zero'}">${m}</span></td>`;
+            }).join('');
+            return `
+            <tr>
+                <td class="roll-cell">${esc(r.rollNo)}</td>
+                <td><div class="cand-name">${esc(r.name)}</div><div class="cand-sub">${esc(r.email || '')}</div></td>
+                <td class="center"><span style="color:#059669;font-weight:700;">${r.correct}</span></td>
+                <td class="center" style="color:#667085;">${r.skipped}</td>
+                <td class="center" style="color:#DC2626;font-weight:700;">${r.wrong}</td>
+                ${qCols}
+                <td class="center">${esc(r.timeTaken)}</td>
+                <td class="center">
+                    <span class="grade-pill" style="background:${r.grade.bg};">
+                        <span class="grade-letter" style="color:${r.grade.color};">${r.grade.letter}</span>
+                        <span style="color:${r.grade.color};font-size:0.85rem;font-weight:600;">(${r.percentage.toFixed(0)}%)</span>
+                    </span>
+                    <div class="cand-sub" style="text-align:center;color:#667085;font-weight:700;">${r.score}/${r.totalMarks}</div>
+                </td>
+            </tr>`;
+        }).join('');
+        const avg = rows.reduce((a, r) => a + r.percentage, 0) / rows.length;
+        document.getElementById('summaryLine').textContent = `${rows.length} submission(s) • Average ${avg.toFixed(1)}% • Highest ${Math.max(...rows.map(r => Math.round(r.percentage)))}%`;
+    }
+
+    function applyFilter() {
+        const term = (document.getElementById('searchInput').value || '').toLowerCase();
+        renderBody(currentRows.filter(r => !term || r.rollNo.toLowerCase().includes(term) || r.name.toLowerCase().includes(term)));
+    }
+
+    function updatePublishUi(t) {
+        const pub = CQ.getPublished(currentKey);
+        const banner = document.getElementById('pubBanner');
+        const btn = document.getElementById('publishBtn');
+        if (pub) {
+            banner.style.display = 'flex';
+            document.getElementById('pubBannerText').textContent = `Marks published on ${new Date(pub.publishedAt).toLocaleString()} — students can already view them in their University Hub.`;
+            btn.innerHTML = '<i class="fas fa-rotate"></i> Re-Publish Marks';
+        } else {
+            banner.style.display = 'none';
+            btn.innerHTML = '<i class="fas fa-upload"></i> Publish Marks';
+        }
+        btn.disabled = !currentRows.length;
+    }
+
+    function publishCurrent() {
+        const t = allTests.find(x => String(x.id || x.code) === String(currentKey));
+        if (!t || !currentRows.length) { toast('Nothing to publish yet.'); return; }
+        if (!confirm(`Publish roll-number-wise marks for "${t.title}" to ${currentRows.length} student(s)? They will see these marks in their University Hub.`)) return;
+        CQ.publishResults(currentKey, {
+            testId: currentKey,
+            testTitle: t.title || 'Untitled University Exam',
+            category: 'university',
+            universityId: t.universityId || '',
+            results: currentRows.map(r => ({ studentId: r.studentId, rollNo: r.rollNo, name: r.name, email: r.email, score: r.score, totalMarks: r.totalMarks, percentage: r.percentage, grade: r.grade, status: 'Declared' }))
+        });
+        toast('Marks published. Students can now view them.');
+        loadCurrent();
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+
+</html>

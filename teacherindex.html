@@ -263,6 +263,9 @@
             <button class="nav-icon-btn" data-tip="Notifications" onclick="location.href='recPosts.html'">
                 <i class="fas fa-bell" style="font-size:1.2rem; color:#1570EF;"></i>
             </button>
+            <button class="nav-icon-btn" data-tip="University Portal" onclick="location.href='university-hub.html'">
+                <img src="UNIVERSITY-ICON(MAIN).jpg" alt="University Portal">
+            </button>
         </nav>
     </div>
 
@@ -471,12 +474,31 @@
     const DEFAULT_SEEDED_DSA = [];
 
     // One-time cleanup: drop any previously-stored dummy rows
+    const LEGACY_DSA_DEMO_IDS = ["PQ9RJ001", "PQ9RJ002", "PQ9RJ003", "PQ9RJ004", "PQ9RJ005"];
     const DUMMY_IDS = {
         [STORAGE_KEY]: ["24CSE0101", "24CSE0102", "24CSE0208"],
-        [TESTS_STORAGE_KEY]: ["CQ_TEST_101", "CQ_TEST_102", "CQ_TEST_103"],
-        [DSA_STORAGE_KEY]: ["PQ9RJ001", "PQ9RJ002", "PQ9RJ003", "PQ9RJ004", "PQ9RJ005"]
+        [TESTS_STORAGE_KEY]: ["CQ_TEST_101", "CQ_TEST_102", "CQ_TEST_103"]
     };
+
+    // Older builds seeded the five LeetCode demo problems into localStorage, so this runs
+    // on every load. Only untouched demo shells (no authored description) are dropped — a
+    // real problem that happens to reuse one of those ids is never purged.
+    function purgeLegacyDsaDemo() {
+        try {
+            const raw = localStorage.getItem(DSA_STORAGE_KEY);
+            if (!raw) return;
+            const list = JSON.parse(raw);
+            if (!Array.isArray(list)) return;
+            const cleaned = list.filter(p => !(p && LEGACY_DSA_DEMO_IDS.includes(p.id) && !(p.desc || p.description || p.createdAt)));
+            if (cleaned.length !== list.length) localStorage.setItem(DSA_STORAGE_KEY, JSON.stringify(cleaned));
+        } catch (e) { }
+    }
+
     function purgeDummyData() {
+        purgeLegacyDsaDemo();
+        // Run ONLY once. Re-running on every load would delete real items a teacher
+        // created with the same ids as the old demo rows.
+        if (localStorage.getItem('CodeQuest_dummy_purged') === '1') return;
         Object.keys(DUMMY_IDS).forEach(key => {
             try {
                 const list = JSON.parse(localStorage.getItem(key));
@@ -486,6 +508,7 @@
                 }
             } catch (e) {}
         });
+        localStorage.setItem('CodeQuest_dummy_purged', '1');
     }
 
     function readStore(key, seed) {
@@ -533,11 +556,19 @@
             const sub = t.submitted || 0;
             const pct = part > 0 ? Math.round((sub / part) * 100) : 0;
             const dcid = 'test-' + t.id;
+            // Test category drives where the dashboard/stats icon points
+            const cat = String(t.testCategory || '').toLowerCase();
+            const CAT_LABEL = { practice: 'Practice Test', university: 'University / College Exam', interview: 'Interview Test', selection: 'Selection Test' };
+            const statsPage = cat === 'university' ? 'statsteachuni.html' : ((cat === 'interview' || cat === 'selection') ? 'interviewteststats.html' : '');
+            const statsIcon = statsPage ? `<div class="icon-btn-box" title="Results &amp; Statistics" onclick="location.href='${statsPage}?test=${tid}'"><i class="fas fa-chart-column" style="font-size:1.05rem; color:#D96C33;"></i></div>` : '';
+            const catChip = cat ? `<span class="status-pill" style="background:#fff5f0;color:#C4551D;border:1px solid #ffd7c2;">${CAT_LABEL[cat] || cat}</span>` : '';
+            const pubChip = t.resultsPublished ? `<span class="status-pill" style="background:#ecfdf3;color:#067647;border:1px solid #abefc6;">RESULTS PUBLISHED</span>` : '';
             return `
             <div class="lm-card" onclick="location.href='interound-attempt.html?id=${tid}'">
                 <div class="lm-card-top">
                     <h3 class="lm-title">${esc(t.title)}</h3>
                     <div class="lm-icons" onclick="event.stopPropagation();">
+                        ${statsIcon}
                         <div class="icon-btn-box" title="Open" onclick="location.href='interound-attempt.html?id=${tid}'"><img src="EXAMPAD/TESTPAD_WEBSITE__files/menu-1.svg" alt="Open"></div>
                         <div class="icon-btn-box" id="expandBtn-${dcid}" title="Details &amp; Actions" onclick="toggleCardDetails(event,'${dcid}')"><i class="fas fa-chevron-down"></i></div>
                     </div>
@@ -549,6 +580,7 @@
                 </div>
                 <div id="details-${dcid}" class="lm-details" onclick="event.stopPropagation();">
                     <span class="status-pill active">${esc(t.status || 'ACTIVE')}</span>
+                    ${catChip}${pubChip}
                     <span class="card-id" style="margin-left:12px;">ID: ${esc(t.id || t.code)}</span>
                     <div style="margin-top:16px;">
                         <a href="interview-maker.html?id=${tid}" class="btn-detail-action"><i class="fas fa-edit"></i> Edit</a>
@@ -695,7 +727,7 @@
         const title = document.getElementById('dsaTitleInput').value.trim();
         const problems = getDsaProblems();
         problems.push({
-            id: 'PQ9RJ' + String(problems.length + 1).padStart(3, '0'),
+            id: 'CQDSA' + Date.now().toString(36).toUpperCase(),
             num: problems.length + 1,
             title,
             diff: document.getElementById('dsaDiffInput').value,

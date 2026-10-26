@@ -172,6 +172,7 @@
 
 <div class="toast-box" id="toast">Done</div>
 
+<script src="cq-shared.js"></script>
 <script>
     const JOBS_KEY = 'CodeQuest_job_postings';
     const APPS_KEY = 'CodeQuest_job_applications';
@@ -201,6 +202,8 @@
             : 'Browse companies and apply in a few clicks.';
 
         let jobs = getJobs().sort((a, b) => b.createdAt - a.createdAt);
+        // Auto-assign missing form numbers to every posting (role-based, idempotent)
+        try { if (window.CQ) { CQ.ensureFormNumbers(); jobs = getJobs().sort((a, b) => b.createdAt - a.createdAt); } } catch (e) {}
         if (role === 'recruiter') {
             const s = session();
             jobs = jobs.filter(j => !s.email || j.createdBy === s.email || !j.createdBy);
@@ -244,6 +247,7 @@
                     ${j.salary ? `<span class="jc-tag"><i class="fas fa-sack-dollar"></i> ${esc(j.salary)}</span>` : ''}
                     ${j.feeApplicable ? `<span class="jc-tag fee"><i class="fas fa-indian-rupee-sign"></i> ${esc(j.feeAmount || 0)} fee</span>` : '<span class="jc-tag"><i class="fas fa-gift"></i> Free</span>'}
                     <span class="jc-tag deadline"><i class="far fa-calendar-check"></i> ${fmtDeadline(j.deadline)}</span>
+                    ${j.formNumber ? `<span class="jc-tag" style="background:#eff6ff;color:#1570EF;border-color:#b9d6fb;"><i class="fas fa-hashtag"></i> Form ${esc(j.formNumber)}</span>` : ''}
                 </div>
                 ${j.description ? `<div class="jc-desc">${esc((j.description || '').slice(0, 150))}${(j.description || '').length > 150 ? '…' : ''}</div>` : ''}
                 ${j.qualification ? `<div class="jc-qual"><i class="fas fa-graduation-cap" style="color:var(--primary);"></i> ${esc(j.qualification)}</div>` : ''}

@@ -55,7 +55,7 @@ class TestpadDB {
 
     // ===== CIRCULAR MANAGEMENT =====
     addCircular(circularData) {
-        const circulars = JSON.parse(localStorage.getItem('TESTPAD_circulars'));
+        const circulars = JSON.parse(localStorage.getItem('TESTPAD_circulars')) || [];
         const circular = {
             ...circularData,
             id: 'CIRC_' + Date.now(),
@@ -67,12 +67,12 @@ class TestpadDB {
     }
 
     getCirculars() {
-        return JSON.parse(localStorage.getItem('TESTPAD_circulars'));
+        return JSON.parse(localStorage.getItem('TESTPAD_circulars')) || [];
     }
 
     // ===== QUESTION POOL =====
     addToQuestionPool(question) {
-        const pool = JSON.parse(localStorage.getItem('TESTPAD_question_pool'));
+        const pool = JSON.parse(localStorage.getItem('TESTPAD_question_pool')) || [];
 
         const poolItem = {
             ...question,
@@ -110,7 +110,7 @@ class TestpadDB {
 
     // ===== USER MANAGEMENT =====
     addUser(userData) {
-        const users = JSON.parse(localStorage.getItem('TESTPAD_users'));
+        const users = JSON.parse(localStorage.getItem('TESTPAD_users')) || [];
         const id = 'user_' + Date.now();
         const user = {
             id,
@@ -127,7 +127,7 @@ class TestpadDB {
     }
 
     updateUser(userId, updateData) {
-        const users = JSON.parse(localStorage.getItem('TESTPAD_users'));
+        const users = JSON.parse(localStorage.getItem('TESTPAD_users')) || [];
         const index = users.findIndex(u => u.id === userId);
         if (index !== -1) {
             users[index] = { ...users[index], ...updateData };
@@ -148,7 +148,7 @@ class TestpadDB {
     }
 
     getUserById(userId) {
-        const users = JSON.parse(localStorage.getItem('TESTPAD_users'));
+        const users = JSON.parse(localStorage.getItem('TESTPAD_users')) || [];
         return users.find(u => u.id === userId);
     }
 
@@ -166,7 +166,7 @@ class TestpadDB {
     }
 
     updatePassword(email, newPassword) {
-        const users = JSON.parse(localStorage.getItem('TESTPAD_users'));
+        const users = JSON.parse(localStorage.getItem('TESTPAD_users')) || [];
         const index = users.findIndex(u => u.email === email);
         if (index !== -1) {
             users[index].password = this.hashPassword(newPassword);
@@ -178,7 +178,7 @@ class TestpadDB {
 
     // ===== EXAM MANAGEMENT =====
     createExam(examData, teacherId) {
-        const exams = JSON.parse(localStorage.getItem('TESTPAD_exams'));
+        const exams = JSON.parse(localStorage.getItem('TESTPAD_exams')) || [];
         const id = 'exam_' + Date.now();
         const testId = this.generateTestId();
         const passcode = this.generatePasscode();
@@ -208,6 +208,14 @@ class TestpadDB {
             sectionLockEnabled: examData.sectionLockEnabled || false,
             isCompetitive: examData.isCompetitive || false,
             candidates: examData.candidates || [],
+            // CodeQuest publishing metadata (audience, category, job/university linkage)
+            audience: examData.audience || 'universal',
+            batchIds: examData.batchIds || [],
+            jobId: examData.jobId || '',
+            registeredOnly: !!examData.registeredOnly,
+            passingCriteria: examData.passingCriteria || '',
+            testCategory: examData.testCategory || '',
+            universityId: examData.universityId || '',
             createdAt: new Date().toISOString(),
             status: examData.status || 'draft',
             security: examData.security || {}
@@ -223,7 +231,7 @@ class TestpadDB {
     }
 
     getExamById(id) {
-        const exams = JSON.parse(localStorage.getItem('TESTPAD_exams'));
+        const exams = JSON.parse(localStorage.getItem('TESTPAD_exams')) || [];
         return exams.find(e => e.id === id || e.testId === id);
     }
 
@@ -240,12 +248,12 @@ class TestpadDB {
     }
 
     getTeacherExams(teacherId) {
-        const exams = JSON.parse(localStorage.getItem('TESTPAD_exams'));
+        const exams = JSON.parse(localStorage.getItem('TESTPAD_exams')) || [];
         return exams.filter(e => e.teacherId === teacherId);
     }
 
     updateExam(examId, updateData) {
-        const exams = JSON.parse(localStorage.getItem('TESTPAD_exams'));
+        const exams = JSON.parse(localStorage.getItem('TESTPAD_exams')) || [];
         const index = exams.findIndex(e => e.id === examId);
         if (index !== -1) {
             exams[index] = { ...exams[index], ...updateData };
@@ -257,7 +265,7 @@ class TestpadDB {
 
     // ===== ATTEMPT/SESSION MANAGEMENT =====
     startAttempt(examId, studentId, isReattempt = false) {
-        const attempts = JSON.parse(localStorage.getItem('TESTPAD_attempts'));
+        const attempts = JSON.parse(localStorage.getItem('TESTPAD_attempts')) || [];
 
         // Check if student already attempted - Return existing if found for seamless resume
         const existingAttempt = attempts.find(a => a.examId === examId && a.studentId === studentId);
@@ -511,13 +519,13 @@ class TestpadDB {
     }
 
     getExamAttempts(examId) {
-        const attempts = JSON.parse(localStorage.getItem('TESTPAD_attempts'));
+        const attempts = JSON.parse(localStorage.getItem('TESTPAD_attempts')) || [];
         return attempts.filter(a => a.examId === examId);
     }
 
     // ===== COURSE MANAGEMENT =====
     createCourse(courseData, teacherId) {
-        const courses = JSON.parse(localStorage.getItem('TESTPAD_courses'));
+        const courses = JSON.parse(localStorage.getItem('TESTPAD_courses')) || [];
         const id = 'course_' + Date.now();
         const course = {
             id,
@@ -600,7 +608,7 @@ class TestpadDB {
 
     // ===== SESSION MANAGEMENT =====
     createSession(userId, role) {
-        const sessions = JSON.parse(localStorage.getItem('TESTPAD_sessions'));
+        const sessions = JSON.parse(localStorage.getItem('TESTPAD_sessions')) || [];
         // Deactivate old sessions
         sessions.forEach(s => s.isActive = false);
 
@@ -619,12 +627,12 @@ class TestpadDB {
     }
 
     getActiveSession() {
-        const sessions = JSON.parse(localStorage.getItem('TESTPAD_sessions'));
+        const sessions = JSON.parse(localStorage.getItem('TESTPAD_sessions')) || [];
         return sessions.find(s => s.isActive);
     }
 
     endSession(sessionId) {
-        const sessions = JSON.parse(localStorage.getItem('TESTPAD_sessions'));
+        const sessions = JSON.parse(localStorage.getItem('TESTPAD_sessions')) || [];
         const session = sessions.find(s => s.sessionId === sessionId);
         if (session) {
             session.isActive = false;
@@ -792,7 +800,7 @@ class TestpadDB {
 
     // ===== TRANSACTION MANAGEMENT =====
     addTransaction(transactionData) {
-        const txs = JSON.parse(localStorage.getItem('TESTPAD_transactions'));
+        const txs = JSON.parse(localStorage.getItem('TESTPAD_transactions')) || [];
         const tx = {
             ...transactionData,
             id: 'TXN_' + Date.now(),
@@ -804,7 +812,7 @@ class TestpadDB {
     }
 
     getStudentTransactions(studentId) {
-        const txs = JSON.parse(localStorage.getItem('TESTPAD_transactions'));
+        const txs = JSON.parse(localStorage.getItem('TESTPAD_transactions')) || [];
         return txs.filter(t => t.studentId === studentId);
     }
 

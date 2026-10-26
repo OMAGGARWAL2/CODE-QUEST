@@ -1,14 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=studentindex.html">
-    <title>Redirecting to Student Dashboard...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Assessment & DSA Platform</title>
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&family=Mulish:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Mulish', 'Hind', sans-serif;
+        }
+
+        body {
+            background-color: #FFFFFF;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #101828;
+            overflow: hidden;
+        }
+
+        .gateway-card {
+            text-align: center;
+            padding: 40px;
+            max-width: 420px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .gateway-logo-wrap {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .gateway-logo {
+            width: 84px;
+            height: 84px;
+            display: block;
+        }
+
+        .gateway-spinner {
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            right: -6px;
+            bottom: -6px;
+            border: 2px solid transparent;
+            border-top-color: #DE5B2B;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .gateway-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #101828;
+            letter-spacing: -0.3px;
+            margin-bottom: 8px;
+        }
+
+        .gateway-subtitle {
+            font-size: 1rem;
+            color: #64748B;
+            font-family: 'Hind', sans-serif;
+            font-weight: 400;
+        }
+
+        .gateway-fallback {
+            margin-top: 24px;
+            font-size: 0.9rem;
+            color: #94A3B8;
+        }
+
+        .gateway-fallback a {
+            color: #DE5B2B;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+
     <script>
-        window.location.replace("studentindex.html");
+        (function () {
+            function routeUser() {
+                try {
+                    const raw = localStorage.getItem('CodeQuest_active_session') || localStorage.getItem('TESTPAD_current_user');
+                    if (raw) {
+                        const session = JSON.parse(raw);
+                        const role = String(session && session.role ? session.role : '').toLowerCase();
+
+                        if (role === 'teacher') {
+                            window.location.replace('teacherindex.html');
+                            return;
+                        } else if (role === 'recruiter' || role === 'company') {
+                            window.location.replace('recruiterindex.html');
+                            return;
+                        } else {
+                            window.location.replace('studentindex.html');
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    console.warn('Session evaluation error:', e);
+                }
+
+                // If no active session, route to the main authentication/welcome page
+                window.location.replace('firstpage.html');
+            }
+
+            // Small delay to allow clean page transition
+            setTimeout(routeUser, 150);
+        })();
     </script>
 </head>
-<body style="font-family: sans-serif; padding: 40px; text-align: center;">
-    <p>Redirecting to <a href="studentindex.html">Student Dashboard</a>...</p>
+
+<body>
+    <div class="gateway-card">
+        <div class="gateway-logo-wrap">
+            <img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest Logo" class="gateway-logo" onerror="this.src='CODEQUEST FULL LOGO.svg'">
+            <div class="gateway-spinner"></div>
+        </div>
+        <h1 class="gateway-title">CodeQuest</h1>
+        <p class="gateway-subtitle">Starting your session...</p>
+
+        <div class="gateway-fallback">
+            Taking too long? <a href="firstpage.html">Click here to continue</a>
+        </div>
+    </div>
 </body>
+
 </html>

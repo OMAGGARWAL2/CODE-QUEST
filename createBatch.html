@@ -317,6 +317,43 @@
     }
     function writeBatches(list) { localStorage.setItem(BATCHES_KEY, JSON.stringify(list)); }
 
+    // Sync batch students into the shared TESTPAD_users login store.
+    const USERS_KEY = 'TESTPAD_users';
+    function registerBatchStudents(students) {
+        let users = [];
+        try { users = JSON.parse(localStorage.getItem(USERS_KEY)) || []; } catch (e) { users = []; }
+        (students || []).forEach(st => {
+            const username = (st.username || '').trim();
+            const roll = (st.roll || st.regNo || '').trim();
+            const pass = st.password || '';
+            // A student needs at least one identifier (username or roll) to log in.
+            if (!username && !roll) return;
+            const loginId = username || roll;
+            const b64 = (() => { try { return btoa(pass); } catch (e) { return pass; } })();
+            let u = users.find(x =>
+                (x.email && x.email.toLowerCase() === loginId.toLowerCase()) ||
+                (x.rollNo && x.rollNo.toLowerCase() === (roll || loginId).toLowerCase()));
+            if (u) {
+                u.name = st.name || u.name;
+                u.email = username || u.email || loginId;
+                u.rollNo = roll || u.rollNo;
+                u.password = b64;
+                u.role = u.role || 'student';
+            } else {
+                users.push({
+                    id: 'cq_batch_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+                    name: st.name || loginId,
+                    email: username || loginId,
+                    rollNo: roll,
+                    role: 'student',
+                    password: b64,
+                    createdAt: new Date().toISOString()
+                });
+            }
+        });
+        try { localStorage.setItem(USERS_KEY, JSON.stringify(users)); } catch (e) { console.warn('Could not register students', e); }
+    }
+
     function getSession() {
         try { return JSON.parse(localStorage.getItem('CodeQuest_active_session')) || JSON.parse(localStorage.getItem('TESTPAD_current_user')) || {}; }
         catch (e) { return {}; }
@@ -461,6 +498,11 @@
 
         const list = readBatches();
         const session = getSession();
+
+        // Register every batch student as a login identity so they can sign in
+        // from firstpage.html using their Username / Roll No + Password.
+        registerBatchStudents(students);
+
         if (editingBatchId) {
             const idx = list.findIndex(b => b.id === editingBatchId);
             if (idx >= 0) {

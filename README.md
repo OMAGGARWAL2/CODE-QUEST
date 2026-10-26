@@ -51,11 +51,16 @@ Everything is stored in `localStorage` under `CodeQuest_*` and `TESTPAD_*` keys:
 Content published with **audience scoping**: `universal` (everyone), `batch` (linked batch members only), or `registered` (job applicants only) — enforced on the student dashboard.
 
 ## 🚀 Run It
-No build step. Just open `firstpage.html` in a browser, or serve the folder:
+Simply start the local development app server:
 
+```bash
+npm start
 ```
-npx serve .
-```
+
+Or run `node server.js`. The server automatically:
+- Launches your default browser to `http://localhost:3000/`
+- Activates live-reloading (edits to files immediately refresh connected tabs)
+- Smart-routes sessions to Student/Teacher/Recruiter portals or the Login page
 
 > ⚠️ This is a client-side demo platform — access control is visibility gating, not a security boundary. Real multi-user sync needs a backend.
 

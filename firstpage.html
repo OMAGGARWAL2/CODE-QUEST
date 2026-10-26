@@ -103,50 +103,7 @@
             }
         }
 
-        /* --- TAB SWITCHER IN TOP RIGHT OF CARD --- */
-        .tab-switcher {
-            display: flex;
-            background: #f1f3f5;
-            padding: 3px;
-            border-radius: 14px;
-            position: absolute;
-            top: 18px;
-            right: 18px;
-            width: 175px;
-            z-index: 10;
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 6px 6px;
-            border: none;
-            background: transparent;
-            font-weight: 700;
-            font-size: 0.73rem;
-            color: var(--text-dim);
-            cursor: pointer;
-            z-index: 2;
-            transition: color 0.25s;
-            text-align: center;
-            border-radius: 10px;
-        }
-
-        .tab-btn.active {
-            color: var(--primary);
-        }
-
-        .tab-slider {
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: calc(50% - 3px);
-            height: calc(100% - 6px);
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 1;
-        }
+        /* --- TAB SWITCHER REMOVED: SIGN IN / CREATE ID REPLACED BY INLINE LINKS --- */
 
         /* --- CARD HEADER & LOGO --- */
         .auth-header {
@@ -603,6 +560,23 @@
             color: var(--primary) !important;
         }
 
+        /* "No account? Sign up now" — plain until hovered, then underlined */
+        .signup-prompt {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 1rem;
+            color: #667085;
+        }
+        .signup-link {
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .signup-link:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 520px) {
             .auth-card {
                 padding: 36px 24px;
@@ -618,13 +592,6 @@
 
     <!-- AUTH CARD -->
     <div class="auth-card">
-        <!-- Top-Right Tab Switcher -->
-        <div class="tab-switcher">
-            <div class="tab-slider" id="tabSlider"></div>
-            <button class="tab-btn active" id="loginTab" onclick="switchTab('login')">SIGN IN</button>
-            <button class="tab-btn" id="signupTab" onclick="switchTab('signup')">CREATE ID</button>
-        </div>
-
         <!-- Header: CODEQUEST Logo and Title -->
         <div class="auth-header">
             <div class="logo-box">
@@ -695,6 +662,11 @@
                     </button>
                     <div id="googleSignInHiddenPrompt" style="display: none;"></div>
                 </div>
+
+                <!-- No account? Sign up now -->
+                <div class="signup-prompt">
+                    No account? <a class="signup-link" onclick="showSignupSection()">Sign up now</a>
+                </div>
             </form>
         </div>
 
@@ -761,9 +733,10 @@
                 </div>
 
                 <div style="text-align: center; margin-top: 18px; padding-top: 14px; border-top: 1px solid #f0f0f0;">
-                    <a href="loginforcomp.html" class="not-student-link">
-                        Click here if you are not a student
-                    </a>
+                    <a class="signup-link" onclick="showLoginSection(event)">Already have an ID? Sign in</a>
+                    <div class="signup-prompt" style="margin-top: 10px;">
+                        Not a student? <a class="signup-link" href="loginforcomp.html">Register here</a>
+                    </div>
                 </div>
             </form>
         </div>
@@ -806,6 +779,11 @@
     <!-- Message Toast -->
     <div class="message-toast" id="toast">Message content</div>
 
+    <!-- Access Denied Banner (revoked accounts) -->
+    <div id="accessDeniedBanner" style="display:none; position:fixed; top:0; left:0; right:0; z-index:99999; background:#B42318; color:#fff; padding:16px 24px; font-family:'Mulish','Hind',sans-serif; font-weight:800; font-size:1.05rem; letter-spacing:0.4px; text-align:center; box-shadow:0 4px 16px rgba(0,0,0,0.25);">
+        ⛔ ACCESS DENIED — Your account has been revoked by the administrator due to unusual activity.
+    </div>
+
     <!-- Delete Confirmation Banner -->
     <div id="deleteConfirmBanner" class="delete-banner">
         <div id="deleteConfirmText" style="font-weight: 500; font-size: 1.05rem; color: #444;">Do you really want to
@@ -822,6 +800,7 @@
 
 
     <!-- ===== JAVASCRIPT: EXACT LOGIN.HTML CREDENTIAL REMEMBER LOGIC ===== -->
+    <script src="cq-shared.js"></script>
     <script>
         const USERS_STORAGE_KEY = 'TESTPAD_users';
         const HISTORY_STORAGE_KEY = 'TESTPAD_login_history';
@@ -876,31 +855,27 @@
         }
 
         function switchTab(tab) {
-            const slider = document.getElementById('tabSlider');
             const loginSection = document.getElementById('loginSection');
             const signupSection = document.getElementById('signupSection');
             const forgotSection = document.getElementById('forgotSection');
-            const loginBtn = document.getElementById('loginTab');
-            const signupBtn = document.getElementById('signupTab');
             const headerTitle = document.getElementById('headerTitle');
 
             forgotSection.classList.remove('active');
 
             if (tab === 'login') {
-                slider.style.transform = 'translateX(0)';
                 loginSection.classList.add('active');
                 signupSection.classList.remove('active');
-                loginBtn.classList.add('active');
-                signupBtn.classList.remove('active');
                 headerTitle.innerText = 'Log into your account';
             } else {
-                slider.style.transform = 'translateX(100%)';
                 loginSection.classList.remove('active');
                 signupSection.classList.add('active');
-                loginBtn.classList.remove('active');
-                signupBtn.classList.add('active');
                 headerTitle.innerText = 'Create your account';
             }
+        }
+
+        // "No account? Sign up now" link under Sign in with Google
+        function showSignupSection() {
+            switchTab('signup');
         }
 
         function showForgotSection(e) {
@@ -908,14 +883,12 @@
             document.getElementById('loginSection').classList.remove('active');
             document.getElementById('signupSection').classList.remove('active');
             document.getElementById('forgotSection').classList.add('active');
-            document.querySelector('.tab-switcher').style.display = 'none';
             document.getElementById('headerTitle').innerText = 'Forgot Password';
         }
 
         function showLoginSection(e) {
             if (e) e.preventDefault();
             document.getElementById('forgotSection').classList.remove('active');
-            document.querySelector('.tab-switcher').style.display = 'flex';
             document.getElementById('headerTitle').innerText = 'Log into your account';
             switchTab('login');
         }
@@ -935,14 +908,31 @@
         }
 
         function getRoleDisplayName(role) {
-            switch ((role || '').toLowerCase()) {
+            const r = (role || '').toLowerCase();
+            switch (r) {
+                case 'student': return 'Student';
+                case 'teacher': return 'Teacher / Faculty';
+                case 'faculty': return 'Teacher / Faculty';
+                case 'university_head': return 'University Head';
+                case 'recruiter':
+                case 'employer':
+                case 'hr':
+                case 'company_recruiter': return 'Recruiter';
                 case 'company_executive': return 'Company Executive';
                 case 'interviewer': return 'Interviewer';
-                case 'university_head': return 'University Head';
-                case 'recruiter': return 'Recruiter';
-                case 'student':
-                default: return 'Student';
+                case 'placement_coordinator':
+                case 'placement coordinator': return 'Placement Coordinator';
+                case 'official': return 'Official';
+                case 'superadmin': return 'Superadmin';
+                case 'head_teacher': return 'Head Teacher';
+                case 'admin':
+                case 'administrator': return 'Administrator';
             }
+            // Unknown non-empty role: prettify the raw string instead of mislabelling as Student
+            if (r) {
+                return r.replace(/[_\-]+/g, ' ').trim().replace(/\b\w/g, c => c.toUpperCase());
+            }
+            return 'User';
         }
 
         function renderHistoryDropdown() {
@@ -1068,7 +1058,15 @@
             }
 
             const users = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY)) || [];
-            const user = users.find(u => (u.email && u.email.toLowerCase() === identifier.toLowerCase()) || (u.rollNo && u.rollNo.toLowerCase() === identifier.toLowerCase()));
+            let user = users.find(u => (u.email && u.email.toLowerCase() === identifier.toLowerCase()) || (u.rollNo && u.rollNo.toLowerCase() === identifier.toLowerCase()));
+
+            // Safety net: activate any pending recruiter / university head / superadmin
+            // applications instantly — no ALPHAWINNERS approval needed
+            if (!user && typeof CQ !== 'undefined') {
+                CQ.instantApprovePending();
+                user = (JSON.parse(localStorage.getItem(USERS_STORAGE_KEY)) || [])
+                    .find(u => (u.email && u.email.toLowerCase() === identifier.toLowerCase()) || (u.rollNo && u.rollNo.toLowerCase() === identifier.toLowerCase()));
+            }
 
             if (!user) {
                 showMessage("Identity not found. Please create an account.");
@@ -1081,6 +1079,14 @@
 
             if (!valid) {
                 showMessage("Invalid password. Please check your credentials.");
+                return;
+            }
+
+            // Revoked by ALPHAWINNERS admins (ONLALP desk) after unusual activity
+            if (user.revoked) {
+                const banner = document.getElementById('accessDeniedBanner');
+                if (banner) banner.style.display = 'block';
+                showMessage("ACCESS DENIED — Your account has been revoked by the administrator.");
                 return;
             }
 
@@ -1098,8 +1104,13 @@
             const sessionData = {
                 name: user.name || identifier.split('@')[0],
                 email: user.email || identifier,
+                rollNo: user.rollNo || (user.rollNo ? user.rollNo : (/^\d/.test(identifier) ? identifier : '')),
+                regNo: user.rollNo || '',
                 role: effectiveRole,
                 roleDisplay: getRoleDisplayName(effectiveRole),
+                userId: user.id || '',
+                universityId: user.universityId || '',
+                universityName: user.universityName || '',
                 loggedInAt: new Date().toISOString()
             };
             localStorage.setItem('CodeQuest_active_session', JSON.stringify(sessionData));
@@ -1111,10 +1122,12 @@
                 const role = (effectiveRole || '').toLowerCase();
                 if (role === 'recruiter' || role === 'employer' || role === 'hr' || role === 'company_recruiter') {
                     window.location.href = 'recruiterindex.html';
-                } else if (role === 'teacher' || role === 'faculty' || role === 'company' || role === 'official') {
-                    window.location.href = 'teacherindex.html';
-                } else {
+                } else if (role === 'student') {
                     window.location.href = 'studentindex.html';
+                } else {
+                    // teacher, faculty, company, official, university_head, head_teacher,
+                    // company_executive, interviewer and any other approved staff role
+                    window.location.href = 'teacherindex.html';
                 }
             }, 600);
         }
@@ -1389,6 +1402,9 @@
                 email: email,
                 role: user.role || role,
                 roleDisplay: getRoleDisplayName(user.role || role),
+                userId: user.id || '',
+                universityId: user.universityId || '',
+                universityName: user.universityName || '',
                 loggedInAt: new Date().toISOString()
             };
             localStorage.setItem('CodeQuest_active_session', JSON.stringify(sessionData));

@@ -5032,8 +5032,10 @@
 
                                 let res = db.startAttempt(currentExam.id, student.id);
                                 if (!res.success && res.existingAttempt) {
-                                    if (res.existingAttempt.status === 'submitted' || res.existingAttempt.status === 'reviewed') {
-                                        res = db.startAttempt(currentExam.id, student.id, true);
+                                    if (res.existingAttempt.status === 'submitted' || res.existingAttempt.status === 'reviewed' || res.existingAttempt.status === 'completed') {
+                                        // Second attempt blocked: show the "Test already attempted" screen
+                                        window.location.href = './Secondattemptnotallowed.html?examId=' + encodeURIComponent(currentExam.id);
+                                        return;
                                     } else {
                                         res.success = true;
                                         res.attempt = res.existingAttempt;

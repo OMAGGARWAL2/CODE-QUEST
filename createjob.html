@@ -179,11 +179,24 @@
         r.readAsDataURL(f);
     }
 
+    // Auto form number: derived from the job role initials, e.g. FORM-SWE-2026-003
+    function genFormNumber(title, jobs) {
+        const initials = (title || 'JOB').split(/\s+/).map(w => w.charAt(0)).join('').replace(/[^A-Za-z]/g, '').toUpperCase().slice(0, 4) || 'JOB';
+        const year = new Date().getFullYear();
+        let seq = 1;
+        jobs.forEach(j => {
+            const m = /^FORM-([A-Z]+)-(\d{4})-(\d{3})$/.exec(j.formNumber || '');
+            if (m && m[1] === initials && parseInt(m[3]) >= seq) seq = parseInt(m[3]) + 1;
+        });
+        return `FORM-${initials}-${year}-${String(seq).padStart(3, '0')}`;
+    }
+
     function handleSaveJob(e) {
         e.preventDefault();
         const jobs = getJobs();
         const id = document.getElementById('jobId').value;
         const s = session();
+        const existing = id ? (jobs.find(j => j.id === id) || {}) : {};
         const data = {
             id: id || ('JOB' + Date.now()),
             title: document.getElementById('jTitle').value.trim(),
@@ -196,11 +209,12 @@
             qualification: document.getElementById('jQual').value.trim(),
             feeApplicable: document.getElementById('jFeeApplicable').checked,
             feeAmount: document.getElementById('jFeeAmount').value.trim(),
-            qr: qrData || (id ? (jobs.find(j => j.id === id) || {}).qr || '' : ''),
+            qr: qrData || (id ? existing.qr || '' : ''),
             fields: collectFields(),
+            formNumber: existing.formNumber || genFormNumber(document.getElementById('jTitle').value.trim(), jobs),
             createdBy: s.email || s.name || 'recruiter',
             createdByName: s.name || 'Recruiter',
-            createdAt: id ? (jobs.find(j => j.id === id) || {}).createdAt || Date.now() : Date.now()
+            createdAt: id ? existing.createdAt || Date.now() : Date.now()
         };
         if (!data.fields.length) { toast('Add at least one registration form field.'); return; }
         if (id) { const idx = jobs.findIndex(j => j.id === id); if (idx >= 0) jobs[idx] = data; else jobs.push(data); }

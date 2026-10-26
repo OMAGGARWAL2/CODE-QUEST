@@ -601,32 +601,88 @@
     }
     function saveApps(a) { localStorage.setItem(APPS_KEY, JSON.stringify(a)); }
 
+    function getUsers() {
+        try { return JSON.parse(localStorage.getItem('TESTPAD_users')) || []; }
+        catch (e) { return []; }
+    }
+    function saveUsers(u) { localStorage.setItem('TESTPAD_users', JSON.stringify(u)); }
+
+    // Role mapping: recruiter and university head get their real portal roles
+    function mapUserRole(roleText) {
+        const r = (roleText || '').toLowerCase();
+        if (/recruiter|\bhr\b|employer/.test(r)) return 'recruiter';
+        if (/university\s*head|head\s*of\s*(the\s*)?university|vice\s*chancellor|pro\s*vice\s*chancellor|registrar|dean\s*university|university\s*dean/.test(r)) return 'university_head';
+        return 'teacher';
+    }
+
+    // Push/patch the account record in TESTPAD_users for an application
+    function upsertUserFromApp(t) {
+        const users = getUsers();
+        const role = mapUserRole(t.role);
+        const uname = (t.username || '').toLowerCase();
+        const uid = (t.officialId || '').toLowerCase();
+        let u = users.find(x =>
+            (x.email && String(x.email).toLowerCase() === uname) ||
+            (x.rollNo && String(x.rollNo).toLowerCase() === uid));
+        if (!u) {
+            u = { id: 'cq_off_' + Date.now(), password: t.password };
+            users.push(u);
+        }
+        u.name = t.fullName;
+        u.email = t.username;
+        u.rollNo = t.officialId;
+        u.role = role;
+        u.designation = t.role || '';
+        u.revoked = false;
+        saveUsers(users);
+    }
+
+    // INSTANT APPROVAL: recruiter and university head signups need NO verification
+    // from ALPHAWINNERS — they are approved the moment they sign up.
+    function instantApprove(apps) {
+        let changed = false;
+        apps.forEach(t => {
+            if ((t.status || 'Pending') !== 'Pending') return;
+            const role = mapUserRole(t.role);
+            if (role !== 'recruiter' && role !== 'university_head') return;
+            t.status = 'Approved';
+            t.approvedAt = new Date().toLocaleString('en-US');
+            t.instantApproved = true;
+            upsertUserFromApp(t);
+            changed = true;
+        });
+        if (changed) saveApps(apps);
+        return changed;
+    }
+
     function isValidImg(src) {
         return src && typeof src === 'string' && src.trim() !== '' && !src.startsWith('data:image/svg+xml;utf8,<svg');
     }
 
     function render() {
         const apps = getApps();
+        instantApprove(apps);
+        const fresh = getApps();
         const search = (document.getElementById('searchInput').value || '').toLowerCase().trim();
 
-        const filtered = apps.filter(a => {
+        const filtered = fresh.filter(a => {
             const hay = [a.fullName, a.college, a.company, a.location, a.officialId, a.username, a.role]
                 .filter(Boolean).join(' ').toLowerCase();
             return !search || hay.includes(search);
         });
 
-        document.getElementById('countLabel').textContent = apps.length ? `(${apps.length})` : '';
+        document.getElementById('countLabel').textContent = apps.length ? `(${fresh.length})` : '';
 
         const tbody = document.getElementById('tbody');
         tbody.innerHTML = '';
 
         if (filtered.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6" class="cell-empty">No applications yet. When officials or companies submit the form on <em>loginforcomp.html</em>, they will show up here.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="6" class="cell-empty">No applications yet. <em>Recruiter</em> and <em>University Head</em> signups on <em>loginforcomp.html</em> are approved instantly &mdash; no document verification needed. They appear here already approved, and you can revoke them if you notice unusual activity.</td></tr>`;
             return;
         }
 
         filtered.forEach(app => {
-            const idx = apps.findIndex(x => x.id === app.id);
+            const idx = fresh.findIndex(x => x.id === app.id);
             const statusText = app.status || 'Pending';
 
             // Check if valid images were uploaded; if not, show 'Not uploaded'
@@ -654,12 +710,24 @@
                 docCellHtml = `<div class="doc-cell">${idPart}${govPart}</div>`;
             }
 
-            // SIMPLE APPROVE AND REJECT BUTTONS - NO EMOJIS, EXACT QUESTIONPOOL STYLE
-            const actionBtns = `
-                <button class="btn-act" onclick="approve(${idx})">Approve</button>
-                <button class="btn-act" onclick="reject(${idx})">Reject</button>
-                <button class="btn-act icon-only" onclick="del(${idx})" title="Delete"><i class="fas fa-trash"></i></button>
-            `;
+            // ACTION BUTTONS - approvable roles get Approve; instant-approved and
+            // manually approved accounts get Revoke (login shows Access Denied).
+            let actionBtns;
+            if (statusText === 'Approved') {
+                actionBtns = `
+                    <button class="btn-act" onclick="revoke(${idx})" title="Revoke this account. The user will see an Access Denied banner on login.">Revoke</button>
+                    <button class="btn-act icon-only" onclick="del(${idx})" title="Delete"><i class="fas fa-trash"></i>
+                    </button>`;
+            } else if (statusText === 'Revoked') {
+                actionBtns = `
+                    <button class="btn-act" onclick="reinstate(${idx})">Reinstate</button>
+                    <button class="btn-act icon-only" onclick="del(${idx})" title="Delete"><i class="fas fa-trash"></i></button>`;
+            } else {
+                actionBtns = `
+                    <button class="btn-act" onclick="approve(${idx})">Approve</button>
+                    <button class="btn-act" onclick="reject(${idx})">Reject</button>
+                    <button class="btn-act icon-only" onclick="del(${idx})" title="Delete"><i class="fas fa-trash"></i></button>`;
+            }
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
@@ -680,8 +748,8 @@
                     ${docCellHtml}
                 </td>
                 <td>
-                    <div class="status-text">${esc(statusText)}</div>
-                    <div class="sub">${esc(app.submittedAt || '')}</div>
+                    <div class="status-text">${esc(statusText)}${app.instantApproved && statusText === 'Approved' ? ' (Instant)' : ''}</div>
+                    <div class="sub">${esc(app.revokedAt || app.approvedAt || app.rejectedAt || app.submittedAt || '')}</div>
                 </td>
                 <td style="text-align:right;">
                     <div class="actions">
@@ -717,29 +785,66 @@
         if (!t) return;
         t.status = 'Approved';
         t.approvedAt = new Date().toLocaleString('en-US');
+        t.instantApproved = false;
         saveApps(apps);
 
-        try {
-            const users = JSON.parse(localStorage.getItem('TESTPAD_users')) || [];
-            const exists = users.some(u =>
-                (u.email && u.email.toLowerCase() === (t.username || '').toLowerCase()) ||
-                (u.rollNo && u.rollNo.toLowerCase() === (t.officialId || '').toLowerCase()));
-            if (!exists) {
-                users.push({
-                    id: 'cq_off_' + Date.now(),
-                    name: t.fullName,
-                    email: t.username,
-                    rollNo: t.officialId,
-                    role: /recruiter|\bhr\b|employer/i.test(t.role || '') ? 'recruiter' : 'teacher',
-                    designation: t.role || '',
-                    password: t.password
-                });
-                localStorage.setItem('TESTPAD_users', JSON.stringify(users));
-            }
-        } catch (e) {}
+        upsertUserFromApp(t);
 
         render();
         showToast(`${t.fullName} approved.`);
+    }
+
+    // REVOKE: after unusual activity the account is cut off — the user sees an
+    // "Access Denied" banner when they try to log in.
+    function revoke(idx) {
+        const apps = getApps();
+        const t = apps[idx];
+        if (!t) return;
+        if (!confirm(`Revoke the account of ${t.fullName}? They will get an Access Denied banner on their next login.`)) return;
+        t.status = 'Revoked';
+        t.revokedAt = new Date().toLocaleString('en-US');
+        saveApps(apps);
+
+        const users = getUsers();
+        const uname = (t.username || '').toLowerCase();
+        const uid = (t.officialId || '').toLowerCase();
+        users.forEach(u => {
+            if ((u.email && String(u.email).toLowerCase() === uname) ||
+                (u.rollNo && String(u.rollNo).toLowerCase() === uid)) {
+                u.revoked = true;
+                u.revokedAt = t.revokedAt;
+            }
+        });
+        saveUsers(users);
+
+        render();
+        showToast(`${t.fullName} revoked. Login blocked.`);
+    }
+
+    function reinstate(idx) {
+        const apps = getApps();
+        const t = apps[idx];
+        if (!t) return;
+        if (!confirm(`Reinstate the account of ${t.fullName}?`)) return;
+        t.status = 'Approved';
+        t.approvedAt = new Date().toLocaleString('en-US');
+        delete t.revokedAt;
+        saveApps(apps);
+
+        const users = getUsers();
+        const uname = (t.username || '').toLowerCase();
+        const uid = (t.officialId || '').toLowerCase();
+        users.forEach(u => {
+            if ((u.email && String(u.email).toLowerCase() === uname) ||
+                (u.rollNo && String(u.rollNo).toLowerCase() === uid)) {
+                u.revoked = false;
+                delete u.revokedAt;
+            }
+        });
+        saveUsers(users);
+
+        render();
+        showToast(`${t.fullName} reinstated.`);
     }
 
     function reject(idx) {

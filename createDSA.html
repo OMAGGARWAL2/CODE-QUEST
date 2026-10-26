@@ -542,6 +542,42 @@
             margin-bottom: 16px;
         }
 
+        /* Company (PYQ) multi-select picker */
+        .company-picker {
+            max-height: 260px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4px;
+            background: #fff;
+        }
+        .company-opt {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 7px 9px;
+            border-radius: 7px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            font-family: 'Hind', sans-serif;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: #344054;
+            user-select: none;
+        }
+        .company-opt:hover { background: #f7f8fa; }
+        .company-opt.sel { background: #FFF4ED; border-color: var(--primary); }
+        .company-opt input { accent-color: var(--primary); width: 16px; height: 16px; }
+        .co-logo { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; flex-shrink: 0; }
+        .co-mono { align-items: center; justify-content: center; background: #111b21; color: #fff; border-radius: 6px; font-size: 11px; font-weight: 700; font-family: 'Hind', sans-serif; }
+        .company-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .company-chip { display: inline-flex; align-items: center; gap: 7px; background: #f0f2f5; border: 1px solid var(--border); border-radius: 999px; padding: 4px 10px 4px 6px; font-size: 0.85rem; font-weight: 600; color: #111b21; font-family: 'Hind', sans-serif; }
+        .company-chip .cc-x { cursor: pointer; color: #98a2b3; font-weight: 700; margin-left: 2px; }
+        .company-chip .cc-x:hover { color: var(--primary); }
+
         .example-item-box {
             background: #ffffff;
             border: 1px solid var(--border);
@@ -833,7 +869,7 @@
     <!-- TOP HEADER -->
     <header class="site-header">
         <div class="header-left">
-            <a href="teacherindex.html" class="logo-box" title="Back to Dashboard">
+            <a href="teacherindex.html" class="logo-box" title="CodeQuest">
                 <div class="logo-icon"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest"></div>
                 <div class="brand-text">
                     <span class="brand-name">CodeQuest</span>
@@ -881,7 +917,7 @@
 
                 <div class="form-group">
                     <label class="field-label" for="probTitle">Problem Title <span class="req">*</span></label>
-                    <input type="text" id="probTitle" class="input-text" placeholder="e.g. 6. Valid Parentheses" required>
+                    <input type="text" id="probTitle" class="input-text" placeholder="e.g. Longest Mountain Subarray" required>
                 </div>
 
                 <div class="form-row" style="margin-top: 14px;">
@@ -1020,6 +1056,20 @@
                     <label class="field-label" for="probConstraints">Constraints (one per line)</label>
                     <textarea id="probConstraints" class="textarea-field" style="min-height: 90px;" placeholder="e.g. 1 <= nums.length <= 10^5&#10;Time Limit: 2.0s"></textarea>
                 </div>
+
+                <div class="form-group" style="margin-top: 18px;">
+                    <label class="field-label">Companies (where this problem was asked &mdash; PYQ)</label>
+                    <input type="text" id="companySearch" class="input-text" placeholder="Search companies…" oninput="renderCompanyPicker(this.value)" style="margin-bottom: 8px;">
+                    <div class="company-picker" id="companyPicker"></div>
+                    <div class="company-chips" id="companyChips"></div>
+                    <div style="font-size: 0.82rem; color: #777; margin-top: 6px;">Select the companies that have asked this problem. Students will see these logos in the <strong>Companies</strong> tab of the arena.</div>
+                </div>
+
+                <div class="form-group" style="margin-top: 18px;">
+                    <label class="field-label" for="probEditorial">Editorial / Solution Approach (optional)</label>
+                    <textarea id="probEditorial" class="textarea-field" style="min-height: 150px;" placeholder="Explain the optimal approach, intuition, algorithm steps and complexity. Basic HTML is allowed."></textarea>
+                    <div style="font-size: 0.82rem; color: #777; margin-top: 6px;">Shown to students in the <strong>Editorial</strong> tab.</div>
+                </div>
             </div>
 
             <!-- 4. SAMPLE EXAMPLES -->
@@ -1146,6 +1196,79 @@
 
     <script>
         const STORAGE_KEY = 'CodeQuest_dsa_problems';
+
+        // ===== 40 COMPANIES (PYQ) — logos rendered from the Simple Icons brand CDN =====
+        // Each entry: slug (Simple Icons id) + display name. Logo URL = https://cdn.simpleicons.org/{slug}
+        // If a slug is unavailable the <img onerror> falls back to a coloured monogram, so nothing ever breaks.
+        const CQ_COMPANIES = [
+            { slug: 'google', name: 'Google', color: '4285F4' }, { slug: 'microsoft', name: 'Microsoft', color: '5E5E5E' },
+            { slug: 'amazon', name: 'Amazon', color: 'FF9900' }, { slug: 'netflix', name: 'Netflix', color: 'E50914' },
+            { slug: 'meta', name: 'Meta', color: '0668E1' }, { slug: 'apple', name: 'Apple', color: '000000' },
+            { slug: 'nvidia', name: 'NVIDIA', color: '76B900' }, { slug: 'adobe', name: 'Adobe', color: 'FA0F00' },
+            { slug: 'uber', name: 'Uber', color: '000000' }, { slug: 'salesforce', name: 'Salesforce', color: '00A1E0' },
+            { slug: 'oracle', name: 'Oracle', color: 'F80000' }, { slug: 'sap', name: 'SAP', color: '0A6ED1' },
+            { slug: 'infosys', name: 'Infosys', color: '1179BF' }, { slug: 'tcs', name: 'TCS', color: '0066B1' },
+            { slug: 'wipro', name: 'Wipro', color: '341E66' }, { slug: 'accenture', name: 'Accenture', color: 'A100FF' },
+            { slug: 'cognizant', name: 'Cognizant', color: '0033A0' }, { slug: 'capgemini', name: 'Capgemini', color: '00A6D6' },
+            { slug: 'ibm', name: 'IBM', color: '0F62FE' }, { slug: 'hcl', name: 'HCLTech', color: '0063BE' },
+            { slug: 'techmahindra', name: 'Tech Mahindra', color: 'DB0F2C' }, { slug: 'deloitte', name: 'Deloitte', color: '86BC25' },
+            { slug: 'ey', name: 'EY', color: 'FFE600' }, { slug: 'pwc', name: 'PwC', color: 'D04A97' },
+            { slug: 'kpmg', name: 'KPMG', color: '00338A' }, { slug: 'flipkart', name: 'Flipkart', color: '2874F0' },
+            { slug: 'walmart', name: 'Walmart Global Tech', color: '0071CE' }, { slug: 'atlassian', name: 'Atlassian', color: '0052CC' },
+            { slug: 'linkedin', name: 'LinkedIn', color: '0A66C2' }, { slug: 'cisco', name: 'Cisco', color: '1BA0D7' },
+            { slug: 'qualcomm', name: 'Qualcomm', color: '3253DC' }, { slug: 'servicenow', name: 'ServiceNow', color: '62D84E' },
+            { slug: 'jpmorgan', name: 'JPMorgan Chase', color: '0A2540' }, { slug: 'goldmansachs', name: 'Goldman Sachs', color: '73A0D0' },
+            { slug: 'paypal', name: 'PayPal', color: '003087' }, { slug: 'phonepe', name: 'PhonePe', color: '5F259F' },
+            { slug: 'razorpay', name: 'Razorpay', color: '0C2451' }, { slug: 'zoho', name: 'Zoho', color: 'C8202B' },
+            { slug: 'freshworks', name: 'Freshworks', color: 'F07753' }, { slug: 'swiggy', name: 'Swiggy', color: 'FC8039' }
+        ];
+        const selectedCompanies = new Set();
+
+        function companyByName(n) { return CQ_COMPANIES.find(c => c.name === n || c.slug === n); }
+        function monoTextColor(hex) {
+            const r = parseInt(hex.substr(0, 2), 16), g = parseInt(hex.substr(2, 2), 16), b = parseInt(hex.substr(4, 2), 16);
+            return (0.299 * r + 0.587 * g + 0.114 * b) > 150 ? '#111b21' : '#ffffff';
+        }
+        function companyLogoHtml(name, slug, size) {
+            size = size || 22;
+            const co = CQ_COMPANIES.find(c => c.slug === slug || c.name === name) || {};
+            const color = (co.color || '111b21').replace('#', '');
+            const initials = (name || '?').replace(/[^A-Za-z ]/g, '').trim().split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
+            const jsdelivr = 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/' + slug + '.svg';
+            const onerr = "if(!this.dataset.b){this.dataset.b=1;this.src='" + jsdelivr + "';}else{this.style.display='none';this.nextElementSibling.style.display='inline-flex';}";
+            return `<span class="co-logo">`
+                + `<img src="https://cdn.simpleicons.org/${slug}/${color}" alt="${name}" width="${size}" height="${size}" loading="lazy" onerror="${onerr}">`
+                + `<span class="co-mono" style="display:none;width:${size}px;height:${size}px;background:#${color};color:${monoTextColor(color)};">${initials}</span></span>`;
+        }
+        function renderCompanyPicker(filter) {
+            const box = document.getElementById('companyPicker');
+            if (!box) return;
+            const f = (filter || '').trim().toLowerCase();
+            box.innerHTML = CQ_COMPANIES.filter(c => !f || c.name.toLowerCase().includes(f)).map(c => {
+                const on = selectedCompanies.has(c.slug);
+                return `<label class="company-opt ${on ? 'sel' : ''}" onclick="event.preventDefault();toggleCompany('${c.slug}')">`
+                    + `<input type="checkbox" ${on ? 'checked' : ''} tabindex="-1">`
+                    + companyLogoHtml(c.name, c.slug)
+                    + `<span>${c.name}</span></label>`;
+            }).join('');
+            renderCompanyChips();
+        }
+        function toggleCompany(slug) {
+            if (selectedCompanies.has(slug)) selectedCompanies.delete(slug);
+            else selectedCompanies.add(slug);
+            renderCompanyPicker(document.getElementById('companySearch') ? document.getElementById('companySearch').value : '');
+        }
+        function renderCompanyChips() {
+            const wrap = document.getElementById('companyChips');
+            if (!wrap) return;
+            const arr = Array.from(selectedCompanies);
+            if (!arr.length) { wrap.innerHTML = ''; return; }
+            wrap.innerHTML = arr.map(slug => {
+                const c = companyByName(slug) || { slug, name: slug };
+                return `<span class="company-chip">${companyLogoHtml(c.name, c.slug, 18)} ${c.name} <span class="cc-x" onclick="toggleCompany('${slug}')">&times;</span></span>`;
+            }).join('');
+        }
+        document.addEventListener('DOMContentLoaded', () => { renderCompanyPicker(''); });
 
         // ALL 22 LANGUAGES FOR DSA SOLVING
         const ALL_22_LANGUAGES = [
@@ -1319,7 +1442,17 @@
                 role: 'teacher',
                 text: '',
                 time: Date.now(),
-                problem: { id: prob.id, title: prob.title, diff: prob.diff, points: prob.points, topics: prob.topics, url: 'CodeQuestattempt.html?id=' + encodeURIComponent(prob.id) }
+                problem: {
+                    id: prob.id,
+                    num: prob.num || '',
+                    title: (prob.num ? prob.num + '. ' : '') + (prob.title || ''),
+                    diff: prob.diff,
+                    points: prob.points,
+                    topics: prob.topics,
+                    published: true,
+                    // Exact arena link so the chat card always opens THIS question
+                    url: 'CodeQuestattempt.html?id=' + encodeURIComponent(prob.id)
+                }
             });
             try { localStorage.setItem('CodeQuest_chat_messages', JSON.stringify(all)); } catch (e) { console.warn('Could not send to group', e); }
         }
@@ -1590,6 +1723,15 @@
                     if (prob.constraints && Array.isArray(prob.constraints)) {
                         document.getElementById('probConstraints').value = prob.constraints.join('\n');
                     }
+                    if (prob.editorial) {
+                        const ed = document.getElementById('probEditorial');
+                        if (ed) ed.value = prob.editorial;
+                    }
+                    if (Array.isArray(prob.companies)) {
+                        selectedCompanies.clear();
+                        prob.companies.forEach(c => { const co = companyByName(c); if (co) selectedCompanies.add(co.slug); });
+                        renderCompanyPicker('');
+                    }
                     if (prob.upperCode && editors.Upper) editors.Upper.setValue(prob.upperCode, -1);
                     if (prob.midBoiler && editors.Mid) editors.Mid.setValue(prob.midBoiler, -1);
                     if (prob.lowerCode && editors.Lower) editors.Lower.setValue(prob.lowerCode, -1);
@@ -1634,6 +1776,11 @@
                 "1 <= input.length <= 10^5",
                 "Time Limit: " + timeLimit
             ];
+
+            // Companies (PYQ) + Editorial authored by the teacher
+            const editorialEl = document.getElementById('probEditorial');
+            const editorial = editorialEl ? editorialEl.value.trim() : '';
+            const companies = Array.from(selectedCompanies);
 
             // Extract examples
             const examples = [];
@@ -1680,7 +1827,9 @@
             const params = new URLSearchParams(window.location.search);
             const editId = params.get('id');
 
-            const newId = editId || ('PQ9RJ' + String(problems.length + 1).padStart(3, '0'));
+            // Collision-free id so a newly-created problem never reuses a legacy
+            // demo id that the dashboards purge.
+            const newId = editId || ('CQDSA' + Date.now().toString(36).toUpperCase());
             const num = editId ? ((problems.find(p => p.id === editId) || {}).num || problems.length) : (problems.length + 1);
 
             const newProblem = {
@@ -1697,6 +1846,8 @@
                 timeLimit: timeLimit,
                 desc: desc,
                 constraints: constraints,
+                editorial: editorial,
+                companies: companies,
                 examples: examples,
                 language: currentLang,
                 upperCode: upper,

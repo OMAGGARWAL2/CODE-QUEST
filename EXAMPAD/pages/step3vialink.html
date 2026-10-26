@@ -466,8 +466,9 @@
                 if (!attemptRes.success && attemptRes.existingAttempt) {
                     const status = attemptRes.existingAttempt.status;
                     if (status === 'submitted' || status === 'reviewed' || status === 'completed') {
-                        // Start a fresh re-attempt
-                        attemptRes = db.startAttempt(currentExam.id, currentUser.id, true);
+                        // Second attempt blocked: show the "Test already attempted" screen
+                        window.location.href = './Secondattemptnotallowed.html?examId=' + encodeURIComponent(currentExam.id);
+                        return;
                     }
                 }
 

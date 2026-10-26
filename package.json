@@ -2,10 +2,11 @@
   "name": "codequest",
   "version": "1.0.0",
   "description": "CodeQuest - Advanced DSA & Assessment Engine",
-  "main": "firstpage.html",
+  "main": "main.js",
   "scripts": {
-    "start": "npx -y serve . -l 3000 -s",
-    "dev": "npx -y serve . -l 3000 -s"
+    "start": "electron .",
+    "dev": "electron .",
+    "web": "node server.js"
   },
   "keywords": [
     "codequest",
@@ -14,5 +15,8 @@
     "assessment"
   ],
   "author": "CodeQuest",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^45.0.0"
+  }
 }

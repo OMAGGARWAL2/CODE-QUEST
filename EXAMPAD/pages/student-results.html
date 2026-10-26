@@ -2088,8 +2088,9 @@
             let res = db.startAttempt(examTarget.id, currentUser.id);
 
             if (!res.success && res.existingAttempt) {
-                if (res.existingAttempt.status === 'submitted' || res.existingAttempt.status === 'reviewed') {
-                    res = db.startAttempt(examTarget.id, currentUser.id, true);
+                if (res.existingAttempt.status === 'submitted' || res.existingAttempt.status === 'reviewed' || res.existingAttempt.status === 'completed') {
+                    window.location.href = './Secondattemptnotallowed.html?examId=' + encodeURIComponent(examTarget.id);
+                    return;
                 } else {
                     res.success = true;
                     res.attempt = res.existingAttempt;

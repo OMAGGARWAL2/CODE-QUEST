@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - University Hub</title>
+    <!-- Google Fonts: Hind, Inter, Outfit, Mulish (questionpool.html stack) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Mulish:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+    <style>
+        :root {
+            --primary: #D96C33;
+            --primary-hover: #B4551D;
+            --primary-soft: #fff5f0;
+            --secondary: #667085;
+            --text-main: #101828;
+            --text-secondary: #475467;
+            --bg-body: #FFFFFF;
+            --border: #EAECF0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+        h1, h2, h3, .logo-text { font-family: 'Outfit', sans-serif; }
+
+        .site-header { height: 72px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; position: sticky; top: 0; z-index: 1000; }
+        .header-left { display: flex; align-items: center; gap: 24px; }
+        .logo-container { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; }
+        .logo-square { width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .logo-square img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text { font-size: 1.35rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; text-transform: uppercase; line-height: 1; }
+        .logo-text small { display: block; font-size: 0.7rem; font-weight: 700; color: var(--primary); letter-spacing: 0.8px; margin-top: 3px; font-family: 'Mulish', sans-serif; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--secondary); text-decoration: none; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 1rem; padding: 8px 14px; border-radius: 8px; }
+        .back-link:hover { background: var(--primary-soft); color: var(--primary); }
+
+        .main-container { width: 100%; max-width: 1180px; margin: 0 auto; padding: 40px 32px 90px; flex: 1; }
+        .page-header { margin-bottom: 28px; display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+        .page-header h1 { font-size: 2rem; font-weight: 700; }
+        .page-header p { color: var(--text-secondary); font-size: 1.05rem; margin-top: 4px; }
+
+        /* Access denied ERP banner */
+        .deny-banner { background: #fef2f2; border: 1px solid #fecaca; border-left: 8px solid #DC2626; border-radius: 8px; padding: 26px 30px; margin-bottom: 28px; display: flex; align-items: center; gap: 22px; }
+        .deny-banner .db-ico { width: 60px; height: 60px; border-radius: 50%; background: #DC2626; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0; }
+        .deny-banner h2 { font-family: 'Mulish', sans-serif; color: #B42318; font-size: 1.4rem; font-weight: 800; margin-bottom: 4px; }
+        .deny-banner p { color: #7f1d1d; font-size: 1.05rem; line-height: 1.5; }
+
+        .uni-card { background: #fff; border: 1px solid #eaecf0; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 24px 28px; margin-bottom: 28px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+        .uni-card .uc-ico { width: 56px; height: 56px; border-radius: 12px; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; }
+        .uni-card .uc-ico img { width: 38px; height: 38px; object-fit: contain; }
+        .uni-card .uc-name { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.35rem; color: #101828; }
+        .uni-card .uc-sub { color: var(--text-secondary); font-size: 1rem; margin-top: 2px; }
+        .chip { display: inline-flex; align-items: center; gap: 6px; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 0.8rem; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; }
+        .chip.green { background: #ecfdf3; color: #067647; border: 1px solid #abefc6; }
+        .chip.amber { background: #fffaeb; color: #b45309; border: 1px solid #fedf89; }
+        .chip.grey { background: #f2f4f7; color: #475467; border: 1px solid #eaecf0; }
+
+        .section-h { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.2rem; color: #101828; margin: 30px 0 16px; display: flex; align-items: center; gap: 12px; }
+        .section-h i { color: var(--primary); }
+        .section-h img { width: 26px; height: 26px; object-fit: contain; }
+
+        /* questionpool.html-style table */
+        .pool-card { background: #fff; border: 1px solid #eaecf0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .pool-card.scroll-x { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #fff; padding: 16px 24px; text-align: left; font-size: 1.05rem; text-transform: uppercase; font-family: 'Mulish', sans-serif; font-weight: 500; color: #344054; border-bottom: 1px solid var(--border); white-space: nowrap; }
+        td { padding: 20px 24px; border-bottom: 1px solid var(--border); vertical-align: middle; font-size: 1.25rem; font-family: 'Mulish', sans-serif; font-weight: 400; color: #000; }
+        td .sub { font-size: 0.95rem; color: #667085; font-family: 'Hind', sans-serif; }
+        .q-heading { font-weight: 400; color: #DE5B2B; font-size: 1.25rem; }
+        .row-action { color: var(--secondary); cursor: pointer; padding: 8px; border-radius: 6px; transition: all 0.2s; background: none; border: none; font-size: 1rem; }
+        .row-action:hover { background: var(--primary-soft); color: var(--primary); }
+        .empty-state { text-align: center; padding: 80px 40px; color: #98a2b3; font-family: 'Hind', sans-serif; font-size: 1.15rem; }
+
+        .btn { border: none; border-radius: 8px; padding: 12px 24px; font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 0.98rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+        .btn.primary { background: var(--primary); color: #fff; }
+        .btn.primary:hover { background: var(--primary-hover); }
+        .btn.ghost { background: #fff; color: #475467; border: 1.5px solid #d0d5dd; }
+        .btn.ghost:hover { border-color: var(--primary); color: var(--primary); }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="header-left">
+        <a href="studentindex.html" class="logo-container">
+            <div class="logo-square"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest"></div>
+            <div class="logo-text">CodeQuest<small>University Hub</small></div>
+        </a>
+        <a href="#" class="back-link" id="backLink" onclick="history.back(); return false;"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+</header>
+
+<div class="main-container">
+    <div class="page-header">
+        <div>
+            <h1 id="pageTitle">My University</h1>
+            <p id="pageSub">University-restricted exams and published marks. Globally posted content stays available to you as always.</p>
+        </div>
+        <div id="headActions"></div>
+    </div>
+
+    <div id="denyWrap"></div>
+    <div id="uniWrap"></div>
+    <div id="marksWrap"></div>
+    <div id="examsWrap"></div>
+    <div id="manageWrap"></div>
+</div>
+
+<script src="EXAMPAD/js/db.js"></script>
+<script src="cq-shared.js"></script>
+<script>
+    function esc(s) { return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+    const CAT_LABEL = { practice: 'Practice Test', university: 'University / College Exam', interview: 'Interview Test', selection: 'Selection Test' };
+
+    function render() {
+        const s = CQ.session();
+        const role = String(s.role || '').toLowerCase();
+        if (!role) {
+            document.getElementById('pageTitle').textContent = 'Sign In Required';
+            document.getElementById('denyWrap').innerHTML = `
+                <div class="deny-banner">
+                    <div class="db-ico"><i class="fas fa-user-lock"></i></div>
+                    <div><h2>Not Signed In</h2><p>Please log in first to view your university hub. <a href="firstpage.html" style="color:#B42318;font-weight:700;">Go to login</a></p></div>
+                </div>`;
+            return;
+        }
+
+        const isStaff = role !== 'student';
+        if (isStaff) { renderStaff(s); return; }
+        renderStudent(s);
+    }
+
+    /* ================= STUDENT VIEW ================= */
+    function renderStudent(s) {
+        const uniId = String(s.universityId || '');
+        if (!uniId) {
+            // Registered by a university head? If not -> Access denied banner.
+            document.getElementById('denyWrap').innerHTML = `
+                <div class="deny-banner">
+                    <div class="db-ico"><i class="fas fa-ban"></i></div>
+                    <div>
+                        <h2>Access Denied</h2>
+                        <p>You are not registered in any university by a university head. University exams and marks are available only after your university head registers you. You can still attempt all globally posted tests and courses.</p>
+                    </div>
+                </div>`;
+        } else {
+            const uni = CQ.getUniversities().find(u => String(u.id) === uniId);
+            document.getElementById('uniWrap').innerHTML = `
+                <div class="uni-card">
+                    <div class="uc-ico"><img src="UNIVERSITY-ICON(MAIN).jpg" alt="University"></div>
+                    <div style="flex:1;">
+                        <div class="uc-name">${esc((uni && uni.name) || s.universityName || 'Your University')}</div>
+                        <div class="uc-sub">Registered by university head${uni && uni.head ? ' — ' + esc(uni.head.name) : ''}</div>
+                    </div>
+                    <span class="chip green"><i class="fas fa-circle-check"></i> Verified Student</span>
+                </div>`;
+        }
+
+        // Published university marks for MY university
+        if (uniId) {
+            const store = CQ.publishedStore();
+            const rows = Object.keys(store).map(k => store[k])
+                .filter(p => p && p.category === 'university' && String(p.universityId || '') === uniId)
+                .flatMap(p => (p.results || []).filter(r => CQ.isMyResult(r)).map(r => ({ p, r })))
+                .sort((a, b) => new Date(b.p.publishedAt) - new Date(a.p.publishedAt));
+            document.getElementById('marksWrap').innerHTML = `
+                <div class="section-h"><i class="fas fa-graduation-cap"></i> Published University Marks</div>
+                <div class="pool-card scroll-x">
+                    <table>
+                        <thead><tr><th>Roll No</th><th>University Exam</th><th>Score</th><th>Percentage</th><th>Grade</th><th>Published On</th></tr></thead>
+                        <tbody>
+                            ${rows.length ? rows.map(({ p, r }) => `
+                                <tr>
+                                    <td>${esc(r.rollNo)}</td>
+                                    <td><span class="q-heading">${esc(p.testTitle)}</span><div class="sub">ID: ${esc(p.testId)}</div></td>
+                                    <td>${r.score} / ${r.totalMarks}</td>
+                                    <td>${r.percentage.toFixed(1)}%</td>
+                                    <td><span class="chip" style="background:${r.grade.bg};color:${r.grade.color};border:1px solid currentColor;">${r.grade.letter}</span></td>
+                                    <td>${esc(new Date(p.publishedAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }))}</td>
+                                </tr>`).join('')
+                                : `<tr><td colspan="6"><div class="empty-state">No marks published by your university yet.</div></td></tr>`}
+                        </tbody>
+                    </table>
+                </div>`;
+
+            // University exams available to me (published to my university)
+            const myExams = CQ.getTests().filter(t => String(t.universityId || '') === uniId && t.audience === 'university');
+            document.getElementById('examsWrap').innerHTML = `
+                <div class="section-h"><i class="fas fa-file-pen"></i> My University's Exams</div>
+                <div class="pool-card scroll-x">
+                    <table>
+                        <thead><tr><th>Exam</th><th>Duration</th><th>Status</th><th style="text-align:right;">Action</th></tr></thead>
+                        <tbody>
+                            ${myExams.length ? myExams.map(t => `
+                                <tr>
+                                    <td><span class="q-heading">${esc(t.title)}</span><div class="sub">${CAT_LABEL[t.testCategory] || 'University Exam'} &bull; ID: ${esc(t.id || t.code)}</div></td>
+                                    <td>${esc(t.duration || '—')}</td>
+                                    <td><span class="chip grey">${esc(t.status || 'ACTIVE')}</span></td>
+                                    <td style="text-align:right;"><button class="row-action" title="Open Exam" onclick="location.href='interound-attempt.html?id=${encodeURIComponent(t.id || t.code)}'"><i class="fas fa-arrow-right"></i></button></td>
+                                </tr>`).join('')
+                                : `<tr><td colspan="4"><div class="empty-state">No exams restricted to your university yet.</div></td></tr>`}
+                        </tbody>
+                    </table>
+                </div>`;
+        }
+    }
+
+    /* ================= STAFF (UNIVERSITY HEAD) VIEW ================= */
+    function renderStaff(s) {
+        document.getElementById('pageTitle').textContent = 'University Management';
+        document.getElementById('pageSub').textContent = 'Register universities and issue student credentials. Only university heads and approved staff can do this.';
+        document.getElementById('headActions').innerHTML = `<a class="btn primary" href="university-setup.html"><i class="fas fa-plus"></i> Register New University</a>`;
+
+        const unis = CQ.getUniversities();
+        const tests = CQ.getTests().filter(t => (t.testCategory || '') === 'university');
+        document.getElementById('manageWrap').innerHTML = `
+            <div class="section-h"><img src="UNIVERSITY-ICON(MAIN).jpg" alt="University"> Registered Universities</div>
+            <div class="pool-card scroll-x">
+                <table>
+                    <thead><tr><th>University</th><th>University Head</th><th>Students</th><th>Uni Exams Published</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        ${unis.length ? unis.map(u => {
+                            const examCount = tests.filter(t => String(t.universityId || '') === String(u.id)).length;
+                            return `
+                            <tr>
+                                <td><span class="q-heading">${esc(u.name)}</span><div class="sub">${esc(u.id)} &bull; ${esc(new Date(u.createdAt).toLocaleDateString())}</div></td>
+                                <td>${esc(u.head ? u.head.name : '—')}<div class="sub">${esc(u.head ? u.head.username : '')}</div></td>
+                                <td>${(u.students || []).length}</td>
+                                <td>${examCount}</td>
+                                <td>
+                                    <button class="row-action" title="Student Directory" onclick="showStudents('${esc(u.id)}')"><i class="fas fa-users"></i></button>
+                                    <button class="row-action" title="Exam Statistics" onclick="location.href='statsteachuni.html?university=${esc(u.id)}'"><i class="fas fa-chart-column"></i></button>
+                                </td>
+                            </tr>`;
+                        }).join('')
+                        : `<tr><td colspan="5"><div class="empty-state">No universities registered yet. Click "Register New University".</div></td></tr>`}
+                    </tbody>
+                </table>
+            </div>`;
+    }
+
+    function showStudents(uniId) {
+        const u = CQ.getUniversities().find(x => String(x.id) === String(uniId));
+        if (!u) return;
+        const rows = (u.students || []).map(st => `<tr><td>${esc(st.name)}</td><td>${esc(st.rollNo || '—')}</td><td>${esc(st.username)}</td></tr>`).join('');
+        const w = window.open('', '_blank');
+        w.document.write(`<html><head><title>${esc(u.name)} - Students</title><style>body{font-family:'Hind',sans-serif;padding:30px;}table{border-collapse:collapse;width:100%;}th,td{border:1px solid #eaecf0;padding:10px 14px;text-align:left;}th{background:#fff5f0;color:#B4551D;}</style></head><body><h2>${esc(u.name)} — Student Directory</h2><table><tr><th>NAME</th><th>ROLL NO</th><th>USERNAME</th></tr>${rows || '<tr><td colspan="3">No students.</td></tr>'}</table></body></html>`);
+        w.document.close();
+    }
+
+    window.addEventListener('DOMContentLoaded', render);
+</script>
+</body>
+
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - University Registration</title>
+    <!-- Google Fonts: Hind, Inter, Outfit, Mulish (questionpool.html stack) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Mulish:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+    <style>
+        :root {
+            --primary: #D96C33;
+            --primary-hover: #B4551D;
+            --primary-soft: #fff5f0;
+            --secondary: #667085;
+            --text-main: #101828;
+            --text-secondary: #475467;
+            --bg-body: #FFFFFF;
+            --border: #EAECF0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+        h1, h2, h3, .logo-text { font-family: 'Outfit', sans-serif; }
+
+        .site-header { height: 72px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; position: sticky; top: 0; z-index: 1000; }
+        .header-left { display: flex; align-items: center; gap: 24px; }
+        .logo-container { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; }
+        .logo-square { width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .logo-square img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text { font-size: 1.35rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; text-transform: uppercase; line-height: 1; }
+        .logo-text small { display: block; font-size: 0.7rem; font-weight: 700; color: var(--primary); letter-spacing: 0.8px; margin-top: 3px; font-family: 'Mulish', sans-serif; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--secondary); text-decoration: none; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 1rem; padding: 8px 14px; border-radius: 8px; }
+        .back-link:hover { background: var(--primary-soft); color: var(--primary); }
+
+        .main-container { width: 100%; max-width: 1080px; margin: 0 auto; padding: 40px 32px 90px; flex: 1; }
+        .page-header { margin-bottom: 32px; }
+        .page-header h1 { font-size: 2rem; font-weight: 700; }
+        .page-header p { color: var(--text-secondary); font-size: 1.05rem; margin-top: 4px; }
+
+        .deny-banner { display: none; background: #fef2f2; border: 1px solid #fecaca; border-left: 6px solid #DC2626; border-radius: 8px; padding: 22px 26px; margin-bottom: 26px; }
+        .deny-banner h2 { font-family: 'Mulish', sans-serif; color: #B42318; font-size: 1.25rem; font-weight: 800; margin-bottom: 6px; }
+        .deny-banner p { color: #7f1d1d; font-size: 1rem; }
+
+        .section-h { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.2rem; color: #101828; margin: 30px 0 16px; padding-top: 20px; border-top: 1px solid #eaecf0; display: flex; align-items: center; gap: 12px; }
+        .section-h i { color: var(--primary); }
+        .section-h .hint { font-weight: 400; color: #98a2b3; font-size: 0.95rem; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-row3 { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 20px; }
+        label { display: block; font-family: 'Mulish', sans-serif; font-size: 0.98rem; font-weight: 700; color: #344054; margin-bottom: 8px; }
+        input[type=text], input[type=password] { width: 100%; padding: 12px 14px; border: 1.5px solid #d0d5dd; border-radius: 8px; font-size: 1.05rem; font-family: 'Hind', sans-serif; color: #101828; outline: none; background: #fff; }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-soft); }
+
+        /* questionpool.html-style table for the student tray */
+        .pool-card { background: #fff; border: 1px solid #eaecf0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #fff; padding: 16px 24px; text-align: left; font-size: 1.05rem; text-transform: uppercase; font-family: 'Mulish', sans-serif; font-weight: 500; color: #344054; border-bottom: 1px solid var(--border); }
+        td { padding: 14px 24px; border-bottom: 1px solid var(--border); vertical-align: middle; font-size: 1.05rem; font-family: 'Mulish', sans-serif; font-weight: 400; color: #000; }
+        td input { width: 100%; padding: 9px 11px; border: 1px solid #d0d5dd; border-radius: 6px; font-size: 1rem; font-family: 'Hind', sans-serif; outline: none; }
+        td input:focus { border-color: var(--primary); }
+        .row-action { color: var(--secondary); cursor: pointer; padding: 8px; border-radius: 6px; transition: all 0.2s; background: none; border: none; font-size: 1rem; }
+        .row-action:hover { background: var(--primary-soft); color: var(--primary); }
+        .empty-state { text-align: center; padding: 50px 40px; color: #98a2b3; font-family: 'Hind', sans-serif; font-size: 1.1rem; }
+
+        .btn { border: none; border-radius: 8px; padding: 13px 26px; font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; }
+        .btn.ghost { background: #fff; color: #475467; border: 1.5px solid #d0d5dd; }
+        .btn.ghost:hover { border-color: var(--primary); color: var(--primary); }
+        .btn.primary { background: var(--primary); color: #fff; }
+        .btn.primary:hover { background: var(--primary-hover); }
+        .btn.sm { padding: 9px 16px; font-size: 0.9rem; }
+        .actions { display: flex; justify-content: flex-end; gap: 16px; margin-top: 36px; }
+
+        .toast-box { position: fixed; bottom: 24px; right: 24px; background: #101828; color: #fff; padding: 14px 24px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; z-index: 100000; font-weight: 600; font-family: 'Mulish', sans-serif; }
+        .redirect-note { display: none; margin-top: 18px; text-align: center; font-family: 'Mulish', sans-serif; font-weight: 700; color: #067647; }
+        @media (max-width: 760px) { .form-row, .form-row3 { grid-template-columns: 1fr; } }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="header-left">
+        <a href="teacherindex.html" class="logo-container">
+            <div class="logo-square"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest"></div>
+            <div class="logo-text">CodeQuest<small>University Portal</small></div>
+        </a>
+        <a href="university-hub.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to University Hub</a>
+    </div>
+</header>
+
+<div class="main-container">
+    <div class="page-header">
+        <h1>University Registration &amp; Student Management</h1>
+        <p>Only university heads can register a university and issue login credentials to their students. On save, everything is registered and you are sent to the login page.</p>
+    </div>
+
+    <div class="deny-banner" id="denyBanner">
+        <h2><i class="fas fa-ban"></i> Access Denied</h2>
+        <p>Only university heads and approved staff accounts can register a university. Please log in with your staff account, or return to the <a href="firstpage.html" style="color:#B42318;font-weight:700;">login page</a>.</p>
+    </div>
+
+    <div id="setupWrap">
+        <div class="section-h"><i class="fas fa-building-columns"></i> University &amp; University Head</div>
+        <div class="form-row">
+            <div class="form-group"><label>University / College Name *</label><input type="text" id="uniName" placeholder="e.g. Chitkara University"></div>
+            <div class="form-group"><label>Head — Full Name *</label><input type="text" id="headName" placeholder="University head name"></div>
+        </div>
+        <div class="form-row3">
+            <div class="form-group"><label>Head — Username *</label><input type="text" id="headUser" placeholder="Used to log in"></div>
+            <div class="form-group"><label>Head — Password *</label><input type="password" id="headPass" placeholder="Min 6 characters"></div>
+            <div class="form-group"><label>Head — Confirm Password *</label><input type="password" id="headPass2" placeholder="Repeat password"></div>
+        </div>
+
+        <div class="section-h"><i class="fas fa-users"></i> Students Of This University <span class="hint">(name, roll number, username &amp; password — these become their login credentials)</span></div>
+        <div class="pool-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:30%;">STUDENT NAME</th>
+                        <th style="width:20%;">ROLL NUMBER</th>
+                        <th style="width:22%;">USERNAME</th>
+                        <th style="width:22%;">PASSWORD</th>
+                        <th style="width:6%; text-align:center;">ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="studentRows"></tbody>
+            </table>
+            <div class="empty-state" id="stuEmpty" style="display:none;">No student rows yet. Click "Add Student".</div>
+        </div>
+        <button type="button" class="btn ghost sm" style="margin-top:14px;" onclick="addStudentRow()"><i class="fas fa-plus"></i> Add Student</button>
+
+        <div class="actions">
+            <button type="button" class="btn ghost" onclick="location.href='university-hub.html'">Cancel</button>
+            <button type="submit" class="btn primary" onclick="saveUniversity()"><i class="fas fa-floppy-disk"></i> Save University</button>
+        </div>
+        <div class="redirect-note" id="redirectNote"><i class="fas fa-circle-check"></i> Saved! Taking you to the login page so students can sign in with these credentials...</div>
+    </div>
+</div>
+
+<div class="toast-box" id="cqToast">Done</div>
+
+<script src="cq-shared.js"></script>
+<script>
+    function toast(msg) { const t = document.getElementById('cqToast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(toast._h); toast._h = setTimeout(() => t.style.display = 'none', 3000); }
+    function esc(s) { return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+    function isStaff() {
+        const s = CQ.session();
+        const r = String(s.role || '').toLowerCase();
+        return !!r && r !== 'student';
+    }
+
+    function addStudentRow(stu) {
+        stu = stu || { name: '', rollNo: '', username: '', password: '' };
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><input class="st-name" placeholder="Full name" value="${esc(stu.name)}"></td>
+            <td><input class="st-roll" placeholder="e.g. 21BCE1234" value="${esc(stu.rollNo)}"></td>
+            <td><input class="st-user" placeholder="Username" value="${esc(stu.username)}"></td>
+            <td><input class="st-pass" type="password" placeholder="Password" value="${esc(stu.password)}"></td>
+            <td style="text-align:center;"><button type="button" class="row-action" title="Remove" onclick="this.closest('tr').remove(); refreshEmpty();"><i class="fas fa-trash"></i></button></td>`;
+        document.getElementById('studentRows').appendChild(tr);
+        refreshEmpty();
+    }
+    function refreshEmpty() {
+        document.getElementById('stuEmpty').style.display = document.querySelectorAll('#studentRows tr').length ? 'none' : 'block';
+    }
+
+    function collectStudents() {
+        return Array.from(document.querySelectorAll('#studentRows tr')).map(tr => ({
+            name: tr.querySelector('.st-name').value.trim(),
+            rollNo: tr.querySelector('.st-roll').value.trim(),
+            username: tr.querySelector('.st-user').value.trim(),
+            password: tr.querySelector('.st-pass').value
+        })).filter(s => s.name && s.username && s.password);
+    }
+
+    // Register a head/student identity into TESTPAD_users so login.html (firstpage login) accepts it
+    function upsertUser(obj) {
+        const users = CQ.readJSON('TESTPAD_users', []);
+        let u = users.find(x => (x.email && x.email.toLowerCase() === String(obj.email).toLowerCase()) ||
+                                 (x.rollNo && String(x.rollNo).toLowerCase() === String(obj.rollNo || '').toLowerCase() && obj.rollNo));
+        if (u) {
+            u.password = btoa(obj.password); u.role = obj.role; u.name = obj.name;
+            u.universityId = obj.universityId; u.universityName = obj.universityName;
+            if (obj.rollNo) u.rollNo = obj.rollNo;
+        } else {
+            u = {
+                id: 'cq_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+                email: obj.email, rollNo: obj.rollNo || (obj.email ? String(obj.email).split('@')[0] : ''),
+                name: obj.name, password: btoa(obj.password), role: obj.role,
+                universityId: obj.universityId, universityName: obj.universityName,
+                createdAt: new Date().toISOString()
+            };
+            users.push(u);
+        }
+        localStorage.setItem('TESTPAD_users', JSON.stringify(users));
+    }
+
+    function saveUniversity() {
+        if (!isStaff()) { toast('Access denied — staff login required.'); return; }
+        const uniName = document.getElementById('uniName').value.trim();
+        const headName = document.getElementById('headName').value.trim();
+        const headUser = document.getElementById('headUser').value.trim();
+        const hp1 = document.getElementById('headPass').value, hp2 = document.getElementById('headPass2').value;
+        if (!uniName || !headName || !headUser) { toast('University name and head credentials are required.'); return; }
+        if (hp1.length < 6) { toast('Head password must be at least 6 characters.'); return; }
+        if (hp1 !== hp2) { toast('Head passwords do not match.'); return; }
+
+        const students = collectStudents();
+        const badPass = students.find(s => s.password.length < 6);
+        if (badPass) { toast(`Password for ${badPass.name} must be at least 6 characters.`); return; }
+        const dupU = {};
+        for (const s of students) { const k = s.username.toLowerCase(); if (dupU[k]) { toast(`Duplicate username: ${s.username}`); return; } dupU[k] = 1; }
+
+        const uniId = 'UNI' + Date.now();
+        const unis = CQ.getUniversities();
+        const uni = {
+            id: uniId, name: uniName,
+            head: { name: headName, username: headUser },
+            students: students.map(s => ({ name: s.name, rollNo: s.rollNo, username: s.username })),
+            createdBy: (CQ.session().email || CQ.session().name || ''),
+            createdAt: new Date().toISOString()
+        };
+        unis.push(uni);
+        localStorage.setItem('CodeQuest_universities', JSON.stringify(unis));
+
+        // Register the head + every student with their credentials
+        upsertUser({ email: headUser, rollNo: '', name: headName, password: hp1, role: 'university_head', universityId: uniId, universityName: uniName });
+        students.forEach(s => upsertUser({ email: s.username, rollNo: s.rollNo, name: s.name, password: s.password, role: 'student', universityId: uniId, universityName: uniName }));
+
+        toast(`University "${uniName}" registered with ${students.length} student(s).`);
+        document.getElementById('redirectNote').style.display = 'block';
+        // As instructed: on save, go straight to the login page
+        setTimeout(() => { window.location.href = 'firstpage.html'; }, 2200);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        if (!isStaff()) {
+            document.getElementById('denyBanner').style.display = 'block';
+            document.getElementById('setupWrap').style.display = 'none';
+            return;
+        }
+        // Pre-fill head from the current staff session where possible
+        const s = CQ.session();
+        if (s.name) document.getElementById('headName').value = s.name;
+        if (s.email) document.getElementById('headUser').value = s.email;
+        addStudentRow(); addStudentRow();
+    });
+</script>
+</body>
+
+</html>

@@ -49,6 +49,20 @@
         input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-soft); }
         textarea { min-height: 180px; resize: vertical; line-height: 1.6; }
 
+        /* Custom image dropdown for Category */
+        .cq-dd { position: relative; }
+        .cq-dd-toggle { width: 100%; padding: 15px 16px; border: 1.5px solid #d0d5dd; border-radius: 10px; background: #fff; font-size: 1.15rem; font-family: 'Hind', sans-serif; color: #101828; display: flex; align-items: center; justify-content: space-between; cursor: pointer; outline: none; }
+        .cq-dd-toggle:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-soft); }
+        .cq-dd-cur { display: flex; align-items: center; gap: 12px; }
+        .cq-dd-ico { width: 26px; height: 26px; object-fit: contain; border-radius: 6px; flex: none; }
+        .cq-dd-caret { color: #667085; font-size: 0.95rem; transition: transform 0.2s; }
+        .cq-dd.open .cq-dd-caret { transform: rotate(180deg); }
+        .cq-dd-menu { position: absolute; top: calc(100% + 6px); left: 0; right: 0; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 12px 30px rgba(0,0,0,0.12); padding: 6px; display: none; z-index: 60; }
+        .cq-dd.open .cq-dd-menu { display: block; }
+        .cq-dd-opt { display: flex; align-items: center; gap: 12px; padding: 11px 12px; border-radius: 8px; cursor: pointer; font-family: 'Hind', sans-serif; font-size: 1.1rem; color: #101828; }
+        .cq-dd-opt:hover { background: var(--primary-soft); }
+        .cq-dd-opt.sel { background: #f2f4f7; font-weight: 700; }
+
         .att-preview { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
         .att-pill { display: inline-flex; align-items: center; gap: 10px; background: #f2f4f7; border-radius: 10px; padding: 9px 14px; font-size: 1rem; font-family: 'Mulish', sans-serif; color: #344054; }
         .att-pill button { border: none; background: transparent; color: #d32f2f; cursor: pointer; font-size: 1rem; }
@@ -72,7 +86,6 @@
             <div class="logo-square"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest"></div>
             <div class="logo-text">CodeQuest<small>Recruiter Portal</small></div>
         </a>
-        <a href="recruiterindex.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
     </div>
     <div class="header-right"><div class="avatar"><img src="EXAMPAD/LINUX_TEST_CHITKARA_files/user-icon.3d6e2547.svg" alt="Profile"></div></div>
 </header>
@@ -90,12 +103,14 @@
             </div>
             <div class="form-group">
                 <label for="pCategory">Category</label>
-                <select id="pCategory">
-                    <option value="Circular">📄 Circular</option>
-                    <option value="Job">💼 Job</option>
-                    <option value="Notice">📢 Notice</option>
-                    <option value="Result">📊 Result</option>
-                </select>
+                <div class="cq-dd" id="pCategoryDD">
+                    <button type="button" class="cq-dd-toggle" onclick="toggleCatDD(event)">
+                        <span class="cq-dd-cur"></span>
+                        <i class="fas fa-chevron-down cq-dd-caret"></i>
+                    </button>
+                    <div class="cq-dd-menu" id="pCategoryMenu"></div>
+                </div>
+                <input type="hidden" id="pCategory" value="Circular">
             </div>
         </div>
 
@@ -145,6 +160,33 @@
     function esc(s) { return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
     function session() { return readJSON('CodeQuest_active_session', null) || readJSON('TESTPAD_current_user', {}); }
 
+    // ===== CATEGORY IMAGE DROPDOWN (native <select> can't show <img>) =====
+    const CATEGORIES = [
+        { value: 'Circular', label: 'Circular', icon: 'OFFICIALCIRCULARS.png' },
+        { value: 'Job', label: 'Job', icon: 'JOBSICONMAIN.png' },
+        { value: 'Notice', label: 'Notice', icon: 'NOTIFICATIONBELLicon.png' },
+        { value: 'Result', label: 'Result', icon: 'EXAMPAD/TESTPAD_WEBSITE__files/statistics.svg' }
+    ];
+    function catIcon(icon) { return `<img src="${icon}" class="cq-dd-ico" alt="">`; }
+    function renderCatDD() {
+        const menu = document.getElementById('pCategoryMenu');
+        if (!menu) return;
+        menu.innerHTML = CATEGORIES.map(c =>
+            `<div class="cq-dd-opt" data-value="${c.value}" onclick="selectCat('${c.value}')">${catIcon(c.icon)}<span>${c.label}</span></div>`
+        ).join('');
+        setCat(document.getElementById('pCategory').value || 'Circular');
+    }
+    function setCat(val) {
+        const c = CATEGORIES.find(x => x.value === val) || CATEGORIES[0];
+        document.getElementById('pCategory').value = c.value;
+        const cur = document.querySelector('#pCategoryToggle .cq-dd-cur') || document.querySelector('#pCategoryDD .cq-dd-cur');
+        if (cur) cur.innerHTML = `${catIcon(c.icon)}<span>${c.label}</span>`;
+        document.querySelectorAll('#pCategoryMenu .cq-dd-opt').forEach(o =>
+            o.classList.toggle('sel', o.getAttribute('data-value') === c.value));
+    }
+    function toggleCatDD(e) { if (e) e.stopPropagation(); document.getElementById('pCategoryDD').classList.toggle('open'); }
+    function selectCat(val) { setCat(val); document.getElementById('pCategoryDD').classList.remove('open'); }
+
     function handleFiles(files) {
         Array.from(files).forEach(f => {
             if (f.size > MAX_FILE) { toast(`"${f.name}" too large (max 4 MB).`); return; }
@@ -187,15 +229,17 @@
         document.getElementById('pCompany').value = p.company || '';
         document.getElementById('pTitle').value = p.title || '';
         document.getElementById('pDesc').value = p.description || '';
-        document.getElementById('pCategory').value = p.category || 'Circular';
+        setCat(p.category || 'Circular');
         document.getElementById('pAudience').value = p.audience || 'all';
         pendingAtt = (p.attachments || []).slice(); renderAttPreview();
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+        renderCatDD();
         const id = new URLSearchParams(location.search).get('id');
         if (id) loadForEdit(id);
     });
+    document.addEventListener('click', () => { const dd = document.getElementById('pCategoryDD'); if (dd) dd.classList.remove('open'); });
     function toast(msg) { const t = document.getElementById('recToast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(toast._h); toast._h = setTimeout(() => t.style.display = 'none', 2500); }
 </script>
 </body>

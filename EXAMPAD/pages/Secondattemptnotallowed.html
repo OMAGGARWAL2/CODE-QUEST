@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Already Attempted</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            /* Same stage backdrop as the exam attempt screens */
+            background-image: url('./BGNEW01.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #f6f7fb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Mirrors the "The test has ended" overlay inside exam-attempt.html */
+        .ended-overlay {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 24px;
+        }
+
+        .ended-overlay img {
+            width: 320px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .ended-overlay h2 {
+            font-size: 2.2rem;
+            color: #de6834;
+            font-weight: 500;
+            margin-bottom: 10px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .ended-overlay p {
+            font-size: 1.1rem;
+            color: #333;
+            font-weight: 400;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="ended-overlay">
+        <img src="./isolated boy.png" alt="Test Already Attempted">
+        <h2 id="blockedTitle">Test already attempted</h2>
+        <p id="blockedText">You have already submitted this test. A second attempt is not allowed.</p>
+    </div>
+
+    <script>
+        // Same presentation as the "The test has ended" overlay in exam-attempt.html,
+        // only the copy (and optionally the accent colour) changes.
+        (function () {
+            const params = new URLSearchParams(window.location.search);
+            const examId = params.get('examId');
+            const title = document.getElementById('blockedTitle');
+            const text = document.getElementById('blockedText');
+
+            if (params.get('theme') === 'blue') {
+                title.style.color = '#2C5AA8';
+            }
+
+            if (examId) {
+                try {
+                    const exams = JSON.parse(localStorage.getItem('TESTPAD_exams')) || [];
+                    const exam = exams.find(e => e.id === examId || e.testId === examId);
+                    if (exam && exam.title) {
+                        text.textContent = `You have already submitted "${exam.title}". A second attempt is not allowed.`;
+                    }
+                } catch (e) {
+                    console.warn('Could not resolve exam title:', e);
+                }
+            }
+        })();
+    </script>
+</body>
+</html>

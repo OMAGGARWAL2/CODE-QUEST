@@ -123,40 +123,100 @@
 
         .hidden { display: none; }
 
-        /* Approval confirmation overlay */
-        #confirmModal {
+        /* ===== FULL-SCREEN SIGNUP SUCCESS (animated green check) ===== */
+        #signupSuccess {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.55);
+            background: rgba(255, 255, 255, 0.97);
             display: none;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-            z-index: 100;
-        }
-
-        #confirmModal .card {
-            background: #fff;
-            border-radius: 10px;
-            padding: 28px 24px;
-            max-width: 340px;
-            width: 100%;
+            padding: 24px;
+            z-index: 9999;
             text-align: center;
         }
-
-        #confirmModal .tick {
-            width: 54px;
-            height: 54px;
-            border-radius: 50%;
-            background: #ecfdf3;
-            color: #027a48;
-            font-size: 1.8rem;
-            line-height: 54px;
-            margin: 0 auto 14px;
+        #signupSuccess .ss-badge {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
         }
-
-        #confirmModal h2 { font-size: 1.1rem; margin-bottom: 8px; }
-        #confirmModal p { font-size: 0.85rem; color: #333; margin-bottom: 18px; }
+        /* pulsing rings behind the check */
+        #signupSuccess .ss-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 3px solid rgba(18, 183, 106, 0.35);
+            opacity: 0;
+            animation: ss-pulse 1.6s ease-out 0.5s infinite;
+        }
+        #signupSuccess .ss-ring.r2 { animation-delay: 0.9s; }
+        @keyframes ss-pulse {
+            0%   { transform: scale(0.6); opacity: 0.7; }
+            100% { transform: scale(1.25); opacity: 0; }
+        }
+        #signupSuccess .checkmark { width: 128px; height: 128px; }
+        #signupSuccess .checkmark-circle {
+            stroke: #12B76A;
+            stroke-width: 2;
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            animation: ss-stroke 0.7s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+        #signupSuccess .checkmark-check {
+            stroke: #12B76A;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 36;
+            stroke-dashoffset: 36;
+            animation: ss-stroke 0.45s cubic-bezier(0.65, 0, 0.45, 1) 0.7s forwards;
+        }
+        @keyframes ss-stroke { to { stroke-dashoffset: 0; } }
+        #signupSuccess h2 {
+            font-family: 'Mulish', sans-serif;
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: #067647;
+            margin: 6px 0 6px;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: ss-rise 0.5s ease 0.9s forwards;
+        }
+        #signupSuccess p {
+            font-family: 'Mulish', sans-serif;
+            font-size: 1.02rem;
+            color: #475467;
+            max-width: 460px;
+            margin-bottom: 22px;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: ss-rise 0.5s ease 1.05s forwards;
+        }
+        #signupSuccess .ss-redirect {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Mulish', sans-serif;
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: #98a2b3;
+            opacity: 0;
+            animation: ss-rise 0.5s ease 1.2s forwards;
+        }
+        #signupSuccess .ss-spinner {
+            width: 16px; height: 16px;
+            border: 2.5px solid #e4e7ec;
+            border-top-color: #12B76A;
+            border-radius: 50%;
+            animation: ss-spin 0.7s linear infinite;
+        }
+        @keyframes ss-spin { to { transform: rotate(360deg); } }
+        @keyframes ss-rise { to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -198,6 +258,8 @@
                 <select id="suRole" required>
                     <option value="Teacher / Faculty">Teacher / Faculty</option>
                     <option value="Company Recruiter / HR">Company Recruiter / HR</option>
+                    <option value="University Head">University Head</option>
+                    <option value="Superadmin">Superadmin</option>
                     <option value="Placement Coordinator">Placement Coordinator</option>
                     <option value="College / School Official">College / School Official</option>
                     <option value="Other Official">Other Official</option>
@@ -259,16 +321,22 @@
         </div>
     </div>
 
-    <!-- Approval confirmation -->
-    <div id="confirmModal">
-        <div class="card">
-            <div class="tick">&#10003;</div>
-            <h2>Application Submitted!</h2>
-            <p>Your application has been processed. Wait for approval. Once approved by the administrator, you will be able to log in with your credentials anytime.</p>
-            <button class="primary" onclick="closeModalAndLogin()">OK</button>
+    <!-- Signup success: big animated green check, then redirect to firstpage.html -->
+    <div id="signupSuccess">
+        <div class="ss-badge">
+            <span class="ss-ring"></span>
+            <span class="ss-ring r2"></span>
+            <svg class="checkmark" viewBox="0 0 52 52">
+                <circle class="checkmark-circle" cx="26" cy="26" r="24" fill="none" />
+                <path class="checkmark-check" fill="none" d="M15 27 l7 7 l16 -16" />
+            </svg>
         </div>
+        <h2 id="ssTitle">Signup Successful!</h2>
+        <p id="ssMsg">Your account has been created. Taking you to the login page&hellip;</p>
+        <div class="ss-redirect"><span class="ss-spinner"></span> Redirecting to CodeQuest login&hellip;</div>
     </div>
 
+    <script src="cq-shared.js"></script>
     <script>
         const APPS_KEY = 'CodeQuest_official_applications'; // read by ONLALP.html
         const USERS_KEY = 'TESTPAD_users';
@@ -327,6 +395,10 @@
                     showErr('loginErr', 'Wrong password for this account.');
                     return false;
                 }
+                if (app.status === 'Revoked' || app.revoked) {
+                    showErr('loginErr', 'ACCESS DENIED — Your account has been revoked by the administrator due to unusual activity.');
+                    return false;
+                }
                 if (app.status !== 'Approved') {
                     showErr('loginErr', 'Your account is not approved yet. Please wait for administrator approval.');
                     return false;
@@ -350,9 +422,13 @@
                 (x.rollNo && x.rollNo.toLowerCase() === id.toLowerCase()) ||
                 (x.companyId && x.companyId.toLowerCase() === id.toLowerCase())
             );
-            if (u && (u.role === 'teacher' || u.role === 'company' || u.role === 'official' || u.role === 'recruiter')) {
+            if (u && (u.role === 'teacher' || u.role === 'company' || u.role === 'official' || u.role === 'recruiter' || u.role === 'university_head')) {
                 let ok = false;
                 try { ok = atob(u.password) === pass; } catch (ex) { ok = u.password === pass; }
+                if (u.revoked) {
+                    showErr('loginErr', 'ACCESS DENIED — Your account has been revoked by the administrator due to unusual activity.');
+                    return false;
+                }
                 if (ok) {
                     localStorage.setItem('CodeQuest_active_session', JSON.stringify({
                         name: u.name, email: u.email || id, role: u.role
@@ -398,7 +474,7 @@
             const idImg = await readFile(document.getElementById('suIdImg'));
             const docImg = await readFile(document.getElementById('suDocImg'));
 
-            apps.push({
+            const app = {
                 id: 'APP_' + Date.now(),
                 fullName: name,
                 role: role,
@@ -413,18 +489,33 @@
                 password: btoa(pass),
                 submittedAt: new Date().toLocaleString('en-US'),
                 status: 'Pending'
-            });
-            saveApps(apps);
+            };
+            // NO APPROVAL NEEDED: recruiter / university head / superadmin signups
+            // are approved instantly — account works right away, no ALPHAWINNERS review
+            const instant = CQ.instantApproveApp(app);
+            saveApps(apps.concat([app]));
 
-            document.getElementById('confirmModal').style.display = 'flex';
+            // Big green success animation, then redirect to the CodeQuest login page
+            showSignupSuccess(instant);
             return false;
         }
 
-        function closeModalAndLogin() {
-            document.getElementById('confirmModal').style.display = 'none';
-            document.getElementById('signupView').reset?.();
-            showView('login');
-            showErr('loginErr', 'Application received. You can log in once it is approved.');
+        // Show the full-screen animated check and auto-redirect to firstpage.html
+        function showSignupSuccess(instant) {
+            const overlay = document.getElementById('signupSuccess');
+            const title = document.getElementById('ssTitle');
+            const msg = document.getElementById('ssMsg');
+            if (title) title.textContent = instant ? 'Account Activated!' : 'Signup Successful!';
+            if (msg) msg.textContent = instant
+                ? 'No approval needed for your role — your account is live. Taking you to the login page…'
+                : 'Your application has been received. Taking you to the login page…';
+
+            // Restart the CSS animations cleanly every time
+            const clone = overlay.cloneNode(true);
+            overlay.parentNode.replaceChild(clone, overlay);
+            clone.style.display = 'flex';
+
+            setTimeout(() => { window.location.href = 'firstpage.html'; }, 2400);
         }
     </script>
 </body>

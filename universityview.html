@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - University Talent &amp; Resumes</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Hind:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="CODEQUEST BOX LOGO.svg">
+    <style>
+        :root {
+            --primary: #D92D20;
+            --primary-hover: #B42318;
+            --primary-soft: #FEF3F2;
+            --secondary: #667085;
+            --text-main: #101828;
+            --text-secondary: #475467;
+            --text-tertiary: #667085;
+            --bg-body: #F9FAFB;
+            --border: #EAECF0;
+            --green: #027A48;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-body); color: var(--text-main); min-height: 100vh; }
+
+        .site-header { height: 72px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; position: sticky; top: 0; z-index: 1000; }
+        .header-left { display: flex; align-items: center; gap: 24px; }
+        .logo-container { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; }
+        .logo-square { width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .logo-square img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text { font-size: 1.35rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; text-transform: uppercase; line-height: 1; font-family: 'Mulish', sans-serif; }
+        .logo-text small { display: block; font-size: 0.7rem; font-weight: 700; color: var(--primary); letter-spacing: 0.8px; margin-top: 3px; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--text-tertiary); text-decoration: none; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 1rem; padding: 8px 14px; border-radius: 8px; }
+        .back-link:hover { background: var(--primary-soft); color: var(--primary); }
+        .header-right { display: flex; align-items: center; gap: 14px; }
+        .who { text-align: right; }
+        .who .n { font-family: 'Mulish', sans-serif; font-size: 1rem; font-weight: 700; color: #444; text-transform: uppercase; }
+        .who .r { font-family: 'Mulish', sans-serif; font-size: 0.72rem; font-weight: 800; color: var(--primary); text-transform: uppercase; }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; background: var(--primary); display: flex; align-items: center; justify-content: center; }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .main-container { max-width: 1280px; margin: 0 auto; padding: 36px 32px 90px; }
+        .page-header { margin-bottom: 26px; display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+        .page-header h1 { font-family: 'Mulish', sans-serif; font-size: 2rem; font-weight: 800; }
+        .page-header p { color: var(--text-secondary); font-size: 1.05rem; margin-top: 4px; max-width: 760px; }
+        .section-h { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.2rem; color: #101828; margin: 30px 0 16px; display: flex; align-items: center; gap: 12px; }
+        .section-h img { width: 26px; height: 26px; object-fit: contain; border-radius: 6px; }
+
+        .btn { border: none; border-radius: 10px; padding: 13px 24px; font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; transition: all 0.2s; }
+        .btn.primary { background: var(--primary); color: #fff; }
+        .btn.primary:hover { background: var(--primary-hover); }
+        .btn.ghost { background: #fff; color: #475467; border: 1.5px solid #d0d5dd; }
+        .btn.ghost:hover { border-color: var(--primary); color: var(--primary); }
+        .btn.green { background: #ECFDF3; color: #067647; border: 1.5px solid #abefc6; }
+        .btn.red { background: #FEF3F2; color: #B42318; border: 1.5px solid #fecdca; }
+        .btn.sm { padding: 8px 14px; font-size: 0.88rem; border-radius: 8px; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .deny-banner { background: #fef2f2; border: 1px solid #fecaca; border-left: 8px solid #DC2626; border-radius: 8px; padding: 24px 28px; margin-bottom: 24px; display: flex; align-items: center; gap: 20px; }
+        .deny-banner .db-ico { width: 56px; height: 56px; border-radius: 50%; background: #DC2626; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
+        .deny-banner h2 { font-family: 'Mulish', sans-serif; color: #B42318; font-size: 1.3rem; font-weight: 800; margin-bottom: 4px; }
+        .deny-banner p { color: #7f1d1d; font-size: 1rem; line-height: 1.5; }
+
+        /* ===== UNIVERSITY CHOOSER ===== */
+        .uni-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 22px; }
+        .ucard { background: #fff; border: 1px solid #f0f0f0; border-radius: 12px; padding: 24px 26px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 18px; cursor: pointer; transition: all 0.25s ease; position: relative; overflow: hidden; }
+        .ucard:hover { box-shadow: 0 12px 30px rgba(0,0,0,0.08); border-color: var(--primary); transform: translateY(-3px); }
+        .ucard .uc-ico { width: 56px; height: 56px; border-radius: 12px; background: var(--primary-soft); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
+        .ucard .uc-ico img { width: 100%; height: 100%; object-fit: cover; }
+        .ucard .uc-name { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.2rem; color: #101828; line-height: 1.3; }
+        .ucard .uc-sub { color: var(--text-tertiary); font-size: 0.92rem; margin-top: 4px; }
+        .ucard .uc-go { position: absolute; right: 18px; bottom: 16px; color: var(--primary); font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 0.82rem; }
+
+        .chip { display: inline-flex; align-items: center; gap: 6px; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 0.78rem; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; }
+        .chip.green { background: #ecfdf3; color: #067647; border: 1px solid #abefc6; }
+        .chip.amber { background: #fffaeb; color: #b45309; border: 1px solid #fedf89; }
+        .chip.grey { background: #f2f4f7; color: #475467; border: 1px solid #eaecf0; }
+        .chip.red { background: #fef3f2; color: #b42318; border: 1px solid #fecdca; }
+
+        /* ===== TALENT SEARCH ===== */
+        .uni-head { background: #fff; border: 1px solid #f0f0f0; border-radius: 12px; padding: 20px 24px; margin: 18px 0 20px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+        .uni-head .uh-ico { width: 46px; height: 46px; border-radius: 10px; overflow: hidden; background: var(--primary-soft); flex-shrink: 0; }
+        .uni-head .uh-ico img { width: 100%; height: 100%; object-fit: cover; }
+        .uni-head .uh-name { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1.3rem; }
+        .uni-head .uh-sub { color: var(--text-tertiary); font-size: 0.92rem; margin-top: 2px; }
+
+        .filter-bar { background: #fff; border: 1px solid #f0f0f0; border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .fb-search { position: relative; flex: 1; min-width: 260px; }
+        .fb-search i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #98a2b3; }
+        .fb-search input { width: 100%; padding: 12px 14px 12px 40px; border: 1.5px solid #d0d5dd; border-radius: 10px; font-size: 1rem; font-family: 'Hind', sans-serif; outline: none; }
+        .fb-search input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-soft); }
+        .switch { display: inline-flex; align-items: center; gap: 8px; font-family: 'Mulish', sans-serif; font-size: 0.92rem; font-weight: 700; color: #475467; cursor: pointer; }
+        .fb-count { font-family: 'Mulish', sans-serif; font-weight: 700; color: var(--text-tertiary); font-size: 0.92rem; margin-left: auto; }
+
+        .skill-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 6px; }
+        .skill-chips .lbl { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 0.85rem; color: #98a2b3; text-transform: uppercase; align-self: center; margin-right: 4px; }
+        .schip { border: 1px solid #e4e7ec; background: #fff; color: #344054; border-radius: 18px; padding: 6px 14px; font-family: 'Mulish', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.18s; }
+        .schip:hover { border-color: var(--primary); color: var(--primary); }
+        .schip.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+        .schip .cnt { opacity: 0.65; font-weight: 600; margin-left: 5px; }
+
+        .pool-card { background: #fff; border: 1px solid #f0f0f0; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); overflow: hidden; margin-top: 18px; }
+        .scroll-x { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 720px; }
+        th { background: #fcfcfd; font-family: 'Mulish', sans-serif; font-size: 0.78rem; font-weight: 800; color: #475467; text-transform: uppercase; letter-spacing: 0.4px; padding: 14px 18px; border-bottom: 1px solid #eaecf0; text-align: left; }
+        td { padding: 16px 18px; border-bottom: 1px solid #f3f4f6; font-size: 0.98rem; color: #344054; font-family: 'Hind', sans-serif; vertical-align: top; }
+        tr:last-child td { border-bottom: none; }
+        .c-name { font-family: 'Mulish', sans-serif; font-weight: 800; color: #101828; font-size: 1.02rem; }
+        .c-sub { color: #98a2b3; font-size: 0.85rem; margin-top: 3px; }
+        .tag { display: inline-block; background: #f2f4f7; color: #475467; border-radius: 6px; padding: 3px 9px; font-size: 0.78rem; font-weight: 700; font-family: 'Mulish', sans-serif; margin: 2px 4px 2px 0; }
+        .tag.hit { background: var(--primary); color: #fff; }
+        .tag-none { color: #98a2b3; font-style: italic; font-size: 0.88rem; }
+        .row-check { width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer; }
+        .no-res { color: #98a2b3; font-size: 0.88rem; }
+
+        /* ===== INVITE PANEL ===== */
+        .invite-panel { position: sticky; bottom: 0; background: #101828; color: #fff; border-radius: 12px; padding: 16px 20px; margin-top: 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; box-shadow: 0 12px 30px rgba(0,0,0,0.22); }
+        .invite-panel .ip-count { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1rem; }
+        .invite-panel select, .invite-panel input { padding: 10px 12px; border-radius: 8px; border: 1px solid #475467; background: #1d2939; color: #fff; font-family: 'Hind', sans-serif; font-size: 0.95rem; outline: none; min-width: 220px; }
+        .invite-panel select:focus, .invite-panel input:focus { border-color: #fda29b; }
+        .invite-panel .ip-spacer { flex: 1; }
+
+        .vcard { background: #fff; border: 1px solid #f0f0f0; border-radius: 12px; padding: 20px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); margin-bottom: 14px; }
+        .vcard-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+        .vcard-title { font-family: 'Mulish', sans-serif; font-size: 1.15rem; font-weight: 800; color: #101828; }
+        .vcard-sub { color: var(--text-tertiary); font-size: 0.92rem; margin-top: 4px; }
+        .vcard-note { font-family: 'Hind', sans-serif; color: #475467; margin-top: 12px; line-height: 1.5; }
+        .vcard-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+
+        /* ===== STUDENT TABS ===== */
+        .tabs { display: flex; gap: 6px; border-bottom: 1px solid #eaecf0; margin-bottom: 24px; }
+        .tab { background: transparent; border: none; border-bottom: 3px solid transparent; padding: 12px 20px; font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1rem; color: #667085; cursor: pointer; }
+        .tab.on { color: var(--primary); border-bottom-color: var(--primary); }
+        .empty-state { text-align: center; padding: 44px; color: #98a2b3; font-family: 'Mulish', sans-serif; font-size: 1rem; }
+        .empty-state .em { font-size: 2.6rem; display: block; margin-bottom: 10px; }
+
+        /* ===== RESUME BUILDER ===== */
+        .rb-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 26px; align-items: start; }
+        .rb-form { background: #fff; border: 1px solid #f0f0f0; border-radius: 12px; padding: 22px 24px; }
+        .rb-h { font-family: 'Mulish', sans-serif; font-weight: 800; font-size: 1rem; color: #101828; margin: 22px 0 12px; padding-bottom: 8px; border-bottom: 1px solid #f3f4f6; display: flex; align-items: center; gap: 10px; }
+        .rb-h:first-child { margin-top: 0; }
+        .rb-h .ln { flex: 1; }
+        .fg { margin-bottom: 14px; }
+        .fg label { display: block; font-family: 'Mulish', sans-serif; font-size: 0.85rem; font-weight: 700; color: #344054; margin-bottom: 6px; }
+        .fg input, .fg textarea, .fg select { width: 100%; padding: 11px 13px; border: 1.5px solid #d0d5dd; border-radius: 8px; font-size: 0.98rem; font-family: 'Hind', sans-serif; color: #101828; outline: none; background: #fff; }
+        .fg input:focus, .fg textarea:focus, .fg select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+        .fg textarea { min-height: 78px; resize: vertical; line-height: 1.5; }
+        .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .sub-row { border: 1px dashed #e4e7ec; border-radius: 10px; padding: 14px; margin-bottom: 12px; position: relative; }
+        .sub-row .rm { position: absolute; top: 10px; right: 10px; border: 1px solid #fecdca; background: #fff; color: #d32f2f; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; }
+        .sub-row .rm:hover { background: #fef3f2; }
+
+        .tpl-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .tpl-opt { border: 1.5px solid #e4e7ec; border-radius: 10px; padding: 12px 10px; text-align: center; cursor: pointer; font-family: 'Mulish', sans-serif; font-size: 0.85rem; font-weight: 700; color: #475467; transition: all 0.18s; background: #fff; }
+        .tpl-opt:hover { border-color: #fda29b; }
+        .tpl-opt.on { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
+        .tpl-opt .sw { display: block; width: 34px; height: 6px; border-radius: 3px; margin: 0 auto 8px; }
+
+        .rz-pane { position: sticky; top: 92px; }
+        .rz-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+        .rz-frame { background: #eef1f5; border-radius: 12px; padding: 18px; max-height: calc(100vh - 190px); overflow: auto; }
+        .rz-doc { background: #fff; width: 100%; min-height: 520px; padding: 34px 36px; box-shadow: 0 2px 12px rgba(16,24,40,0.1); font-family: 'Hind', sans-serif; color: #202124; line-height: 1.55; }
+        .rz-doc * { line-height: 1.55; }
+        .rz-name { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.3px; }
+        .rz-role { font-size: 1.02rem; color: #475467; font-weight: 600; margin-top: 2px; }
+        .rz-contact { font-size: 0.86rem; color: #475467; margin-top: 8px; word-break: break-word; }
+        .rz-sec { margin-top: 20px; }
+        .rz-h { font-family: 'Mulish', sans-serif; font-size: 0.8rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 8px; }
+        .rz-item { margin-bottom: 12px; }
+        .rz-ititle { font-weight: 700; color: #101828; font-size: 0.98rem; }
+        .rz-imeta { font-size: 0.85rem; color: #667085; }
+        .rz-idesc { font-size: 0.9rem; color: #344054; margin-top: 3px; }
+        .rz-skills { display: flex; flex-wrap: wrap; gap: 6px; }
+        .rz-skill { background: #f2f4f7; border-radius: 6px; padding: 3px 9px; font-size: 0.82rem; font-weight: 600; }
+
+        /* Classic: serif, centered header, rules */
+        .rz-classic { font-family: Georgia, 'Times New Roman', serif; }
+        .rz-classic .rz-head { text-align: center; border-bottom: 2px solid #101828; padding-bottom: 12px; }
+        .rz-classic .rz-h { border-bottom: 1px solid #d0d5dd; padding-bottom: 4px; }
+        .rz-classic .rz-skill { background: transparent; border: 1px solid #d0d5dd; }
+
+        /* Modern: colored header band */
+        .rz-modern .rz-head { background: var(--primary); color: #fff; margin: -34px -36px 0; padding: 28px 36px; }
+        .rz-modern .rz-role, .rz-modern .rz-contact { color: #ffe4e0; }
+        .rz-modern .rz-h { color: var(--primary); border-left: 4px solid var(--primary); padding-left: 8px; }
+
+        /* Minimal: airy, no fills */
+        .rz-minimal .rz-h { color: #667085; }
+        .rz-minimal .rz-skill { background: transparent; padding: 0; }
+        .rz-minimal .rz-skills { gap: 0; }
+        .rz-minimal .rz-skills .rz-skill::after { content: ' ·'; color: #98a2b3; }
+        .rz-minimal .rz-skills .rz-skill:last-child::after { content: ''; }
+
+        /* Sidebar: two column */
+        .rz-sidebar { display: grid; grid-template-columns: 1.65fr 1fr; gap: 26px; padding: 0; }
+        .rz-sidebar .rz-main { padding: 34px 12px 34px 36px; }
+        .rz-sidebar .rz-side { background: #f7f8fa; padding: 34px 30px 34px 22px; align-self: stretch; }
+        .rz-sidebar .rz-head { padding-bottom: 14px; border-bottom: 3px solid var(--primary); }
+        .rz-sidebar .rz-side .rz-h { color: var(--primary); }
+        .rz-sidebar .rz-side .rz-skill { display: block; margin: 0 0 6px; background: #fff; border: 1px solid #e4e7ec; }
+
+        .toast-box { position: fixed; bottom: 24px; right: 24px; background: #101828; color: #fff; padding: 14px 24px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; z-index: 100000; font-weight: 600; font-family: 'Mulish', sans-serif; }
+
+        @media (max-width: 1000px) { .rb-wrap { grid-template-columns: 1fr; } .rz-pane { position: static; } .tpl-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 720px) { .main-container { padding: 24px 16px 70px; } .grid2 { grid-template-columns: 1fr; } .who { display: none; } }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="header-left">
+        <a href="recruiterindex.html" class="logo-container">
+            <div class="logo-square"><img src="CODEQUEST BOX LOGO.svg" alt="CodeQuest"></div>
+            <div class="logo-text">CodeQuest<small id="portalLabel">Recruiter Portal</small></div>
+        </a>
+        <a href="recruiterindex.html" class="back-link" id="backLink"><i class="fas fa-arrow-left"></i> Dashboard</a>
+    </div>
+    <div class="header-right">
+        <div class="who"><div class="n" id="whoName">Guest</div><div class="r" id="whoRole">—</div></div>
+        <div class="avatar"><img src="EXAMPAD/LINUX_TEST_CHITKARA_files/user-icon.3d6e2547.svg" alt="Profile"></div>
+    </div>
+</header>
+
+<div class="main-container">
+    <div class="page-header">
+        <div>
+            <h1 id="pageTitle">University Talent Search</h1>
+            <p id="pageSub">Pick a university, filter its students by skills and resume content, and invite matching candidates to one of your form openings.</p>
+        </div>
+        <div id="headActions"></div>
+    </div>
+
+    <div id="denyWrap"></div>
+
+    <!-- ================= RECRUITER / STAFF VIEW ================= -->
+    <div id="recruiterView" style="display:none;">
+        <div id="uniStep">
+            <div class="section-h"><img src="UNIVERSITY-ICON(MAIN).jpg" alt="University"> Select a University</div>
+            <div class="uni-grid" id="uniGrid"></div>
+            <div class="empty-state" id="uniEmpty" style="display:none;">
+                <span class="em">🏛️</span>
+                No universities are registered yet. A university head registers one from the University Hub, and their students appear here.
+            </div>
+        </div>
+
+        <div id="talentStep" style="display:none;">
+            <button class="btn ghost sm" onclick="showUniversities()"><i class="fas fa-arrow-left"></i> All Universities</button>
+            <div class="uni-head" id="uniHead"></div>
+
+            <div class="filter-bar">
+                <div class="fb-search"><i class="fas fa-magnifying-glass"></i>
+                    <input type="text" id="fTerm" placeholder="Smart filter — search a skill or resume text (e.g. Rust)" onkeyup="onFilter()">
+                </div>
+                <label class="switch"><input type="checkbox" id="fOnly" onchange="onFilter()"> Only students with a resume</label>
+                <button class="btn ghost sm" onclick="clearFilters()"><i class="fas fa-rotate-left"></i> Clear</button>
+                <span class="fb-count" id="fCount"></span>
+            </div>
+            <div class="skill-chips" id="skillChips"></div>
+
+            <div class="pool-card scroll-x">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:38px;"><input type="checkbox" class="row-check" id="selAll" onchange="toggleAll(this.checked)"></th>
+                            <th style="width:26%;">Student</th>
+                            <th>Skills &amp; Resume Matches</th>
+                            <th style="width:140px;">Resume</th>
+                            <th style="width:150px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stuBody"></tbody>
+                </table>
+                <div class="empty-state" id="stuEmpty" style="display:none;"></div>
+            </div>
+
+            <div class="invite-panel" id="invitePanel" style="display:none;">
+                <span class="ip-count" id="ipCount">0 selected</span>
+                <select id="inviteJob"></select>
+                <input type="text" id="inviteNote" placeholder="Optional note to candidates (e.g. Apply by Friday)">
+                <span class="ip-spacer"></span>
+                <button class="btn ghost sm" onclick="clearSel()">Cancel</button>
+                <button class="btn primary" onclick="sendInvites()"><i class="fas fa-paper-plane"></i> Send Invite</button>
+            </div>
+
+            <div class="section-h"><i class="fas fa-paper-plane" style="color:var(--primary);"></i> Invites Sent From My Account</div>
+            <div id="sentList"></div>
+        </div>
+    </div>
+
+    <!-- ================= STUDENT VIEW ================= -->
+    <div id="studentView" style="display:none;">
+        <div class="uni-head" id="stuUniCard"></div>
+        <div class="tabs">
+            <button class="tab on" id="tabBtnInvites" onclick="studentTab('invites')"><i class="fas fa-envelope-open-text"></i> Recruiter Invites</button>
+            <button class="tab" id="tabBtnResume" onclick="studentTab('resume')"><i class="fas fa-file-arrow-down"></i> Resume Builder</button>
+        </div>
+        <div id="invitesWrap"></div>
+
+        <div id="resumeWrap" style="display:none;">
+            <div class="rb-wrap">
+                <div class="rb-form">
+                    <div class="rb-h"><i class="fas fa-palette" style="color:var(--primary);"></i><span class="ln">Choose a Template</span></div>
+                    <div class="tpl-grid" id="tplGrid">
+                        <div class="tpl-opt on" data-tpl="classic"><span class="sw" style="background:#101828;"></span>Classic</div>
+                        <div class="tpl-opt" data-tpl="modern"><span class="sw" style="background:var(--primary);"></span>Modern</div>
+                        <div class="tpl-opt" data-tpl="minimal"><span class="sw" style="background:#667085;"></span>Minimal</div>
+                        <div class="tpl-opt" data-tpl="sidebar"><span class="sw" style="background:linear-gradient(90deg,#101828 50%,#f7f8fa 50%);"></span>Sidebar</div>
+                    </div>
+
+                    <div class="rb-h"><i class="fas fa-id-card" style="color:var(--primary);"></i><span class="ln">Basics</span></div>
+                    <div class="grid2">
+                        <div class="fg"><label>Full Name</label><input type="text" id="rbName" onkeyup="renderPreview()"></div>
+                        <div class="fg"><label>Profile Title / Desired Role</label><input type="text" id="rbTitle" placeholder="e.g. Systems Engineer — Rust" onkeyup="renderPreview()"></div>
+                    </div>
+                    <div class="grid2">
+                        <div class="fg"><label>Email / Username</label><input type="text" id="rbEmail" onkeyup="renderPreview()"></div>
+                        <div class="fg"><label>Phone</label><input type="text" id="rbPhone" onkeyup="renderPreview()"></div>
+                    </div>
+                    <div class="grid2">
+                        <div class="fg"><label>Location</label><input type="text" id="rbLocation" placeholder="City, Country" onkeyup="renderPreview()"></div>
+                        <div class="fg"><label>Links (LinkedIn / GitHub / Portfolio)</label><input type="text" id="rbLinks" placeholder="github.com/me · linkedin.com/in/me" onkeyup="renderPreview()"></div>
+                    </div>
+
+                    <div class="rb-h"><i class="fas fa-align-left" style="color:var(--primary);"></i><span class="ln">Professional Summary</span></div>
+                    <div class="fg"><textarea id="rbSummary" placeholder="Two or three lines about what you do and what you are looking for." onkeyup="renderPreview()"></textarea></div>
+
+                    <div class="rb-h"><i class="fas fa-lightbulb" style="color:var(--primary);"></i><span class="ln">Skills <span style="font-weight:600;color:#98a2b3;font-size:0.82rem;">(recruiters search these — be specific: Rust, React, PostgreSQL)</span></span></div>
+                    <div class="fg"><input type="text" id="rbSkills" placeholder="Rust, TypeScript, WebAssembly, Docker" onkeyup="renderPreview()"><div class="skill-chips" id="rbSkillPreview" style="margin:8px 0 0;"></div></div>
+
+                    <div class="rb-h"><i class="fas fa-graduation-cap" style="color:var(--primary);"></i><span class="ln">Education</span><button class="btn ghost sm" onclick="addRow('edu')"><i class="fas fa-plus"></i> Add</button></div>
+                    <div id="eduRows"></div>
+
+                    <div class="rb-h"><i class="fas fa-briefcase" style="color:var(--primary);"></i><span class="ln">Experience / Internships</span><button class="btn ghost sm" onclick="addRow('exp')"><i class="fas fa-plus"></i> Add</button></div>
+                    <div id="expRows"></div>
+
+                    <div class="rb-h"><i class="fas fa-code" style="color:var(--primary);"></i><span class="ln">Projects</span><button class="btn ghost sm" onclick="addRow('prj')"><i class="fas fa-plus"></i> Add</button></div>
+                    <div id="prjRows"></div>
+
+                    <div class="rb-h"><i class="fas fa-award" style="color:var(--primary);"></i><span class="ln">Certifications &amp; Achievements <span style="font-weight:600;color:#98a2b3;font-size:0.82rem;">(one per line)</span></span></div>
+                    <div class="fg"><textarea id="rbCerts" placeholder="AWS Cloud Practitioner&#10;Winner — Smart India Hackathon 2025" onkeyup="renderPreview()"></textarea></div>
+
+                    <div style="display:flex; gap:12px; margin-top:22px; flex-wrap:wrap;">
+                        <button class="btn primary" onclick="saveResume()"><i class="fas fa-floppy-disk"></i> Save Resume</button>
+                        <button class="btn ghost" onclick="downloadResume()"><i class="fas fa-print"></i> Download / Print PDF</button>
+                    </div>
+                </div>
+
+                <div class="rz-pane">
+                    <div class="rz-bar"><b style="font-family:'Mulish',sans-serif;">Live Preview</b><span style="color:#98a2b3;font-size:0.88rem;" id="rzSavedNote">Not saved yet</span></div>
+                    <div class="rz-frame"><div id="rzPreview"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-box" id="cqToast">Done</div>
+
+<script src="cq-shared.js"></script>
+<script>
+    // ===== STORES =====
+    // CodeQuest_student_profiles : [{ universityId, universityName, name, rollNo, username, email, phone,
+    //                                 location, links, title, summary, skills[], education[], experience[],
+    //                                 projects[], certifications[], template, updatedAt }]
+    // CodeQuest_student_invites  : [{ id, jobId, jobTitle, formNumber, company, universityId, universityName,
+    //                                 toName, toRollNo, toUsername, recruiterEmail, recruiterName, note,
+    //                                 status, createdAt, respondedAt }]
+    const PROFILES_KEY = 'CodeQuest_student_profiles';
+    const INVITES_KEY = 'CodeQuest_student_invites';
+
+    function toast(msg) { const t = document.getElementById('cqToast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(toast._h); toast._h = setTimeout(() => t.style.display = 'none', 3000); }
+    function esc(s) { return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function getProfiles() { return CQ.readJSON(PROFILES_KEY, []); }
+    function saveProfiles(a) { try { localStorage.setItem(PROFILES_KEY, JSON.stringify(a)); return true; } catch (e) { toast('Storage full — shrink the resume text.'); return false; } }
+    function getInvites() { return CQ.readJSON(INVITES_KEY, []); }
+    function saveInvites(v) { try { localStorage.setItem(INVITES_KEY, JSON.stringify(v)); return true; } catch (e) { toast('Storage full.'); return false; } }
+    function fmtDT(iso) { const d = new Date(iso); return d.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }) + ', ' + d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }); }
+
+    // ===== IDENTITY MATCHING (uni student row  <->  stored profile) =====
+    function sameStudent(a, b) {
+        if (!a || !b) return false;
+        const r1 = String(a.rollNo || '').trim().toLowerCase(), r2 = String(b.rollNo || '').trim().toLowerCase();
+        const u1 = String(a.username || a.email || '').trim().toLowerCase(), u2 = String(b.username || b.email || '').trim().toLowerCase();
+        return (!!r1 && !!r2 && r1 === r2) || (!!u1 && !!u2 && u1 === u2);
+    }
+    function findProfile(uniId, stu) { return getProfiles().find(p => String(p.universityId) === String(uniId) && sameStudent(p, stu)); }
+    function sidOf(uniId, s) { return encodeURIComponent(uniId + '::' + (s.rollNo || '') + '::' + (s.username || '')); }
+
+    // ===== SEARCH HELPERS =====
+    function splitSkills(str) { return (str || '').split(/[,\n;\u2022/|]+/).map(s => s.trim()).filter(Boolean); }
+    function resumeHaystack(p) {
+        if (!p) return '';
+        const parts = [p.title, p.summary, (p.skills || []).join(' '), p.location, p.links,
+            (p.education || []).map(e => `${e.degree} ${e.institution} ${e.score}`).join(' '),
+            (p.experience || []).map(e => `${e.role} ${e.company} ${e.desc}`).join(' '),
+            (p.projects || []).map(e => `${e.name} ${e.tech} ${e.desc}`).join(' '),
+            (p.certifications || []).join(' ')];
+        return parts.filter(Boolean).join(' \u2022 ').toLowerCase();
+    }
+    function statusChip(st) {
+        const cls = st === 'Accepted' ? 'green' : st === 'Declined' ? 'red' : 'amber';
+        return `<span class="chip ${cls}">${esc(st)}</span>`;
+    }
+
+    // ============================================================
+    //  BOOT — role detection
+    // ============================================================
+    const ME = { name: '', email: '', role: '', uniId: '', uniName: '', rollNo: '' };
+    const isStudent = () => String(ME.role).toLowerCase() === 'student';
+
+    function boot() {
+        const s = CQ.session();
+        ME.name = s.name || ''; ME.email = String(s.email || ''); ME.role = String(s.role || '');
+        ME.uniId = String(s.universityId || ''); ME.uniName = s.universityName || '';
+        ME.rollNo = String(s.rollNo || s.regNo || '');
+        document.getElementById('whoName').textContent = ME.name || 'Guest';
+        document.getElementById('whoRole').textContent = ME.role ? ME.role.replace('_', ' ') : '—';
+
+        if (!ME.role) {
+            document.getElementById('denyWrap').innerHTML = `
+                <div class="deny-banner"><div class="db-ico"><i class="fas fa-user-lock"></i></div>
+                    <div><h2>Not Signed In</h2><p>Log in first to use the university talent view. <a href="firstpage.html" style="color:#B42318;font-weight:700;">Go to login</a></p></div>
+                </div>`;
+            return;
+        }
+        if (isStudent()) {
+            document.getElementById('portalLabel').textContent = 'Student Portal';
+            const bl = document.getElementById('backLink');
+            bl.href = 'studentindex.html'; bl.innerHTML = '<i class="fas fa-arrow-left"></i> Home';
+            document.getElementById('pageTitle').textContent = 'University Invites &amp; Resume';
+            document.getElementById('pageSub').textContent = 'See hiring invites sent to you for form openings, and build a resume recruiters can actually find.';
+            document.getElementById('studentView').style.display = 'block';
+            renderStudentShell(); renderMyInvites(); initResumeForm();
+        } else {
+            document.getElementById('recruiterView').style.display = 'block';
+            renderUniversities();
+        }
+    }
+
+    // ============================================================
+    //  RECRUITER — step 1: pick a university
+    // ============================================================
+    const R = { uni: null, skills: new Set(), sel: new Map() };
+
+    function renderUniversities() {
+        const unis = CQ.getUniversities();
+        document.getElementById('uniEmpty').style.display = unis.length ? 'none' : 'block';
+        document.getElementById('uniGrid').innerHTML = unis.map(u => `
+            <div class="ucard" onclick="openUniversity('${esc(u.id)}')">
+                <div class="uc-ico"><img src="UNIVERSITY-ICON(MAIN).jpg" alt="University"></div>
+                <div style="flex:1;min-width:0;">
+                    <div class="uc-name">${esc(u.name)}</div>
+                    <div class="uc-sub">${(u.students || []).length} registered student${(u.students || []).length === 1 ? '' : 's'}${u.head ? ' &bull; Head: ' + esc(u.head.name) : ''}</div>
+                </div>
+                <div class="uc-go">View students <i class="fas fa-arrow-right"></i></div>
+            </div>`).join('');
+    }
+    function showUniversities() {
+        R.uni = null; R.sel.clear(); R.skills.clear();
+        document.getElementById('talentStep').style.display = 'none';
+        document.getElementById('uniStep').style.display = 'block';
+    }
+
+    // ============================================================
+    //  RECRUITER — step 2: student directory + smart filter
+    // ============================================================
+    function openUniversity(uniId) {
+        const u = CQ.getUniversities().find(x => String(x.id) === String(uniId));
+        if (!u) { toast('University not found.'); return; }
+        R.uni = u; R.sel.clear(); R.skills.clear();
+        document.getElementById('fTerm').value = '';
+        document.getElementById('fOnly').checked = false;
+        document.getElementById('uniStep').style.display = 'none';
+        document.getElementById('talentStep').style.display = 'block';
+        document.getElementById('uniHead').innerHTML = `
+            <div class="uh-ico"><img src="UNIVERSITY-ICON(MAIN).jpg" alt="University"></div>
+            <div style="flex:1;min-width:0;">
+                <div class="uh-name">${esc(u.name)}</div>
+                <div class="uh-sub">Student talent pool &bull; ${(roster(u).length)} students &bull; filter by skill or resume content, then invite to a form opening</div>
+            </div>
+            <span class="chip grey"><i class="fas fa-users"></i> ${roster(u).length}</span>`;
+        renderTalent(); renderSent();
+    }
+
+    // Registered students + anyone who saved a profile under this university
+    function roster(u) {
+        const rows = (u.students || []).map(s => ({ name: s.name, rollNo: s.rollNo, username: s.username }));
+        getProfiles().filter(p => String(p.universityId) === String(u.id))
+            .forEach(p => { if (!rows.some(r => sameStudent(r, p))) rows.push({ name: p.name, rollNo: p.rollNo, username: p.username || p.email }); });
+        return rows;
+    }
+
+    function buildRows() {
+        const u = R.uni;
+        const term = document.getElementById('fTerm').value.trim().toLowerCase();
+        const tokens = term ? term.split(/\s+/).filter(Boolean) : [];
+        const onlyResume = document.getElementById('fOnly').checked;
+        const picked = Array.from(R.skills);
+        return roster(u).map(s => {
+            const p = findProfile(u.id, s);
+            const skills = p ? (p.skills || []) : [];
+            const hay = resumeHaystack(p);
+            const okTerm = tokens.every(t => hay.includes(t) || s.name.toLowerCase().includes(t));
+            const okSkills = picked.every(sk => skills.some(x => x.toLowerCase() === sk.toLowerCase()));
+            const hasResume = !!(p && (skills.length || p.summary || (p.education || []).length || (p.experience || []).length));
+            const matched = skills.filter(x => tokens.some(t => x.toLowerCase().includes(t)) || picked.some(sk => sk.toLowerCase() === x.toLowerCase()));
+            return { s, p, skills, hasResume, matched, pass: okTerm && okSkills && (!onlyResume || hasResume) };
+        });
+    }
+
+    function renderTalent() {
+        const u = R.uni; if (!u) return;
+        const rows = buildRows();
+
+        // Skill chips = every skill present in this university, most frequent first
+        const freq = {};
+        rows.forEach(r => r.skills.forEach(sk => { const k = sk.charAt(0).toUpperCase() + sk.slice(1).toLowerCase(); freq[k] = (freq[k] || 0) + 1; }));
+        const top = Object.keys(freq).sort((a, b) => freq[b] - freq[a] || a.localeCompare(b)).slice(0, 26);
+        document.getElementById('skillChips').innerHTML = top.length
+            ? `<span class="lbl">Skills in this university</span>` + top.map(sk =>
+                `<button class="schip${R.skills.has(sk) ? ' on' : ''}" onclick="toggleSkill('${esc(sk.replace(/'/g, "\\'"))}')" title="Filter by ${esc(sk)}">${esc(sk)}<span class="cnt">${freq[sk]}</span></button>`).join('')
+            : '';
+
+        const shown = rows.filter(r => r.pass);
+        const body = document.getElementById('stuBody');
+        body.innerHTML = shown.map(r => {
+            const sid = sidOf(u.id, r.s);
+            const checked = R.sel.has(sid) ? 'checked' : '';
+            const term = document.getElementById('fTerm').value.trim().toLowerCase();
+            const tags = r.skills.length
+                ? r.skills.map(sk => { const hit = (term && sk.toLowerCase().includes(term)) || R.skills.has(sk); return `<span class="tag${hit ? ' hit' : ''}">${esc(sk)}</span>`; }).join('')
+                : `<span class="tag-none">No skills added yet</span>`;
+            const res = r.p
+                ? `<span class="chip green"><i class="fas fa-circle-check"></i> Ready</span><div class="c-sub">${esc(new Date(r.p.updatedAt).toLocaleDateString())}</div>`
+                : `<span class="no-res">Not filled</span>`;
+            return `<tr>
+                <td><input type="checkbox" class="row-check" ${checked} onchange="toggleSel('${sid}', this.checked)"></td>
+                <td><div class="c-name">${esc(r.s.name || 'Student')}</div><div class="c-sub">${esc(r.s.rollNo || '—')}${r.s.username ? ' &bull; ' + esc(r.s.username) : ''}</div></td>
+                <td>${tags}</td>
+                <td>${res}</td>
+                <td><button class="btn ghost sm" onclick="viewResume('${sid}')"><i class="fas fa-file-lines"></i> View Resume</button></td>
+            </tr>`;
+        }).join('');
+
+        const empty = document.getElementById('stuEmpty');
+        empty.style.display = shown.length ? 'none' : 'block';
+        empty.innerHTML = `<span class="em">🔍</span>${rows.length ? 'No student matches this skill / resume filter. Try another term (e.g. "Rust").' : 'This university has no students registered yet.'}`;
+        document.querySelectorAll('#stuBody tr').forEach(tr => tr.style.display = shown.length ? '' : 'none');
+        document.getElementById('fCount').textContent = `Showing ${shown.length} of ${rows.length} students · ${R.sel.size} selected`;
+        document.getElementById('selAll').checked = shown.length > 0 && shown.every(r => R.sel.has(sidOf(u.id, r.s)));
+        refreshInvitePanel();
+    }
+
+    function onFilter() { renderTalent(); }
+    function clearFilters() { document.getElementById('fTerm').value = ''; document.getElementById('fOnly').checked = false; R.skills.clear(); renderTalent(); }
+    function toggleSkill(sk) { R.skills.has(sk) ? R.skills.delete(sk) : R.skills.add(sk); renderTalent(); }
+
+    function studentBySid(sid) {
+        if (!R.uni) return null;
+        const raw = decodeURIComponent(sid).split('::');
+        return roster(R.uni).find(s => String(raw[0]) === String(R.uni.id) && String(s.rollNo || '') === raw[1] && String(s.username || '') === raw[2]) || null;
+    }
+    function toggleSel(sid, on) {
+        const s = studentBySid(sid); if (!s) return;
+        if (on) R.sel.set(sid, s); else R.sel.delete(sid);
+        renderTalent();
+    }
+    function toggleAll(on) {
+        buildRows().filter(r => r.pass).forEach(r => { const sid = sidOf(R.uni.id, r.s); if (on) R.sel.set(sid, r.s); else R.sel.delete(sid); });
+        renderTalent();
+    }
+    function clearSel() { R.sel.clear(); renderTalent(); }
+
+    function myJobs() {
+        const jobs = CQ.ensureFormNumbers();
+        const mine = jobs.filter(j => String(j.createdBy || '').toLowerCase() === (ME.email || '').toLowerCase() || (j.createdByName || '').toLowerCase() === (ME.name || '').toLowerCase());
+        const list = mine.length ? mine : jobs;
+        return list.slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    }
+    function refreshInvitePanel() {
+        const panel = document.getElementById('invitePanel');
+        panel.style.display = R.sel.size ? 'flex' : 'none';
+        if (!R.sel.size) return;
+        document.getElementById('ipCount').textContent = `${R.sel.size} student${R.sel.size === 1 ? '' : 's'} selected`;
+        const sel = document.getElementById('inviteJob');
+        const jobs = myJobs();
+        if (!jobs.length) {
+            sel.innerHTML = `<option value="">No form openings yet — create one first</option>`;
+            document.querySelectorAll('#invitePanel .btn.primary').forEach(b => b.disabled = true);
+            return;
+        }
+        document.querySelectorAll('#invitePanel .btn.primary').forEach(b => b.disabled = false);
+        const keep = sel.value;
+        sel.innerHTML = `<option value="">Choose form opening…</option>` + jobs.map(j =>
+            `<option value="${esc(j.id)}">${esc(j.formNumber || 'FORM')} — ${esc(j.title)}${j.company ? ' (' + esc(j.company) + ')' : ''}</option>`).join('');
+        if (keep) sel.value = keep;
+    }
+
+    function sendInvites() {
+        if (!R.uni || !R.sel.size) { toast('Select at least one student.'); return; }
+        const jobId = document.getElementById('inviteJob').value;
+        if (!jobId) { toast('Pick the form opening to invite them for.'); return; }
+        const job = CQ.jobFor(jobId) || CQ.getJobs().find(j => String(j.id) === jobId);
+        const note = document.getElementById('inviteNote').value.trim();
+        const invites = getInvites();
+        let added = 0, dupe = 0;
+        R.sel.forEach(s => {
+            const exists = invites.some(iv => String(iv.jobId) === String(jobId) && String(iv.universityId) === String(R.uni.id) && sameStudent(iv, { rollNo: s.rollNo, username: s.username }));
+            if (exists) { dupe++; return; }
+            invites.push({
+                id: 'INV' + Date.now() + '_' + Math.floor(Math.random() * 900),
+                jobId: jobId, jobTitle: job.title || '', formNumber: job.formNumber || '', company: job.company || '',
+                universityId: R.uni.id, universityName: R.uni.name,
+                toName: s.name || '', toRollNo: s.rollNo || '', toUsername: s.username || '',
+                recruiterEmail: ME.email, recruiterName: ME.name || 'Recruiter',
+                note: note, status: 'Pending', createdAt: new Date().toISOString(), respondedAt: null
+            });
+            added++;
+        });
+        if (!saveInvites(invites)) return;
+        toast(added ? `Invited ${added} student(s) for ${job.formNumber || job.title}.${dupe ? ` ${dupe} already invited.` : ''}` : `Those students were already invited for this form.`);
+        document.getElementById('inviteNote').value = '';
+        R.sel.clear(); renderTalent(); renderSent();
+    }
+
+    function renderSent() {
+        const mine = getInvites().filter(iv => String(iv.recruiterEmail || '').toLowerCase() === (ME.email || '').toLowerCase() || (iv.recruiterName || '').toLowerCase() === (ME.name || '').toLowerCase())
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        document.getElementById('sentList').innerHTML = mine.length ? mine.map(iv => `
+            <div class="vcard">
+                <div class="vcard-top">
+                    <div style="flex:1;min-width:0;">
+                        <div class="vcard-title">${esc(iv.toName || 'Student')} <span style="color:#98a2b3;font-weight:600;">· ${esc(iv.toRollNo || '—')}</span></div>
+                        <div class="vcard-sub">${esc(iv.universityName || '')} &bull; ${esc(iv.formNumber || '')} ${esc(iv.jobTitle || '')}${iv.company ? ' &bull; ' + esc(iv.company) : ''}</div>
+                        ${iv.note ? `<div class="vcard-note">“${esc(iv.note)}”</div>` : ''}
+                    </div>
+                    ${statusChip(iv.status)}
+                </div>
+                <div class="vcard-sub" style="margin-top:10px;"><i class="fas fa-clock"></i> Sent ${fmtDT(iv.createdAt)}${iv.respondedAt ? ' · responded ' + fmtDT(iv.respondedAt) : ''}</div>
+            </div>`).join('')
+            : `<div class="vcard"><div class="empty-state">No invites sent yet. Select students above and click "Send Invite".</div></div>`;
+    }
+
+    // ============================================================
+    //  STUDENT — invites + resume builder
+    // ============================================================
+    function renderStudentShell() {
+        const card = document.getElementById('stuUniCard');
+        if (!ME.uniId) {
+            card.innerHTML = `
+                <div class="deny-banner" style="margin:0;width:100%;">
+                    <div class="db-ico"><i class="fas fa-ban"></i></div>
+                    <div><h2>Not Linked To A University</h2><p>Your account is not registered by a university head yet, so recruiters cannot find you or send you invites. Build your resume below anyway — it becomes searchable the moment your university registers you.</p></div>
+                </div>`;
+            return;
+        }
+        const uni = CQ.getUniversities().find(x => String(x.id) === ME.uniId);
+        card.innerHTML = `
+            <div class="uh-ico"><img src="UNIVERSITY-ICON(MAIN).jpg" alt="University"></div>
+            <div style="flex:1;min-width:0;">
+                <div class="uh-name">${esc((uni && uni.name) || ME.uniName || 'Your University')}</div>
+                <div class="uh-sub">${esc(ME.name)}${ME.rollNo ? ' &bull; ' + esc(ME.rollNo) : ''}</div>
+            </div>
+            <span class="chip green"><i class="fas fa-circle-check"></i> Verified Student</span>`;
+    }
+
+    function studentTab(which) {
+        document.getElementById('tabBtnInvites').classList.toggle('on', which === 'invites');
+        document.getElementById('tabBtnResume').classList.toggle('on', which === 'resume');
+        document.getElementById('invitesWrap').style.display = which === 'invites' ? 'block' : 'none';
+        document.getElementById('resumeWrap').style.display = which === 'resume' ? 'block' : 'none';
+    }
+
+    function myInvites() {
+        const me = { rollNo: ME.rollNo, username: ME.email };
+        return getInvites().filter(iv => (!ME.uniId || String(iv.universityId) === ME.uniId) && sameStudent(iv, me))
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }
+    function renderMyInvites() {
+        const list = myInvites();
+        document.getElementById('invitesWrap').innerHTML = list.length ? list.map(iv => `
+            <div class="vcard">
+                <div class="vcard-top">
+                    <div style="flex:1;min-width:0;">
+                        <div class="vcard-title">${esc(iv.jobTitle || 'Opening')}${iv.formNumber ? ' <span class="chip grey" style="text-transform:none;">' + esc(iv.formNumber) + '</span>' : ''}</div>
+                        <div class="vcard-sub">${esc(iv.company || '')}${iv.recruiterName ? ' &bull; Invited by ' + esc(iv.recruiterName) : ''} &bull; ${fmtDT(iv.createdAt)}</div>
+                        ${iv.note ? `<div class="vcard-note">“${esc(iv.note)}”</div>` : ''}
+                    </div>
+                    ${statusChip(iv.status)}
+                </div>
+                ${iv.status === 'Pending' ? `<div class="vcard-actions">
+                        <button class="btn green sm" onclick="respondInvite('${esc(iv.id)}','Accepted')"><i class="fas fa-check"></i> Accept Invite</button>
+                        <button class="btn red sm" onclick="respondInvite('${esc(iv.id)}','Declined')"><i class="fas fa-xmark"></i> Decline</button>
+                        <a class="btn ghost sm" href="openjobposting.html"><i class="fas fa-arrow-up-right-from-square"></i> Open Form</a>
+                    </div>` : ''}
+            </div>`).join('')
+            : `<div class="vcard"><div class="empty-state"><span class="em">📭</span>No recruiter invites yet. Add strong skills to your resume — recruiters search for those.</div></div>`;
+    }
+    function respondInvite(id, status) {
+        const invites = getInvites();
+        const iv = invites.find(x => String(x.id) === String(id));
+        if (!iv) { toast('Invite not found.'); return; }
+        iv.status = status; iv.respondedAt = new Date().toISOString();
+        if (!saveInvites(invites)) return;
+        renderMyInvites();
+        toast(status === 'Accepted' ? 'Invite accepted — the recruiter has been notified on their dashboard.' : 'Invite declined.');
+    }
+
+    // ---------- Resume builder ----------
+    let CURRENT_TPL = 'classic';
+
+    function addRow(kind, data) {
+        data = data || {};
+        const wrap = document.getElementById(kind + 'Rows');
+        const div = document.createElement('div');
+        div.className = 'sub-row';
+        if (kind === 'edu') div.innerHTML = `
+            <button type="button" class="rm" onclick="this.parentNode.remove();renderPreview()"><i class="fas fa-trash"></i></button>
+            <div class="grid2">
+                <div class="fg"><label>Degree / Course</label><input class="f-degree" value="${esc(data.degree || '')}" onkeyup="renderPreview()"></div>
+                <div class="fg"><label>Institution</label><input class="f-institution" value="${esc(data.institution || '')}" onkeyup="renderPreview()"></div>
+            </div>
+            <div class="grid2">
+                <div class="fg" style="margin-bottom:0;"><label>Year / Graduation</label><input class="f-year" value="${esc(data.year || '')}" onkeyup="renderPreview()"></div>
+                <div class="fg" style="margin-bottom:0;"><label>Score / CGPA</label><input class="f-score" value="${esc(data.score || '')}" onkeyup="renderPreview()"></div>
+            </div>`;
+        if (kind === 'exp') div.innerHTML = `
+            <button type="button" class="rm" onclick="this.parentNode.remove();renderPreview()"><i class="fas fa-trash"></i></button>
+            <div class="grid2">
+                <div class="fg"><label>Role / Title</label><input class="f-role" value="${esc(data.role || '')}" onkeyup="renderPreview()"></div>
+                <div class="fg"><label>Company</label><input class="f-company" value="${esc(data.company || '')}" onkeyup="renderPreview()"></div>
+            </div>
+            <div class="fg"><label>Period</label><input class="f-period" value="${esc(data.period || '')}" placeholder="Jun 2025 — Present" onkeyup="renderPreview()"></div>
+            <div class="fg" style="margin-bottom:0;"><label>What you did (skills used here are searchable)</label><textarea class="f-desc" onkeyup="renderPreview()">${esc(data.desc || '')}</textarea></div>`;
+        if (kind === 'prj') div.innerHTML = `
+            <button type="button" class="rm" onclick="this.parentNode.remove();renderPreview()"><i class="fas fa-trash"></i></button>
+            <div class="grid2">
+                <div class="fg"><label>Project Name</label><input class="f-name" value="${esc(data.name || '')}" onkeyup="renderPreview()"></div>
+                <div class="fg"><label>Tech / Stack</label><input class="f-tech" value="${esc(data.tech || '')}" placeholder="Rust, WASM" onkeyup="renderPreview()"></div>
+            </div>
+            <div class="fg" style="margin-bottom:0;"><label>Description</label><textarea class="f-pdesc" onkeyup="renderPreview()">${esc(data.desc || '')}</textarea></div>`;
+        wrap.appendChild(div);
+    }
+    function collectRows(kind) {
+        return Array.from(document.querySelectorAll('#' + kind + 'Rows .sub-row')).map(tr => {
+            const g = c => { const e = tr.querySelector('.' + c); return e ? e.value.trim() : ''; };
+            if (kind === 'edu') return { degree: g('f-degree'), institution: g('f-institution'), year: g('f-year'), score: g('f-score') };
+            if (kind === 'exp') return { role: g('f-role'), company: g('f-company'), period: g('f-period'), desc: g('f-desc') };
+            return { name: g('f-name'), tech: g('f-tech'), desc: g('f-pdesc') };
+        }).filter(o => Object.values(o).some(v => v));
+    }
+
+    function collectResume() {
+        return {
+            universityId: ME.uniId, universityName: ME.uniName,
+            name: document.getElementById('rbName').value.trim(),
+            rollNo: ME.rollNo, username: ME.email, email: ME.email,
+            title: document.getElementById('rbTitle').value.trim(),
+            phone: document.getElementById('rbPhone').value.trim(),
+            location: document.getElementById('rbLocation').value.trim(),
+            links: document.getElementById('rbLinks').value.trim(),
+            summary: document.getElementById('rbSummary').value.trim(),
+            skills: splitSkills(document.getElementById('rbSkills').value),
+            education: collectRows('edu'),
+            experience: collectRows('exp'),
+            projects: collectRows('prj'),
+            certifications: document.getElementById('rbCerts').value.split('\n').map(s => s.trim()).filter(Boolean),
+            template: CURRENT_TPL,
+            updatedAt: new Date().toISOString()
+        };
+    }
+
+    function initResumeForm() {
+        document.querySelectorAll('#tplGrid .tpl-opt').forEach(el => el.addEventListener('click', () => {
+            document.querySelectorAll('#tplGrid .tpl-opt').forEach(x => x.classList.remove('on'));
+            el.classList.add('on'); CURRENT_TPL = el.getAttribute('data-tpl'); renderPreview();
+        }));
+        const mine = getProfiles().find(p => String(p.universityId) === ME.uniId && sameStudent(p, { rollNo: ME.rollNo, username: ME.email }));
+        document.getElementById('rbName').value = ME.name || '';
+        document.getElementById('rbEmail').value = ME.email || '';
+        if (mine) {
+            document.getElementById('rbTitle').value = mine.title || '';
+            document.getElementById('rbPhone').value = mine.phone || '';
+            document.getElementById('rbLocation').value = mine.location || '';
+            document.getElementById('rbLinks').value = mine.links || '';
+            document.getElementById('rbSummary').value = mine.summary || '';
+            document.getElementById('rbSkills').value = (mine.skills || []).join(', ');
+            document.getElementById('rbCerts').value = (mine.certifications || []).join('\n');
+            (mine.education || []).forEach(e => addRow('edu', e));
+            (mine.experience || []).forEach(e => addRow('exp', e));
+            (mine.projects || []).forEach(e => addRow('prj', e));
+            CURRENT_TPL = mine.template || 'classic';
+            document.querySelectorAll('#tplGrid .tpl-opt').forEach(x => x.classList.toggle('on', x.getAttribute('data-tpl') === CURRENT_TPL));
+            document.getElementById('rzSavedNote').textContent = 'Saved ' + fmtDT(mine.updatedAt);
+        } else {
+            addRow('edu'); addRow('exp');
+            document.getElementById('rzSavedNote').textContent = 'Not saved yet';
+        }
+        renderPreview();
+    }
+
+    function resumeHTML(p) {
+        const tpl = p.template || 'classic';
+        const sec = (h, inner) => inner ? `<div class="rz-sec"><div class="rz-h">${h}</div>${inner}</div>` : '';
+        const contact = [p.email, p.phone, p.location, p.links].filter(Boolean).map(esc).join(' &bull; ');
+        const skills = (p.skills || []).length ? `<div class="rz-skills">${p.skills.map(s => `<span class="rz-skill">${esc(s)}</span>`).join('')}</div>` : '';
+        const edu = (p.education || []).map(e => `<div class="rz-item"><div class="rz-ititle">${esc(e.degree)}${e.institution ? ' — ' + esc(e.institution) : ''}</div>${[e.year, e.score].filter(Boolean).map(esc).join(' &bull; ') ? `<div class="rz-imeta">${[e.year, e.score].filter(Boolean).map(esc).join(' &bull; ')}</div>` : ''}</div>`).join('');
+        const exp = (p.experience || []).map(e => `<div class="rz-item"><div class="rz-ititle">${esc(e.role)}${e.company ? ' — ' + esc(e.company) : ''}</div><div class="rz-imeta">${esc(e.period || '')}</div>${e.desc ? `<div class="rz-idesc">${esc(e.desc)}</div>` : ''}</div>`).join('');
+        const prj = (p.projects || []).map(e => `<div class="rz-item"><div class="rz-ititle">${esc(e.name)}${e.tech ? ' <span class="rz-imeta">· ' + esc(e.tech) + '</span>' : ''}</div>${e.desc ? `<div class="rz-idesc">${esc(e.desc)}</div>` : ''}</div>`).join('');
+        const certs = (p.certifications || []).length ? `<div class="rz-idesc">${p.certifications.map(esc).join('<br>')}</div>` : '';
+        const head = `<div class="rz-head"><div class="rz-name">${esc(p.name || 'Your Name')}</div>${p.title ? `<div class="rz-role">${esc(p.title)}</div>` : ''}${contact ? `<div class="rz-contact">${contact}</div>` : ''}</div>`;
+        const body = sec('Summary', `<div class="rz-idesc">${esc(p.summary || '')}</div>`)
+            + (tpl === 'sidebar' ? '' : sec('Skills', skills))
+            + sec('Experience', exp) + sec('Projects', prj) + sec('Education', edu)
+            + (tpl === 'sidebar' ? '' : sec('Certifications &amp; Achievements', certs));
+
+        if (tpl === 'sidebar') {
+            return `<div class="rz-doc rz-sidebar">
+                <div class="rz-main">${head}${sec('Summary', `<div class="rz-idesc">${esc(p.summary || '')}</div>`)}${sec('Experience', exp)}${sec('Projects', prj)}${sec('Education', edu)}</div>
+                <aside class="rz-side">${sec('Skills', skills)}${sec('Certifications', certs)}${sec('Contact', `<div class="rz-idesc">${[p.email, p.phone, p.location, p.links].filter(Boolean).map(esc).join('<br>')}</div>`)}</aside>
+            </div>`;
+        }
+        return `<div class="rz-doc rz-${tpl}">${head}${body}</div>`;
+    }
+
+    function renderPreview() {
+        const box = document.getElementById('rzPreview');
+        if (!box) return;
+        box.innerHTML = resumeHTML(collectResume());
+        document.getElementById('rbSkillPreview').innerHTML = splitSkills(document.getElementById('rbSkills').value).map(s => `<span class="tag">${esc(s)}</span>`).join('');
+    }
+
+    function saveResume() {
+        const p = collectResume();
+        if (!p.name) { toast('Add your name first.'); return; }
+        const all = getProfiles().filter(x => !(String(x.universityId) === String(p.universityId) && sameStudent(x, p)));
+        all.push(p);
+        if (!saveProfiles(all)) return;
+        document.getElementById('rzSavedNote').textContent = 'Saved ' + fmtDT(p.updatedAt);
+        toast('Resume saved. Recruiters can now filter you by ' + (p.skills.length ? p.skills.slice(0, 3).join(', ') : 'your resume text') + '.');
+    }
+
+    function resumeWindowHTML(p) {
+        const css = document.querySelector('style').textContent;
+        return `<!DOCTYPE html><html><head><title>${esc(p.name || 'Resume')} — Resume</title>
+            <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;800&family=Hind:wght@400;600;700&display=swap" rel="stylesheet">
+            <style>${css}
+                body { background:#fff; padding:0; } .rz-doc { box-shadow:none; min-height:auto; }
+                @media print { .rz-frame { padding:0; background:#fff; } }
+            </style></head><body><div class="rz-frame">${resumeHTML(p)}</div>
+            <script>window.onload=function(){setTimeout(function(){window.print();},400);};<\/script></body></html>`;
+    }
+    function downloadResume() {
+        const p = collectResume();
+        const w = window.open('', '_blank');
+        if (!w) { toast('Allow pop-ups to download the PDF.'); return; }
+        w.document.write(resumeWindowHTML(p)); w.document.close();
+    }
+
+    // Recruiter reads a student's saved resume (read-only, printable)
+    function viewResume(sid) {
+        const s = studentBySid(sid); if (!s || !R.uni) return;
+        const p = findProfile(R.uni.id, s);
+        if (!p) {
+            const w = window.open('', '_blank');
+            if (!w) return;
+            w.document.write(`<!DOCTYPE html><html><head><title>${esc(s.name)}</title><style>body{font-family:'Hind',sans-serif;padding:40px;color:#344054;}h2{font-family:'Mulish',sans-serif;}</style></head><body><h2>${esc(s.name)}${s.rollNo ? ' — ' + esc(s.rollNo) : ''}</h2><p><b>${esc(s.username || '')}</b></p><p>This student has not created a CodeQuest resume yet, so there is nothing to match against a skill search.</p></body></html>`);
+            w.document.close();
+            return;
+        }
+        const w = window.open('', '_blank');
+        if (!w) { toast('Allow pop-ups to view resumes.'); return; }
+        w.document.write(`<!DOCTYPE html><html><head><title>${esc(p.name)} — Resume</title>
+            <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;800&family=Hind:wght@400;600;700&display=swap" rel="stylesheet">
+            <style>${document.querySelector('style').textContent}</style></head>
+            <body style="background:#eef1f5;padding:26px;"><div class="rz-frame" style="max-width:860px;margin:0 auto;">${resumeHTML(p)}</div></body></html>`);
+        w.document.close();
+    }
+
+    window.addEventListener('DOMContentLoaded', boot);
+</script>
+</body>
+
+</html>

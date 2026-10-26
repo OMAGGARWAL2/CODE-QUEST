@@ -486,15 +486,11 @@
                     if (exam) {
                         let res = db.startAttempt(exam.id, user.id);
 
-                        // Resume or re-attempt support
+                        // Resume allowed, but a finished attempt cannot be re-started
                         if (!res.success && res.existingAttempt) {
                             if (res.existingAttempt.status === 'submitted' || res.existingAttempt.status === 'reviewed' || res.existingAttempt.status === 'completed') {
-                                // Start a fresh re-attempt
-                                res = db.startAttempt(exam.id, user.id, true);
-                                if (res.success && res.attempt) {
-                                    sessionStorage.removeItem(`exam_started_${res.attempt.id}`);
-                                    sessionStorage.removeItem(`quickStartAttemptId_${exam.id}`);
-                                }
+                                window.location.href = './Secondattemptnotallowed.html?examId=' + encodeURIComponent(exam.id);
+                                return true;
                             } else {
                                 // Resume in-progress attempt
                                 res.success = true;
@@ -590,7 +586,12 @@
                         user = [...users].reverse().find(u => u.role === 'student');
                         if (user) db.createSession(user.id, 'student');
                     }
-                    let res = user ? db.startAttempt(exam.id, user.id, true) : null;
+                    let res = user ? db.startAttempt(exam.id, user.id) : null;
+                    if (res && !res.success && res.existingAttempt && (res.existingAttempt.status === 'submitted' || res.existingAttempt.status === 'reviewed' || res.existingAttempt.status === 'completed')) {
+                        // Second attempt blocked: show the "Test already attempted" screen
+                        window.location.href = './Secondattemptnotallowed.html?examId=' + encodeURIComponent(exam.id);
+                        return;
+                    }
                     const attId = res && (res.attempt || res.existingAttempt) ? (res.attempt || res.existingAttempt).id : '';
                     if (attId) sessionStorage.removeItem(`exam_started_${attId}`);
                     sessionStorage.setItem('joined_via_link', 'true');
@@ -656,7 +657,12 @@
                 if (pendingExam) {
                     console.log(`[QUICK START] Fast-tracking to ${pendingExam.title} for ${student.name}`);
 
-                    let res = db.startAttempt(pendingExam.id, student.id, true);
+                    let res = db.startAttempt(pendingExam.id, student.id);
+                    if (!res.success && res.existingAttempt && (res.existingAttempt.status === 'submitted' || res.existingAttempt.status === 'reviewed' || res.existingAttempt.status === 'completed')) {
+                        // Second attempt blocked: show the "Test already attempted" screen
+                        window.location.href = './Secondattemptnotallowed.html?examId=' + encodeURIComponent(pendingExam.id);
+                        return;
+                    }
                     const attempt = res.attempt || res.existingAttempt;
 
                     if (attempt) {
